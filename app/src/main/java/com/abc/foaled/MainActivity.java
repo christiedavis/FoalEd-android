@@ -3,6 +3,8 @@ package com.abc.foaled;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -11,15 +13,29 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 public class MainActivity extends AppCompatActivity {
+
+    private DrawerLayout drawerLayout;
+    private ListView drawerList;
+    private String[] drawerStringArray;
+
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -39,7 +55,24 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
+
+        drawerStringArray = new String[5];
+        drawerStringArray[0] = "My Profile";
+        drawerStringArray[1] = "Notifications";
+        drawerStringArray[2] = "My Horses";
+
+       /* drawerLayout = (DrawerLayout) findViewById(R.id.settings_drawer_layout);
+      drawerList = (ListView) findViewById(R.id.left_drawer);
+  */
+        // Set the adapter for the list view
+       // drawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.setings_drawer_list_item, drawerStringArray));
+        // Set the list's click listener
+        //drawerList.setOnItemClickListener(new DrawerItemClickListener());
+
+
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -57,28 +90,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     /**
      * A placeholder fragment containing a simple view.
@@ -155,14 +166,44 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void setPrimaryItem(ViewGroup container, int position, Object object) {
             super.setPrimaryItem(container, position, object);
-            setTitle(getPageTitle(position));
+            //setTitle(getPageTitle(position));
+            TextView t = (TextView) findViewById(R.id.toolbar_title);
+            t.setText(getPageTitle(position));
         }
-
-//        @Override
-//        public void finishUpdate(ViewGroup container) {
-//            super.finishUpdate(container);
-//
-//
-//        }
     }
+
+
+    //Handles drawer clicking
+    private class DrawerItemClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+          //  selectItem(position);
+        }
+    }
+
+//    /** Swaps fragments in the main content view */
+//    private void selectItem(int position) {
+//        // Create a new fragment and specify the planet to show based on position
+//       // Fragment fragment = new PlanetFragment();
+//        Bundle args = new Bundle();
+//        //args.putInt(PlanetFragment.ARG_PLANET_NUMBER, position);
+//        //fragment.setArguments(args);
+//
+//        // Insert the fragment by replacing any existing fragment
+//       // FragmentManager fragmentManager = getFragmentManager();
+//        //fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+//
+//        // Highlight the selected item, update the title, and close the drawer
+//        drawerList.setItemChecked(position, true);
+//        setTitle(drawerStringArray[position]);
+//        drawerLayout.closeDrawer(drawerList);
+//    }
+//
+//    @Override
+//    public void setTitle(CharSequence title) {
+//        getActionBar().setTitle("settings");
+//    }
+
 }
+
+
