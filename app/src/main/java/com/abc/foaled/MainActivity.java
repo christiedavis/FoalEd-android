@@ -112,7 +112,6 @@ public class MainActivity extends AppCompatActivity {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-//            getActivity().setTitle(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
             return rootView;
         }
     }
@@ -156,10 +155,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void setPrimaryItem(ViewGroup container, int position, Object object) {
             super.setPrimaryItem(container, position, object);
-
-//            getParent().setTitle(getPageTitle(position));
-            if (getParent() != null)
-                getParent().setTitle(position);
+            setTitle(getPageTitle(position));
         }
 
 //        @Override
