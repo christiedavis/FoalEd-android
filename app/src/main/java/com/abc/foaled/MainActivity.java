@@ -3,6 +3,7 @@ package com.abc.foaled;
 import android.support.design.widget.TabLayout;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.Toolbar;
 
 import android.support.v4.app.Fragment;
@@ -103,14 +104,37 @@ public class MainActivity extends AppCompatActivity {
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-
             fragment.setArguments(args);
             return fragment;
         }
 
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+            if (getArguments().getInt(ARG_SECTION_NUMBER) ==2)
+            {
+                List<Horse> horses;
+
+                horses = new ArrayList<>();
+                horses.add(new Horse("Emma Wilson", "23 years old", R.drawable.christie));
+                horses.add(new Horse("Lavery Maiss", "25 years old", R.drawable.emma));
+                horses.add(new Horse("Lillie Watts", "35 years old", R.drawable.alitia));
+
+                View rootView = inflater.inflate(R.layout.recyler_view, container, false);
+
+                RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.rv);
+
+                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+                recyclerView.setLayoutManager(mLayoutManager);
+                recyclerView.setItemAnimator(new DefaultItemAnimator());
+                RVAdaptor adapter = new RVAdaptor(horses);
+                recyclerView.setAdapter(adapter);
+
+                return rootView;
+
+            }
+
+
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
@@ -176,8 +200,6 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout.closeDrawer(drawerList);
 
     }
-
-
 
 }
 
