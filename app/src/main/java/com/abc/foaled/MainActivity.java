@@ -59,12 +59,12 @@ public class MainActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
 
+        drawerLayout = (DrawerLayout) findViewById(R.id.settings_drawer_layout);
+        drawerList = (ListView) findViewById(R.id.left_drawer);
         drawerStringArray = getResources().getStringArray(R.array.drawer_items_arrays);
 
-        drawerList = (ListView) findViewById(R.id.left_drawer);
         drawerList.setAdapter(new ArrayAdapter<>(this,
                 R.layout.drawer_list_item, drawerStringArray));
-
         drawerList.setOnItemClickListener(new DrawerItemClickListener());
 
 
@@ -175,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
 
     /** Swaps fragments in the main content view */
     private void selectItem(int position) {
-        Toast.makeText(this, position, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "test", Toast.LENGTH_SHORT).show();
         drawerLayout.closeDrawer(drawerList);
 
     }
