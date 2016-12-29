@@ -27,6 +27,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
@@ -58,19 +59,13 @@ public class MainActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
 
-        drawerStringArray = new String[5];
-        drawerStringArray[0] = "My Profile";
-        drawerStringArray[1] = "Notifications";
-        drawerStringArray[2] = "My Horses";
+        drawerStringArray = getResources().getStringArray(R.array.drawer_items_arrays);
 
-       /* drawerLayout = (DrawerLayout) findViewById(R.id.settings_drawer_layout);
-      drawerList = (ListView) findViewById(R.id.left_drawer);
-  */
-        // Set the adapter for the list view
-       // drawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.setings_drawer_list_item, drawerStringArray));
-        // Set the list's click listener
-        //drawerList.setOnItemClickListener(new DrawerItemClickListener());
+        drawerList = (ListView) findViewById(R.id.left_drawer);
+        drawerList.setAdapter(new ArrayAdapter<>(this,
+                R.layout.drawer_list_item, drawerStringArray));
 
+        drawerList.setOnItemClickListener(new DrawerItemClickListener());
 
 
 
@@ -86,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
-
 
     }
 
@@ -172,37 +166,21 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-    //Handles drawer clicking
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-          //  selectItem(position);
+            selectItem(position);
         }
     }
 
-//    /** Swaps fragments in the main content view */
-//    private void selectItem(int position) {
-//        // Create a new fragment and specify the planet to show based on position
-//       // Fragment fragment = new PlanetFragment();
-//        Bundle args = new Bundle();
-//        //args.putInt(PlanetFragment.ARG_PLANET_NUMBER, position);
-//        //fragment.setArguments(args);
-//
-//        // Insert the fragment by replacing any existing fragment
-//       // FragmentManager fragmentManager = getFragmentManager();
-//        //fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
-//
-//        // Highlight the selected item, update the title, and close the drawer
-//        drawerList.setItemChecked(position, true);
-//        setTitle(drawerStringArray[position]);
-//        drawerLayout.closeDrawer(drawerList);
-//    }
-//
-//    @Override
-//    public void setTitle(CharSequence title) {
-//        getActionBar().setTitle("settings");
-//    }
+    /** Swaps fragments in the main content view */
+    private void selectItem(int position) {
+        Toast.makeText(this, position, Toast.LENGTH_SHORT).show();
+        drawerLayout.closeDrawer(drawerList);
+
+    }
+
+
 
 }
 

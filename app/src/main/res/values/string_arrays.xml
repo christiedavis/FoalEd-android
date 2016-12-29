@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array
+        name="drawer_items_arrays">
+        <item>My Profile</item>
+        <item>Notifications</item>
+        <item>My Horses</item>
+        <item>Settings</item>
+        <item>Feedback</item>
+    </string-array>
+</resources>
