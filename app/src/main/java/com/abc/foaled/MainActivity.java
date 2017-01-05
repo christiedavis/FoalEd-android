@@ -63,12 +63,11 @@ public class MainActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
 
+        //this is for brendans settings drawer
         drawerStringArray = getResources().getStringArray(R.array.drawer_items_arrays);
 
         drawerList = (ListView) findViewById(R.id.left_drawer);
-        drawerList.setAdapter(new ArrayAdapter<>(this,
-                R.layout.drawer_list_item, drawerStringArray));
-
+        drawerList.setAdapter(new ArrayAdapter<>(this, R.layout.drawer_list_item, drawerStringArray));
         drawerList.setOnItemClickListener(new DrawerItemClickListener());
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -127,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-            if (getArguments().getInt(ARG_SECTION_NUMBER) ==2) // makes cards for second view
+            if (getArguments().getInt(ARG_SECTION_NUMBER) == 2) // makes cards for second view
             {
                 List<Horse> horses;
 
@@ -147,9 +146,7 @@ public class MainActivity extends AppCompatActivity {
                 recyclerView.setAdapter(adapter);
 
                 return rootView;
-
             }
-
 
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
@@ -161,6 +158,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
+     * EVERYTHING BELOW HERE IS FOR THE TAB PAGES
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
@@ -175,11 +173,8 @@ public class MainActivity extends AppCompatActivity {
             return PlaceholderFragment.newInstance(position + 1);
         }
 
-        @Override
-        public int getCount() {
-            // Show 3 total pages.
-            return 3;
-        }
+        @Override // Show 3 total pages.
+        public int getCount() { return 3; }
 
         @Override
         public CharSequence getPageTitle(int position) {
@@ -216,7 +211,6 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout.closeDrawer(drawerList);
 
     }
-
 }
 
 

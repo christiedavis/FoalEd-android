@@ -13,6 +13,6 @@ public class HorseDetailActivity extends AppCompatActivity {
         //passed details
         Bundle bundle = getIntent().getExtras();
         TextView tv = (TextView) this.findViewById(R.id.nameText);
-        tv.setText(bundle.getString("nameText"));
+        tv.setText(bundle.getString("nameText")); // this doesnt work properly - im trying to get the pushed txt out into the label
     }
 }

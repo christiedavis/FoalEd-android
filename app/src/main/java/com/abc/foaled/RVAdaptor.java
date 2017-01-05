@@ -14,6 +14,7 @@ import java.util.List;
 
 /**
  * Created by christie on 29/12/16.
+ * Used to generate cards :)
  */
 
 public class RVAdaptor extends RecyclerView.Adapter<com.abc.foaled.RVAdaptor.HorseViewHolder>{
