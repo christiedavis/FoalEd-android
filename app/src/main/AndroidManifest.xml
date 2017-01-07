@@ -29,7 +29,25 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.abc.foaled.MainActivity" />
         </activity>
-        <activity android:name=".HorseDetailActivity"></activity>
+        <activity android:name=".HorseDetailActivity" />
+        <activity
+            android:name=".Profile"
+            android:label="@string/title_activity_profile"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.abc.foaled.MainActivity" />
+        </activity>
+        <activity
+            android:name=".NotificationSettings"
+            android:label="@string/title_activity_notification_settings"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.abc.foaled.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

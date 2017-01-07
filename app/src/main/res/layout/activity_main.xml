@@ -6,19 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <!-- The main content view -->
-    <FrameLayout
-        android:id="@+id/content_frame"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-    <!-- The navigation drawer -->
-    <ListView android:id="@+id/left_drawer"
-        android:layout_width="240dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:choiceMode="singleChoice"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="0dp"
-        android:background="#fff"/>
+    <!--<FrameLayout-->
+        <!--android:id="@+id/content_frame"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent" />-->
+
 
     <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -79,5 +71,34 @@
             app:srcCompat="@android:drawable/ic_dialog_email" />
 
     </android.support.design.widget.CoordinatorLayout>
+
+    <!-- The navigation drawer -->
+    <!--<ListView android:id="@+id/left_drawer"-->
+        <!--android:layout_width="220dp"-->
+        <!--android:layout_height=-->
+        <!--android:layout_gravity="start"-->
+        <!--android:choiceMode="singleChoice"-->
+        <!--android:divider="@android:color/transparent"-->
+        <!--android:layout_marginTop="50dp"-->
+        <!--android:dividerHeight="20dp"-->
+        <!--android:fitsSystemWindows="false"-->
+        <!--android:background="#fff"/>-->
+
+
+    <android.support.design.widget.NavigationView
+        android:id="@+id/navigation_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start">
+
+        <ListView
+            android:id="@+id/navdrawer_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:choiceMode="singleChoice"
+            android:dividerHeight="10dp"
+            android:divider="@null"/>
+
+    </android.support.design.widget.NavigationView>
 
 </android.support.v4.widget.DrawerLayout>
