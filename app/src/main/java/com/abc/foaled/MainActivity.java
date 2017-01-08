@@ -131,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
                 List<Horse> horses;
 
                 horses = new ArrayList<>();
+                horses.add(new Horse("Brown Horse", "2 years old", R.drawable.animal_brown_horse));
                 horses.add(new Horse("Emma Wilson", "23 years old", R.drawable.christie));
                 horses.add(new Horse("Lavery Maiss", "25 years old", R.drawable.emma));
                 horses.add(new Horse("Lillie Watts", "35 years old", R.drawable.alitia));
