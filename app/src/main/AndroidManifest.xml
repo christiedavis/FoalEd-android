@@ -17,6 +17,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".Main2Activity"
+            android:label="@string/title_activity_main2"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".AddHorseActivity"
+            android:label="@string/title_activity_new_horse"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.abc.foaled.MainActivity" />
+        </activity>
+        <activity android:name=".HorseDetailActivity"></activity>
     </application>
 
 </manifest>

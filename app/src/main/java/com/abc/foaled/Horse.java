@@ -8,7 +8,8 @@ public class Horse {
 
     String name;
     String age;
-
+    String gender;
+    
     int photoId;
 
 
