@@ -1,10 +1,13 @@
 package com.abc.foaled;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.Toolbar;
@@ -14,6 +17,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private ListView drawerList;
     private String[] drawerStringArray;
+    private AppBarLayout appBarLayout;
 
 
     /**
@@ -62,40 +67,72 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
+        Log.d("Application Started", "YAY");
 
         //this is for brendans settings drawer
         drawerStringArray = getResources().getStringArray(R.array.drawer_items_arrays);
 
-        drawerList = (ListView) findViewById(R.id.left_drawer);
+        drawerList = (ListView) findViewById(R.id.navdrawer_list);
         drawerList.setAdapter(new ArrayAdapter<>(this, R.layout.drawer_list_item, drawerStringArray));
         drawerList.setOnItemClickListener(new DrawerItemClickListener());
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitleTextColor(Color.CYAN);
         setSupportActionBar(toolbar);
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-        // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
+//        drawerLayout = (DrawerLayout) findViewById(R.id.settings_drawer_layout);
+//        appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
+//        appBarLayout.setBackgroundColor(Color.MAGENTA);
+//        ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close)
+//        {
+//            /** Called when a drawer has settled in a completely closed state. */
+//            public void onDrawerClosed(View view) {
+//            super.onDrawerClosed(view);
+//            getActionBar().setTitle("TEST1");
+//        }
+//
+//            /** Called when a drawer has settled in a completely open state. */
+//        public void onDrawerOpened(View drawerView) {
+//            super.onDrawerOpened(drawerView);
+//            getActionBar().setTitle("TEST2");
+//        }
+//        };
+//
+//        // Set the drawer toggle as the DrawerListener
+//        drawerLayout.setDrawerListener(mDrawerToggle);
+//
+//        getActionBar().setDisplayHomeAsUpEnabled(true);
+//        getActionBar().setHomeButtonEnabled(true);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(mViewPager);
 
 
-        //this is to go to the add horse screen from the floating action button
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, AddHorseActivity.class);
-                startActivity(intent);
+            // Create the adapter that will return a fragment for each of the three
+            // primary sections of the activity.
+            mSectionsPagerAdapter=new SectionsPagerAdapter(getSupportFragmentManager());
 
-            }
-        });
+            // Set up the ViewPager with the sections adapter.
+            mViewPager=(ViewPager)
 
-    }
+            findViewById(R.id.container);
+
+            mViewPager.setAdapter(mSectionsPagerAdapter);
+
+            TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+            tabLayout.setupWithViewPager(mViewPager);
+
+
+            //this is to go to the add horse screen from the floating action button
+            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick (View view) {
+                    Intent intent = new Intent(MainActivity.this, AddHorseActivity.class);
+                    startActivity(intent);
+                }
+            });
+
+        };
+
 
 
     /**
@@ -193,25 +230,48 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void setPrimaryItem(ViewGroup container, int position, Object object) {
             super.setPrimaryItem(container, position, object);
-            //setTitle(getPageTitle(position));
             TextView t = (TextView) findViewById(R.id.toolbar_title);
             t.setText(getPageTitle(position));
         }
     }
 
+    //this is for the settings drawer
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            selectItem(position);
+            Log.d("drawer click listener", "has been click at position" + position);
+            Intent intent;
+
+            //TODO: the rest of these options need screens to be linked too
+            switch (position) {
+                case 1:
+                    //my profile
+                    intent = new Intent(MainActivity.this, Profile.class);
+                    break;
+                case 2:
+                    //notifications
+                    intent = new Intent(MainActivity.this, NotificationSettings.class);
+                    break;
+//                case 3:
+//                    //my horses - not required?
+//                    break;
+//                case 4:
+//                    //settings
+//                    break;
+//                case 5:
+//                    //feedback
+//                    break;
+                default:
+                    intent = new Intent(MainActivity.this, MainActivity.class);
+                    break;
+
+
+            }
+            drawerLayout.closeDrawer(drawerList);
+
+            startActivity(intent);
+
         }
     }
 
-    /** Swaps fragments in the main content view */
-    private void selectItem(int position) {
-        Toast.makeText(this, position, Toast.LENGTH_SHORT).show();
-        drawerLayout.closeDrawer(drawerList);
-
-    }
 }
-
-

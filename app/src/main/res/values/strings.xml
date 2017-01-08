@@ -14,6 +14,8 @@
     <string name="title_activity_new_horse">Add Horse</string>
 
     <!-- Strings related to Settings -->
+    <string name="drawer_open">Open Drawer</string>
+    <string name="drawer_close">Close Drawer</string>
 
     <!-- Example General settings -->
     <string name="pref_header_general">General</string>
@@ -84,5 +86,7 @@
     <string name="pref_ringtone_silent">Silent</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
+    <string name="title_activity_profile">Profile</string>
+    <string name="title_activity_notification_settings">NotificationSettings</string>
 
 </resources>
