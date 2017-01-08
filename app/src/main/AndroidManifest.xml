@@ -48,6 +48,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.abc.foaled.MainActivity" />
         </activity>
+        <activity
+            android:name=".AddNewHorse"
+            android:label="@string/title_activity_add_new_horse"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.abc.foaled.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

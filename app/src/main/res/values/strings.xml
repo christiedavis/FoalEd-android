@@ -88,5 +88,6 @@
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="title_activity_profile">Profile</string>
     <string name="title_activity_notification_settings">NotificationSettings</string>
+    <string name="title_activity_add_new_horse">Add New Horse</string>
 
 </resources>
