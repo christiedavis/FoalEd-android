@@ -29,7 +29,7 @@
     <string name="pref_default_display_name">John Smith</string>
 
     <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
-    <string-array name="pref_example_list_titles">
+<!--    <string-array name="pref_example_list_titles">
         <item>Always</item>
         <item>When possible</item>
         <item>Never</item>
@@ -38,13 +38,13 @@
         <item>1</item>
         <item>0</item>
         <item>-1</item>
-    </string-array>
+    </string-array>-->
 
     <!-- Example settings for Data & Sync -->
     <string name="pref_header_data_sync">Data &amp; sync</string>
 
     <string name="pref_title_sync_frequency">Sync frequency</string>
-    <string-array name="pref_sync_frequency_titles">
+<!--    <string-array name="pref_sync_frequency_titles">
         <item>15 minutes</item>
         <item>30 minutes</item>
         <item>1 hour</item>
@@ -71,7 +71,7 @@
         <item>1</item>
         <item>2</item>
         <item>3</item>
-    </string-array>
+    </string-array>-->
 
     <string-array name="multi_select_list_preference_default_value" />
 
@@ -89,5 +89,35 @@
     <string name="title_activity_profile">Profile</string>
     <string name="title_activity_notification_settings">NotificationSettings</string>
     <string name="title_activity_add_new_horse">Add New Horse</string>
+
+
+
+
+
+
+    <string name="name">Name</string>
+    <string name="age">Age</string>
+    <string name="query">Query</string>
+    <string name="delete">Delete</string>
+    <string name="database_results">Database results</string>
+    <string name="table">Table</string>
+    <string name="insert">Insert</string>
+    <string name="remove_table">Remove Table</string>
+    <string name="facebook_app_id">699311710219758</string>
+    <string name="edit_fields">Edit Fields</string>
+    <string name="dob">Date of Birth</string>
+    <string name="weight">Weight</string>
+    <string name="height">Height</string>
+    <string name="breed">Breed</string>
+    <string name="mare">Mare</string>
+    <string name="status">Status</string>
+    <string name="location">Location</string>
+    <string name="image">Image</string>
+    <string name="update">Update</string>
+    <string name="dialog_ok">Confirm</string>
+    <string name="dialog_cancel">Cancel</string>
+    <string name="male">Make</string>
+    <string name="female">Female</string>
+    <string name="colour">Colour</string>
 
 </resources>
