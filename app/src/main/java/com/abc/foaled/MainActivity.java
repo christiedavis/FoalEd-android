@@ -4,10 +4,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.Toolbar;
@@ -25,19 +23,17 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 
+import com.abc.foaled.DatabaseTables.Horse;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -168,9 +164,15 @@ public class MainActivity extends AppCompatActivity {
                 List<Horse> horses;
 
                 horses = new ArrayList<>();
-                horses.add(new Horse("Emma Wilson", "23 years old", R.drawable.christie));
+/*                horses.add(new Horse("Emma Wilson", "23 years old", R.drawable.christie));
                 horses.add(new Horse("Lavery Maiss", "25 years old", R.drawable.emma));
-                horses.add(new Horse("Lillie Watts", "35 years old", R.drawable.alitia));
+                horses.add(new Horse("Lillie Watts", "35 years old", R.drawable.alitia));*/
+                for (int i = 0; i < 3; i++) {
+                    Horse horse = new Horse();
+                    horse.name = "horse" + i;
+                    horse.photo = R.drawable.christie;
+                    horses.add(horse);
+                }
 
                 View rootView = inflater.inflate(R.layout.recyler_view, container, false);
 

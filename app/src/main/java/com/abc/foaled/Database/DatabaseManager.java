@@ -1,4 +1,4 @@
-package com.abc.foaled;
+package com.abc.foaled.Database;
 
 /**
  * Created by Brendan on 15/01/2017.
@@ -10,8 +10,7 @@ import java.util.List;
 
 import android.content.Context;
 
-import com.abc.foaled.DatabaseDescription.ChildrenTable;
-import com.abc.foaled.DatabaseDescription.HorseTable;
+import com.abc.foaled.DatabaseTables.Horse;
 
 public class DatabaseManager {
 
@@ -36,8 +35,8 @@ public class DatabaseManager {
         return helper;
     }
 
-    public List<HorseTable> getAllHorses() {
-        List<HorseTable> Horses = null;
+    public List<Horse> getAllHorses() {
+        List<Horse> Horses = null;
         try {
             Horses = getHelper().getHorseDao().queryForAll();
         } catch (SQLException e) {

@@ -1,10 +1,9 @@
-package com.abc.foaled;
+package com.abc.foaled.Database;
 
 /**
  * Created by PC on 15/01/2017.
  */
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

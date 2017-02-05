@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.abc.foaled.DatabaseTables.Horse;
+
 import java.util.List;
 
 /**
@@ -69,8 +71,8 @@ public class RVAdaptor extends RecyclerView.Adapter<com.abc.foaled.RVAdaptor.Hor
     @Override
     public void onBindViewHolder(HorseViewHolder holder, int i) {
         holder.personName.setText(horses.get(i).name);
-        holder.personAge.setText(horses.get(i).age);
-        holder.personPhoto.setImageResource(horses.get(i).photoId);
+//        holder.personAge.setText(horses.get(i).age);
+        holder.personPhoto.setImageResource(horses.get(i).photo);
     }
 
     @Override

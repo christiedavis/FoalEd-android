@@ -18,25 +18,22 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 
-import android.support.v4.content.CursorLoader;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.abc.foaled.DatabaseDescription.HorseTable;
+import com.abc.foaled.Database.DatabaseHelper;
+import com.abc.foaled.Database.ORMBaseActivity;
+import com.abc.foaled.DatabaseTables.Horse;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -174,7 +171,7 @@ public class AddNewHorse extends ORMBaseActivity<DatabaseHelper> {
         RadioGroup test = (RadioGroup) findViewById(R.id.radioGroup);
         RadioButton radioSex = (RadioButton) findViewById(test.getCheckedRadioButtonId());
 
-        String name = nameView.getText().toString();
+/*        String name = nameView.getText().toString();
         String age = ageView.getText().toString();
         String colour = colourView.getText().toString();
 
@@ -187,7 +184,7 @@ public class AddNewHorse extends ORMBaseActivity<DatabaseHelper> {
             e.printStackTrace();
         }
         //True if selected female, false if not
-        boolean sex = radioSex.getText().equals("Female");
+        boolean sex = radioSex.getText().equals("Female");*/
 
 /*        if (name.equals("") || age.equals("")) {
             if (name.equals(""))
@@ -198,9 +195,8 @@ public class AddNewHorse extends ORMBaseActivity<DatabaseHelper> {
         }*/
 
         //Gets the Data Access Object and creates a new Horse row
-        RuntimeExceptionDao<HorseTable, Integer> horseDao = getHelper().getHorseDataDao();
-        HorseTable horse = new HorseTable(name, date, colour, sex);
-        horse.photoLocation = imagePath;
+        RuntimeExceptionDao<Horse, Integer> horseDao = getHelper().getHorseDataDao();
+        Horse horse = new Horse();
         horseDao.create(horse);
 
         query(view);
@@ -212,14 +208,14 @@ public class AddNewHorse extends ORMBaseActivity<DatabaseHelper> {
      * @param view The control that calls this method
      */
     public void query(View view) {
-        RuntimeExceptionDao<HorseTable, Integer> horseDao = getHelper().getHorseDataDao();
+        RuntimeExceptionDao<Horse, Integer> horseDao = getHelper().getHorseDataDao();
 
         TextView tv = (TextView) findViewById(R.id.textView4);
         String display = "";
 
-        List<HorseTable> Horses = horseDao.queryForAll();
+        List<Horse> Horses = horseDao.queryForAll();
 
-        for (HorseTable h : Horses)
+        for (Horse h : Horses)
             display += h.toString() + "\n";
 
         tv.setText(display);
