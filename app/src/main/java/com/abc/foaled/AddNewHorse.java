@@ -165,11 +165,11 @@ public class AddNewHorse extends ORMBaseActivity<DatabaseHelper> {
     public void insert(View view) {
 
         EditText nameView = (EditText) findViewById(R.id.editText2);
-        TextView ageView = (TextView) findViewById(R.id.editText3);
-        EditText colourView = (EditText) findViewById(R.id.editText4);
+        //TextView ageView = (TextView) findViewById(R.id.editText3);
+        //EditText colourView = (EditText) findViewById(R.id.editText4);
 
-        RadioGroup test = (RadioGroup) findViewById(R.id.radioGroup);
-        RadioButton radioSex = (RadioButton) findViewById(test.getCheckedRadioButtonId());
+        //RadioGroup test = (RadioGroup) findViewById(R.id.radioGroup);
+        //RadioButton radioSex = (RadioButton) findViewById(test.getCheckedRadioButtonId());
 
 /*        String name = nameView.getText().toString();
         String age = ageView.getText().toString();
@@ -197,6 +197,8 @@ public class AddNewHorse extends ORMBaseActivity<DatabaseHelper> {
         //Gets the Data Access Object and creates a new Horse row
         RuntimeExceptionDao<Horse, Integer> horseDao = getHelper().getHorseDataDao();
         Horse horse = new Horse();
+        horse.name = nameView.getText().toString();
+//        horse.photo = R.drawable.christie;
         horseDao.create(horse);
 
         query(view);

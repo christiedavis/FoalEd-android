@@ -6,7 +6,6 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.Toolbar;
 
@@ -29,13 +28,14 @@ import android.widget.TextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-
+import com.abc.foaled.Database.DatabaseHelper;
+import com.abc.foaled.Database.ORMBaseActivity;
 import com.abc.foaled.DatabaseTables.Horse;
+import com.j256.ormlite.dao.RuntimeExceptionDao;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends ORMBaseActivity<DatabaseHelper> {
 
     private DrawerLayout drawerLayout;
     private ListView drawerList;
@@ -76,29 +76,29 @@ public class MainActivity extends AppCompatActivity {
         toolbar.setTitleTextColor(Color.CYAN);
         setSupportActionBar(toolbar);
 
-//        drawerLayout = (DrawerLayout) findViewById(R.id.settings_drawer_layout);
-//        appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
-//        appBarLayout.setBackgroundColor(Color.MAGENTA);
-//        ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close)
-//        {
-//            /** Called when a drawer has settled in a completely closed state. */
-//            public void onDrawerClosed(View view) {
-//            super.onDrawerClosed(view);
-//            getActionBar().setTitle("TEST1");
-//        }
-//
-//            /** Called when a drawer has settled in a completely open state. */
-//        public void onDrawerOpened(View drawerView) {
-//            super.onDrawerOpened(drawerView);
-//            getActionBar().setTitle("TEST2");
-//        }
-//        };
-//
-//        // Set the drawer toggle as the DrawerListener
-//        drawerLayout.setDrawerListener(mDrawerToggle);
-//
-//        getActionBar().setDisplayHomeAsUpEnabled(true);
-//        getActionBar().setHomeButtonEnabled(true);
+/*        drawerLayout = (DrawerLayout) findViewById(R.id.settings_drawer_layout);
+        appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
+        appBarLayout.setBackgroundColor(Color.MAGENTA);
+        ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close)
+        {
+            *//** Called when a drawer has settled in a completely closed state. *//*
+            public void onDrawerClosed(View view) {
+            super.onDrawerClosed(view);
+            getActionBar().setTitle("TEST1");
+        }
+
+            *//** Called when a drawer has settled in a completely open state. *//*
+        public void onDrawerOpened(View drawerView) {
+            super.onDrawerOpened(drawerView);
+            getActionBar().setTitle("TEST2");
+        }
+        };
+
+        // Set the drawer toggle as the DrawerListener
+        drawerLayout.setDrawerListener(mDrawerToggle);
+
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setHomeButtonEnabled(true);*/
 
 
 
@@ -127,8 +127,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-        };
-
+        }
 
 
     /**
@@ -140,16 +139,19 @@ public class MainActivity extends AppCompatActivity {
          * fragment.
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
+        private List<Horse> horses;
+        private RuntimeExceptionDao<Horse, Integer> horseDao;
 
         public PlaceholderFragment() {
         }
 
         /**
          * Returns a new instance of this fragment for the given section
-         * number.
+         * number. Also passes through the current Horse DAO
          */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
+        public static PlaceholderFragment newInstance(int sectionNumber, RuntimeExceptionDao<Horse, Integer> horseDao) {
             PlaceholderFragment fragment = new PlaceholderFragment();
+            fragment.horseDao = horseDao;
             Bundle args = new Bundle();
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
             fragment.setArguments(args);
@@ -161,18 +163,11 @@ public class MainActivity extends AppCompatActivity {
 
             if (getArguments().getInt(ARG_SECTION_NUMBER) == 2) // makes cards for second view
             {
-                List<Horse> horses;
+                horses = horseDao.queryForAll();
 
-                horses = new ArrayList<>();
 /*                horses.add(new Horse("Emma Wilson", "23 years old", R.drawable.christie));
                 horses.add(new Horse("Lavery Maiss", "25 years old", R.drawable.emma));
                 horses.add(new Horse("Lillie Watts", "35 years old", R.drawable.alitia));*/
-                for (int i = 0; i < 3; i++) {
-                    Horse horse = new Horse();
-                    horse.name = "horse" + i;
-                    horse.photo = R.drawable.christie;
-                    horses.add(horse);
-                }
 
                 View rootView = inflater.inflate(R.layout.recyler_view, container, false);
 
@@ -209,7 +204,9 @@ public class MainActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
+
+            //When we create this, we pass through the current DatabaseHelper
+            return PlaceholderFragment.newInstance(position + 1, getHelper().getHorseDataDao());
         }
 
         @Override // Show 3 total pages.
