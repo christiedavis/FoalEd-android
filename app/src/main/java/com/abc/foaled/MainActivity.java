@@ -49,11 +49,6 @@ import static com.abc.foaled.R.id.rv;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-
-
-    private ListView drawerList;
-    private String[] drawerStringArray;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,8 +60,6 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         //Settings drawer
-        drawerStringArray = getResources().getStringArray(R.array.drawer_items_arrays);
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -75,10 +68,6 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-//        drawerList = (ListView) findViewById(R.id.navdrawer_list);
-//        drawerList.setAdapter(new ArrayAdapter<>(this, R.layout.drawer_list_item, drawerStringArray));
-//        drawerList.setOnItemClickListener(new DrawerItemClickListener());
 
         //floating action button
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -90,9 +79,10 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        // TODO: SET UP VIEW
+        // SeT UP VIEW
 
         RecyclerView rvHorses = (RecyclerView) findViewById(R.id.rv);
+
 
         // Initialize Horse list
         List<Horse> horses = new ArrayList<>();
@@ -111,17 +101,8 @@ public class MainActivity extends AppCompatActivity
         rvHorses.setAdapter(adapter);
         // Set layout manager to position the items
         rvHorses.setLayoutManager(new LinearLayoutManager(this));
-        // That's all!
 
-//        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.rv);
-//
-//        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-//        recyclerView.setLayoutManager(mLayoutManager);
-//        recyclerView.setItemAnimator(new DefaultItemAnimator());
-//        RVAdaptor adapter = new RVAdaptor(horses);
-//        recyclerView.setAdapter(adapter);
     }
-
 
     @Override
     public void onBackPressed() {
@@ -179,5 +160,4 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
 }

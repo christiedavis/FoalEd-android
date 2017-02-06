@@ -22,14 +22,6 @@
             android:fitsSystemWindows="true"
             tools:context="com.abc.foaled.MainActivity">
 
-            <android.support.v7.widget.RecyclerView
-                android:layout_height="match_parent"
-                android:layout_width="match_parent"
-                android:id="@+id/rv"
-                >
-
-            </android.support.v7.widget.RecyclerView>
-
         </android.support.design.widget.CoordinatorLayout>
 
     <android.support.design.widget.NavigationView
@@ -39,7 +31,7 @@
     android:layout_gravity="start"
     android:fitsSystemWindows="true"
     app:headerLayout="@layout/nav_header_home_page"
-    app:menu="@menu/activity_home_page_drawer" >
+    app:menu="@menu/activity_main_drawer" >
 
     </android.support.design.widget.NavigationView>
 
