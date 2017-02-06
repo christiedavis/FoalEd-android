@@ -1,8 +1,10 @@
-package com.abc.foaled;
+package com.abc.foaled.Activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
+
+import com.abc.foaled.R;
 
 public class HorseDetailActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package com.abc.foaled;
+package com.abc.foaled.Activity;
 
 import android.Manifest;
 import android.app.Activity;
@@ -30,11 +30,12 @@ import android.widget.Toast;
 import com.abc.foaled.Database.DatabaseHelper;
 import com.abc.foaled.Database.ORMBaseActivity;
 import com.abc.foaled.DatabaseTables.Horse;
+import com.abc.foaled.Fragment.DatePickerFragment;
+import com.abc.foaled.R;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -42,7 +43,7 @@ import java.util.Locale;
 
 
 
-public class AddNewHorse extends ORMBaseActivity<DatabaseHelper> {
+public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
 
     public final static String EXTRA_MESSAGE = "";
     static final int REQUEST_IMAGE_CAPTURE = 1;

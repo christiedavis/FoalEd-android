@@ -1,4 +1,4 @@
-package com.abc.foaled;
+package com.abc.foaled.Adaptors;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.abc.foaled.DatabaseTables.Horse;
+import com.abc.foaled.Activity.HorseDetailActivity;
+import com.abc.foaled.R;
 
 import java.util.List;
 
@@ -19,7 +21,7 @@ import java.util.List;
  * Used to generate cards :)
  */
 
-public class RVAdaptor extends RecyclerView.Adapter<com.abc.foaled.RVAdaptor.HorseViewHolder>{
+public class RVAdaptor extends RecyclerView.Adapter<RVAdaptor.HorseViewHolder>{
 
     List<Horse> horses;
 
@@ -53,11 +55,11 @@ public class RVAdaptor extends RecyclerView.Adapter<com.abc.foaled.RVAdaptor.Hor
     }
 
 
-    RVAdaptor(List<Horse> horses) { this.horses = horses; }
+    public RVAdaptor(List<Horse> horses) { this.horses = horses; }
 
     @Override
     public HorseViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.card, viewGroup, false);
+        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.view_card, viewGroup, false);
         HorseViewHolder pvh = new HorseViewHolder(v);
         return pvh;
     }

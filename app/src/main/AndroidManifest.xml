@@ -34,21 +34,25 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-<!--        <activity
+        <!--
+            <activity
             android:name=".Main2Activity"
             android:label="@string/title_activity_main2"
-            android:theme="@style/AppTheme.NoActionBar" />-->
-<!--        <activity
+            android:theme="@style/AppTheme.NoActionBar" />
+        -->
+        <!--
+            <activity
             android:name=".AddHorseActivity"
             android:label="@string/title_activity_new_horse"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.abc.foaled.MainActivity" />
-        </activity>-->
-        <activity android:name=".HorseDetailActivity" />
+        </activity>
+        -->
+        <activity android:name=".Activity.HorseDetailActivity" />
         <activity
-            android:name=".Profile"
+            android:name=".Activity.ProfileActivity"
             android:label="@string/title_activity_profile"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -57,7 +61,7 @@
                 android:value="com.abc.foaled.MainActivity" />
         </activity>
         <activity
-            android:name=".NotificationSettings"
+            android:name=".Activity.NotificationSettingsActivity"
             android:label="@string/title_activity_notification_settings"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -66,13 +70,23 @@
                 android:value="com.abc.foaled.MainActivity" />
         </activity>
         <activity
-            android:name=".AddNewHorse"
+            android:name=".Activity.AddNewHorseActivity"
             android:label="@string/title_activity_add_new_horse"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.abc.foaled.MainActivity" />
+        </activity>
+        <activity
+            android:name=".Activity.HomePageActivity"
+            android:label="@string/title_activity_home_page"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 

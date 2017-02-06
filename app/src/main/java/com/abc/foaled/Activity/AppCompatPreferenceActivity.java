@@ -1,4 +1,4 @@
-package com.abc.foaled;
+package com.abc.foaled.Activity;
 
 import android.content.res.Configuration;
 import android.os.Bundle;

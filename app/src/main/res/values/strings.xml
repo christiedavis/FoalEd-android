@@ -29,7 +29,7 @@
     <string name="pref_default_display_name">John Smith</string>
 
     <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
-<!--    <string-array name="pref_example_list_titles">
+    <!--    <string-array name="pref_example_list_titles">
         <item>Always</item>
         <item>When possible</item>
         <item>Never</item>
@@ -44,7 +44,7 @@
     <string name="pref_header_data_sync">Data &amp; sync</string>
 
     <string name="pref_title_sync_frequency">Sync frequency</string>
-<!--    <string-array name="pref_sync_frequency_titles">
+    <!--    <string-array name="pref_sync_frequency_titles">
         <item>15 minutes</item>
         <item>30 minutes</item>
         <item>1 hour</item>
@@ -91,10 +91,6 @@
     <string name="title_activity_add_new_horse">Add New Horse</string>
 
 
-
-
-
-
     <string name="name">Name</string>
     <string name="age">Age</string>
     <string name="query">Query</string>
@@ -119,5 +115,6 @@
     <string name="male">Make</string>
     <string name="female">Female</string>
     <string name="colour">Colour</string>
+    <string name="title_activity_home_page">HomePageActivity</string>
 
 </resources>
