@@ -1,5 +1,6 @@
 package com.abc.foaled.DatabaseTables;
 
+import com.abc.foaled.R;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
@@ -18,8 +19,8 @@ public class Horse {
     private int id;                             //ID
     @DatabaseField
     public String name;                        //NAME
-    @DatabaseField(canBeNull = false)
-    private Births birth;
+    @DatabaseField(canBeNull = false, foreign = true)
+    private Births birth = new Births(this);
     @DatabaseField
     private  boolean sex;                       //SEX
     @DatabaseField
@@ -36,6 +37,7 @@ public class Horse {
         this.markings = null;
         this.notes = null;
         this.sex = false;
+        this.photo = R.drawable.christie;
     }
 
     /**
@@ -49,6 +51,7 @@ public class Horse {
         sb.append(", ").append("name=").append(name);
         SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MMM/yyyy", Locale.US);
         sb.append(", ").append("sex=").append(sex);
+        sb.append(", ").append("photo=").append(photo+"");
         return sb.toString();
     }
 

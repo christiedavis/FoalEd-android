@@ -13,6 +13,8 @@ import java.util.Date;
 @DatabaseTable(tableName = "births")
 public class Births {
 
+    @DatabaseField(generatedId = true)
+    private int id;
     @DatabaseField(canBeNull = false, foreign = true)
     private Horse horse;        //Foreign horse id
     @DatabaseField(canBeNull = false, foreign = true)
@@ -37,6 +39,10 @@ public class Births {
         this.est_conception = null;
         this.birth_time = null;
         this.notes = null;
+    }
+
+    public Births() {
+
     }
 
     /**

@@ -1,52 +1,34 @@
 package com.abc.foaled;
 
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.Toolbar;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.os.Bundle;
-import android.util.AttributeSet;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 
 import android.view.Window;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 
 import com.abc.foaled.Activity.AddNewHorseActivity;
-import com.abc.foaled.Activity.NotificationSettingsActivity;
-import com.abc.foaled.Activity.ProfileActivity;
 import com.abc.foaled.Adaptors.RVAdaptor;
+import com.abc.foaled.Database.DatabaseHelper;
+import com.abc.foaled.Database.ORMBaseActivity;
 import com.abc.foaled.DatabaseTables.Horse;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import static com.abc.foaled.R.id.rv;
-
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends ORMBaseActivity<DatabaseHelper>
         implements NavigationView.OnNavigationItemSelectedListener {
 
     @Override
@@ -79,22 +61,11 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        // SeT UP VIEW
+        // SET UP VIEW
 
         RecyclerView rvHorses = (RecyclerView) findViewById(R.id.rv);
-
-
         // Initialize Horse list
-        List<Horse> horses = new ArrayList<>();
-//      horses.add(new Horse("Emma Wilson", "23 years old", R.drawable.christie));
-//      horses.add(new Horse("Lavery Maiss", "25 years old", R.drawable.emma));
-//      horses.add(new Horse("Lillie Watts", "35 years old", R.drawable.alitia));
-        for (int i = 0; i < 3; i++) {
-            Horse horse = new Horse();
-            horse.name = "horse" + i;
-            horse.photo = R.drawable.christie;
-            horses.add(horse);
-        }
+        List<Horse> horses = getHelper().getHorseDataDao().queryForAll();
         // Create adapter passing in the sample user data
         RVAdaptor adapter = new RVAdaptor(horses);
         // Attach the adapter to the recyclerview to populate items

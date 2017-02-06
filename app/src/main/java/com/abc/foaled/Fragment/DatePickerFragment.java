@@ -68,7 +68,7 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
 
     /**
      * Sets the Date of Birth TextView to the value specified in the
-     * DateTimePicker Dialog Fragment. This is the onTimeSet() callback
+     * DateTimePicker Dialog FragmentExtender. This is the onTimeSet() callback
      * method, and gets called when the user chooses the date
      *
      * @param view The DatePicker view that was being interacted with
