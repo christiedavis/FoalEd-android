@@ -1,11 +1,17 @@
 package com.abc.foaled;
 
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.Toolbar;
 
 import android.os.Bundle;
@@ -13,18 +19,19 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
 import android.view.Window;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-
 import com.abc.foaled.Activity.AddNewHorseActivity;
+import com.abc.foaled.Activity.HomePageActivity;
 import com.abc.foaled.Adaptors.RVAdaptor;
 import com.abc.foaled.Database.DatabaseHelper;
 import com.abc.foaled.Database.ORMBaseActivity;
 import com.abc.foaled.DatabaseTables.Horse;
+import com.abc.foaled.Notifications.NotificationPublisher;
+import com.abc.foaled.Notifications.NotificationScheduler;
 
 import java.util.List;
 
@@ -45,6 +52,7 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        //TODO fix this
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
@@ -64,7 +72,7 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
         // SET UP VIEW
 
         RecyclerView rvHorses = (RecyclerView) findViewById(R.id.rv);
-        // Initialize Horse list
+        // Initialize Horse list with all horses in database
         List<Horse> horses = getHelper().getHorseDataDao().queryForAll();
         // Create adapter passing in the sample user data
         RVAdaptor adapter = new RVAdaptor(horses);
@@ -127,8 +135,65 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
 
         }
 
+        //createNotification();
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void createNotification() {
+        NotificationCompat.Builder notificationBuilder =
+                new NotificationCompat.Builder(this);
+
+        notificationBuilder
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setCategory(Notification.CATEGORY_EVENT)
+                .setAutoCancel(true)
+                .setPriority(NotificationCompat.PRIORITY_MAX)
+                .setContentTitle("FoalEd")
+                .setContentText("<Insert notification here>");
+
+        NotificationScheduler notificationScheduler = new NotificationScheduler(this);
+        notificationScheduler.schedule(notificationBuilder.build(), 10000, new Intent(this, MainActivity.class));
+
+/*        Intent resultIntent = new Intent(this, HomePageActivity.class);
+        PendingIntent resultPendingIntent =
+                PendingIntent.getActivity(
+                        this,
+                        1,
+                        resultIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this);
+        mBuilder
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setAutoCancel(true)
+                .setContentIntent(resultPendingIntent)
+                .setPriority(NotificationCompat.PRIORITY_MAX)
+                .setContentTitle("FoalEd")
+                .setContentText("<Insert notification here>");
+
+
+        Notification notification = mBuilder.build();
+        notification.defaults |= Notification.DEFAULT_ALL;
+
+
+        Intent notificationIntent = new Intent(this, NotificationPublisher.class);
+        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification);
+        PendingIntent pendingIntent =
+                PendingIntent.getBroadcast(
+                        this,
+                        2,
+                        notificationIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
+
+
+        long futureInMillis = SystemClock.elapsedRealtime() + 5000;
+        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);*/
+
     }
 }
