@@ -4,6 +4,7 @@ import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -17,9 +18,9 @@ public class Births {
     private int id;
     @DatabaseField(canBeNull = false, foreign = true)
     private Horse horse;        //Foreign horse id
-    @DatabaseField(canBeNull = false, foreign = true)
+    @DatabaseField(foreign = true)
     private Horse sire;
-    @DatabaseField(canBeNull = false, foreign = true)
+    @DatabaseField(foreign = true)
     private Horse mare;
 
     @DatabaseField(dataType = DataType.DATE_STRING)
@@ -37,7 +38,7 @@ public class Births {
         this.sire = null;
         this.mare = null;
         this.est_conception = null;
-        this.birth_time = null;
+        this.birth_time = Calendar.getInstance().getTime();
         this.notes = null;
     }
 

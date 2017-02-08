@@ -59,16 +59,29 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
      */
     @Override
     public void onUpgrade(SQLiteDatabase db, ConnectionSource connectionSource, int oldVersion, int newVersion) {
-        try {
+/*        try {
             Log.i(DatabaseHelper.class.getName(), "onUpgrade");
             TableUtils.dropTable(connectionSource, Horse.class, true);
             TableUtils.dropTable(connectionSource, Births.class, true);
             // after we drop the old databases, we create the new ones
             onCreate(db, connectionSource);
+
+
         } catch (SQLException e) {
-            Log.e(DatabaseHelper.class.getName(), "Can't drop databases", e);
+            //Log.e(DatabaseHelper.class.getName(), "Can't drop databases", e);
             throw new RuntimeException(e);
-        }
+        } */
+/*        RuntimeExceptionDao<Horse, Integer> horseDAO = getHorseDataDao();
+
+        try {
+            //Upgrading to version 3 of the database
+            if (oldVersion < 3) {
+                horseDao.executeRaw("ALTER TABLE 'horse' ADD COLUMN status INTEGER DEFAULT 0;");
+                horseDao.updateRaw("UPDATE 'horse' SET status = 1 WHERE 'birthdate makes them a foal");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }*/
     }
 
     /**

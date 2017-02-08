@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import com.abc.foaled.Database.DatabaseHelper;
 import com.abc.foaled.Database.ORMBaseActivity;
+import com.abc.foaled.DatabaseTables.Births;
 import com.abc.foaled.DatabaseTables.Horse;
 import com.abc.foaled.Fragment.DatePickerFragment;
 import com.abc.foaled.R;
@@ -195,10 +196,11 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
 
         //Gets the Data Access Object and creates a new Horse row
         RuntimeExceptionDao<Horse, Integer> horseDao = getHelper().getHorseDataDao();
+        //RuntimeExceptionDao<Births, Integer> birthsDao = getHelper().getBirthsDataDao();
         Horse horse = new Horse();
         horse.name = nameView.getText().toString();
-//        horse.photo = R.drawable.christie;
         horseDao.create(horse);
+        //birthsDao.create(horse.birth);
 
         query(view);
     }
