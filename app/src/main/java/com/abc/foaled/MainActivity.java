@@ -21,6 +21,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.abc.foaled.Activity.AddNewHorseActivity;
+import com.abc.foaled.Activity.HorseDetailActivity;
+import com.abc.foaled.Activity.NotificationSettingsActivity;
 import com.abc.foaled.Adaptors.RVAdaptor;
 import com.abc.foaled.Database.DatabaseHelper;
 import com.abc.foaled.Database.ORMBaseActivity;
@@ -129,17 +131,29 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_horses) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_foals) {
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_mares) {
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_notifications) {
+            //push notificationSettings
 
-        } else if (id == R.id.nav_share) {
+            final Intent intent;
+            intent = new Intent(this, NotificationSettingsActivity.class);
+            //intent.putExtra("desc",details[position]);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            this.startActivity(intent);
 
-        } else if (id == R.id.nav_send) {
+
+        } else if (id == R.id.nav_settings) {
+
+        } else if (id == R.id.nav_faq) {
+
+        }else if (id == R.id.nav_about) {
+
+        }else if (id == R.id.nav_feedback) {
 
         }
 
