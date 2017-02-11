@@ -37,7 +37,7 @@ public class Horse {
     @DatabaseField
     public String name;                        //NAME
     @DatabaseField(canBeNull = false, foreign = true)
-    private Births birth = new Births(this);
+    public Births birth = new Births(this);
     @DatabaseField
     private boolean sex;                       //SEX
     @DatabaseField

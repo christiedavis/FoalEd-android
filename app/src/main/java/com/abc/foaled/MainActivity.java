@@ -1,11 +1,7 @@
 package com.abc.foaled;
 
-import android.app.AlarmManager;
 import android.app.Notification;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
-import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -29,13 +25,16 @@ import com.abc.foaled.Adaptors.RVAdaptor;
 import com.abc.foaled.Database.DatabaseHelper;
 import com.abc.foaled.Database.ORMBaseActivity;
 import com.abc.foaled.DatabaseTables.Horse;
-import com.abc.foaled.Notifications.NotificationPublisher;
 import com.abc.foaled.Notifications.NotificationScheduler;
 
 import java.util.List;
 
 public class MainActivity extends ORMBaseActivity<DatabaseHelper>
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    RecyclerView rvHorses;
+    List<Horse> horses;
+    RVAdaptor adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,16 +69,26 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
 
         // SET UP VIEW
 
-        RecyclerView rvHorses = (RecyclerView) findViewById(R.id.rv);
+
+        rvHorses = (RecyclerView) findViewById(R.id.rv);
         // Initialize Horse list with all horses in database
-        List<Horse> horses = getHelper().getHorseDataDao().queryForAll();
+        horses = getHelper().getHorseDataDao().queryForAll();
         // Create adapter passing in the sample user data
-        RVAdaptor adapter = new RVAdaptor(horses);
+        adapter = new RVAdaptor(horses);
         // Attach the adapter to the recyclerview to populate items
         rvHorses.setAdapter(adapter);
         // Set layout manager to position the items
         rvHorses.setLayoutManager(new LinearLayoutManager(this));
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        horses = getHelper().getHorseDataDao().queryForAll();
+        //TODO this seems like the wrong way to update the recycler view?
+        adapter = new RVAdaptor(horses);
+        rvHorses.setAdapter(adapter);
     }
 
     @Override
@@ -134,7 +143,7 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
 
         }
 
-        //createNotification();
+        createNotification();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -144,6 +153,7 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
     private void createNotification() {
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this);
+
 
         notificationBuilder
                 .setSmallIcon(R.mipmap.ic_launcher)
