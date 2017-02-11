@@ -1,13 +1,12 @@
 package com.abc.foaled.DatabaseTables;
 
+import com.abc.foaled.Milestone;
 import com.abc.foaled.R;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
-
-import static com.abc.foaled.DatabaseTables.Horse.HORSE_STATUS.HORSE_STATUS_DORMANT;
 
 /**
  * Created by Brendan on 29/12/16.
@@ -47,6 +46,9 @@ public class Horse {
     private String notes;
     @DatabaseField (unknownEnumName = "HORSE_STATUS_DORMANT")
     private HORSE_STATUS status;
+    @DatabaseField
+    private boolean favourite;
+
 
     //TODO need to update database to include photo location OR actual photo
     public int photo;
@@ -76,5 +78,11 @@ public class Horse {
     }
 
     //TODO return method for age (done through birth dob field)
+
+
+    public void addMilestones() {
+        // add new milestone
+        Milestone milestone1 = new Milestone(Milestone.MILESTONE.MILESTONE_POOP);
+    }
 
 }

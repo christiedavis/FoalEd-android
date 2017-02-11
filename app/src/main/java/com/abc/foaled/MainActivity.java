@@ -25,7 +25,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.abc.foaled.Activity.AddNewHorseActivity;
-import com.abc.foaled.Activity.HomePageActivity;
 import com.abc.foaled.Adaptors.RVAdaptor;
 import com.abc.foaled.Database.DatabaseHelper;
 import com.abc.foaled.Database.ORMBaseActivity;
