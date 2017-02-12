@@ -1,10 +1,6 @@
 package com.abc.foaled.Activity;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.NavUtils;
-import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -22,8 +18,6 @@ public class FeedbackActivity extends AppCompatActivity {
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_camera);
-
 
     }
 

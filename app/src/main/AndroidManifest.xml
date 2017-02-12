@@ -41,7 +41,7 @@
 
         <!-- **  screens  ** -->
         <activity android:name=".Activity.HorseDetailActivity"
-            android:label="Feedback"
+            android:label="Horse Detail"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
         <meta-data
