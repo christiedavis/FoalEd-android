@@ -1,9 +1,14 @@
 package com.abc.foaled;
 
+import android.content.ClipData;
+import android.support.v4.app.Fragment;
 import android.app.Notification;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -27,12 +32,14 @@ import com.abc.foaled.Adaptors.RVAdaptor;
 import com.abc.foaled.Database.DatabaseHelper;
 import com.abc.foaled.Database.ORMBaseActivity;
 import com.abc.foaled.DatabaseTables.Horse;
+import com.abc.foaled.Fragment.FavouriteHorsesFragment;
+import com.abc.foaled.Fragment.NotificationSettingsFragment;
 import com.abc.foaled.Notifications.NotificationScheduler;
 
 import java.util.List;
 
 public class MainActivity extends ORMBaseActivity<DatabaseHelper>
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, FavouriteHorsesFragment.OnListFragmentInteractionListener, NotificationSettingsFragment.OnFragmentInteractionListener {
 
     RecyclerView rvHorses;
     List<Horse> horses;
@@ -47,6 +54,19 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
+        // SET UP FRAGMENT
+
+        horses = getHelper().getHorseDataDao().queryForAll(); //get data
+
+        FragmentTransaction fragmentManager = getSupportFragmentManager().beginTransaction();
+
+        FavouriteHorsesFragment fragment = FavouriteHorsesFragment.newInstance();
+        fragment.setListToBeDisplayed(horses);
+
+        fragmentManager.replace(R.id.flContent, fragment).commit();
+
 
         //Settings drawer
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -69,28 +89,15 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
             }
         });
 
-        // SET UP VIEW
-
-
-        rvHorses = (RecyclerView) findViewById(R.id.rv);
-        // Initialize Horse list with all horses in database
-        horses = getHelper().getHorseDataDao().queryForAll();
-        // Create adapter passing in the sample user data
-        adapter = new RVAdaptor(horses);
-        // Attach the adapter to the recyclerview to populate items
-        rvHorses.setAdapter(adapter);
-        // Set layout manager to position the items
-        rvHorses.setLayoutManager(new LinearLayoutManager(this));
-
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        horses = getHelper().getHorseDataDao().queryForAll();
-        //TODO this seems like the wrong way to update the recycler view?
-        adapter = new RVAdaptor(horses);
-        rvHorses.setAdapter(adapter);
+//        horses = getHelper().getHorseDataDao().queryForAll();
+//        //TODO this seems like the wrong way to update the recycler view?
+//        adapter = new RVAdaptor(horses);
+//        rvHorses.setAdapter(adapter);
     }
 
     @Override
@@ -125,10 +132,11 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
+        Fragment fragment = null;
+        Class fragmentClass = null;
         int id = item.getItemId();
 
         if (id == R.id.nav_horses) {
@@ -148,6 +156,9 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
 
 
         } else if (id == R.id.nav_settings) {
+            fragmentClass = NotificationSettingsFragment.class;
+
+
 
         } else if (id == R.id.nav_faq) {
 
@@ -155,13 +166,36 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
 
         }else if (id == R.id.nav_feedback) {
 
+        }else {
+            fragmentClass = NotificationSettingsFragment.class;
         }
 
-        createNotification();
+
+        try {
+            fragment = (Fragment) fragmentClass.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+
+      //  createNotification();
+    }
+
+
+
+    @Override //needed
+    public void onFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void onListFragmentInteraction(Horse item) {
+
     }
 
     private void createNotification() {

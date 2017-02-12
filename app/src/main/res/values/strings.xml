@@ -117,4 +117,7 @@
     <string name="colour">Colour</string>
     <string name="title_activity_home_page">HomePageActivity</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

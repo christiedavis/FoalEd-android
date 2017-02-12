@@ -44,10 +44,10 @@ public class Horse {
     private String markings;
     @DatabaseField
     private String notes;
-    @DatabaseField (unknownEnumName = "HORSE_STATUS_DORMANT")
-    private HORSE_STATUS status;
-    @DatabaseField
-    private boolean favourite;
+//    @DatabaseField (unknownEnumName = "HORSE_STATUS_DORMANT")
+//    private HORSE_STATUS status;
+//    @DatabaseField
+//    private boolean favourite;
 
 
     //TODO need to update database to include photo location OR actual photo
