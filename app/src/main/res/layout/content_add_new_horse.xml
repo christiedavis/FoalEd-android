@@ -13,17 +13,6 @@
     tools:context="com.abc.foaled.Activity.AddNewHorseActivity"
     tools:showIn="@layout/activity_add_new_horse">
 
-<!--    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:text=""
-        android:ems="10"
-        android:id="@+id/editText"
-        android:hint="@string/table"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />-->
-
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -34,17 +23,6 @@
         android:hint="@string/name"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
-
-<!--    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:text=""
-        android:ems="10"
-        android:layout_below="@+id/editText2"
-        android:layout_alignParentStart="true"
-        android:id="@+id/editText3"
-        android:hint="@string/age"/>-->
 
     <TextView
         android:layout_width="wrap_content"

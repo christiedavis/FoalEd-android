@@ -1,6 +1,5 @@
 package com.abc.foaled;
 
-import android.content.ClipData;
 import android.support.v4.app.Fragment;
 import android.app.Notification;
 import android.content.Intent;
@@ -22,13 +21,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-
 import com.abc.foaled.Activity.AddNewHorseActivity;
-import com.abc.foaled.Activity.HorseDetailActivity;
-import com.abc.foaled.Activity.NotificationSettingsActivity;
-import com.abc.foaled.Adaptors.RVAdaptor;
+import com.abc.foaled.Activity.FaqActivity;
+import com.abc.foaled.Activity.FeedbackActivity;
 import com.abc.foaled.Database.DatabaseHelper;
 import com.abc.foaled.Database.ORMBaseActivity;
 import com.abc.foaled.DatabaseTables.Horse;
@@ -41,9 +36,7 @@ import java.util.List;
 public class MainActivity extends ORMBaseActivity<DatabaseHelper>
         implements NavigationView.OnNavigationItemSelectedListener, FavouriteHorsesFragment.OnListFragmentInteractionListener, NotificationSettingsFragment.OnFragmentInteractionListener {
 
-    RecyclerView rvHorses;
     List<Horse> horses;
-    RVAdaptor adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,18 +48,13 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
         // SET UP FRAGMENT
-
         horses = getHelper().getHorseDataDao().queryForAll(); //get data
-
         FragmentTransaction fragmentManager = getSupportFragmentManager().beginTransaction();
-
         FavouriteHorsesFragment fragment = FavouriteHorsesFragment.newInstance();
         fragment.setListToBeDisplayed(horses);
 
         fragmentManager.replace(R.id.flContent, fragment).commit();
-
 
         //Settings drawer
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -88,16 +76,17 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
                 startActivity(intent);
             }
         });
-
     }
 
     @Override
     public void onResume() {
         super.onResume();
-//        horses = getHelper().getHorseDataDao().queryForAll();
-//        //TODO this seems like the wrong way to update the recycler view?
-//        adapter = new RVAdaptor(horses);
-//        rvHorses.setAdapter(adapter);
+        //TODO this seems like the wrong way to update the recycler view?
+        horses = getHelper().getHorseDataDao().queryForAll(); //get data
+        FragmentTransaction fragmentManager = getSupportFragmentManager().beginTransaction();
+        FavouriteHorsesFragment fragment = FavouriteHorsesFragment.newInstance();
+        fragment.setListToBeDisplayed(horses);
+        fragmentManager.replace(R.id.flContent, fragment).commit();
     }
 
     @Override
@@ -146,25 +135,23 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
         } else if (id == R.id.nav_mares) {
 
         } else if (id == R.id.nav_notifications) {
-            //push notificationSettings
-
-            final Intent intent;
-            intent = new Intent(this, NotificationSettingsActivity.class);
-            //intent.putExtra("desc",details[position]);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-            this.startActivity(intent);
-
-
-        } else if (id == R.id.nav_settings) {
             fragmentClass = NotificationSettingsFragment.class;
 
-
+        } else if (id == R.id.nav_settings) {
 
         } else if (id == R.id.nav_faq) {
+
+            Intent intent = new Intent(this, FaqActivity.class);
+            this.startActivity(intent);
+            return true;
 
         }else if (id == R.id.nav_about) {
 
         }else if (id == R.id.nav_feedback) {
+
+            Intent intent = new Intent(this, FeedbackActivity.class);
+            this.startActivity(intent);
+            return true;
 
         }else {
             fragmentClass = NotificationSettingsFragment.class;

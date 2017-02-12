@@ -35,7 +35,6 @@ public class FavouriteHorsesFragment extends Fragment {
     public FavouriteHorsesFragment() {
     }
 
-    // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
     public static FavouriteHorsesFragment newInstance() {
         FavouriteHorsesFragment fragment = new FavouriteHorsesFragment();
@@ -52,21 +51,17 @@ public class FavouriteHorsesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_favourite_horses, container, false);
 
+         if (mHorses == null) {      //error
+             Log.e(null, "onCreateView: ERROR no horses ", null);
+         }
+
+         View view = inflater.inflate(R.layout.fragment_favourite_horses, container, false);
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
-
-            if (mHorses == null) {
-                //error
-                Log.e(null, "onCreateView: ERROR no horses ", null);
-                 //add a sample horse
-            }
-
-
             recyclerView.setAdapter(new RVAdaptor(mHorses));
         }
         return view;
@@ -98,10 +93,6 @@ public class FavouriteHorsesFragment extends Fragment {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnListFragmentInteractionListener {
         void onListFragmentInteraction(Horse horse);
