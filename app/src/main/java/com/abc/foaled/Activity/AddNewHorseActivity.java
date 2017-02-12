@@ -27,8 +27,7 @@ import android.widget.Toast;
 
 import com.abc.foaled.Database.DatabaseHelper;
 import com.abc.foaled.Database.ORMBaseActivity;
-import com.abc.foaled.DatabaseTables.Births;
-import com.abc.foaled.DatabaseTables.Horse;
+import com.abc.foaled.Models.Horse;
 import com.abc.foaled.Fragment.DatePickerFragment;
 import com.abc.foaled.R;
 import com.j256.ormlite.dao.RuntimeExceptionDao;

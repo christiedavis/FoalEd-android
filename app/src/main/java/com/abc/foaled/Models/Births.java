@@ -1,4 +1,4 @@
-package com.abc.foaled.DatabaseTables;
+package com.abc.foaled.Models;
 
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;

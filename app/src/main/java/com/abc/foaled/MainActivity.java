@@ -21,12 +21,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 
+import com.abc.foaled.Activity.AboutActivity;
 import com.abc.foaled.Activity.AddNewHorseActivity;
 import com.abc.foaled.Activity.FaqActivity;
 import com.abc.foaled.Activity.FeedbackActivity;
+import com.abc.foaled.Activity.NotificationSettingsActivity;
+import com.abc.foaled.Activity.SettingsActivity;
 import com.abc.foaled.Database.DatabaseHelper;
 import com.abc.foaled.Database.ORMBaseActivity;
-import com.abc.foaled.DatabaseTables.Horse;
+import com.abc.foaled.Models.Horse;
 import com.abc.foaled.Fragment.FavouriteHorsesFragment;
 import com.abc.foaled.Fragment.NotificationSettingsFragment;
 import com.abc.foaled.Notifications.NotificationScheduler;
@@ -127,34 +130,45 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
         Fragment fragment = null;
         Class fragmentClass = null;
         int id = item.getItemId();
+        Intent intent;
 
-        if (id == R.id.nav_horses) {
-            // Handle the camera action
-        } else if (id == R.id.nav_foals) {
+        switch (id) {
+            case R.id.nav_horses :  // new fragment
+                fragmentClass = NotificationSettingsFragment.class;
 
-        } else if (id == R.id.nav_mares) {
+            case R.id.nav_foals : // new fragment
+                fragmentClass = NotificationSettingsFragment.class;
 
-        } else if (id == R.id.nav_notifications) {
-            fragmentClass = NotificationSettingsFragment.class;
+            case R.id.nav_mares :     // new fragment
+                fragmentClass = NotificationSettingsFragment.class;
 
-        } else if (id == R.id.nav_settings) {
+            case R.id.nav_notifications :
+                intent = new Intent(this, NotificationSettingsActivity.class);
+                this.startActivity(intent);
+                return true;
 
-        } else if (id == R.id.nav_faq) {
+            case R.id.nav_settings:
+                intent = new Intent(this, SettingsActivity.class);
+                this.startActivity(intent);
+                return true;
 
-            Intent intent = new Intent(this, FaqActivity.class);
-            this.startActivity(intent);
-            return true;
+            case  R.id.nav_faq :
+                intent = new Intent(this, FaqActivity.class);
+                this.startActivity(intent);
+                return true;
 
-        }else if (id == R.id.nav_about) {
+            case R.id.nav_about :
+                intent = new Intent(this, AboutActivity.class);
+                this.startActivity(intent);
+                return true;
 
-        }else if (id == R.id.nav_feedback) {
+            case R.id.nav_feedback:
+                intent = new Intent(this, FeedbackActivity.class);
+                this.startActivity(intent);
+                return true;
 
-            Intent intent = new Intent(this, FeedbackActivity.class);
-            this.startActivity(intent);
-            return true;
-
-        }else {
-            fragmentClass = NotificationSettingsFragment.class;
+            default:
+                fragmentClass = NotificationSettingsFragment.class;
         }
 
 

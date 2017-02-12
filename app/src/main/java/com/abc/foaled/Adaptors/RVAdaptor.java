@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.abc.foaled.DatabaseTables.Horse;
+import com.abc.foaled.Models.Horse;
 import com.abc.foaled.Activity.HorseDetailActivity;
 import com.abc.foaled.R;
 

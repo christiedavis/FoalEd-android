@@ -1,4 +1,4 @@
-package com.abc.foaled;
+package com.abc.foaled.Models;
 
 /**
  * Created by Brendan on 7/02/2017.

@@ -10,7 +10,7 @@ import java.util.List;
 
 import android.content.Context;
 
-import com.abc.foaled.DatabaseTables.Horse;
+import com.abc.foaled.Models.Horse;
 
 public class DatabaseManager {
 

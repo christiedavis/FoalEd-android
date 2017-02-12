@@ -1,6 +1,5 @@
-package com.abc.foaled.DatabaseTables;
+package com.abc.foaled.Models;
 
-import com.abc.foaled.Milestone;
 import com.abc.foaled.R;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;

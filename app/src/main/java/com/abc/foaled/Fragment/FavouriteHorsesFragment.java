@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.abc.foaled.Adaptors.RVAdaptor;
-import com.abc.foaled.DatabaseTables.Horse;
+import com.abc.foaled.Models.Horse;
 import com.abc.foaled.R;
 
 import java.util.List;

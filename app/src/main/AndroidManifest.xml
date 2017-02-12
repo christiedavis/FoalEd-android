@@ -32,15 +32,13 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER"
-                            android:launchMode="singleTask"
-                    />
 
-
+                <category
+                    android:name="android.intent.category.LAUNCHER"
+                    android:launchMode="singleTask" />
             </intent-filter>
         </activity>
         <activity android:name=".Activity.HorseDetailActivity" />
-
         <activity
             android:name=".Activity.ProfileActivity"
             android:label="@string/title_activity_profile"
@@ -73,21 +71,21 @@
             android:label="FAQ"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
-        <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value="com.abc.foaled.MainActivity" />
-
-            </activity>
-        <activity android:name=".Activity.FeedbackActivity"
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.abc.foaled.MainActivity" />
+        </activity>
+        <activity
+            android:name=".Activity.FeedbackActivity"
             android:label="Feedback"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.abc.foaled.MainActivity" />
-
         </activity>
-
+        <activity android:name=".Activity.SettingsActivity" />
+        <activity android:name=".Activity.AboutActivity"></activity>
     </application>
 
 </manifest>

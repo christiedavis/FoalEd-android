@@ -6,8 +6,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.abc.foaled.DatabaseTables.Births;
-import com.abc.foaled.DatabaseTables.Horse;
+import com.abc.foaled.Models.Births;
+import com.abc.foaled.Models.Horse;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
