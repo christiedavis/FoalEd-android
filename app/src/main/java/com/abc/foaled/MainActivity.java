@@ -23,7 +23,7 @@ import android.view.Window;
 
 import com.abc.foaled.Activity.AboutActivity;
 import com.abc.foaled.Activity.AddNewHorseActivity;
-import com.abc.foaled.Activity.FaqActivity;
+import com.abc.foaled.Activity.faqActivity;
 import com.abc.foaled.Activity.FeedbackActivity;
 import com.abc.foaled.Activity.NotificationSettingsActivity;
 import com.abc.foaled.Activity.SettingsActivity;
@@ -153,7 +153,7 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
                 return true;
 
             case  R.id.nav_faq :
-                intent = new Intent(this, FaqActivity.class);
+                intent = new Intent(this, faqActivity.class);
                 this.startActivity(intent);
                 return true;
 

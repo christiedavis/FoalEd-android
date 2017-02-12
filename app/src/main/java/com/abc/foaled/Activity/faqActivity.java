@@ -8,7 +8,7 @@ import android.view.MenuItem;
 
 import com.abc.foaled.R;
 
-public class FaqActivity extends AppCompatActivity {
+public class faqActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
