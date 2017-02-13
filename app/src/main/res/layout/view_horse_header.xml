@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <include
         layout="@layout/view_card"
-        android:id="+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="@dimen/cardView.height"/>
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
 
         <Button
@@ -21,20 +20,23 @@
             android:layout_height="wrap_content"
             android:id="@+id/buttonAge"
             android:layout_weight="1"
-            android:layout_width="wrap_content" />
+            android:layout_width="wrap_content"
+            android:clickable="false" />
 
         <Button
             android:text="Status"
             android:layout_height="wrap_content"
             android:id="@+id/buttonStatus"
             android:layout_weight="1"
-            android:layout_width="wrap_content" />
+            android:layout_width="wrap_content"
+            android:clickable="false" />
 
         <Button
             android:text="Pregnant"
             android:layout_height="wrap_content"
             android:id="@+id/buttonPregnant"
             android:layout_weight="1"
-            android:layout_width="wrap_content" />
+            android:layout_width="wrap_content"
+            android:clickable="false" />
     </LinearLayout>
 </LinearLayout>
