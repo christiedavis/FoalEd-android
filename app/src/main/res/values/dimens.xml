@@ -8,4 +8,12 @@
     <dimen name="nav_header_vertical_spacing">16dp</dimen>
     <dimen name="nav_header_height">160dp</dimen>
     <dimen name="text_margin">16dp</dimen>
+
+    <dimen name="textbox_height">16dp</dimen>
+
+    <dimen name="cardView.height">215dp</dimen>
+
+    <dimen name="horseHeaderView.statusRow">24dp</dimen>
+    <dimen name="horseHeaderView.statusButtonSize">16dp</dimen>
+
 </resources>
