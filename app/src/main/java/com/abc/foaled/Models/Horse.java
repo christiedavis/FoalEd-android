@@ -47,10 +47,12 @@ public class Horse {
 //    private HORSE_STATUS status;
 //    @DatabaseField
 //    private boolean favourite;
+    @DatabaseField
+    public String imagePath;
 
 
     //TODO need to update database to include photo location OR actual photo
-    public int photo;
+    //public int photo;
 
     public Horse() {
         this.name = null;
@@ -58,7 +60,7 @@ public class Horse {
         this.markings = null;
         this.notes = null;
         this.sex = false;
-        this.photo = R.drawable.christie;
+        this.imagePath = null;
     }
 
     /**
@@ -72,7 +74,7 @@ public class Horse {
         sb.append(", ").append("name=").append(name);
         SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MMM/yyyy", Locale.US);
         sb.append(", ").append("sex=").append(sex);
-        sb.append(", ").append("photo=").append(photo+"");
+        sb.append(", ").append("photo=").append(imagePath+"");
         return sb.toString();
     }
 
