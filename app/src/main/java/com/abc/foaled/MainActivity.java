@@ -33,6 +33,7 @@ import com.abc.foaled.Activity.NotificationSettingsActivity;
 import com.abc.foaled.Activity.SettingsActivity;
 import com.abc.foaled.Database.DatabaseHelper;
 import com.abc.foaled.Database.ORMBaseActivity;
+import com.abc.foaled.Helpers.ImageHelper;
 import com.abc.foaled.Models.Horse;
 import com.abc.foaled.Fragment.FavouriteHorsesFragment;
 import com.abc.foaled.Fragment.NotificationSettingsFragment;
@@ -44,6 +45,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import static com.abc.foaled.Helpers.ImageHelper.createPlaceholderImageFile;
+
 public class MainActivity extends ORMBaseActivity<DatabaseHelper>
         implements NavigationView.OnNavigationItemSelectedListener, FavouriteHorsesFragment.OnListFragmentInteractionListener, NotificationSettingsFragment.OnFragmentInteractionListener {
 
@@ -52,43 +55,46 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //TODO create default placeholder image file if it doesn't exist already (essentially creating on first run through)
-        createPlaceholderImageFile();
-        super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_main);
-        Log.d("Application Started", "YAY");
+        try {
+            ImageHelper.createPlaceholderImageFile(getAssets().open("christie.jpg"));
+            super.onCreate(savedInstanceState);
+            requestWindowFeature(Window.FEATURE_NO_TITLE);
+            setContentView(R.layout.activity_main);
+            Log.d("Application Started", "YAY");
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+            // SET UP FRAGMENT
+            horses = getHelper().getHorseDataDao().queryForAll(); //get data
+            FragmentTransaction fragmentManager = getSupportFragmentManager().beginTransaction();
+            FavouriteHorsesFragment fragment = FavouriteHorsesFragment.newInstance();
+            fragment.setListToBeDisplayed(horses);
 
-        // SET UP FRAGMENT
-        horses = getHelper().getHorseDataDao().queryForAll(); //get data
-        FragmentTransaction fragmentManager = getSupportFragmentManager().beginTransaction();
-        FavouriteHorsesFragment fragment = FavouriteHorsesFragment.newInstance();
-        fragment.setListToBeDisplayed(horses);
+            fragmentManager.replace(R.id.flContent, fragment).commit();
 
-        fragmentManager.replace(R.id.flContent, fragment).commit();
+            //Settings drawer
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                    this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+            //TODO fix this
+            drawer.setDrawerListener(toggle);
+            toggle.syncState();
 
-        //Settings drawer
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        //TODO fix this
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
+            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+            navigationView.setNavigationItemSelectedListener(this);
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-        //floating action button
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, AddNewHorseActivity.class);
-                startActivity(intent);
-            }
-        });
+            //floating action button
+            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(MainActivity.this, AddNewHorseActivity.class);
+                    startActivity(intent);
+                }
+            });
+        } catch (Exception ex) {
+            System.out.println(ex.toString());
+        }
     }
 
     @Override
@@ -198,8 +204,6 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
       //  createNotification();
     }
 
-
-
     @Override //needed
     public void onFragmentInteraction(Uri uri) {
 
@@ -266,43 +270,5 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
 
     }
 
-    //TODO Should this be here? Where else could we add it
-    @SuppressWarnings("ResultOfMethodCallIgnored")
-    public void createPlaceholderImageFile() {
-        //The directory the images are saved in
-        String storageDirPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/FoalEd";
-        //The image I'm looking for
-        File image = new File(storageDirPath + "/placeholder.jpg");
-        if (!image.exists()) {
-            //Make both of the directories (fails if it already exists, which it probably shouldn't if it's getting here for the first time)
-            File storageDir = new File(storageDirPath);
-            storageDir.mkdir();
-            File smallStorageDir = new File(storageDirPath + "/Small_Versions");
-            smallStorageDir.mkdir();
 
-            try {
-
-                image.createNewFile();
-                File smallVersion = new File(smallStorageDir + "/placeholder.jpg");
-                smallVersion.createNewFile();
-                //TODO use the drawable instead of asset for this
-                //Opens default christie image, and reads it into the new file /FoalEd/placeholder.jpg
-                InputStream inputStream = getAssets().open("christie.jpg");
-                FileOutputStream outputStream = new FileOutputStream(image);
-                byte[] byteArray = new byte[1024];
-                while (inputStream.read(byteArray) != -1)
-                    outputStream.write(byteArray);
-                inputStream.close();
-                outputStream.close();
-
-                //Saves a smaller version into the new output stream
-                outputStream = new FileOutputStream(smallVersion);
-                BitmapFactory.decodeFile(image.getAbsolutePath()).compress(Bitmap.CompressFormat.JPEG, 50, outputStream);;
-                outputStream.close();
-
-            } catch (IOException ioE) {
-                ioE.printStackTrace();
-            }
-        }
-    }
 }
