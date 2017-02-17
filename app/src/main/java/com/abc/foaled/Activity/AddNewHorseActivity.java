@@ -6,18 +6,14 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 
 import android.support.v7.widget.Toolbar;
@@ -38,24 +34,21 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import static java.security.AccessController.getContext;
 
 
 public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
 
-    public final static String EXTRA_MESSAGE = "";
+    //public final static String EXTRA_MESSAGE = "";
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_IMAGE_SELECT = 2;
-    private String imagePath = "";
+    private String bigImagePath = "";
+    private String smallImagePath = "";
     private int API_LEVEL = 1;
-    private Bitmap imageBitmap;
     private BitmapFactory.Options options = new BitmapFactory.Options();
 
 
@@ -74,22 +67,20 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
 
         ImageView iV = (ImageView) findViewById(R.id.imageView3);
         options.inSampleSize = 4;
-        imageBitmap = BitmapFactory.decodeResource(getApplication().getResources(), R.drawable.christie, options);
-        iV.setImageBitmap(imageBitmap);
-
-
-/*        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            iV.setImageDrawable(getApplicationContext().getDrawable(R.drawable.christie));
-        } else {
-            iV.setImageDrawable(getResources().getDrawable(R.drawable.christie));
-        }*/
-
+        iV.setImageBitmap(BitmapFactory.decodeResource(getApplication().getResources(), R.drawable.christie, options));
 
         API_LEVEL = android.os.Build.VERSION.SDK_INT;
 
+        bigImagePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/FoalEd/placeholder.jpg";
+        smallImagePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/FoalEd/Small_Versions/placeholder.jpg";
+    }
 
-
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+/*
+        File image = new File(bigImagePath);
+        image.delete();*/
     }
 
     /**
@@ -103,22 +94,28 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
      * @param resultCode -
      * @param data -
      */
+    //TODO make new photos (camera or gallery) temp, until inserted where they then make the files
+    //Because when you select a photo, currently a file is made. Select multiple photos before deciding,
+    //      and then you have multiple files, and only the most recently selected gets deleted.
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)  {
         super.onActivityResult(requestCode, resultCode, data);
 
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inSampleSize = 4;
-        String firstImagePath = "";
-
         //If the activity WAS taking a photo
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) { //RESULT_OK = -1
+            try {
+                File newImage = createImageFile(true);
+                FileOutputStream outputStream = new FileOutputStream(newImage);
+                BitmapFactory.decodeFile(bigImagePath).compress(Bitmap.CompressFormat.JPEG, 50, outputStream);
+                outputStream.close();
+            } catch (IOException ioE) {
+                ioE.printStackTrace();
+            }
             //Pull photo through bitmapFactory and display
-            Bitmap imageBitmap = BitmapFactory.decodeFile(imagePath, options);
-            ImageView test = (ImageView) findViewById(R.id.imageView3);
-            test.setImageBitmap(imageBitmap);
-            Toast.makeText(getApplicationContext(), imagePath, Toast.LENGTH_LONG).show();
+            ((ImageView) findViewById(R.id.imageView3)).setImageBitmap(BitmapFactory.decodeFile(smallImagePath));
+//            Toast.makeText(getApplicationContext(), bigImagePath, Toast.LENGTH_LONG).show();
 
+            //If request code is from selecting photo from gallery
         } else if (requestCode == REQUEST_IMAGE_SELECT && resultCode == RESULT_OK) {
 
             /*
@@ -133,40 +130,43 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
                 cursor = this.getContentResolver().query(data.getData(), proj, null, null, null);
                 int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
                 cursor.moveToFirst();
-                imagePath = cursor.getString(column_index);
+                bigImagePath = cursor.getString(column_index);
             }
             finally {
                 if (cursor != null)
                     cursor.close();
             }
 
+
             /**
              * Creates new image (which also alters string imagePath
              * Read chosen file
              */
-            File newImage;
+
             try {
-                FileInputStream inputStream = new FileInputStream(new File(imagePath));
-                newImage = createImageFile();
+                File newImage;
+
+                //Make the big image
+                FileInputStream inputStream = new FileInputStream(new File(bigImagePath));
+                newImage = createImageFile(false);
                 FileOutputStream outputStream = new FileOutputStream(newImage);
                 byte[] byteArray = new byte[1024];
-                while (inputStream.read(byteArray) != -1) {
+                while (inputStream.read(byteArray) != -1)
                     outputStream.write(byteArray);
-                }
                 inputStream.close();
+
+                //Makes the small image, based off the big image
+                newImage = createImageFile(true);
+                outputStream = new FileOutputStream(newImage);
+                BitmapFactory.decodeFile(bigImagePath).compress(Bitmap.CompressFormat.JPEG, 50, outputStream);
                 outputStream.close();
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
-            Bitmap imageBitmap = BitmapFactory.decodeFile(imagePath, options);
-            ImageView test = (ImageView) findViewById(R.id.imageView3);
-            test.setImageBitmap(imageBitmap);
-            Toast.makeText(getApplicationContext(), imagePath, Toast.LENGTH_LONG).show();
-
+            ((ImageView) findViewById(R.id.imageView3)).setImageBitmap(BitmapFactory.decodeFile(smallImagePath));
+            Toast.makeText(getApplicationContext(), bigImagePath, Toast.LENGTH_LONG).show();
         }
-
-
     }
 
 
@@ -200,37 +200,6 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
     public void insert(View view) {
 
         EditText nameView = (EditText) findViewById(R.id.editText2);
-        //TextView ageView = (TextView) findViewById(R.id.editText3);
-        //EditText colourView = (EditText) findViewById(R.id.editText4);
-
-        //RadioGroup test = (RadioGroup) findViewById(R.id.radioGroup);
-        //RadioButton radioSex = (RadioButton) findViewById(test.getCheckedRadioButtonId());
-
-/*        String name = nameView.getText().toString();
-        String age = ageView.getText().toString();
-        String colour = colourView.getText().toString();
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/mm/yyyy", Locale.ENGLISH);
-        Date date = new Date();
-        try {
-            date = dateFormat.parse(age);
-        } catch (ParseException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        //True if selected female, false if not
-        boolean sex = radioSex.getText().equals("Female");*/
-
-/*        if (name.equals("") || age.equals("")) {
-            if (name.equals(""))
-                nameView.setError("Field cannot be left blank");
-            if (age.equals(""))
-                ageView.setError("Field cannot be left blank");
-            return;
-        }*/
-
-
-
 
         //Gets the Data Access Object and creates a new Horse row
         RuntimeExceptionDao<Horse, Integer> horseDao = getHelper().getHorseDataDao();
@@ -238,12 +207,11 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
         Horse horse = new Horse();
         horse.name = nameView.getText().toString();
 
-        ImageView iV = (ImageView) findViewById(R.id.imageView3);
+/*        ImageView iV = (ImageView) findViewById(R.id.imageView3);
         if (imagePath.equals("")) {
-            //AssetManager assetManager = new AssetManager();
-//            getAssets().
             File newImage;
             try {
+                //TODO Get rid of assets and open through bitmap and read bytes and save
                 InputStream inputStream = getAssets().open("christie.jpg");
                 newImage = createImageFile();
                 FileOutputStream outputStream = new FileOutputStream(newImage);
@@ -256,11 +224,10 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
+        }*/
 
-        horse.imagePath = imagePath;
+        horse.setImagePath(bigImagePath, smallImagePath);
         horseDao.create(horse);
-        //birthsDao.create(horse.birth);
 
         query(view);
     }
@@ -288,10 +255,15 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
     /**
      * Displays an alert dialog box that lets your select what source to get
      * the image from; Camera or Gallery
-     * TODO This is not ideal and need to change how you select what source
+     * TODO This is not ideal and need to change how you select what source (from the positive/negative methods)
      * @param view The control that calls this method
      */
     public void chooseImage(View view) {
+        //Checks to see whether the user has permission to read&write
+        if (API_LEVEL >= 23)
+            verifyStoragePermissions(this);
+
+        //Creates a dialog to choose where the photo cromes from
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Choose photo source");
 
@@ -303,7 +275,6 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
                         android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
                 );
 
-                //intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
                 startActivityForResult(intent, REQUEST_IMAGE_SELECT);
             }
         });
@@ -321,10 +292,6 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
      * Access the camera to take an image through an activityForResult
      */
     public void takeImage() {
-        //Checks to see whether the user has permission to read&write
-        if (API_LEVEL >= 23)
-            verifyStoragePermissions(this);
-
 
         if (this.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -332,11 +299,7 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
             if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
                 // Create the File where the photo should go
                 File photoFile = null;
-                try {
-                    photoFile = createImageFile();
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
+                photoFile = createImageFile(false);
                 // Continue only if the File was successfully created
                 if (photoFile != null) {
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
@@ -348,22 +311,46 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
 
     /**
      * Creates the empty file in the right directory with a unique filename
-     * @return Returns a new empty file in the storage directory for the app
+     * @return
      * @throws IOException
      */
-    private File createImageFile() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        String storageDirPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/FoalEd";
-        File storageDir = new File(storageDirPath);
-        storageDir.mkdirs();
-        File image =  File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
-        imagePath = image.getAbsolutePath();
-        return image;
+    /**
+     *
+     * @param smallImage true means to create a smaller image file
+     * @return Returns a new empty file in the storage directory for the app
+     */
+    private File createImageFile(boolean smallImage) {
+        try {
+            // Create an image file name
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
+            String imageFileName = "JPEG_" + timeStamp + ".jpg";
+            String storageDirPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/FoalEd";
+
+            if (smallImage)
+                storageDirPath += "/Small_Versions";
+
+            //File storageDir = new File(storageDirPath);
+            //storageDir.mkdirs();
+/*        File image =  File.createTempFile(
+                imageFileName,  *//* prefix *//*
+                ".jpg",         *//* suffix *//*
+                storageDir      *//* directory *//*
+        );*/
+            File image;
+            //If we're creating the smaller image,
+            if (smallImage) {
+                File f = new File(bigImagePath);
+                image = new File(storageDirPath + "/" + f.getName());
+                smallImagePath = image.getAbsolutePath();
+            } else {
+                image = new File(storageDirPath + "/" + imageFileName);
+                bigImagePath = image.getAbsolutePath();
+            }
+            image.createNewFile();
+            return image;
+        } catch (IOException ioE) {
+            ioE.printStackTrace();
+            return null;
+        }
     }
 }
