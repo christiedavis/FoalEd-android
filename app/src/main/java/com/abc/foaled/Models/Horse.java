@@ -18,7 +18,7 @@ import java.util.Locale;
 @DatabaseTable(tableName = "horse")
 public class Horse {
 
-    public enum HORSE_STATUS{
+    public enum HORSE_STATUS {
 
         HORSE_STATUS_DORMANT(0),
         HORSE_STATUS_MAIDEN(1),
@@ -39,16 +39,16 @@ public class Horse {
     private int id;                             //ID
     @DatabaseField
     public String name;                        //NAME
-    @DatabaseField(canBeNull = false, foreign = true)
-    public Births birth = new Births(this);
+    @DatabaseField(canBeNull = false, foreign = true, foreignAutoRefresh = true)
+    public Births birth;
     @DatabaseField
     private boolean sex;                       //SEX
     @DatabaseField
     private String markings;
     @DatabaseField
     private String notes;
-//    @DatabaseField (unknownEnumName = "HORSE_STATUS_DORMANT")
-//    private HORSE_STATUS status;
+    @DatabaseField (unknownEnumName = "HORSE_STATUS_DORMANT")
+    private HORSE_STATUS status;
 //    @DatabaseField
 //    private boolean favourite;
     @DatabaseField
@@ -65,9 +65,10 @@ public class Horse {
 
     public Horse() {
         this.name = null;
-        this.birth = new Births(this);
+        this.birth = null;
         this.markings = null;
         this.notes = null;
+        this.status = null;
         this.sex = false;
         this.smallImagePath = null;
         this.bigImagePath = null;

@@ -56,7 +56,7 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
-        Log.d("Application Started", "YAY");
+        Log.d("Application Started", "YAY"); //lol
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

@@ -25,16 +25,20 @@ import android.widget.Toast;
 
 import com.abc.foaled.Database.DatabaseHelper;
 import com.abc.foaled.Database.ORMBaseActivity;
+import com.abc.foaled.Models.Births;
 import com.abc.foaled.Models.Horse;
 import com.abc.foaled.Fragment.DatePickerFragment;
 import com.abc.foaled.R;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
+
+import org.joda.time.DateTime;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -71,16 +75,15 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
 
         API_LEVEL = android.os.Build.VERSION.SDK_INT;
 
-        bigImagePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/FoalEd/placeholder.jpg";
-        smallImagePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/FoalEd/Small_Versions/placeholder.jpg";
+        bigImagePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
+                + "/FoalEd/placeholder.jpg";
+        smallImagePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
+                + "/FoalEd/Small_Versions/placeholder.jpg";
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-/*
-        File image = new File(bigImagePath);
-        image.delete();*/
     }
 
     /**
@@ -113,7 +116,6 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
             }
             //Pull photo through bitmapFactory and display
             ((ImageView) findViewById(R.id.imageView3)).setImageBitmap(BitmapFactory.decodeFile(smallImagePath));
-//            Toast.makeText(getApplicationContext(), bigImagePath, Toast.LENGTH_LONG).show();
 
             //If request code is from selecting photo from gallery
         } else if (requestCode == REQUEST_IMAGE_SELECT && resultCode == RESULT_OK) {
@@ -203,32 +205,17 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
 
         //Gets the Data Access Object and creates a new Horse row
         RuntimeExceptionDao<Horse, Integer> horseDao = getHelper().getHorseDataDao();
-        //RuntimeExceptionDao<Births, Integer> birthsDao = getHelper().getBirthsDataDao();
+        RuntimeExceptionDao<Births, Integer> birthDao = getHelper().getBirthsDataDao();
+        Births birth = new Births();
+        DateTime currentDate = new DateTime();
+        //birth.birth_time = currentDate.getMillis();
+        birthDao.create(birth);
+
         Horse horse = new Horse();
         horse.name = nameView.getText().toString();
-
-/*        ImageView iV = (ImageView) findViewById(R.id.imageView3);
-        if (imagePath.equals("")) {
-            File newImage;
-            try {
-                //TODO Get rid of assets and open through bitmap and read bytes and save
-                InputStream inputStream = getAssets().open("christie.jpg");
-                newImage = createImageFile();
-                FileOutputStream outputStream = new FileOutputStream(newImage);
-                byte[] byteArray = new byte[1024];
-                while (inputStream.read(byteArray) != -1) {
-                    outputStream.write(byteArray);
-                }
-                inputStream.close();
-                outputStream.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }*/
-
         horse.setImagePath(bigImagePath, smallImagePath);
+        horse.birth = birth;
         horseDao.create(horse);
-
         query(view);
     }
 

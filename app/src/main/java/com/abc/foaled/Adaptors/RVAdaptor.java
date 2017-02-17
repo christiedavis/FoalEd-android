@@ -46,7 +46,7 @@ public class RVAdaptor extends RecyclerView.Adapter<RVAdaptor.HorseViewHolder>{
                     int position = getAdapterPosition();
                     final Intent intent;
                     intent = new Intent(c, HorseDetailActivity.class);
-                    intent.putExtra("nameText", position);
+                    intent.putExtra("nameText", position + 1);
                     //intent.putExtra("desc",details[position]);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     c.startActivity(intent);
@@ -78,15 +78,7 @@ public class RVAdaptor extends RecyclerView.Adapter<RVAdaptor.HorseViewHolder>{
     @Override
     public void onBindViewHolder(HorseViewHolder holder, int i) {
         holder.personName.setText(horses.get(i).name);
-//        holder.personAge.setText(horses.get(i).age);
-//        holder.personPhoto.setImageResource(horses.get(i).imagePath);
-//        holder.personPhoto.setImageResource(R.drawable.christie);
-        /*BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inSampleSize = 4;
-        Bitmap imageBitmap = BitmapFactory.decodeFile(horses.get(i).imagePath, options);*/
-        //holder.personPhoto.setImageBitmap(horses.get(i).getImage(true));
         holder.personPhoto.setImageURI(Uri.fromFile(new File(horses.get(i).smallImagePath)));
-
     }
 
     @Override

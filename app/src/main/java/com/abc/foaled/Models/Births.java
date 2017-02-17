@@ -4,6 +4,8 @@ import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import org.joda.time.DateTime;
+
 import java.util.Calendar;
 import java.util.Date;
 
@@ -16,8 +18,8 @@ public class Births {
 
     @DatabaseField(generatedId = true)
     private int id;
-    @DatabaseField(canBeNull = false, foreign = true)
-    private Horse horse;        //Foreign horse id
+    @DatabaseField(foreign = true)
+    public Horse horse;        //Foreign horse id
     @DatabaseField(foreign = true)
     private Horse sire;
     @DatabaseField(foreign = true)
@@ -26,25 +28,25 @@ public class Births {
     @DatabaseField(dataType = DataType.DATE_STRING)
     public Date est_conception;
 
-    @DatabaseField(dataType = DataType.DATE_STRING)
-    public Date birth_time;
+    @DatabaseField(dataType = DataType.DATE_TIME)
+    public DateTime birth_time;
+
+/*    @DatabaseField
+    public long birth_time;*/
 
     @DatabaseField
     public String notes;
 
 
-    public Births(Horse horse) {
-        this.horse = horse;
+    public Births() {
+        this.horse = null;
         this.sire = null;
         this.mare = null;
         this.est_conception = null;
-        this.birth_time = Calendar.getInstance().getTime();
+        this.birth_time = new DateTime();
         this.notes = null;
     }
 
-    public Births() {
-
-    }
 
     /**
      * @return A string representation of the row in the database
