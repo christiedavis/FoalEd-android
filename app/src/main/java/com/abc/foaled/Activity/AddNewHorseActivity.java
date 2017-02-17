@@ -359,9 +359,7 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
      * Success method to be called when a horse has been succesfully added.
      */
     private void showSucessConfirmation() {
-        Toast confirmationToast = new Toast(this);
-        confirmationToast.setText("Horse added sucessfully");
-        confirmationToast.setDuration(Toast.LENGTH_LONG);
+        Toast confirmationToast = Toast.makeText(this, "Horse added sucessfully", Toast.LENGTH_LONG);
         confirmationToast.show();
 
         NavUtils.navigateUpFromSameTask(this);

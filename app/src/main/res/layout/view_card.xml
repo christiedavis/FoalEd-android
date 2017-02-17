@@ -15,13 +15,13 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/person_photo"
+            android:id="@+id/horse_photo"
             android:foreground="@drawable/crdgrad"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/person_name"
+            android:id="@+id/horse_name"
             android:textColor="#FFFFFF"
             android:paddingLeft="50dp"
             android:layout_alignParentBottom="true"
@@ -31,7 +31,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/person_age"
+            android:id="@+id/horse_age"
             android:textColor="#FFFFFF"
             android:paddingLeft="50dp"
             android:layout_alignParentBottom="true"
@@ -42,7 +42,7 @@
             android:layout_height="30dp"
             android:id="@+id/imageView2"
             app:srcCompat="@drawable/hollowstar"
-            android:layout_alignTop="@+id/person_name"
+            android:layout_alignTop="@+id/horse_name"
             android:layout_alignParentBottom="true"
             android:layout_marginStart="10dp"/>
 

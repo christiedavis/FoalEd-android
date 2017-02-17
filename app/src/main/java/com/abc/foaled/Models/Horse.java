@@ -11,6 +11,8 @@ import com.j256.ormlite.table.DatabaseTable;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
+import static android.R.attr.id;
+
 /**
  * Created by Brendan on 29/12/16.
  *
@@ -36,7 +38,7 @@ public class Horse {
     }
 
     @DatabaseField(generatedId = true)
-    private int id;                             //ID
+    private int horseID;                             //ID
     @DatabaseField
     public String name;                        //NAME
     @DatabaseField(canBeNull = false, foreign = true)
@@ -113,7 +115,7 @@ public class Horse {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("id=").append(id);
+        sb.append("id=").append(horseID);
         sb.append(", ").append("name=").append(name);
         SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MMM/yyyy", Locale.US);
         sb.append(", ").append("sex=").append(sex);
@@ -127,6 +129,10 @@ public class Horse {
     public void addMilestones() {
         // add new milestone
         Milestone milestone1 = new Milestone(Milestone.MILESTONE.MILESTONE_POOP);
+    }
+
+    public int getHorseID() {
+        return this.horseID;
     }
 
 }

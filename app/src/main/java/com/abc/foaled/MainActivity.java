@@ -34,6 +34,7 @@ import com.abc.foaled.Activity.SettingsActivity;
 import com.abc.foaled.Database.DatabaseHelper;
 import com.abc.foaled.Database.ORMBaseActivity;
 import com.abc.foaled.Helpers.ImageHelper;
+import com.abc.foaled.Helpers.UserInfo;
 import com.abc.foaled.Models.Horse;
 import com.abc.foaled.Fragment.FavouriteHorsesFragment;
 import com.abc.foaled.Fragment.NotificationSettingsFragment;
@@ -50,7 +51,7 @@ import static com.abc.foaled.Helpers.ImageHelper.createPlaceholderImageFile;
 public class MainActivity extends ORMBaseActivity<DatabaseHelper>
         implements NavigationView.OnNavigationItemSelectedListener, FavouriteHorsesFragment.OnListFragmentInteractionListener, NotificationSettingsFragment.OnFragmentInteractionListener {
 
-    List<Horse> horses;
+    UserInfo userInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,14 +62,17 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
             requestWindowFeature(Window.FEATURE_NO_TITLE);
             setContentView(R.layout.activity_main);
             Log.d("Application Started", "YAY");
+
+            // Set up Nav
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
+            this.userInfo = UserInfo.getInstance();
 
             // SET UP FRAGMENT
-            horses = getHelper().getHorseDataDao().queryForAll(); //get data
+            this.userInfo.horses = getHelper().getHorseDataDao().queryForAll(); //get data
             FragmentTransaction fragmentManager = getSupportFragmentManager().beginTransaction();
             FavouriteHorsesFragment fragment = FavouriteHorsesFragment.newInstance();
-            fragment.setListToBeDisplayed(horses);
+            fragment.setListToBeDisplayed(this.userInfo.horses);
 
             fragmentManager.replace(R.id.flContent, fragment).commit();
 
@@ -102,10 +106,10 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
         super.onResume();
         //createPlaceholderImageFile();
         //TODO this seems like the wrong way to update the recycler view?
-        horses = getHelper().getHorseDataDao().queryForAll(); //get data
+        this.userInfo.horses = getHelper().getHorseDataDao().queryForAll(); //get data
         FragmentTransaction fragmentManager = getSupportFragmentManager().beginTransaction();
         FavouriteHorsesFragment fragment = FavouriteHorsesFragment.newInstance();
-        fragment.setListToBeDisplayed(horses);
+        fragment.setListToBeDisplayed(this.userInfo.horses);
         fragmentManager.replace(R.id.flContent, fragment).commit();
     }
 

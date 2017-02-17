@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,11 +31,15 @@ public class RVAdaptor extends RecyclerView.Adapter<RVAdaptor.HorseViewHolder>{
 
     List<Horse> horses;
 
+    public RVAdaptor(List<Horse> horses) { this.horses = horses; }
+
     public static class HorseViewHolder extends RecyclerView.ViewHolder {
+
         CardView cv;
         TextView personName;
         TextView personAge;
         ImageView personPhoto;
+        int horseID;
         private final Context c = itemView.getContext();
 
         HorseViewHolder(View itemView) {
@@ -45,30 +50,28 @@ public class RVAdaptor extends RecyclerView.Adapter<RVAdaptor.HorseViewHolder>{
                 public void onClick(View v) {
                     int position = getAdapterPosition();
                     final Intent intent;
+
                     intent = new Intent(c, HorseDetailActivity.class);
-                    intent.putExtra("nameText", position);
-                    //intent.putExtra("desc",details[position]);
+                    intent.putExtra("HorseID", position);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     c.startActivity(intent);
 
+
                 }
             });
-            personName = (TextView)itemView.findViewById(R.id.person_name);
-            personAge = (TextView)itemView.findViewById(R.id.person_age);
-            personPhoto = (ImageView)itemView.findViewById(R.id.person_photo);
+            personName = (TextView)itemView.findViewById(R.id.horse_name);
+            personAge = (TextView)itemView.findViewById(R.id.horse_age);
+            personPhoto = (ImageView)itemView.findViewById(R.id.horse_photo);
+            horseID =   getAdapterPosition();
         }
     }
-
-
-    public RVAdaptor(List<Horse> horses) { this.horses = horses; }
 
     @Override
     public HorseViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.view_card, viewGroup, false);
-        HorseViewHolder pvh = new HorseViewHolder(v);
-        return pvh;
+        HorseViewHolder horseCard = new HorseViewHolder(v);
+        return horseCard;
     }
-
 
     @Override
     public int getItemCount() {
@@ -78,6 +81,7 @@ public class RVAdaptor extends RecyclerView.Adapter<RVAdaptor.HorseViewHolder>{
     @Override
     public void onBindViewHolder(HorseViewHolder holder, int i) {
         holder.personName.setText(horses.get(i).name);
+        holder.horseID = horses.get(i).getHorseID();
 //        holder.personAge.setText(horses.get(i).age);
 //        holder.personPhoto.setImageResource(horses.get(i).imagePath);
 //        holder.personPhoto.setImageResource(R.drawable.christie);
@@ -86,7 +90,6 @@ public class RVAdaptor extends RecyclerView.Adapter<RVAdaptor.HorseViewHolder>{
         Bitmap imageBitmap = BitmapFactory.decodeFile(horses.get(i).imagePath, options);*/
         //holder.personPhoto.setImageBitmap(horses.get(i).getImage(true));
         holder.personPhoto.setImageURI(Uri.fromFile(new File(horses.get(i).smallImagePath)));
-
     }
 
     @Override
