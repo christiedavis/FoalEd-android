@@ -106,7 +106,7 @@
             android:id="@+id/radioButton2" />
     </RadioGroup>
 
-    <ImageButton
+<!--    <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:srcCompat="@drawable/ic_menu_camera"
@@ -114,16 +114,27 @@
         android:contentDescription="Image for horse"
         android:onClick="chooseImage"
         android:layout_alignBottom="@+id/editText2"
+        android:layout_alignParentEnd="true" />-->
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:id="@+id/imageView3"
+        android:src="@drawable/christie"
+        android:onClick="chooseImage"
+        app:civ_border_width="2dp"
+        app:civ_border_color="#AA96C8A2"
+        android:layout_alignBottom="@+id/editText4"
         android:layout_alignParentEnd="true" />
 
-    <ImageView
-        android:layout_width="90dp"
-        android:layout_height="90dp"
-        app:srcCompat="@color/cardview_light_background"
-        android:id="@+id/imageView3"
-        android:layout_below="@+id/imageButton"
-        android:layout_alignBottom="@+id/radioGroup"
-        android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/button7" />
+    <!--    <ImageView
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            app:srcCompat="@color/cardview_light_background"
+            android:id="@+id/imageView3"
+            android:layout_below="@+id/imageButton"
+            android:layout_alignBottom="@+id/radioGroup"
+            android:layout_alignParentEnd="true"
+            android:layout_toEndOf="@+id/button7" />-->
 
 </RelativeLayout>

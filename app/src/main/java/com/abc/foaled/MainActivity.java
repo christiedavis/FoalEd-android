@@ -1,5 +1,8 @@
 package com.abc.foaled;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.app.Notification;
 import android.content.Intent;
@@ -20,6 +23,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.Toast;
 
 import com.abc.foaled.Activity.AboutActivity;
 import com.abc.foaled.Activity.AddNewHorseActivity;
@@ -34,6 +38,10 @@ import com.abc.foaled.Fragment.FavouriteHorsesFragment;
 import com.abc.foaled.Fragment.NotificationSettingsFragment;
 import com.abc.foaled.Notifications.NotificationScheduler;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 public class MainActivity extends ORMBaseActivity<DatabaseHelper>
@@ -43,6 +51,8 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //TODO create default placeholder image file if it doesn't exist already (essentially creating on first run through)
+        createPlaceholderImageFile();
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
@@ -84,6 +94,7 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
     @Override
     public void onResume() {
         super.onResume();
+        //createPlaceholderImageFile();
         //TODO this seems like the wrong way to update the recycler view?
         horses = getHelper().getHorseDataDao().queryForAll(); //get data
         FragmentTransaction fragmentManager = getSupportFragmentManager().beginTransaction();
@@ -253,5 +264,45 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
         AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);*/
 
+    }
+
+    //TODO Should this be here? Where else could we add it
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    public void createPlaceholderImageFile() {
+        //The directory the images are saved in
+        String storageDirPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/FoalEd";
+        //The image I'm looking for
+        File image = new File(storageDirPath + "/placeholder.jpg");
+        if (!image.exists()) {
+            //Make both of the directories (fails if it already exists, which it probably shouldn't if it's getting here for the first time)
+            File storageDir = new File(storageDirPath);
+            storageDir.mkdir();
+            File smallStorageDir = new File(storageDirPath + "/Small_Versions");
+            smallStorageDir.mkdir();
+
+            try {
+
+                image.createNewFile();
+                File smallVersion = new File(smallStorageDir + "/placeholder.jpg");
+                smallVersion.createNewFile();
+                //TODO use the drawable instead of asset for this
+                //Opens default christie image, and reads it into the new file /FoalEd/placeholder.jpg
+                InputStream inputStream = getAssets().open("christie.jpg");
+                FileOutputStream outputStream = new FileOutputStream(image);
+                byte[] byteArray = new byte[1024];
+                while (inputStream.read(byteArray) != -1)
+                    outputStream.write(byteArray);
+                inputStream.close();
+                outputStream.close();
+
+                //Saves a smaller version into the new output stream
+                outputStream = new FileOutputStream(smallVersion);
+                BitmapFactory.decodeFile(image.getAbsolutePath()).compress(Bitmap.CompressFormat.JPEG, 50, outputStream);;
+                outputStream.close();
+
+            } catch (IOException ioE) {
+                ioE.printStackTrace();
+            }
+        }
     }
 }

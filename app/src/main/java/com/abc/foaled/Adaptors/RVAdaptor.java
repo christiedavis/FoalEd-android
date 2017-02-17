@@ -2,6 +2,9 @@ package com.abc.foaled.Adaptors;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,11 +12,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.abc.foaled.Models.Horse;
 import com.abc.foaled.Activity.HorseDetailActivity;
 import com.abc.foaled.R;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -74,7 +79,14 @@ public class RVAdaptor extends RecyclerView.Adapter<RVAdaptor.HorseViewHolder>{
     public void onBindViewHolder(HorseViewHolder holder, int i) {
         holder.personName.setText(horses.get(i).name);
 //        holder.personAge.setText(horses.get(i).age);
-        holder.personPhoto.setImageResource(horses.get(i).photo);
+//        holder.personPhoto.setImageResource(horses.get(i).imagePath);
+//        holder.personPhoto.setImageResource(R.drawable.christie);
+        /*BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = 4;
+        Bitmap imageBitmap = BitmapFactory.decodeFile(horses.get(i).imagePath, options);*/
+        //holder.personPhoto.setImageBitmap(horses.get(i).getImage(true));
+        holder.personPhoto.setImageURI(Uri.fromFile(new File(horses.get(i).smallImagePath)));
+
     }
 
     @Override
