@@ -4,11 +4,14 @@ import android.net.Uri;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.ButtonBarLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.abc.foaled.Helpers.DateTimeHelper;
 import com.abc.foaled.Helpers.UserInfo;
 import com.abc.foaled.Models.Horse;
 import com.abc.foaled.R;
@@ -34,12 +37,15 @@ public class HorseDetailActivity extends AppCompatActivity {
         this.horse = this.userInfo.horses.get(horseID);
 
         // TODO: set up the rest of the fields.
-        TextView horseName = (TextView)this.findViewById(R.id.horse_name);
+        Button horseName = (Button)this.findViewById(R.id.buttonAge);
         horseName.setText(horse.name);
+
+        TextView age = (TextView)this.findViewById(R.id.horse_age);
+        age.setText(DateTimeHelper.printPeriod(horse.getAge()));
+
 
         ImageView personPhoto = (ImageView)this.findViewById(R.id.horse_photo);
         personPhoto.setImageURI(Uri.fromFile(new File(horse.smallImagePath)));
-
 
     }
 

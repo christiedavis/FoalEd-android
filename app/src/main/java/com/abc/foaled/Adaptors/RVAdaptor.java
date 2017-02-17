@@ -82,13 +82,6 @@ public class RVAdaptor extends RecyclerView.Adapter<RVAdaptor.HorseViewHolder>{
     public void onBindViewHolder(HorseViewHolder holder, int i) {
         holder.personName.setText(horses.get(i).name);
         holder.horseID = horses.get(i).getHorseID();
-//        holder.personAge.setText(horses.get(i).age);
-//        holder.personPhoto.setImageResource(horses.get(i).imagePath);
-//        holder.personPhoto.setImageResource(R.drawable.christie);
-        /*BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inSampleSize = 4;
-        Bitmap imageBitmap = BitmapFactory.decodeFile(horses.get(i).imagePath, options);*/
-        //holder.personPhoto.setImageBitmap(horses.get(i).getImage(true));
         holder.personPhoto.setImageURI(Uri.fromFile(new File(horses.get(i).smallImagePath)));
     }
 

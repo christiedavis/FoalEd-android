@@ -5,8 +5,11 @@ import android.graphics.BitmapFactory;
 import android.os.Environment;
 
 
+import com.abc.foaled.Helpers.DateTimeHelper;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+
+import org.joda.time.Period;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -20,7 +23,7 @@ import static android.R.attr.id;
 @DatabaseTable(tableName = "horse")
 public class Horse {
 
-    public enum HORSE_STATUS{
+    public enum HORSE_STATUS {
 
         HORSE_STATUS_DORMANT(0),
         HORSE_STATUS_MAIDEN(1),
@@ -37,20 +40,21 @@ public class Horse {
         public int getValue() { return value; }
     }
 
+    private String age;
     @DatabaseField(generatedId = true)
     private int horseID;                             //ID
     @DatabaseField
     public String name;                        //NAME
-    @DatabaseField(canBeNull = false, foreign = true)
-    public Births birth = new Births(this);
+    @DatabaseField(canBeNull = false, foreign = true, foreignAutoRefresh = true)
+    public Births birth;
     @DatabaseField
     private boolean sex;                       //SEX
     @DatabaseField
     private String markings;
     @DatabaseField
     private String notes;
-//    @DatabaseField (unknownEnumName = "HORSE_STATUS_DORMANT")
-//    private HORSE_STATUS status;
+    @DatabaseField (unknownEnumName = "HORSE_STATUS_DORMANT")
+    private HORSE_STATUS status;
 //    @DatabaseField
 //    private boolean favourite;
     @DatabaseField
@@ -67,15 +71,20 @@ public class Horse {
 
     public Horse() {
         this.name = null;
-        this.birth = new Births(this);
+        this.birth = null;
         this.markings = null;
         this.notes = null;
+        this.status = null;
         this.sex = false;
         this.smallImagePath = null;
         this.bigImagePath = null;
         this.image = null;
     }
 
+    // TODO: is this when this horse was born?
+    public Period getAge(){
+        return DateTimeHelper.getCurrentAge(this.birth.birth_time);
+    }
     /**
      *
      * @param getSmall boolean indicating whether to select the small version, or the big one. True means small
