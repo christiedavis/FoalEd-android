@@ -16,6 +16,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 
+import android.support.v4.app.NavUtils;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
@@ -39,11 +40,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-
-
 public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
 
-    //public final static String EXTRA_MESSAGE = "";
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_IMAGE_SELECT = 2;
     private String bigImagePath = "";
@@ -230,6 +228,8 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
         horseDao.create(horse);
 
         query(view);
+
+        showSucessConfirmation();
     }
 
     /**
@@ -352,5 +352,20 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
             ioE.printStackTrace();
             return null;
         }
+    }
+
+
+    /**
+     * Success method to be called when a horse has been succesfully added.
+     */
+    private void showSucessConfirmation() {
+        Toast confirmationToast = new Toast(this);
+        confirmationToast.setText("Horse added sucessfully");
+        confirmationToast.setDuration(Toast.LENGTH_LONG);
+        confirmationToast.show();
+
+        NavUtils.navigateUpFromSameTask(this);
+        return;
+
     }
 }
