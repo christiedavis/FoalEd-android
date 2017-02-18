@@ -201,20 +201,20 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
 
         EditText nameView = (EditText) findViewById(R.id.editText2);
 
-        //Gets the Data Access Object and creates a new Horse row
-        RuntimeExceptionDao<Horse, Integer> horseDao = getHelper().getHorseDataDao();
+
         RuntimeExceptionDao<Births, Integer> birthDao = getHelper().getBirthsDataDao();
         Births birth = new Births();
-        DateTime currentDate = new DateTime();
-        //birth.birth_time = currentDate.getMillis();
         birthDao.create(birth);
 
+        //Gets the Data Access Object and creates a new Horse row
+        RuntimeExceptionDao<Horse, Integer> horseDao = getHelper().getHorseDataDao();
         Horse horse = new Horse();
         horse.name = nameView.getText().toString();
         horse.setImagePath(bigImagePath, smallImagePath);
         horse.birth = birth;
         horseDao.create(horse);
-        query(view);
+
+        //query(view);
 
         showSucessConfirmation();
     }
@@ -346,11 +346,8 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
      * Success method to be called when a horse has been succesfully added.
      */
     private void showSucessConfirmation() {
-        Toast confirmationToast = Toast.makeText(this, "Horse added sucessfully", Toast.LENGTH_LONG);
-        confirmationToast.show();
+        Toast.makeText(this, "Horse added sucessfully", Toast.LENGTH_LONG).show();
 
         NavUtils.navigateUpFromSameTask(this);
-        return;
-
     }
 }

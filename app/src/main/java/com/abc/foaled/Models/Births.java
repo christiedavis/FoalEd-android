@@ -31,12 +31,8 @@ public class Births {
     @DatabaseField(dataType = DataType.DATE_TIME)
     public DateTime birth_time;
 
-/*    @DatabaseField
-    public long birth_time;*/
-
     @DatabaseField
     public String notes;
-
 
     public Births() {
         this.horse = null;

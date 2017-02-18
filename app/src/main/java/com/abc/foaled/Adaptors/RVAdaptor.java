@@ -51,6 +51,7 @@ public class RVAdaptor extends RecyclerView.Adapter<RVAdaptor.HorseViewHolder>{
                     int position = getAdapterPosition();
                     final Intent intent;
 
+                    //TODO this needs to be better than just the position of the card
                     intent = new Intent(c, HorseDetailActivity.class);
                     intent.putExtra("HorseID", position);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);

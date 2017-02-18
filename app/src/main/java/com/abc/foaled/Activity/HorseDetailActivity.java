@@ -11,14 +11,17 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.abc.foaled.Database.DatabaseHelper;
+import com.abc.foaled.Database.ORMBaseActivity;
 import com.abc.foaled.Helpers.DateTimeHelper;
 import com.abc.foaled.Helpers.UserInfo;
 import com.abc.foaled.Models.Horse;
 import com.abc.foaled.R;
+import com.j256.ormlite.dao.RuntimeExceptionDao;
 
 import java.io.File;
 
-public class HorseDetailActivity extends AppCompatActivity {
+public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper> {
 
     UserInfo userInfo;
     Horse horse;
@@ -58,5 +61,14 @@ public class HorseDetailActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    //TODO this is the delete Horse method
+    private boolean deleteHorse(int id) {
+        RuntimeExceptionDao<Horse, Integer> horseDao = getHelper().getHorseDataDao();
+        Horse horse = horseDao.queryForId(id);
+        //returns true if deleted 1 row (which should be the case if ID exists)
+        //else returns false
+        return horseDao.delete(horse) == 1;
     }
 }

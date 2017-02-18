@@ -45,7 +45,7 @@ public class Horse {
     private int horseID;                             //ID
     @DatabaseField
     public String name;                        //NAME
-    @DatabaseField(canBeNull = false, foreign = true, foreignAutoRefresh = true)
+    @DatabaseField(foreign = true, canBeNull = false, foreignAutoRefresh = true)
     public Births birth;
     @DatabaseField
     private boolean sex;                       //SEX
@@ -65,10 +65,6 @@ public class Horse {
 
     private Bitmap image;
 
-
-    //TODO need to update database to include photo location OR actual photo
-    //public int photo;
-
     public Horse() {
         this.name = null;
         this.birth = null;
@@ -76,12 +72,15 @@ public class Horse {
         this.notes = null;
         this.status = null;
         this.sex = false;
-        this.smallImagePath = null;
-        this.bigImagePath = null;
-        this.image = null;
+        this.smallImagePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
+                + "/FoalEd/Small_Versions/placeholder.jpg";;
+        this.bigImagePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
+                + "/FoalEd/placeholder.jpg";
+        this.image = BitmapFactory.decodeFile(smallImagePath);;
     }
 
     // TODO: is this when this horse was born?
+    // TODO yes
     public Period getAge(){
         return DateTimeHelper.getCurrentAge(this.birth.birth_time);
     }
@@ -91,17 +90,6 @@ public class Horse {
      * @return Returns the relevant bitmap image
      */
     public Bitmap getImage(boolean getSmall) {
-        //TODO should some of these not be initialized with the horse object?
-        if (bigImagePath == null) {
-            bigImagePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
-                    + "/FoalEd/placeholder.jpg";
-            smallImagePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
-                    + "/FoalEd/Small_Versions/placeholder.jpg";
-            image = BitmapFactory.decodeFile(smallImagePath);
-        }
-
-
-        //returns image if getSmall is true, else returns full-size bitmap of the big image
         return getSmall ? image : BitmapFactory.decodeFile(bigImagePath);
     }
 
@@ -111,6 +99,7 @@ public class Horse {
      * @param bigImage The current absolute path of the now existing photo (fullsize).
      * @param smallImage The current absolute path of the now existing photo (compressed).
      */
+    //TODO this could just be bigImagePath, and then create the small image file here instead?
     public void setImagePath(String bigImage, String smallImage) {
         bigImagePath = bigImage;
         smallImagePath = smallImage;
