@@ -224,7 +224,7 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
 
 
         notificationBuilder
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.mipmap.ic_horse_launcher)
                 .setCategory(Notification.CATEGORY_EVENT)
                 .setAutoCancel(true)
                 .setPriority(NotificationCompat.PRIORITY_MAX)
