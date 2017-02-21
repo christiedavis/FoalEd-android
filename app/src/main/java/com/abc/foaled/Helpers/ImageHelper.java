@@ -19,7 +19,7 @@ public class ImageHelper {
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public static void createPlaceholderImageFile(InputStream inputStream) {
-        //The directory the images are saved in
+/*        //The directory the images are saved in
         String storageDirPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/FoalEd";
         //The image I'm looking for
         File image = new File(storageDirPath + "/placeholder.jpg");
@@ -53,6 +53,50 @@ public class ImageHelper {
             } catch (IOException ioE) {
                 ioE.printStackTrace();
             }
+        }*/
+
+    }
+
+    public static Bitmap bitmapSmaller(String filePath, int reqHeight, int reqWidth) {
+        return decodeSampledBitmapFromResource(filePath, reqHeight, reqWidth);
+    }
+
+    private static int calculateInSampleSize(
+            BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) >= reqHeight
+                    && (halfWidth / inSampleSize) >= reqWidth) {
+                inSampleSize *= 2;
+            }
         }
+
+        return inSampleSize;
+    }
+
+    private static Bitmap decodeSampledBitmapFromResource(String photo,
+                                                         int reqWidth, int reqHeight) {
+
+        // First decode with inJustDecodeBounds=true to check dimensions
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(photo, options);
+
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeFile(photo, options);
     }
 }

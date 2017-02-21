@@ -1,5 +1,6 @@
 package com.abc.foaled;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
@@ -57,7 +58,7 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
     protected void onCreate(Bundle savedInstanceState) {
         //TODO create default placeholder image file if it doesn't exist already (essentially creating on first run through)
         try {
-            ImageHelper.createPlaceholderImageFile(getAssets().open("christie.jpg"));
+            createPlaceholderImageFile(getAssets().open("christie.jpg"));
             super.onCreate(savedInstanceState);
             requestWindowFeature(Window.FEATURE_NO_TITLE);
             setContentView(R.layout.activity_main);
@@ -75,6 +76,7 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
             fragment.setListToBeDisplayed(this.userInfo.horses);
 
             fragmentManager.replace(R.id.flContent, fragment).commit();
+
 
             //Settings drawer
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -217,6 +219,67 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
     public void onListFragmentInteraction(Horse item) {
 
     }
+
+    public void createPlaceholderImageFile(InputStream inputStream) {
+/*        //The directory the images are saved in
+        String storageDirPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/FoalEd";
+        //The image I'm looking for
+        File image = new File(storageDirPath + "/placeholder.jpg");
+        if (!image.exists()) {
+            //Make both of the directories (fails if it already exists, which it probably shouldn't if it's getting here for the first time)
+            File storageDir = new File(storageDirPath);
+            storageDir.mkdir();
+            File smallStorageDir = new File(storageDirPath + "/Small_Versions");
+            smallStorageDir.mkdir();
+
+            try {
+
+                image.createNewFile();
+                File smallVersion = new File(smallStorageDir + "/placeholder.jpg");
+                smallVersion.createNewFile();
+                //TODO use the drawable instead of asset for this
+                //Opens default christie image, and reads it into the new file /FoalEd/placeholder.jpg
+                //InputStream inputStream = MainActivity.getAssets().open("christie.jpg");
+                FileOutputStream outputStream = new FileOutputStream(image);
+                byte[] byteArray = new byte[1024];
+                while (inputStream.read(byteArray) != -1)
+                    outputStream.write(byteArray);
+                inputStream.close();
+                outputStream.close();
+
+                //Saves a smaller version into the new output stream
+                outputStream = new FileOutputStream(smallVersion);
+                BitmapFactory.decodeFile(image.getAbsolutePath()).compress(Bitmap.CompressFormat.JPEG, 50, outputStream);
+                ;
+                outputStream.close();
+
+            } catch (IOException ioE) {
+                ioE.printStackTrace();
+            }
+        }*/
+
+        File f = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
+                + "/FoalEd");
+        f.mkdir();
+
+        File placeholderImage = new File(getFilesDir().getAbsolutePath() + "/placeholder.jpg");
+        if (!placeholderImage.exists()) {
+            try {
+                FileOutputStream fos = openFileOutput("placeholder.jpg", Context.MODE_PRIVATE);
+                byte[] array = new byte[2048];
+                while (inputStream.read(array) != -1)
+                    fos.write(array);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+
+    }
+
+
+
 
     private void createNotification() {
         NotificationCompat.Builder notificationBuilder =

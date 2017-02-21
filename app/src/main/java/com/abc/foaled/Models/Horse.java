@@ -1,5 +1,6 @@
 package com.abc.foaled.Models;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
@@ -61,7 +62,7 @@ public class Horse {
     public String smallImagePath;
 
     @DatabaseField
-    private String bigImagePath;
+    public String bigImagePath;
 
     private Bitmap image;
 
@@ -72,11 +73,12 @@ public class Horse {
         this.notes = null;
         this.status = null;
         this.sex = false;
-        this.smallImagePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
+/*        this.smallImagePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
                 + "/FoalEd/Small_Versions/placeholder.jpg";;
         this.bigImagePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
                 + "/FoalEd/placeholder.jpg";
-        this.image = BitmapFactory.decodeFile(smallImagePath);;
+        this.image = BitmapFactory.decodeFile(bigImagePath);*/
+
     }
 
     // TODO: is this when this horse was born?
@@ -96,13 +98,21 @@ public class Horse {
     /**
      * This sets the image paths. The big image path is already created and the image is already there.
      * But then I need to create the small image file, and compress big image to smaller size
-     * @param bigImage The current absolute path of the now existing photo (fullsize).
-     * @param smallImage The current absolute path of the now existing photo (compressed).
+     * @param a The current absolute path of the now existing photo (fullsize).
      */
     //TODO this could just be bigImagePath, and then create the small image file here instead?
-    public void setImagePath(String bigImage, String smallImage) {
-        bigImagePath = bigImage;
+    public void setImagePath(Activity a) {
+        this.smallImagePath = a.getFilesDir().getAbsolutePath() + "/placeholder.jpg";
+        this.bigImagePath = a.getFilesDir().getAbsolutePath() + "/placeholder.jpg";
+        this.image = BitmapFactory.decodeFile(bigImagePath);
+/*        bigImagePath = bigImage;
         smallImagePath = smallImage;
+        image = BitmapFactory.decodeFile(smallImagePath);*/
+    }
+
+    public void setImagePath(String filePath) {
+        bigImagePath = filePath;
+        smallImagePath = bigImagePath;
         image = BitmapFactory.decodeFile(smallImagePath);
     }
 

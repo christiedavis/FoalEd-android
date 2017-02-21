@@ -52,6 +52,9 @@ public class FavouriteHorsesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        int height = container.getHeight();
+        int width = container.getHeight();
+
          if (mHorses == null) {      //error
              Log.e(null, "onCreateView: ERROR no horses ", null);
          }
@@ -63,7 +66,10 @@ public class FavouriteHorsesFragment extends Fragment {
             RecyclerView recyclerView = (RecyclerView) view;
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
             recyclerView.setAdapter(new RVAdaptor(mHorses));
+            Log.d("LayoutManager Height - ", recyclerView.getLayoutManager().getHeight() + "");
+            Log.d("RecyclerView Height - ", recyclerView.getHeight() + "");
         }
+        Log.d("View Height - ", view.getHeight() + "");
         return view;
     }
 
