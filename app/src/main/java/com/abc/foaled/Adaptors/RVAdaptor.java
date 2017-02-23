@@ -5,22 +5,19 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.net.Uri;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.abc.foaled.Helpers.ImageHelper;
 import com.abc.foaled.Models.Horse;
 import com.abc.foaled.Activity.HorseDetailActivity;
 import com.abc.foaled.R;
 
-import java.io.File;
 import java.util.List;
 
 /**
@@ -87,9 +84,10 @@ public class RVAdaptor extends RecyclerView.Adapter<RVAdaptor.HorseViewHolder>{
     public void onBindViewHolder(HorseViewHolder holder, int i) {
         holder.personName.setText(horses.get(i).name);
         holder.horseID = horses.get(i).getHorseID();
-        Bitmap m = decodeSampledBitmapFromResource(horses.get(i).bigImagePath, 200, 200);
-        /*m = RotateBitmap(m, 90);*/
-        holder.personPhoto.setImageBitmap(m);
+/*        Bitmap m = decodeSampledBitmapFromResource(horses.get(i).bigImagePath, 200, 200);
+        *//*m = RotateBitmap(m, 90);*//*
+        holder.personPhoto.setImageBitmap(m);*/
+        holder.personPhoto.setImageBitmap(ImageHelper.bitmapSmaller(horses.get(i).bigImagePath, 200, 200));
 
         //holder.personPhoto.setImageURI(Uri.fromFile(new File(horses.get(i).smallImagePath)));
     }

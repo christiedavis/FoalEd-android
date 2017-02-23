@@ -1,6 +1,7 @@
 package com.abc.foaled.Activity;
 
 import android.net.Uri;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,6 +14,8 @@ import android.widget.TextView;
 
 import com.abc.foaled.Database.DatabaseHelper;
 import com.abc.foaled.Database.ORMBaseActivity;
+import com.abc.foaled.Fragment.FavouriteHorsesFragment;
+import com.abc.foaled.Fragment.NotificationSettingsFragment;
 import com.abc.foaled.Helpers.DateTimeHelper;
 import com.abc.foaled.Helpers.UserInfo;
 import com.abc.foaled.Models.Horse;
@@ -21,7 +24,8 @@ import com.j256.ormlite.dao.RuntimeExceptionDao;
 
 import java.io.File;
 
-public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper> {
+public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
+    implements FavouriteHorsesFragment.OnListFragmentInteractionListener, NotificationSettingsFragment.OnFragmentInteractionListener {
 
     UserInfo userInfo;
     Horse horse;
@@ -50,6 +54,13 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper> {
         ImageView personPhoto = (ImageView)this.findViewById(R.id.horse_photo);
         personPhoto.setImageURI(Uri.fromFile(new File(horse.smallImagePath)));
 
+
+        this.userInfo.horses = getHelper().getHorseDataDao().queryForAll(); //get data
+        FragmentTransaction fragmentManager = getSupportFragmentManager().beginTransaction();
+        FavouriteHorsesFragment fragment = FavouriteHorsesFragment.newInstance();
+        fragment.setListToBeDisplayed(this.userInfo.horses);
+        fragmentManager.replace(R.id.horseDetailNotes, fragment).commit();
+
     }
 
     @Override
@@ -70,5 +81,15 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper> {
         //returns true if deleted 1 row (which should be the case if ID exists)
         //else returns false
         return horseDao.delete(horse) == 1;
+    }
+
+    @Override //needed
+    public void onFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void onListFragmentInteraction(Horse item) {
+
     }
 }

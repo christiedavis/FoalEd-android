@@ -1,5 +1,7 @@
 package com.abc.foaled.Helpers;
 
+import android.app.Activity;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
@@ -10,6 +12,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by christie on 17/02/17.
@@ -58,7 +63,11 @@ public class ImageHelper {
     }
 
     public static Bitmap bitmapSmaller(String filePath, int reqHeight, int reqWidth) {
-        return decodeSampledBitmapFromResource(filePath, reqHeight, reqWidth);
+        return decodeSampledBitmapFromString(filePath, reqHeight, reqWidth);
+    }
+
+    public static Bitmap bitmapSmaller(Resources resources, int resID, int reqHeight, int reqWidth) {
+        return decodeSampledBitmapFromResource(resources, resID, reqHeight, reqWidth);
     }
 
     private static int calculateInSampleSize(
@@ -84,7 +93,7 @@ public class ImageHelper {
         return inSampleSize;
     }
 
-    private static Bitmap decodeSampledBitmapFromResource(String photo,
+    private static Bitmap decodeSampledBitmapFromString(String photo,
                                                          int reqWidth, int reqHeight) {
 
         // First decode with inJustDecodeBounds=true to check dimensions
@@ -98,5 +107,36 @@ public class ImageHelper {
         // Decode bitmap with inSampleSize set
         options.inJustDecodeBounds = false;
         return BitmapFactory.decodeFile(photo, options);
+    }
+
+    private static Bitmap decodeSampledBitmapFromResource(Resources resources,
+                                                          int resID, int reqHeight, int reqWidth) {
+
+        // First decode with inJustDecodeBounds=true to check dimensions
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(resources, resID, options);
+
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeResource(resources, resID, options);
+    }
+
+    public static String createImageFile(Activity a, StringBuilder imageFileName) {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
+        imageFileName.delete(0, imageFileName.length());
+        imageFileName.append("JPEG_" + timeStamp + ".jpg");
+
+        String imagePath = a.getFilesDir().getAbsolutePath() + "/" + imageFileName;
+        try {
+            new File(imagePath).createNewFile();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return imagePath;
     }
 }

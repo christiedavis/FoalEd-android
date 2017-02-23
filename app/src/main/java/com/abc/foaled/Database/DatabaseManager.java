@@ -17,9 +17,8 @@ public class DatabaseManager {
     static private DatabaseManager instance;
 
     static public void init(Context ctx) {
-        if (null==instance) {
+        if (instance==null)
             instance = new DatabaseManager(ctx);
-        }
     }
 
     static public DatabaseManager getInstance() {

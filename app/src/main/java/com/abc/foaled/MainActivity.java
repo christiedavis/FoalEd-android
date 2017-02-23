@@ -1,8 +1,6 @@
 package com.abc.foaled;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.app.Notification;
@@ -24,7 +22,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.widget.Toast;
 
 import com.abc.foaled.Activity.AboutActivity;
 import com.abc.foaled.Activity.AddNewHorseActivity;
@@ -33,8 +30,8 @@ import com.abc.foaled.Activity.FeedbackActivity;
 import com.abc.foaled.Activity.NotificationSettingsActivity;
 import com.abc.foaled.Activity.SettingsActivity;
 import com.abc.foaled.Database.DatabaseHelper;
+import com.abc.foaled.Database.DatabaseManager;
 import com.abc.foaled.Database.ORMBaseActivity;
-import com.abc.foaled.Helpers.ImageHelper;
 import com.abc.foaled.Helpers.UserInfo;
 import com.abc.foaled.Models.Horse;
 import com.abc.foaled.Fragment.FavouriteHorsesFragment;
@@ -43,11 +40,7 @@ import com.abc.foaled.Notifications.NotificationScheduler;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
-
-import static com.abc.foaled.Helpers.ImageHelper.createPlaceholderImageFile;
 
 public class MainActivity extends ORMBaseActivity<DatabaseHelper>
         implements NavigationView.OnNavigationItemSelectedListener, FavouriteHorsesFragment.OnListFragmentInteractionListener, NotificationSettingsFragment.OnFragmentInteractionListener {
@@ -82,12 +75,14 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
             ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                     this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-            //TODO fix this
+            //TODO fix this deprecated call
             drawer.setDrawerListener(toggle);
             toggle.syncState();
 
             NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
             navigationView.setNavigationItemSelectedListener(this);
+
+            DatabaseManager.init(this);
 
             //floating action button
             FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -151,7 +146,7 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         Fragment fragment = null;
-        Class fragmentClass = null;
+        Class fragmentClass;
         int id = item.getItemId();
         Intent intent;
 
@@ -221,43 +216,6 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
     }
 
     public void createPlaceholderImageFile(InputStream inputStream) {
-/*        //The directory the images are saved in
-        String storageDirPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/FoalEd";
-        //The image I'm looking for
-        File image = new File(storageDirPath + "/placeholder.jpg");
-        if (!image.exists()) {
-            //Make both of the directories (fails if it already exists, which it probably shouldn't if it's getting here for the first time)
-            File storageDir = new File(storageDirPath);
-            storageDir.mkdir();
-            File smallStorageDir = new File(storageDirPath + "/Small_Versions");
-            smallStorageDir.mkdir();
-
-            try {
-
-                image.createNewFile();
-                File smallVersion = new File(smallStorageDir + "/placeholder.jpg");
-                smallVersion.createNewFile();
-                //TODO use the drawable instead of asset for this
-                //Opens default christie image, and reads it into the new file /FoalEd/placeholder.jpg
-                //InputStream inputStream = MainActivity.getAssets().open("christie.jpg");
-                FileOutputStream outputStream = new FileOutputStream(image);
-                byte[] byteArray = new byte[1024];
-                while (inputStream.read(byteArray) != -1)
-                    outputStream.write(byteArray);
-                inputStream.close();
-                outputStream.close();
-
-                //Saves a smaller version into the new output stream
-                outputStream = new FileOutputStream(smallVersion);
-                BitmapFactory.decodeFile(image.getAbsolutePath()).compress(Bitmap.CompressFormat.JPEG, 50, outputStream);
-                ;
-                outputStream.close();
-
-            } catch (IOException ioE) {
-                ioE.printStackTrace();
-            }
-        }*/
-
         File f = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
                 + "/FoalEd");
         f.mkdir();
@@ -273,9 +231,7 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
         }
-
     }
 
 

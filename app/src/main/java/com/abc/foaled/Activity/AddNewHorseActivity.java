@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,50 +18,40 @@ import android.support.v4.app.ActivityCompat;
 
 import android.support.v4.app.NavUtils;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.abc.foaled.Database.DatabaseHelper;
 import com.abc.foaled.Database.ORMBaseActivity;
 import com.abc.foaled.Helpers.ImageHelper;
+import com.abc.foaled.Helpers.UserInfo;
 import com.abc.foaled.Models.Births;
 import com.abc.foaled.Models.Horse;
-import com.abc.foaled.Fragment.DatePickerFragment;
 import com.abc.foaled.R;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 
-import org.joda.time.DateTime;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.net.URI;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
 
 public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_IMAGE_SELECT = 2;
     private String imagePath = "";
-    private String smallImagePath = "";
-    private String imageFileName = "";
+    private StringBuilder imageFileName = new StringBuilder();
     private int API_LEVEL = 1;
-    private BitmapFactory.Options options = new BitmapFactory.Options();
-
 
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
+
+    //TODO reckon we can put all photo related methods in the ImageHelper class to be re-used everywhere else?
+    //This would require a little bit of rework
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,18 +61,13 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        imagePath = getFilesDir().getAbsolutePath() + "/placeholder.jpg";
+
         ImageView iV = (ImageView) findViewById(R.id.imageView3);
-        options.inSampleSize = 4;
-        iV.setImageBitmap(BitmapFactory.decodeResource(getApplication().getResources(), R.drawable.christie, options));
+        iV.setImageBitmap(ImageHelper.bitmapSmaller(imagePath, 200, 200));
 
         API_LEVEL = android.os.Build.VERSION.SDK_INT;
 
-        /*bigImagePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
-                + "/FoalEd/placeholder.jpg";
-        smallImagePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
-                + "/FoalEd/Small_Versions/placeholder.jpg";*/
-        imagePath = getFilesDir().getAbsolutePath() + "/placeholder.jpg";
-        smallImagePath = getFilesDir().getAbsolutePath() + "/placeholder.jpg";
     }
 
     @Override
@@ -91,30 +75,29 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
         super.onDestroy();
     }
 
+
     /**
-     * On return to this activity, if it was from camera then change imageView to
-     * the saved image
+     * Deals with the result of coming back from another intent when started with 'startActivityForResult
      *
-     * THIS HAS AN ERROR
-     * Not actually an error, but I noticed a bug in which the imagePath is not updated
-     * and so the imageview is not updated at all... It was curious.
-     * @param requestCode -
-     * @param resultCode -
-     * @param data -
+     * @param requestCode Custom request code send with 'startActivityForResult'. Used to determine what to do with result
+     * @param resultCode The activity returns a result code, depending on what you did
+     * @param data The intent we just came from. Will usually hold data
      */
-    //TODO make new photos (camera or gallery) temp, until inserted where they then make the files
-    //Because when you select a photo, currently a file is made. Select multiple photos before deciding,
-    //      and then you have multiple files, and only the most recently selected gets deleted.
+    //TODO If user clicks select new photo while original is not Placeholder image, remove old image
+    //But this will not work, because what if the user goes back from the camera or gallery activity?
+    //TODO deal with Picasa web album URI's
+    //TODO fix error with camera when using S4
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)  {
         super.onActivityResult(requestCode, resultCode, data);
 
-        //If the activity WAS taking a photo
+        //If we just took a photo
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) { //RESULT_OK = -1
             try {
                 FileInputStream fis = new FileInputStream(new File(imagePath));
-                createImageFile();
-                FileOutputStream fos = openFileOutput(imageFileName, Context.MODE_PRIVATE);
+                imagePath = ImageHelper.createImageFile(this, imageFileName);
+
+                FileOutputStream fos = openFileOutput(imageFileName.toString(), Context.MODE_PRIVATE);
                 byte[] byteArray = new byte[2048];
                 while (fis.read(byteArray) != -1)
                     fos.write(byteArray);
@@ -123,15 +106,8 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
                 e.printStackTrace();
             }
 
-            //Pull photo through bitmapFactory and display
-            ImageView iV = ((ImageView) findViewById(R.id.imageView3));
-            int height = iV.getHeight();
-            int width = iV.getWidth();
-            iV.setImageBitmap(ImageHelper.bitmapSmaller(imagePath, height, width));
-
-            //If request code is from selecting photo from gallery
+            //If we just selected a photo from the gallery
         } else if (requestCode == REQUEST_IMAGE_SELECT && resultCode == RESULT_OK) {
-
             /*
              * List all the media's, then query that media using returned uri
              * Go to the first option (which should be our file), and list
@@ -151,17 +127,14 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
                     cursor.close();
             }
 
-
-            /**
-             * Creates new image (which also alters string imagePath
-             * Read chosen file
+            /*
+                Creates FIS from selected image path, then changes imagePath to be a new empty File
+                We then copy the bytes from the selected image into the new internal image file
              */
 
             try {
-                //String newFilePath = createImageFile();
                 FileInputStream fis = new FileInputStream(new File(imagePath));
-//                get
-                createImageFile();
+                imagePath = ImageHelper.createImageFile(this, imageFileName);
                 File file = new File(imagePath);
                 String name = file.getName();
                 FileOutputStream fos = openFileOutput(name, Context.MODE_PRIVATE);
@@ -171,41 +144,23 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
                 fos.close();
                 fis.close();
 
-/*                File newImage;
-
-                //Make the big image
-                FileInputStream inputStream = new FileInputStream(new File(bigImagePath));
-                newImage = createImageFile(false);
-                FileOutputStream outputStream = new FileOutputStream(newImage);
-                byte[] byteArray = new byte[1024];
-                while (inputStream.read(byteArray) != -1)
-                    outputStream.write(byteArray);
-                inputStream.close();
-
-                //Makes the small image, based off the big image
-                newImage = createImageFile(true);
-                outputStream = new FileOutputStream(newImage);
-                BitmapFactory.decodeFile(bigImagePath).compress(Bitmap.CompressFormat.JPEG, 50, outputStream);
-                outputStream.close();*/
-
             } catch (Exception e) {
-                e.printStackTrace();
+                    e.printStackTrace();
             }
-
-            ImageView iV = ((ImageView) findViewById(R.id.imageView3));
-            int height = iV.getHeight();
-            int width = iV.getWidth();
-            iV.setImageBitmap(ImageHelper.bitmapSmaller(imagePath, height, width));
-/*            ((ImageView) findViewById(R.id.imageView3)).setImageBitmap(BitmapFactory.decodeFile(smallImagePath));
-            Toast.makeText(getApplicationContext(), bigImagePath, Toast.LENGTH_LONG).show();*/
         }
+
+        //Pull photo through bitmapFactory and display
+        ImageView iV = ((ImageView) findViewById(R.id.imageView3));
+        int height = iV.getHeight();
+        int width = iV.getWidth();
+        iV.setImageBitmap(ImageHelper.bitmapSmaller(imagePath, height, width));
     }
 
 
     /**
      * Checks if the app has permission to write to device storage
      * If the app does not has permission then the user will be prompted to grant permissions
-     * @param activity The activity to check whether it has permissions or now
+     * @param activity The activity to check whether it has permissions or not
      */
     private static void verifyStoragePermissions(Activity activity) {
         // Check if we have write permission
@@ -222,13 +177,17 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
     }
 
 
-    public void update(View view) {
+/*    public void update(View view) {
         DatePickerFragment newFragment = new DatePickerFragment();
         newFragment.setViewResult((TextView) view);
         newFragment.show(getFragmentManager(), "Date Picker");
-    }
+    }*/
 
 
+    /**
+     *  Adds a horse to the database with the relevant information entered in this activity
+     * @param view The UI control that called this insert method
+     */
     public void insert(View view) {
 
         EditText nameView = (EditText) findViewById(R.id.editText2);
@@ -246,17 +205,13 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
         horse.birth = birth;
         horseDao.create(horse);
 
-        //query(view);
+        //TODO this refreshes the singletons horse list so RVAdapator doesn't have to
+        UserInfo.getInstance().horses = getHelper().getHorseDataDao().queryForAll();
 
         showSuccessConfirmation();
     }
 
-    /**
-     * Pulls all the horses from the database into database objects and
-     * displays them in the text view.
-     * @param view The control that calls this method
-     */
-    public void query(View view) {
+/*    public void query(View view) {
         RuntimeExceptionDao<Horse, Integer> horseDao = getHelper().getHorseDataDao();
 
         TextView tv = (TextView) findViewById(R.id.textView4);
@@ -269,7 +224,7 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
 
         tv.setText(display);
 
-    }
+    }*/
 
     /**
      * Displays an alert dialog box that lets your select what source to get
@@ -283,7 +238,7 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
             verifyStoragePermissions(this);
 
 
-        //Creates a dialog to choose where the photo cromes from
+        //Creates a dialog to choose where the photo comes from
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Choose photo source");
 
@@ -309,7 +264,10 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
     }
 
     /**
-     * Access the camera to take an image through an activityForResult
+     * Creates the camera intent to take the photo. All photos that are accepted by this camera
+     * intent are saved as temporary files in a public directory (public because camera doesn't
+     * have permission to save to internal directory).
+     * TODO need to delete all left over photos on insert method
      */
     public void takeImage() {
 
@@ -317,13 +275,13 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
             if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                //Directory of the foal-ed directory (public)
+                //foal-ed public directory
                 File f = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
                         + "/FoalEd");
 
                 File image = null;
                 try {
-                    //creates a temp file that gets deleted when app closes
+                    //creates a temp file that gets deleted when app closes (hopefully)
                     image = File.createTempFile(
                             "temp",
                             ".jpg",
@@ -341,26 +299,11 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
     }
 
     /**
-     * Success method to be called when a horse has been succesfully added.
+     * Success method to be called when a horse has been successfully added.
      */
     private void showSuccessConfirmation() {
-        Toast.makeText(this, "Horse added sucessfully", Toast.LENGTH_LONG).show();
-
+        Toast.makeText(this, "Horse added successfully", Toast.LENGTH_SHORT).show();
         NavUtils.navigateUpFromSameTask(this);
     }
 
-    private String createImageFile() {
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
-        imageFileName = "JPEG_" + timeStamp + ".jpg";
-
-        imagePath = getFilesDir().getAbsolutePath() + "/" + imageFileName;
-        try {
-            new File(imagePath).createNewFile();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        smallImagePath = imagePath;
-
-        return imagePath;
-    }
 }
