@@ -16,11 +16,12 @@ import com.abc.foaled.R;
 public class NoteAdaptor extends RecyclerView.Adapter<NoteAdaptor.NoteViewHolder> {
 
     public static class NoteViewHolder extends RecyclerView.ViewHolder {
-        // each data item is just a string in this case
+
         public TextView mTextView;
-        public NoteViewHolder(View itemView) {
+
+
+        NoteViewHolder(View itemView) {
             super(itemView);
-//            mTextView = v;
         }
     }
 

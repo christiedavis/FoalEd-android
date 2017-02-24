@@ -32,10 +32,37 @@
         android:layout_height="wrap_content"
         android:id="@+id/button_add_pregnancy" />
 
-    <FrameLayout
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/horse_note_card_view"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_height="wrap_content"
+        card_view:cardCornerRadius="4dp">
+
+        <!--DP is for system-font-size-independent-values
+        if you want the size to change based on system font size,
+            use sp instead-->
+        <TextView
+            android:id="@+id/horse_note_card_view_title"
+
+            android:textSize="24dp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <TextView
+            android:id="@+id/horse_note_card_view_note"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </android.support.v7.widget.CardView>
+
+<!--    <FrameLayout
         android:id="@+id/horseDetailNotes"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"/>-->
     <!--android:layout_marginTop="?attr/actionBarSize"/>-->
 
 

@@ -55,11 +55,19 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
         personPhoto.setImageURI(Uri.fromFile(new File(horse.smallImagePath)));
 
 
-        this.userInfo.horses = getHelper().getHorseDataDao().queryForAll(); //get data
+/*        this.userInfo.horses = getHelper().getHorseDataDao().queryForAll(); //get data
         FragmentTransaction fragmentManager = getSupportFragmentManager().beginTransaction();
         FavouriteHorsesFragment fragment = FavouriteHorsesFragment.newInstance();
         fragment.setListToBeDisplayed(this.userInfo.horses);
-        fragmentManager.replace(R.id.horseDetailNotes, fragment).commit();
+        fragmentManager.replace(R.id.horseDetailNotes, fragment).commit();*/
+
+        StringBuilder note = new StringBuilder(horse.notes);
+        String notes = note.substring(0, 47) + " ...";
+        TextView tvTitle = (TextView) findViewById(R.id.horse_note_card_view_title);
+        TextView tvText = (TextView) findViewById(R.id.horse_note_card_view_note);
+        tvTitle.setText(horse.name + "'s notes");
+//        tvText.setText
+
 
     }
 
