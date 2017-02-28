@@ -15,12 +15,15 @@ import android.widget.TextView;
 import com.abc.foaled.Database.DatabaseHelper;
 import com.abc.foaled.Database.ORMBaseActivity;
 import com.abc.foaled.Fragment.FavouriteHorsesFragment;
+import com.abc.foaled.Fragment.HorseNoteFragment;
 import com.abc.foaled.Fragment.NotificationSettingsFragment;
 import com.abc.foaled.Helpers.DateTimeHelper;
 import com.abc.foaled.Helpers.UserInfo;
+import com.abc.foaled.Models.Births;
 import com.abc.foaled.Models.Horse;
 import com.abc.foaled.R;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
+import com.j256.ormlite.stmt.QueryBuilder;
 
 import java.io.File;
 
@@ -54,18 +57,21 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
         ImageView personPhoto = (ImageView)this.findViewById(R.id.horse_photo);
         personPhoto.setImageURI(Uri.fromFile(new File(horse.smallImagePath)));
 
+        QueryBuilder<Births, Integer> queryBuilder = getHelper().getBirthsDataDao().queryBuilder();
+        queryBuilder.where().eq(Births.mare, "qwerty");
+        String[] birthNotes = getHelper().getBirthsDataDao().query
 
-/*        this.userInfo.horses = getHelper().getHorseDataDao().queryForAll(); //get data
         FragmentTransaction fragmentManager = getSupportFragmentManager().beginTransaction();
-        FavouriteHorsesFragment fragment = FavouriteHorsesFragment.newInstance();
-        fragment.setListToBeDisplayed(this.userInfo.horses);
-        fragmentManager.replace(R.id.horseDetailNotes, fragment).commit();*/
+        HorseNoteFragment fragment = HorseNoteFragment.newInstance();
+        //fragment.setListToBeDisplayed(this.userInfo.horses);
 
-        StringBuilder note = new StringBuilder(horse.notes);
+        fragmentManager.replace(R.id.horseDetailNotes, fragment).commit();
+
+/*        StringBuilder note = new StringBuilder(horse.notes);
         String notes = note.substring(0, 47) + " ...";
         TextView tvTitle = (TextView) findViewById(R.id.horse_note_card_view_title);
         TextView tvText = (TextView) findViewById(R.id.horse_note_card_view_note);
-        tvTitle.setText(horse.name + "'s notes");
+        tvTitle.setText(horse.name + "'s notes");*/
 //        tvText.setText
 
 

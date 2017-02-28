@@ -176,14 +176,6 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
         }
     }
 
-
-/*    public void update(View view) {
-        DatePickerFragment newFragment = new DatePickerFragment();
-        newFragment.setViewResult((TextView) view);
-        newFragment.show(getFragmentManager(), "Date Picker");
-    }*/
-
-
     /**
      *  Adds a horse to the database with the relevant information entered in this activity
      * @param view The UI control that called this insert method
