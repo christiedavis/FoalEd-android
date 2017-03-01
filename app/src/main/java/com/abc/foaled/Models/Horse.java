@@ -12,6 +12,7 @@ import com.j256.ormlite.table.DatabaseTable;
 
 import org.joda.time.Period;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
@@ -22,9 +23,9 @@ import static android.R.attr.id;
  *
  */
 @DatabaseTable(tableName = "horse")
-public class Horse {
+public class Horse implements Serializable {
 
-    public enum HORSE_STATUS {
+    private enum HORSE_STATUS {
 
         HORSE_STATUS_DORMANT(0),
         HORSE_STATUS_MAIDEN(1),
@@ -41,7 +42,6 @@ public class Horse {
         public int getValue() { return value; }
     }
 
-    private String age;
     @DatabaseField(generatedId = true)
     private int horseID;                             //ID
     @DatabaseField
@@ -53,7 +53,7 @@ public class Horse {
     @DatabaseField
     private String markings;
     @DatabaseField
-    private String notes;
+    public String notes;
     @DatabaseField (unknownEnumName = "HORSE_STATUS_DORMANT")
     private HORSE_STATUS status;
 //    @DatabaseField

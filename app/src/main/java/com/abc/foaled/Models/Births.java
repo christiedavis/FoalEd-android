@@ -23,7 +23,7 @@ public class Births {
     @DatabaseField(foreign = true)
     private Horse sire;
     @DatabaseField(foreign = true)
-    private Horse mare;
+    public Horse mare;
 
     @DatabaseField(dataType = DataType.DATE_STRING)
     public Date est_conception;

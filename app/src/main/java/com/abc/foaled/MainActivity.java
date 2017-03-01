@@ -67,7 +67,6 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
             FragmentTransaction fragmentManager = getSupportFragmentManager().beginTransaction();
             FavouriteHorsesFragment fragment = FavouriteHorsesFragment.newInstance();
             fragment.setListToBeDisplayed(this.userInfo.horses);
-
             fragmentManager.replace(R.id.flContent, fragment).commit();
 
 

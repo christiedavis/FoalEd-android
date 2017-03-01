@@ -6,7 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.abc.foaled.Models.Horse;
 import com.abc.foaled.R;
+
+import java.util.List;
 
 /**
  * Created by Brendan on 23/02/2017.
@@ -15,12 +18,18 @@ import com.abc.foaled.R;
 
 public class NoteAdaptor extends RecyclerView.Adapter<NoteAdaptor.NoteViewHolder> {
 
+    private String horseNote;
+    private String[] birthNotes;
+
+    public NoteAdaptor(String horseNote, String[] birthNotes) { this.horseNote = horseNote; this.birthNotes = birthNotes; }
+
     public static class NoteViewHolder extends RecyclerView.ViewHolder {
-        // each data item is just a string in this case
+
         public TextView mTextView;
-        public NoteViewHolder(View itemView) {
+
+
+        NoteViewHolder(View itemView) {
             super(itemView);
-//            mTextView = v;
         }
     }
 

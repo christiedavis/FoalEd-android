@@ -6,6 +6,7 @@ import java.util.List;
 
 /**
  * Created by christie on 17/02/17.
+ *
  */
 public class UserInfo {
     private static UserInfo ourInstance = new UserInfo();
@@ -14,6 +15,7 @@ public class UserInfo {
         return ourInstance;
     }
 
+    //TODO make this private
     public List<Horse> horses;
 
      public List<Horse> getHorses() {
