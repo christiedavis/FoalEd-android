@@ -57,9 +57,9 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
         ImageView personPhoto = (ImageView)this.findViewById(R.id.horse_photo);
         personPhoto.setImageURI(Uri.fromFile(new File(horse.smallImagePath)));
 
-        QueryBuilder<Births, Integer> queryBuilder = getHelper().getBirthsDataDao().queryBuilder();
-        queryBuilder.where().eq(Births.mare, "qwerty");
-        String[] birthNotes = getHelper().getBirthsDataDao().query
+//        QueryBuilder<Births, Integer> queryBuilder = getHelper().getBirthsDataDao().queryBuilder();
+//        queryBuilder.where().eq(Births.mare, "qwerty");
+//        String[] birthNotes = getHelper().getBirthsDataDao().query
 
         FragmentTransaction fragmentManager = getSupportFragmentManager().beginTransaction();
         HorseNoteFragment fragment = HorseNoteFragment.newInstance();
