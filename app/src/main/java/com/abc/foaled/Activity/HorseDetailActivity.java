@@ -46,8 +46,11 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
         int horseID = getIntent().getIntExtra("HorseID", 0);
         this.horse = this.userInfo.getHorseAtIndex(horseID);
 
-        Button horseName = (Button)this.findViewById(R.id.buttonAge);
-        horseName.setText(DateTimeHelper.printPeriod(horse.getAge()));
+        Button horseAge = (Button)this.findViewById(R.id.buttonAge);
+        horseAge.setText(DateTimeHelper.printPeriod(horse.getAge()));
+
+        TextView name = (TextView)this.findViewById(R.id.horse_name);
+        name.setText(horse.name);
 
         TextView age = (TextView)this.findViewById(R.id.horse_age);
         age.setText(DateTimeHelper.printPeriod(horse.getAge()));

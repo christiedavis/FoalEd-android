@@ -64,7 +64,7 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
             this.userInfo = UserInfo.getInstance();
 
             // SET UP FRAGMENT
-            this.userInfo.horses = getHelper().getHorseDataDao().queryForAll(); //get data
+            this.userInfo.horses = getHelper().refresh(); //get data
             FragmentTransaction fragmentManager = getSupportFragmentManager().beginTransaction();
             FavouriteHorsesFragment fragment = FavouriteHorsesFragment.newInstance();
             fragment.setListToBeDisplayed(this.userInfo.horses);

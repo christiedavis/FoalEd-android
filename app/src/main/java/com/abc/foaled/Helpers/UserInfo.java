@@ -16,9 +16,12 @@ import java.util.List;
  */
 public class UserInfo {
 
-    private static UserInfo ourInstance = new UserInfo();
+    private static UserInfo ourInstance;
 
     public static UserInfo getInstance() {
+        if (ourInstance == null) {
+            ourInstance = new UserInfo();
+        }
         return ourInstance;
     }
 
