@@ -68,6 +68,14 @@ public abstract class ORMBaseActivity<H extends OrmLiteSqliteOpenHelper> extends
         }
         super.onCreate(savedInstanceState);
     }
+    @Override
+    public void onResume() {
+        if (helper == null) {
+            helper = getHelperInternal(this);
+            created = true;
+        }
+        super.onResume();
+    }
 
     @Override
     protected void onDestroy() {

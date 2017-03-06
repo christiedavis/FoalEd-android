@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.abc.foaled.Database.DatabaseHelper;
 import com.abc.foaled.Database.ORMBaseActivity;
@@ -66,13 +67,6 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 
         fragmentManager.replace(R.id.horseDetailNotes, fragment).commit();
 
-/*        StringBuilder note = new StringBuilder(horse.notes);
-        String notes = note.substring(0, 47) + " ...";
-        TextView tvTitle = (TextView) findViewById(R.id.horse_note_card_view_title);
-        TextView tvText = (TextView) findViewById(R.id.horse_note_card_view_note);
-        tvTitle.setText(horse.name + "'s notes");*/
-//        tvText.setText
-
         final TextView tvTitle = (TextView) findViewById(R.id.horse_only_note_title);
         final TextView tvText = (TextView) findViewById(R.id.horse_only_note_content);
         tvTitle.setText(horse.name);
@@ -85,6 +79,8 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
                 Intent intent = new Intent(getApplicationContext(), NoteActivity.class);
                 intent.putExtra("title", tvTitle.getText().toString());
                 intent.putExtra("note", tvText.getText().toString());
+                startActivity(intent);
+//                Toast.makeText(v.getContext(), "Done", Toast.LENGTH_SHORT).show();
             }
         });
 

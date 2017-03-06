@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:clickable="true"
     android:layout_width="match_parent"
     android:layout_height="100sp"
     android:id="@+id/horse_note_card_view">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="200dp"
+        android:orientation="vertical"
         android:background="@color/cardview_dark_background">
 
         <TextView
@@ -21,7 +21,6 @@
             android:paddingStart="10sp"
             android:paddingEnd="10sp"
             android:paddingBottom="10sp"
-            android:layout_alignParentBottom="true"
             android:textSize="25sp"/>
 
         <TextView
@@ -32,8 +31,7 @@
             android:paddingTop="10sp"
             android:paddingStart="10sp"
             android:paddingEnd="10sp"
-            android:paddingBottom="10sp"
-            android:layout_alignParentBottom="true" />
-    </RelativeLayout>
+            android:paddingBottom="10sp" />
+    </LinearLayout>
 
 </android.support.v7.widget.CardView>

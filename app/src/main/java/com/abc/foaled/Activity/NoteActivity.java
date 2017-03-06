@@ -22,21 +22,20 @@ public class NoteActivity extends ORMBaseActivity<DatabaseHelper> {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.note_activity);
 
         title = getIntent().getStringExtra("title");
         note = getIntent().getStringExtra("note");
-//        noteTitle = (EditText) findViewById(R.id.note_activity_title);
-//        noteContent = (EditText) findViewById(R.id.note_activity_content);
+
+        noteTitle = (EditText) findViewById(R.id.note_activity_title);
+        noteContent = (EditText) findViewById(R.id.note_activity_content);
+        noteTitle.setText(title);
+        noteContent.setText(note);
     }
 
     @Override
     public void onResume() {
         super.onResume();
 
-        noteTitle = (EditText) findViewById(R.id.note_activity_title);
-        noteContent = (EditText) findViewById(R.id.note_activity_content);
-
-        noteTitle.setText(title);
-        noteContent.setText(note);
     }
 }

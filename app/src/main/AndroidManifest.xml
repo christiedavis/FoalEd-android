@@ -80,8 +80,18 @@
         </activity>
 
         <activity
-            android:name=".Activity.FaqActivity"
+            android:name=".Activity.faqActivity"
             android:label="FAQ"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.abc.foaled.MainActivity" />
+        </activity>
+
+        <activity
+            android:name=".Activity.NoteActivity"
+            android:label="Notes"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data

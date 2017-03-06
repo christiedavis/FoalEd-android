@@ -78,7 +78,6 @@ public class Horse implements Serializable {
         this.bigImagePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
                 + "/FoalEd/placeholder.jpg";
         this.image = BitmapFactory.decodeFile(bigImagePath);*/
-
     }
 
     // TODO: is this when this horse was born?

@@ -49,10 +49,11 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         //TODO create default placeholder image file if it doesn't exist already (essentially creating on first run through)
         try {
             createPlaceholderImageFile(getAssets().open("christie.jpg"));
-            super.onCreate(savedInstanceState);
+
             requestWindowFeature(Window.FEATURE_NO_TITLE);
             setContentView(R.layout.activity_main);
             Log.d("Application Started", "YAY");
@@ -64,6 +65,7 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
 
             // SET UP FRAGMENT
             this.userInfo.horses = getHelper().getHorseDataDao().queryForAll(); //get data
+//            this.userInfo.refresh();
             FragmentTransaction fragmentManager = getSupportFragmentManager().beginTransaction();
             FavouriteHorsesFragment fragment = FavouriteHorsesFragment.newInstance();
             fragment.setListToBeDisplayed(this.userInfo.horses);
@@ -233,13 +235,9 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
         }
     }
 
-
-
-
     private void createNotification() {
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this);
-
 
         notificationBuilder
                 .setSmallIcon(R.mipmap.ic_horse_launcher)

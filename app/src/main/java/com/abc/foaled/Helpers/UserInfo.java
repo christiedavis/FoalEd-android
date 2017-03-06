@@ -1,5 +1,7 @@
 package com.abc.foaled.Helpers;
 
+import com.abc.foaled.Database.DatabaseHelper;
+import com.abc.foaled.Database.ORMBaseActivity;
 import com.abc.foaled.Models.Horse;
 
 import java.util.List;
@@ -22,9 +24,5 @@ public class UserInfo {
             return this.horses;
     }
 
-    private UserInfo() {
-
-    }
-
-
+    private UserInfo() {}
 }
