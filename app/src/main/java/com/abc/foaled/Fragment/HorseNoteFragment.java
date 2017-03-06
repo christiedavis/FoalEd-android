@@ -54,13 +54,6 @@ public class HorseNoteFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-//        int height = container.getHeight();
-//        int width = container.getHeight();
-
-/*         if (mHorses == null) {      //error
-             Log.e(null, "onCreateView: ERROR no horses ", null);
-         }*/
-
          View view = inflater.inflate(R.layout.fragment_horse_note, container, false);
         // Set the adapter
         if (view instanceof RecyclerView) {
@@ -68,10 +61,7 @@ public class HorseNoteFragment extends Fragment {
             RecyclerView recyclerView = (RecyclerView) view;
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
             recyclerView.setAdapter(new NoteAdaptor(horseNote, birthNotes));
-//            Log.d("LayoutManager Height - ", recyclerView.getLayoutManager().getHeight() + "");
-//            Log.d("RecyclerView Height - ", recyclerView.getHeight() + "");
         }
-//        Log.d("View Height - ", view.getHeight() + "");
         return view;
     }
 
@@ -83,12 +73,12 @@ public class HorseNoteFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnListFragmentInteractionListener) {
+/*        if (context instanceof OnListFragmentInteractionListener) {
             mListener = (OnListFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
-        }
+        }*/
     }
 
     @Override

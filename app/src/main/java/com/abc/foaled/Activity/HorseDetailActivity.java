@@ -1,13 +1,16 @@
 package com.abc.foaled.Activity;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.ButtonBarLayout;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -47,23 +50,19 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
         this.horse = this.userInfo.horses.get(horseID);
 
         // TODO: set up the rest of the fields.
+        //Sets up horse name
         Button horseName = (Button)this.findViewById(R.id.buttonAge);
         horseName.setText(horse.name);
-
+        //sets up horse age
         TextView age = (TextView)this.findViewById(R.id.horse_age);
         age.setText(DateTimeHelper.printPeriod(horse.getAge()));
-
-
+        //sets up the photo
         ImageView personPhoto = (ImageView)this.findViewById(R.id.horse_photo);
         personPhoto.setImageURI(Uri.fromFile(new File(horse.smallImagePath)));
 
-//        QueryBuilder<Births, Integer> queryBuilder = getHelper().getBirthsDataDao().queryBuilder();
-//        queryBuilder.where().eq(Births.mare, "qwerty");
-//        String[] birthNotes = getHelper().getBirthsDataDao().query
 
         FragmentTransaction fragmentManager = getSupportFragmentManager().beginTransaction();
         HorseNoteFragment fragment = HorseNoteFragment.newInstance();
-        //fragment.setListToBeDisplayed(this.userInfo.horses);
 
         fragmentManager.replace(R.id.horseDetailNotes, fragment).commit();
 
@@ -73,6 +72,21 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
         TextView tvText = (TextView) findViewById(R.id.horse_note_card_view_note);
         tvTitle.setText(horse.name + "'s notes");*/
 //        tvText.setText
+
+        final TextView tvTitle = (TextView) findViewById(R.id.horse_only_note_title);
+        final TextView tvText = (TextView) findViewById(R.id.horse_only_note_content);
+        tvTitle.setText(horse.name);
+        tvText.setText(horse.notes);
+
+        CardView cv = (CardView) findViewById(R.id.horse_only_note);
+        cv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), NoteActivity.class);
+                intent.putExtra("title", tvTitle.getText().toString());
+                intent.putExtra("note", tvText.getText().toString());
+            }
+        });
 
 
     }

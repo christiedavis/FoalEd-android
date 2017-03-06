@@ -1,11 +1,11 @@
 package com.abc.foaled.Activity;
 
 import android.os.Bundle;
+import android.widget.EditText;
 
 import com.abc.foaled.Database.DatabaseHelper;
 import com.abc.foaled.Database.ORMBaseActivity;
-import com.abc.foaled.Helpers.UserInfo;
-import com.abc.foaled.Models.Horse;
+import com.abc.foaled.R;
 
 /**
  * Created by Brendan on 24/02/2017.
@@ -13,14 +13,30 @@ import com.abc.foaled.Models.Horse;
  */
 
 public class NoteActivity extends ORMBaseActivity<DatabaseHelper> {
+    EditText noteTitle;
+    EditText noteContent;
+
+    String title;
+    String note;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        int horseID = getIntent().getIntExtra("HorseID", 0);
-        if (horseID == 0)
-            throw new IllegalArgumentException("No Horse ID was passed to this activity");
-        Horse horse = UserInfo.getInstance().horses.get(horseID);
+        title = getIntent().getStringExtra("title");
+        note = getIntent().getStringExtra("note");
+//        noteTitle = (EditText) findViewById(R.id.note_activity_title);
+//        noteContent = (EditText) findViewById(R.id.note_activity_content);
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        noteTitle = (EditText) findViewById(R.id.note_activity_title);
+        noteContent = (EditText) findViewById(R.id.note_activity_content);
+
+        noteTitle.setText(title);
+        noteContent.setText(note);
     }
 }

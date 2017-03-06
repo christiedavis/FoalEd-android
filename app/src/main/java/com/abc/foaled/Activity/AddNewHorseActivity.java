@@ -184,6 +184,7 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
     public void insert(View view) {
 
         EditText nameView = (EditText) findViewById(R.id.editText2);
+        EditText notes = (EditText) findViewById(R.id.editText4);
 
 
         RuntimeExceptionDao<Births, Integer> birthDao = getHelper().getBirthsDataDao();
@@ -196,6 +197,7 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
         horse.name = nameView.getText().toString();
         horse.setImagePath(imagePath);
         horse.birth = birth;
+        horse.notes = notes.getText().toString();
         horseDao.create(horse);
 
         //TODO this refreshes the singletons horse list so RVAdapator doesn't have to
