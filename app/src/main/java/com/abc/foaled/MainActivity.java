@@ -49,10 +49,11 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
         //TODO create default placeholder image file if it doesn't exist already (essentially creating on first run through)
         try {
             createPlaceholderImageFile(getAssets().open("christie.jpg"));
-            super.onCreate(savedInstanceState);
             requestWindowFeature(Window.FEATURE_NO_TITLE);
             setContentView(R.layout.activity_main);
             Log.d("Application Started", "YAY");
@@ -102,7 +103,7 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
         super.onResume();
         //createPlaceholderImageFile();
         //TODO this seems like the wrong way to update the recycler view?
-        this.userInfo.horses = getHelper().getHorseDataDao().queryForAll(); //get data
+        this.userInfo.horses = getHelper().refresh(); //get data
         FragmentTransaction fragmentManager = getSupportFragmentManager().beginTransaction();
         FavouriteHorsesFragment fragment = FavouriteHorsesFragment.newInstance();
         fragment.setListToBeDisplayed(this.userInfo.horses);

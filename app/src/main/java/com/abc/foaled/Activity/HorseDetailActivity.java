@@ -44,15 +44,19 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         int horseID = getIntent().getIntExtra("HorseID", 0);
-        this.horse = this.userInfo.horses.get(horseID);
+        this.horse = this.userInfo.getHorseAtIndex(horseID);
 
-        // TODO: set up the rest of the fields.
         Button horseName = (Button)this.findViewById(R.id.buttonAge);
-        horseName.setText(horse.name);
+        horseName.setText(DateTimeHelper.printPeriod(horse.getAge()));
 
         TextView age = (TextView)this.findViewById(R.id.horse_age);
         age.setText(DateTimeHelper.printPeriod(horse.getAge()));
 
+        TextView gender = (TextView)this.findViewById(R.id.buttonSex);
+        gender.setText(horse.getSex());
+
+        TextView status = (TextView)this.findViewById(R.id.buttonStatus);
+        status.setText(horse.getStatusString());
 
         ImageView personPhoto = (ImageView)this.findViewById(R.id.horse_photo);
         personPhoto.setImageURI(Uri.fromFile(new File(horse.smallImagePath)));

@@ -25,7 +25,7 @@ import static android.R.attr.id;
 @DatabaseTable(tableName = "horse")
 public class Horse implements Serializable {
 
-    private enum HORSE_STATUS {
+    public enum HORSE_STATUS {
 
         HORSE_STATUS_DORMANT(0),
         HORSE_STATUS_MAIDEN(1),
@@ -40,6 +40,28 @@ public class Horse implements Serializable {
         }
 
         public int getValue() { return value; }
+
+        public String getString() {
+            switch (this) {
+                case HORSE_STATUS_DORMANT :
+                    return "Dormant";
+
+                case HORSE_STATUS_MAIDEN:
+                    return "Maiden Pregnancy";
+
+                case HORSE_STATUS_PREGNANT:
+                    return "Pregnant";
+
+                case HORSE_STATUS_FOAL:
+                    return "With foal";
+
+                case HORSE_STATUS_RETIRED:
+                    return "Retired";
+
+                default:
+                    return "Dormant";
+            }
+        }
     }
 
     @DatabaseField(generatedId = true)
@@ -49,7 +71,7 @@ public class Horse implements Serializable {
     @DatabaseField(foreign = true, canBeNull = false, foreignAutoRefresh = true)
     public Births birth;
     @DatabaseField
-    private boolean sex;                       //SEX
+    private boolean sex;                       //SEX true - gal
     @DatabaseField
     private String markings;
     @DatabaseField
@@ -66,28 +88,66 @@ public class Horse implements Serializable {
 
     private Bitmap image;
 
-    public Horse() {
-        this.name = null;
-        this.birth = null;
-        this.markings = null;
-        this.notes = null;
-        this.status = null;
-        this.sex = false;
-/*        this.smallImagePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
-                + "/FoalEd/Small_Versions/placeholder.jpg";;
-        this.bigImagePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
-                + "/FoalEd/placeholder.jpg";
-        this.image = BitmapFactory.decodeFile(bigImagePath);*/
+    public Horse(){
 
     }
+    public Horse(String name, Births birth, String markings, String notes, boolean sex) {
+        this.name = name;
+        this.birth = birth;
+        this.markings = markings;
+        this.notes = notes;
+        this.status = HORSE_STATUS.HORSE_STATUS_DORMANT;
+        this.sex = sex;
+    }
 
-    // TODO: is this when this horse was born?
-    // TODO yes
+
     public Period getAge(){
         return DateTimeHelper.getCurrentAge(this.birth.birth_time);
     }
+    public int getHorseID() {
+        return this.horseID;
+    }
+    public String getSex() {
+        if (this.sex == true) {
+            return "Female";
+        }
+        else
+            return "Male";
+    }
+    public String getStatusString() {
+        return this.status.getString();
+    }
+
     /**
-     *
+     * @return A string representation of the row in the database
+     * TODO build this to be proper again - brendan
+     */
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("id=").append(horseID);
+        sb.append(", ").append("name=").append(name);
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MMM/yyyy", Locale.US);
+        sb.append(", ").append("sex=").append(sex);
+        sb.append(", ").append("photo=").append(smallImagePath+"");
+        return sb.toString();
+    }
+
+    //TODO return method for age (done through birth dob field)
+
+
+    public void addMilestones() {
+        // add new milestone
+        Milestone milestone1 = new Milestone(Milestone.MILESTONE.MILESTONE_POOP);
+    }
+
+
+
+
+
+//// Mark - Image helper methods
+
+    /**
      * @param getSmall boolean indicating whether to select the small version, or the big one. True means small
      * @return Returns the relevant bitmap image
      */
@@ -115,32 +175,4 @@ public class Horse implements Serializable {
         smallImagePath = bigImagePath;
         image = BitmapFactory.decodeFile(smallImagePath);
     }
-
-    /**
-     * @return A string representation of the row in the database
-     * TODO build this to be proper again
-     */
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("id=").append(horseID);
-        sb.append(", ").append("name=").append(name);
-        SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MMM/yyyy", Locale.US);
-        sb.append(", ").append("sex=").append(sex);
-        sb.append(", ").append("photo=").append(smallImagePath+"");
-        return sb.toString();
-    }
-
-    //TODO return method for age (done through birth dob field)
-
-
-    public void addMilestones() {
-        // add new milestone
-        Milestone milestone1 = new Milestone(Milestone.MILESTONE.MILESTONE_POOP);
-    }
-
-    public int getHorseID() {
-        return this.horseID;
-    }
-
 }

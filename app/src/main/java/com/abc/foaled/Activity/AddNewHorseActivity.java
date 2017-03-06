@@ -17,6 +17,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
@@ -46,6 +47,7 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
     private StringBuilder imageFileName = new StringBuilder();
     private int API_LEVEL = 1;
 
+    private UserInfo userInfo;
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {
             Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -63,12 +65,12 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         imagePath = getFilesDir().getAbsolutePath() + "/placeholder.jpg";
+        this.userInfo.getInstance();
 
         ImageView iV = (ImageView) findViewById(R.id.imageView3);
         iV.setImageBitmap(ImageHelper.bitmapSmaller(imagePath, 200, 200));
 
         API_LEVEL = android.os.Build.VERSION.SDK_INT;
-
     }
 
     @Override
@@ -185,21 +187,13 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
 
         EditText nameView = (EditText) findViewById(R.id.editText2);
 
-
-        RuntimeExceptionDao<Births, Integer> birthDao = getHelper().getBirthsDataDao();
         Births birth = new Births();
-        birthDao.create(birth);
 
-        //Gets the Data Access Object and creates a new Horse row
-        RuntimeExceptionDao<Horse, Integer> horseDao = getHelper().getHorseDataDao();
-        Horse horse = new Horse();
-        horse.name = nameView.getText().toString();
+        Horse horse = new Horse(nameView.getText().toString(), birth, "", "", true);
+
         horse.setImagePath(imagePath);
-        horse.birth = birth;
-        horseDao.create(horse);
 
-        //TODO this refreshes the singletons horse list so RVAdapator doesn't have to
-        UserInfo.getInstance().horses = getHelper().getHorseDataDao().queryForAll();
+        getHelper().addNewHorse(birth, horse);
 
         showSuccessConfirmation();
     }

@@ -1,6 +1,7 @@
 package com.abc.foaled.Database;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -100,9 +101,21 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         return birthsDao;
     }
 
+public void addNewHorse(Births birth, Horse horse) {
 
+    try {
 
+        getBirthsDao().create(birth);
+        getHorseDao().create(horse);
 
+    }
+    catch (Exception ex){
+     //TODO: handle errors
+    }
+}
+    public List<Horse> refresh() {
+        return getHorseDataDao().queryForAll();
+    }
     /**
      * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for database object classes. It will
      * create it or just give the cached value. RuntimeExceptionDao only through RuntimeExceptions.

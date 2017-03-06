@@ -20,7 +20,7 @@ public class NoteActivity extends ORMBaseActivity<DatabaseHelper> {
         int horseID = getIntent().getIntExtra("HorseID", 0);
         if (horseID == 0)
             throw new IllegalArgumentException("No Horse ID was passed to this activity");
-        Horse horse = UserInfo.getInstance().horses.get(horseID);
+        Horse horse = UserInfo.getInstance().getHorseAtIndex(horseID);
 
     }
 }
