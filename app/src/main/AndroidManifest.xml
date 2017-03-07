@@ -72,11 +72,9 @@
         <activity
             android:name=".Activity.AddNewHorseActivity"
             android:label="@string/title_activity_add_new_horse"
+            android:launchMode="singleTop"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.abc.foaled.MainActivity" />
         </activity>
 
         <activity
@@ -92,11 +90,8 @@
         <activity
             android:name=".Activity.NoteActivity"
             android:label="Notes"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".Activity.HorseDetailActivity"
             android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.abc.foaled.MainActivity" />
         </activity>
 
         <activity

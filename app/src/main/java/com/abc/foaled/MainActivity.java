@@ -95,7 +95,7 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
                 }
             });
         } catch (Exception ex) {
-            System.out.println(ex.toString());
+            ex.printStackTrace();
         }
     }
 

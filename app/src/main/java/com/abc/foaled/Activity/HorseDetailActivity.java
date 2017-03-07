@@ -36,6 +36,7 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 
     UserInfo userInfo;
     Horse horse;
+    int horseID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,12 +44,17 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
         setContentView(R.layout.activity_horse_detail);
         this.userInfo = UserInfo.getInstance();
 
+
+
+        horseID = getIntent().getIntExtra("HorseID", 0);
+        this.horse = this.userInfo.horses.get(horseID);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        int horseID = getIntent().getIntExtra("HorseID", 0);
-        this.horse = this.userInfo.horses.get(horseID);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle(horse.name);
+        }
 
         // TODO: set up the rest of the fields.
         //Sets up horse name
@@ -68,9 +74,16 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
         fragmentManager.replace(R.id.horseDetailNotes, fragment).commit();
 
         final TextView tvTitle = (TextView) findViewById(R.id.horse_only_note_title);
-        final TextView tvText = (TextView) findViewById(R.id.horse_only_note_content);
-        tvTitle.setText(horse.name);
-        tvText.setText(horse.notes);
+        TextView tvText = (TextView) findViewById(R.id.horse_only_note_content);
+
+        StringBuilder stringBuilder = new StringBuilder(horse.notes);
+        if (stringBuilder.length() >= 50) {
+            stringBuilder.setLength(47);
+            stringBuilder.append("...");
+        }
+
+        tvTitle.setText(horse.name+"'s General Notes");
+        tvText.setText(stringBuilder.toString());
 
         CardView cv = (CardView) findViewById(R.id.horse_only_note);
         cv.setOnClickListener(new View.OnClickListener() {
@@ -78,13 +91,34 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), NoteActivity.class);
                 intent.putExtra("title", tvTitle.getText().toString());
-                intent.putExtra("note", tvText.getText().toString());
+                intent.putExtra("note", horse.notes);
+                intent.putExtra("horseID", horseID);
                 startActivity(intent);
-//                Toast.makeText(v.getContext(), "Done", Toast.LENGTH_SHORT).show();
             }
         });
 
 
+    }
+
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
+        NavUtils.navigateUpFromSameTask(this);
+    }
+
+    @Override
+    public void onResume() {
+        this.horse = this.userInfo.horses.get(horseID);
+        TextView tvText = (TextView) findViewById(R.id.horse_only_note_content);
+
+        StringBuilder stringBuilder = new StringBuilder(horse.notes);
+        if (stringBuilder.length() >= 50) {
+            stringBuilder.setLength(47);
+            stringBuilder.append("...");
+        }
+
+        tvText.setText(stringBuilder.toString());
+        super.onResume();
     }
 
     @Override
