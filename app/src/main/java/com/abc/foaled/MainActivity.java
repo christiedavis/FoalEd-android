@@ -53,7 +53,6 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
         //TODO create default placeholder image file if it doesn't exist already (essentially creating on first run through)
         try {
             createPlaceholderImageFile(getAssets().open("christie.jpg"));
-
             requestWindowFeature(Window.FEATURE_NO_TITLE);
             setContentView(R.layout.activity_main);
             Log.d("Application Started", "YAY");

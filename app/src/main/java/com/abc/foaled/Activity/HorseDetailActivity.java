@@ -21,6 +21,7 @@ import com.abc.foaled.Fragment.NotificationSettingsFragment;
 import com.abc.foaled.Helpers.DateTimeHelper;
 import com.abc.foaled.Helpers.ImageHelper;
 import com.abc.foaled.Helpers.UserInfo;
+import com.abc.foaled.Models.Births;
 import com.abc.foaled.Models.Horse;
 import com.abc.foaled.R;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
@@ -40,7 +41,7 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
         this.userInfo = UserInfo.getInstance();
 
         horseID = getIntent().getIntExtra("HorseID", 0);
-        this.horse = this.userInfo.horses.get(horseID);
+        this.horse = this.userInfo.getHorseAtIndex(horseID);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -48,9 +49,6 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setTitle(horse.name);
         }
-
-        final int horseID = getIntent().getIntExtra("HorseID", 0);
-        this.horse = this.userInfo.getHorseAtIndex(horseID);
 
         Button horseAge = (Button)this.findViewById(R.id.buttonAge);
         horseAge.setText(DateTimeHelper.printPeriod(horse.getAge()));
@@ -74,6 +72,7 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 
         FragmentTransaction fragmentManager = getSupportFragmentManager().beginTransaction();
         HorseNoteFragment fragment = HorseNoteFragment.newInstance();
+        //fragment.setListToBeDisplayed(this.userInfo.horses);
 
         fragmentManager.replace(R.id.horseDetailNotes, fragment).commit();
 

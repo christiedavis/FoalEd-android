@@ -88,18 +88,8 @@ public class Horse implements Serializable {
 
     private Bitmap image;
 
-    public Horse() {
-        this.name = null;
-        this.birth = null;
-        this.markings = null;
-        this.notes = null;
-        this.status = null;
-        this.sex = false;
-/*        this.smallImagePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
-                + "/FoalEd/Small_Versions/placeholder.jpg";;
-        this.bigImagePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
-                + "/FoalEd/placeholder.jpg";
-        this.image = BitmapFactory.decodeFile(bigImagePath);*/
+    public Horse(){
+
     }
     public Horse(String name, Births birth, String markings, String notes, boolean sex) {
         this.name = name;
@@ -109,7 +99,6 @@ public class Horse implements Serializable {
         this.status = HORSE_STATUS.HORSE_STATUS_DORMANT;
         this.sex = sex;
     }
-
 
     public Period getAge(){
         return DateTimeHelper.getCurrentAge(this.birth.birth_time);

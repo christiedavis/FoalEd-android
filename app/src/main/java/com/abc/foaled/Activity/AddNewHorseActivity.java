@@ -66,7 +66,7 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         imagePath = getFilesDir().getAbsolutePath() + "/placeholder.jpg";
-        this.userInfo = userInfo.getInstance();
+        this.userInfo.getInstance();
 
         ImageView iV = (ImageView) findViewById(R.id.imageView3);
         iV.setImageBitmap(ImageHelper.bitmapSmaller(imagePath, 200, 200));
@@ -186,20 +186,15 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
      */
     public void insert(View view) {
 
-        String name = ((EditText) findViewById(R.id.add_horse_name)).getText().toString();
-        String marking = ((EditText) findViewById(R.id.add_markings_text)).getText().toString();
-        String notes = ((EditText) findViewById(R.id.add_notes_text)).getText().toString();
-
-        Boolean sexIsFemale = ((RadioButton) findViewById(R.id.isFemaleRadioButton)).isChecked();
+        EditText nameView = (EditText) findViewById(R.id.editText2);
 
         Births birth = new Births();
 
-        Horse horse = new Horse(name, birth, marking, notes, sexIsFemale);
+        Horse horse = new Horse(nameView.getText().toString(), birth, "", "", true);
 
         horse.setImagePath(imagePath);
 
         getHelper().addNewHorse(birth, horse);
-
 
         showSuccessConfirmation();
     }
@@ -281,7 +276,6 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
      */
     private void showSuccessConfirmation() {
         Toast.makeText(this, "Horse added successfully", Toast.LENGTH_SHORT).show();
-        userInfo.horses = getHelper().refresh();
         NavUtils.navigateUpFromSameTask(this);
     }
 

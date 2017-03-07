@@ -35,7 +35,20 @@ public class UserInfo {
         return this.horses.get(index);
     }
 
+//    private void refresh() {
+//        this.horses = getHelper().getHorseDataDao().queryForAll();
+//    }
+//    public void addNewHorse(Births birth, Horse horse){
+//        birthDao.create(birth);
+//        horseDao.create(horse);
+//
+//        this.refresh();
+//    }
+
     private UserInfo() { // intiatializer
+
+//        this.birthDao = getHelper().getBirthsDataDao();
+//        this.horseDao = getHelper().getHorseDataDao();
 
     }
 
