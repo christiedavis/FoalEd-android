@@ -17,10 +17,12 @@ import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.abc.foaled.Database.DatabaseHelper;
@@ -46,6 +48,7 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
     private StringBuilder imageFileName = new StringBuilder();
     private int API_LEVEL = 1;
 
+    private UserInfo userInfo;
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {
             Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -63,12 +66,12 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         imagePath = getFilesDir().getAbsolutePath() + "/placeholder.jpg";
+        this.userInfo = userInfo.getInstance();
 
         ImageView iV = (ImageView) findViewById(R.id.imageView3);
         iV.setImageBitmap(ImageHelper.bitmapSmaller(imagePath, 200, 200));
 
         API_LEVEL = android.os.Build.VERSION.SDK_INT;
-
     }
 
     @Override
@@ -183,43 +186,23 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
      */
     public void insert(View view) {
 
-        EditText nameView = (EditText) findViewById(R.id.editText2);
-        EditText notes = (EditText) findViewById(R.id.editText4);
+        String name = ((EditText) findViewById(R.id.add_horse_name)).getText().toString();
+        String marking = ((EditText) findViewById(R.id.add_markings_text)).getText().toString();
+        String notes = ((EditText) findViewById(R.id.add_notes_text)).getText().toString();
 
+        Boolean sexIsFemale = ((RadioButton) findViewById(R.id.isFemaleRadioButton)).isChecked();
 
-        RuntimeExceptionDao<Births, Integer> birthDao = getHelper().getBirthsDataDao();
         Births birth = new Births();
-        birthDao.create(birth);
 
-        //Gets the Data Access Object and creates a new Horse row
-        RuntimeExceptionDao<Horse, Integer> horseDao = getHelper().getHorseDataDao();
-        Horse horse = new Horse();
-        horse.name = nameView.getText().toString();
+        Horse horse = new Horse(name, birth, marking, notes, sexIsFemale);
+
         horse.setImagePath(imagePath);
-        horse.birth = birth;
-        horse.notes = notes.getText().toString();
-        horseDao.create(horse);
 
-        //TODO this refreshes the singletons horse list so RVAdapator doesn't have to
-        UserInfo.getInstance().horses = getHelper().getHorseDataDao().queryForAll();
+        getHelper().addNewHorse(birth, horse);
+
 
         showSuccessConfirmation();
     }
-
-/*    public void query(View view) {
-        RuntimeExceptionDao<Horse, Integer> horseDao = getHelper().getHorseDataDao();
-
-        TextView tv = (TextView) findViewById(R.id.textView4);
-        String display = "";
-
-        List<Horse> Horses = horseDao.queryForAll();
-
-        for (Horse h : Horses)
-            display += h.toString() + "\n";
-
-        tv.setText(display);
-
-    }*/
 
     /**
      * Displays an alert dialog box that lets your select what source to get
@@ -298,6 +281,7 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
      */
     private void showSuccessConfirmation() {
         Toast.makeText(this, "Horse added successfully", Toast.LENGTH_SHORT).show();
+        userInfo.horses = getHelper().refresh();
         NavUtils.navigateUpFromSameTask(this);
     }
 

@@ -32,9 +32,9 @@
             android:clickable="false" />
 
         <Button
-            android:text="Pregnant"
+            android:text="Sex"
             android:layout_height="wrap_content"
-            android:id="@+id/buttonPregnant"
+            android:id="@+id/buttonSex"
             android:layout_weight="1"
             android:layout_width="wrap_content"
             android:clickable="false" />

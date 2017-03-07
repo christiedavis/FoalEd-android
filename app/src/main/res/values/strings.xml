@@ -59,7 +59,7 @@
     <string name="delete">Delete</string>
     <string name="database_results">Database results</string>
     <string name="table">Table</string>
-    <string name="insert">Insert</string>
+    <string name="insert">Add</string>
     <string name="remove_table">Remove Table</string>
     <string name="facebook_app_id">699311710219758</string>
     <string name="edit_fields">Edit Fields</string>
@@ -75,7 +75,7 @@
     <string name="dialog_ok">Confirm</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="male">Make</string>
-    <string name="female">Female</string>
+    <string name="female">Female?</string>
     <string name="colour">Colour</string>
     <string name="title_activity_home_page">HomePageActivity</string>
 

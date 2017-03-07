@@ -64,8 +64,7 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
             this.userInfo = UserInfo.getInstance();
 
             // SET UP FRAGMENT
-            this.userInfo.horses = getHelper().getHorseDataDao().queryForAll(); //get data
-//            this.userInfo.refresh();
+            this.userInfo.horses = getHelper().refresh(); //get data
             FragmentTransaction fragmentManager = getSupportFragmentManager().beginTransaction();
             FavouriteHorsesFragment fragment = FavouriteHorsesFragment.newInstance();
             fragment.setListToBeDisplayed(this.userInfo.horses);
@@ -104,7 +103,7 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
         super.onResume();
         //createPlaceholderImageFile();
         //TODO this seems like the wrong way to update the recycler view?
-        this.userInfo.horses = getHelper().getHorseDataDao().queryForAll(); //get data
+        this.userInfo.horses = getHelper().refresh(); //get data
         FragmentTransaction fragmentManager = getSupportFragmentManager().beginTransaction();
         FavouriteHorsesFragment fragment = FavouriteHorsesFragment.newInstance();
         fragment.setListToBeDisplayed(this.userInfo.horses);
