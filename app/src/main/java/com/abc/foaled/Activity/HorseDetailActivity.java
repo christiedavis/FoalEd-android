@@ -4,9 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.ButtonBarLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -14,7 +12,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.abc.foaled.Database.DatabaseHelper;
 import com.abc.foaled.Database.ORMBaseActivity;
@@ -22,14 +19,12 @@ import com.abc.foaled.Fragment.FavouriteHorsesFragment;
 import com.abc.foaled.Fragment.HorseNoteFragment;
 import com.abc.foaled.Fragment.NotificationSettingsFragment;
 import com.abc.foaled.Helpers.DateTimeHelper;
+import com.abc.foaled.Helpers.ImageHelper;
 import com.abc.foaled.Helpers.UserInfo;
-import com.abc.foaled.Models.Births;
 import com.abc.foaled.Models.Horse;
 import com.abc.foaled.R;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
-import com.j256.ormlite.stmt.QueryBuilder;
 
-import java.io.File;
 
 public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
     implements FavouriteHorsesFragment.OnListFragmentInteractionListener, NotificationSettingsFragment.OnFragmentInteractionListener {
@@ -43,8 +38,6 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_horse_detail);
         this.userInfo = UserInfo.getInstance();
-
-
 
         horseID = getIntent().getIntExtra("HorseID", 0);
         this.horse = this.userInfo.horses.get(horseID);
@@ -63,9 +56,10 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
         //sets up horse age
         TextView age = (TextView)this.findViewById(R.id.horse_age);
         age.setText(DateTimeHelper.printPeriod(horse.getAge()));
+
         //sets up the photo
         ImageView personPhoto = (ImageView)this.findViewById(R.id.horse_photo);
-        personPhoto.setImageURI(Uri.fromFile(new File(horse.smallImagePath)));
+        personPhoto.setImageBitmap(ImageHelper.bitmapSmaller(horse.smallImagePath, personPhoto.getMaxHeight(), personPhoto.getMaxWidth()));
 
 
         FragmentTransaction fragmentManager = getSupportFragmentManager().beginTransaction();

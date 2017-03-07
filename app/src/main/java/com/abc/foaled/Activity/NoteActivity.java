@@ -3,11 +3,8 @@ package com.abc.foaled.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.NavUtils;
-import android.support.v4.app.TaskStackBuilder;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,7 +25,6 @@ import com.abc.foaled.R;
  */
 
 public class NoteActivity extends ORMBaseActivity<DatabaseHelper> {
-
     TextView noteTitle;
     EditText noteContent;
     UserInfo userInfo;
@@ -39,7 +35,6 @@ public class NoteActivity extends ORMBaseActivity<DatabaseHelper> {
     Horse horse;
 
     boolean editing = false;
-
     boolean dialogResult = true;
 
     @Override
@@ -51,9 +46,10 @@ public class NoteActivity extends ORMBaseActivity<DatabaseHelper> {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_black_18dp);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_black_18dp);
         }
 
         horseID = getIntent().getIntExtra("horseID", 0);
@@ -63,25 +59,34 @@ public class NoteActivity extends ORMBaseActivity<DatabaseHelper> {
 
         noteTitle = (TextView) findViewById(R.id.note_activity_title);
         noteContent = (EditText) findViewById(R.id.note_activity_content);
-        noteTitle.append(title);
-        noteContent.append(note);
+        noteTitle.setText(title);
+        noteContent.setText(note);
         noteContent.setFocusableInTouchMode(editing);
     }
 
     @Override
     public void onPause() {
-        if (isFinishing() && !noteContent.getText().toString().equals(horse.notes))
+        if (isFinishing() && hasChanged())
             Toast.makeText(this, "Note not saved", Toast.LENGTH_SHORT).show();
         super.onPause();
     }
 
+    /**
+     *
+     * @param menu The menu object to put items in
+     * @return Whether or not the menu items were added..?
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.note_action_bar, menu);
         return true;
     }
 
-
+    /**
+     *
+     * @param item The item thatw as clicked in the menu
+     * @return Return false to allow normal menu processing to proceed, true to consume it here.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -98,12 +103,28 @@ public class NoteActivity extends ORMBaseActivity<DatabaseHelper> {
         return super.onOptionsItemSelected(item);
     }
 
-    private void changeNote() {
-        horse.notes = noteContent.getText().toString();
-        getHelper().getHorseDataDao().update(horse);
-        Toast.makeText(this, "Note saved", Toast.LENGTH_SHORT).show();
+    /**
+     * @return Returns true if the note has changed
+     */
+    private boolean hasChanged() {
+        return !noteContent.getText().toString().equals(horse.notes);
     }
 
+    /**
+     * Saves the new note
+     */
+    private void changeNote() {
+        if (hasChanged()) {
+            horse.notes = noteContent.getText().toString();
+            getHelper().getHorseDataDao().update(horse);
+            Toast.makeText(this, "Note saved", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * This method toggles this screen between edit and read-only mode
+     * @param item The item in the menu that was clicked
+     */
     private void toggleEditMode(MenuItem item) {
 
         editing = !editing;
@@ -112,10 +133,13 @@ public class NoteActivity extends ORMBaseActivity<DatabaseHelper> {
 
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         noteContent.setFocusableInTouchMode(editing);
+
         if (editing) {
+            noteContent.setSelection(noteContent.getText().length());
             noteContent.requestFocus();
             imm.showSoftInput(noteContent, InputMethodManager.SHOW_IMPLICIT);
         } else {
+            noteContent.setSelection(0);
             noteContent.clearFocus();
             imm.hideSoftInputFromWindow(noteContent.getWindowToken(), 0);
         }
@@ -124,7 +148,7 @@ public class NoteActivity extends ORMBaseActivity<DatabaseHelper> {
     //TODO get this confirmation dialog working?
     private boolean confirmLeave() {
         dialogResult = true;
-        if (!noteContent.getText().toString().equals(horse.notes)) {
+        if (hasChanged()) {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(noteContent.getWindowToken(), 0);
             AlertDialog.Builder builder = new AlertDialog.Builder(this);

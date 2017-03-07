@@ -38,13 +38,16 @@
         android:clickable="true"
         android:layout_width="match_parent"
         android:layout_height="100sp"
+        android:layout_marginStart="20sp"
+        android:layout_marginEnd="20sp"
+        android:layout_marginTop="5sp"
         android:id="@+id/horse_only_note">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:orientation="vertical"
-            android:background="@color/cardview_dark_background">
+            android:background="@color/cardview_light_background">
 
             <TextView
                 android:layout_width="match_parent"
@@ -73,7 +76,8 @@
     <FrameLayout
         android:id="@+id/horseDetailNotes"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginTop="10sp"/>
 
 </LinearLayout>
 
