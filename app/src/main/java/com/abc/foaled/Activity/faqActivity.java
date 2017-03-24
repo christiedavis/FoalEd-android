@@ -5,8 +5,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 
 import com.abc.foaled.R;
+import com.andexert.expandablelayout.library.ExpandableLayoutItem;
+import com.andexert.expandablelayout.library.ExpandableLayoutListView;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
 
 public class faqActivity extends AppCompatActivity {
@@ -20,7 +23,6 @@ public class faqActivity extends AppCompatActivity {
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        // sample code snippet to set the text content on the ExpandableTextView
         ExpandableTextView expTv1 = (ExpandableTextView) findViewById(R.id.faq_q1);
         expTv1.setText(getString(R.string.FAQ_Q1_Title) + "\n" + getString(R.string.FAQ_Q1_Message));
         ExpandableTextView expTv2 = (ExpandableTextView) findViewById(R.id.faq_q2);
@@ -31,7 +33,6 @@ public class faqActivity extends AppCompatActivity {
         expTv4.setText(getString(R.string.FAQ_Q4_Title) + "\n" + getString(R.string.FAQ_Q4_Message));
         ExpandableTextView expTv5 = (ExpandableTextView) findViewById(R.id.faq_q5);
         expTv5.setText(getString(R.string.FAQ_Q5_Title) + "\n" + getString(R.string.FAQ_Q5_Message));
-
     }
 
     @Override
