@@ -100,6 +100,8 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
                 startActivity(intent);
             }
         });
+
+
     }
 
     @Override

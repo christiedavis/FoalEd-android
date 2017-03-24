@@ -41,6 +41,7 @@
         <ImageView
             android:layout_width="30dp"
             android:layout_height="30dp"
+            android:id="@+id/imageView2"
             app:srcCompat="@drawable/hollowstar"
             android:layout_alignTop="@+id/horse_name"
             android:layout_alignParentBottom="true"

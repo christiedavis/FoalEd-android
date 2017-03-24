@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_add_new_horse"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -48,7 +49,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/sex_radioButton"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:id="@+id/sex_radioGroup">
 
         <RadioButton
             android:id="@+id/isFemaleRadioButton"
@@ -73,7 +75,15 @@
         android:layout_marginBottom="25dp"
         android:layout_marginTop="25dp"/>
 
-
+    <Button
+        android:id="@+id/button6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/textView4"
+        android:layout_alignEnd="@+id/radioGroup"
+        android:layout_marginBottom="10dp"
+        android:onClick="insert"
+        android:text="@string/insert" />
 
       <ImageButton
         android:layout_width="wrap_content"
@@ -91,15 +101,9 @@
             app:srcCompat="@color/cardview_light_background"
             android:id="@+id/imageView3"
             android:layout_below="@+id/imageButton"
-            android:layout_marginBottom="10dp"/>
-
-    <Button
-        android:id="@+id/buttonAddHorse"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="insert"
-        android:text="@string/insert"
-        />
+            android:layout_alignBottom="@+id/radioGroup"
+            android:layout_alignParentEnd="true"
+            android:layout_toEndOf="@+id/button7" />
 
 
     </LinearLayout>

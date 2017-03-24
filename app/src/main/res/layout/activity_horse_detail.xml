@@ -29,7 +29,8 @@
     <Button
         android:text="Add Pregnancy"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:id="@+id/button_add_pregnancy" />
 
     <android.support.v7.widget.CardView
         xmlns:android="http://schemas.android.com/apk/res/android"
