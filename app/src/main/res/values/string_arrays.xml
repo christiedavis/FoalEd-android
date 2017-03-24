@@ -21,7 +21,6 @@
         <item>-1</item>
     </string-array>
 
-
     <string-array name="pref_sync_frequency_titles">
         <item>15 minutes</item>
         <item>30 minutes</item>

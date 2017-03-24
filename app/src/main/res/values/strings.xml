@@ -13,41 +13,8 @@
     <string name="side_nav_horses">My Horses</string>
     <string name="title_activity_new_horse">Add Horse</string>
 
-    <!-- Strings related to Settings -->
-    <string name="drawer_open">Open Drawer</string>
-    <string name="drawer_close">Close Drawer</string>
 
-    <!-- Example General settings -->
-    <string name="pref_header_general">General</string>
-
-    <string name="pref_title_social_recommendations">Enable social recommendations</string>
-    <string name="pref_description_social_recommendations">Recommendations for people to contact
-        based on your message history
-    </string>
-
-    <string name="pref_title_display_name">Display name</string>
-    <string name="pref_default_display_name">John Smith</string>
-
-    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
-
-    <!-- Example settings for Data & Sync -->
-    <string name="pref_header_data_sync">Data &amp; sync</string>
-
-    <string name="pref_title_sync_frequency">Sync frequency</string>
-
-    <string-array name="multi_select_list_preference_default_value" />
-
-    <string name="pref_title_system_sync_settings">System sync settings</string>
-
-    <!-- Example settings for Notifications -->
-    <string name="pref_header_notifications">Notifications</string>
-
-    <string name="pref_title_new_message_notifications">New message notifications</string>
-
-    <string name="pref_title_ringtone">Ringtone</string>
-    <string name="pref_ringtone_silent">Silent</string>
-
-    <string name="pref_title_vibrate">Vibrate</string>
+    <!-- Screen names -->
     <string name="title_activity_profile">Profile</string>
     <string name="title_activity_notification_settings">Notification Settings</string>
     <string name="title_activity_add_new_horse">Add New Horse</string>
@@ -77,6 +44,9 @@
     <string name="female">Female?</string>
     <string name="colour">Colour</string>
     <string name="title_activity_home_page">HomePageActivity</string>
+
+    <!--About Us Page-->
+    <string name="About.Content">At FoalEd we’re passionate about supporting you and building your confidence in all things foalings, so we can help you to give your foals the best possible start to life.\nFounder and Trainer Ashleigh Davis has over 15 years experience working with horses, the last 10 years primarily across the Thoroughbred sector in New Zealand.\nAshleigh studied at Massey University in New Zealand and holds a Bachelor of Applied Science with a major in Equine Studies, as well as a Graduate Diploma in Business with a major in Human Resource Management.</string>
 
     <!--FAQ Page-->
     <string name="FAQ.Q1.Title">IT SEEMS QUITE EXPENSIVE – WHY DOES IT COST WHAT IT DOES?</string>
