@@ -21,4 +21,22 @@
 
     </android.support.design.widget.AppBarLayout>
 
+
+    <com.andexert.expandablelayout.library.ExpandableLayout
+        xmlns:expandable="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/firstItem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        expandable:el_headerLayout="@layout/ex_layout_header_view"
+        expandable:el_contentLayout="@layout/ex_layout_content_view"
+        android:background="#e74c3c"
+        />
+
+    <com.andexert.expandablelayout.library.ExpandableLayoutListView
+        android:id="@+id/exlistview"
+        android:layout_below="@+id/first"
+        android:layout_width="match_parent"
+        android:layout_marginTop="15dp"
+        android:layout_height="match_parent"/>
+
 </android.support.design.widget.CoordinatorLayout>
