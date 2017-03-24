@@ -7,6 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.abc.foaled.R;
+import com.ms.square.android.expandabletextview.ExpandableTextView;
 
 public class faqActivity extends AppCompatActivity {
 
@@ -18,6 +19,19 @@ public class faqActivity extends AppCompatActivity {
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        // sample code snippet to set the text content on the ExpandableTextView
+        ExpandableTextView expTv1 = (ExpandableTextView) findViewById(R.id.faq_q1);
+        expTv1.setText(getString(R.string.FAQ_Q1_Title) + "\n" + getString(R.string.FAQ_Q1_Message));
+        ExpandableTextView expTv2 = (ExpandableTextView) findViewById(R.id.faq_q2);
+        expTv2.setText(getString(R.string.FAQ_Q2_Title) + "\n" + getString(R.string.FAQ_Q2_Message));
+        ExpandableTextView expTv3 = (ExpandableTextView) findViewById(R.id.faq_q3);
+        expTv3.setText(getString(R.string.FAQ_Q3_Title) + "\n" + getString(R.string.FAQ_Q3_Message));
+        ExpandableTextView expTv4 = (ExpandableTextView) findViewById(R.id.faq_q4);
+        expTv4.setText(getString(R.string.FAQ_Q4_Title) + "\n" + getString(R.string.FAQ_Q4_Message));
+        ExpandableTextView expTv5 = (ExpandableTextView) findViewById(R.id.faq_q5);
+        expTv5.setText(getString(R.string.FAQ_Q5_Title) + "\n" + getString(R.string.FAQ_Q5_Message));
+
     }
 
     @Override

@@ -52,7 +52,6 @@
     <string name="title_activity_notification_settings">Notification Settings</string>
     <string name="title_activity_add_new_horse">Add New Horse</string>
 
-
     <string name="name">Name</string>
     <string name="age">Age</string>
     <string name="query">Query</string>
@@ -79,6 +78,16 @@
     <string name="colour">Colour</string>
     <string name="title_activity_home_page">HomePageActivity</string>
 
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!--FAQ Page-->
+    <string name="FAQ.Q1.Title">IT SEEMS QUITE EXPENSIVE – WHY DOES IT COST WHAT IT DOES?</string>
+    <string name="FAQ.Q1.Message">\nInitially it may seem expensive but when you consider that you happily pay up to $150+ an hour for riding lessons it puts it all in perspective. \n On top of this you pay for vets and stallion/semen fees for foals and we look forward to having them so much. $150 for 3+ hours of education is a small price to pay if it is the difference between being able to identify issues and potentially save our mare and or foal.</string>
+    <string name="FAQ.Q2.Title">DO I GET A QUALIFICATION FOR ATTENDING YOUR FOALING SEMINAR?</string>
+    <string name="FAQ.Q2.Message">\nNo. There is no formal qualification for completing the course. However if you are interested please talk to us and we may be able to direct you towards some more formal training.</string>
+    <string name="FAQ.Q3.Title">THERE ISN’T A SEMINAR SCHEDULED FOR MY TOWN – WILL YOU COME HERE?</string>
+    <string name="FAQ.Q3.Message">\nWe are happy to travel to deliver training, however we need to be guaranteed a minimum of 6 participants. Please contact us if you think there is enough interest in your area.</string>
+    <string name="FAQ.Q4.Title">WHO IS THE TRAINING AIMED AT?</string>
+    <string name="FAQ.Q4.Message">\nFoalEd seminars are aimed at people who may or may not know much about horses. This includes: \n – Small breeding operations starting out \n – People breeding for pleasure/personal reasons (e.g. breeding from their favourite mare) \n – People who are interested in learning more about foaling \n – People who may want to get into work in  the Thoroughbred, Standardbred, Sporthorse or any other industry which involves breeding and foaling down of mare.\n – Anyone who wants to be there</string>
+    <string name="FAQ.Q5.Title">WHAT WILL I LEARN ABOUT IN A SEMINAR?</string>
+    <string name="FAQ.Q5.Message">\nYou can find more information on what is covered in the seminar in the Intro to Foaling Seminar Page.</string>
 
 </resources>
