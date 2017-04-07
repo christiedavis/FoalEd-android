@@ -12,6 +12,11 @@ import com.andexert.expandablelayout.library.ExpandableLayoutListView;
 
 public class FeedbackActivity extends AppCompatActivity {
 
+
+    //TODO: This is currently being used as a test screen to play with the notes.
+    //The notes need to add ability to scroll up when you click on one below the keyboard
+    // Also we need to save the note on button click
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,7 +26,8 @@ public class FeedbackActivity extends AppCompatActivity {
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        final String[] array = {"Hello", "World", "Android", "is", "Awesome", "World", "Android", "is", "Awesome", "World", "Android", "is", "Awesome", "World", "Android", "is", "Awesome"};
+        //TODO: this needs to be populated based on the horses previous births + General
+        final String[] array = {"General Notes", "2015", "2014", "2013", "Awesome"};
 
         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.ex_layout_row_view, R.id.expandableLayoutHeaderText, array);
         final ExpandableLayoutListView expandableLayoutListView = (ExpandableLayoutListView) findViewById(R.id.exlistview);

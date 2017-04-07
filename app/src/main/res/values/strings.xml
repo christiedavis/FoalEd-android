@@ -46,9 +46,12 @@
     <string name="title_activity_home_page">HomePageActivity</string>
 
     <!--About Us Page-->
-    <string name="About.Content">At FoalEd we’re passionate about supporting you and building your confidence in all things foalings, so we can help you to give your foals the best possible start to life.\nFounder and Trainer Ashleigh Davis has over 15 years experience working with horses, the last 10 years primarily across the Thoroughbred sector in New Zealand.\nAshleigh studied at Massey University in New Zealand and holds a Bachelor of Applied Science with a major in Equine Studies, as well as a Graduate Diploma in Business with a major in Human Resource Management.</string>
+    <string name="About.Title">FoalEd</string>
+    <string name="About.Content">At FoalEd we’re passionate about supporting you and building your confidence in all things foalings, so we can help you to give your foals the best possible start to life.\n\nFounder and Trainer Ashleigh Davis has over 15 years experience working with horses, the last 10 years primarily across the Thoroughbred sector in New Zealand.\n\nAshleigh studied at Massey University in New Zealand and holds a Bachelor of Applied Science with a major in Equine Studies, as well as a Graduate Diploma in Business with a major in Human Resource Management.</string>
 
     <!--FAQ Page-->
+
+    <string name="FAQ.header">If you can\'t find the answer to your question here please feel free to get in touch by emailing info@foaled.co.nz or check out our Facebook page.</string>
     <string name="FAQ.Q1.Title">IT SEEMS QUITE EXPENSIVE – WHY DOES IT COST WHAT IT DOES?</string>
     <string name="FAQ.Q1.Message">\nInitially it may seem expensive but when you consider that you happily pay up to $150+ an hour for riding lessons it puts it all in perspective. \n On top of this you pay for vets and stallion/semen fees for foals and we look forward to having them so much. $150 for 3+ hours of education is a small price to pay if it is the difference between being able to identify issues and potentially save our mare and or foal.</string>
     <string name="FAQ.Q2.Title">DO I GET A QUALIFICATION FOR ATTENDING YOUR FOALING SEMINAR?</string>

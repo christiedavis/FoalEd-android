@@ -45,5 +45,4 @@ public class faqActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
 }

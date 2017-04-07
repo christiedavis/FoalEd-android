@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:fitsSystemWindows="true"
     tools:context="com.abc.foaled.Activity.FeedbackActivity">
 
@@ -22,15 +23,14 @@
     </android.support.design.widget.AppBarLayout>
 
 
-    <com.andexert.expandablelayout.library.ExpandableLayout
-        xmlns:expandable="http://schemas.android.com/apk/res-auto"
+    <com.andexert.expandablelayout.library.ExpandableLayout xmlns:expandable="http://schemas.android.com/apk/res-auto"
         android:id="@+id/firstItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        expandable:el_headerLayout="@layout/ex_layout_header_view"
+        android:background="@color/colorAccent"
         expandable:el_contentLayout="@layout/ex_layout_content_view"
-        android:background="#e74c3c"
-        />
+
+        expandable:el_headerLayout="@layout/ex_layout_header_view" />
 
     <com.andexert.expandablelayout.library.ExpandableLayoutListView
         android:id="@+id/exlistview"
@@ -39,4 +39,4 @@
         android:layout_marginTop="15dp"
         android:layout_height="match_parent"/>
 
-</android.support.design.widget.CoordinatorLayout>
+</LinearLayout>

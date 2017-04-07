@@ -19,4 +19,10 @@
 
     <style name="FoalEd" parent="Theme.AppCompat.Light.NoActionBar" />
 
+    <style name="FoalEd.Button" parent="Widget.AppCompat.ActionButton">
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:clickable">false</item>
+
+    </style>
+
 </resources>

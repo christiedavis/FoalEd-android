@@ -6,4 +6,11 @@
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
+
+    <style name="FoalEd.Button" parent="Widget.AppCompat.ActionButton">
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:clickable">false</item>
+
+    </style>
+
 </resources>

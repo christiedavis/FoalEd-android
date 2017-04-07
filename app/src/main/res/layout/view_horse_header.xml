@@ -14,29 +14,48 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <!--TODO: make content hold it's height-->
 
         <Button
-            android:text="Age"
-            android:layout_height="wrap_content"
             android:id="@+id/buttonAge"
+            android:layout_width="0px"
+            android:layout_height="50dp"
             android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:clickable="false" />
+
+            android:clickable="false"
+            android:text="Age"
+            android:textColor="@android:color/white"
+            android:background="@color/colorPrimary"
+            android:paddingLeft="10sp"
+            android:paddingRight="10sp"
+            android:layout_marginRight="5sp"
+            android:layout_marginLeft="5sp"
+            />
 
         <Button
             android:text="Status"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:id="@+id/buttonStatus"
             android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:clickable="false" />
+            android:layout_width="0px"
+            android:clickable="false"
+            android:textColor="@android:color/white"
+            android:background="@color/colorPrimary"
+            android:layout_marginLeft="5sp"
+            android:layout_marginRight="5sp"
+            />
 
         <Button
             android:text="Sex"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:id="@+id/buttonSex"
             android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:clickable="false" />
+            android:layout_width="0px"
+            android:clickable="false"
+            android:textColor="@android:color/white"
+            android:background="@color/colorPrimary"
+            android:layout_marginLeft="5sp"
+            android:layout_marginRight="5sp"
+            />
     </LinearLayout>
 </LinearLayout>

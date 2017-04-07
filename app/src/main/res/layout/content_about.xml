@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:showIn="@layout/activity_about"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.abc.foaled.Activity.AboutActivity"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    >
+    <ImageView
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_width="80sp"
+        android:layout_height="80dp"
+        android:layout_gravity="center"
+        android:background="@drawable/christie"
+        android:cropToPadding="true"
+        android:requiresFadingEdge="vertical"
+        android:scaleType="matrix"
+        android:paddingTop="20dp" />
+
+        <!--TODO: make circle imageview please brendan-->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:paddingTop="20dp"
+        android:text="@string/About.Title"
+        android:textColor="@color/colorPrimary"
+        android:textSize="25dp"
+        android:textStyle="bold" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:paddingTop="15dp"
+        android:textColor="#000"
+        android:text="@string/About.Content"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+
+        />
+
+
+</LinearLayout>
