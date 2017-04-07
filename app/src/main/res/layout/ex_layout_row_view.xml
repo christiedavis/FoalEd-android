@@ -10,8 +10,8 @@
         android:id="@+id/row"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        expandable:el_headerLayout="@layout/ex_layout_header_view"
+        android:background="@color/cardview_shadow_start_color"
         expandable:el_contentLayout="@layout/ex_layout_content_view"
-        android:background="#e74c3c"/>
+        expandable:el_headerLayout="@layout/ex_layout_header_view" />
 
 </RelativeLayout>

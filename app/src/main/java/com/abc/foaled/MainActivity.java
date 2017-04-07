@@ -154,11 +154,12 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
             case R.id.nav_horses :  // new fragment
                 fragmentClass = NotificationSettingsFragment.class;
 
-            case R.id.nav_foals : // new fragment
-                fragmentClass = NotificationSettingsFragment.class;
+                //These fragments aren't being used anymore
+//            case R.id.nav_foals : // new fragment
+//                fragmentClass = NotificationSettingsFragment.class;
 
-            case R.id.nav_mares :     // new fragment
-                fragmentClass = NotificationSettingsFragment.class;
+//            case R.id.nav_mares :     // new fragment
+//                fragmentClass = NotificationSettingsFragment.class;
 
             case R.id.nav_notifications :
                 intent = new Intent(this, NotificationSettingsActivity.class);

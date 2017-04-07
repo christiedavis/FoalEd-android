@@ -2,21 +2,32 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <EditText
         android:id="@+id/expandableLayoutTextContent"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="wrap_content"
+        android:background="@android:color/background_light"
+        android:fontFamily="sans-serif"
         android:gravity="center"
-        android:hint="Hello World !"
-        android:textColor="@android:color/white"
-        android:background="#c0392b"/>
+        android:hint="Add information about your horse's pregnancy here"
+        android:paddingBottom="10dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingTop="5dp"
+        android:textColor="@android:color/black" />
+
+    <!--TODO: on click save note to data base-->
 
     <Button
-        android:layout_below="@+id/expandableLayoutTextContent"
+        android:id="@+id/expandableLayoutSaveButton"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="click ME !"/>
+        android:layout_height="30sp"
+        android:layout_below="@+id/expandableLayoutTextContent"
+        android:background="@color/cardview_light_background"
+        android:text="Save note..."></Button>
+
 
 </RelativeLayout>

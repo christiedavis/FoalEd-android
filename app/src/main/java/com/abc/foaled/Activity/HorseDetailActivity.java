@@ -9,6 +9,7 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -23,8 +24,8 @@ import com.abc.foaled.Helpers.ImageHelper;
 import com.abc.foaled.Helpers.UserInfo;
 import com.abc.foaled.Models.Horse;
 import com.abc.foaled.R;
+import com.andexert.expandablelayout.library.ExpandableLayoutListView;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
-
 
 public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
     implements FavouriteHorsesFragment.OnListFragmentInteractionListener, NotificationSettingsFragment.OnFragmentInteractionListener {
@@ -71,56 +72,19 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
         ImageView personPhoto = (ImageView)this.findViewById(R.id.horse_photo);
         personPhoto.setImageBitmap(ImageHelper.bitmapSmaller(horse.smallImagePath, personPhoto.getMaxHeight(), personPhoto.getMaxWidth()));
 
+         /// TODO: Set up notes with birth info - see feedback screen to play around with this functionality
+        final String[] array = {"Current pregnancy", "2015", "2014", "2013", "Awesome"};
 
-        FragmentTransaction fragmentManager = getSupportFragmentManager().beginTransaction();
-        HorseNoteFragment fragment = HorseNoteFragment.newInstance();
+        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.ex_layout_row_view, R.id.expandableLayoutHeaderText, array);
+        final ExpandableLayoutListView expandableLayoutListView = (ExpandableLayoutListView) findViewById(R.id.exlistview);
 
-        fragmentManager.replace(R.id.horseDetailNotes, fragment).commit();
-
-        final TextView tvTitle = (TextView) findViewById(R.id.horse_only_note_title);
-        TextView tvText = (TextView) findViewById(R.id.horse_only_note_content);
-
-        StringBuilder stringBuilder = new StringBuilder(horse.notes);
-        if (stringBuilder.length() >= 50) {
-            stringBuilder.setLength(47);
-            stringBuilder.append("...");
-        }
-
-        tvTitle.setText(horse.name+"'s General Notes");
-        tvText.setText(stringBuilder.toString());
-
-        CardView cv = (CardView) findViewById(R.id.horse_only_note);
-        cv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), NoteActivity.class);
-                intent.putExtra("title", tvTitle.getText().toString());
-                intent.putExtra("note", horse.notes);
-                intent.putExtra("horseID", horseID);
-                startActivity(intent);
-            }
-        });
+        expandableLayoutListView.setAdapter(arrayAdapter);
     }
 
     @Override
     public void onBackPressed() {
-//        super.onBackPressed();
+        super.onBackPressed();
         NavUtils.navigateUpFromSameTask(this);
-    }
-
-    @Override
-    public void onResume() {
-        this.horse = this.userInfo.horses.get(horseID);
-        TextView tvText = (TextView) findViewById(R.id.horse_only_note_content);
-
-        StringBuilder stringBuilder = new StringBuilder(horse.notes);
-        if (stringBuilder.length() >= 50) {
-            stringBuilder.setLength(47);
-            stringBuilder.append("...");
-        }
-
-        tvText.setText(stringBuilder.toString());
-        super.onResume();
     }
 
     @Override
@@ -134,7 +98,8 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
         return super.onOptionsItemSelected(item);
     }
 
-    //TODO this is the delete Horse method
+    //TODO this is the delete Horse method - B
+    // WHat is this used for? Does it belong in this class - C
     private boolean deleteHorse(int id) {
         RuntimeExceptionDao<Horse, Integer> horseDao = getHelper().getHorseDataDao();
         Horse horse = horseDao.queryForId(id);
@@ -153,3 +118,48 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 
     }
 }
+
+
+//   This is brendan's fragment note stuff. TO be deleted if we decide we're not using it.
+//    @Override
+//    public void onResume() {
+//        this.horse = this.userInfo.horses.get(horseID);
+//        TextView tvText = (TextView) findViewById(R.id.horse_only_note_content);
+//
+//        StringBuilder stringBuilder = new StringBuilder(horse.notes);
+//        if (stringBuilder.length() >= 50) {
+//            stringBuilder.setLength(47);
+//            stringBuilder.append("...");
+//        }
+//
+//        tvText.setText(stringBuilder.toString());
+//        super.onResume();
+//    }
+//       FragmentTransaction fragmentManager = getSupportFragmentManager().beginTransaction();
+//                HorseNoteFragment fragment = HorseNoteFragment.newInstance();
+//
+//                fragmentManager.replace(R.id.horseDetailNotes, fragment).commit();
+//
+//                final TextView tvTitle = (TextView) findViewById(R.id.horse_only_note_title);
+//                TextView tvText = (TextView) findViewById(R.id.horse_only_note_content);
+//
+//                StringBuilder stringBuilder = new StringBuilder(horse.notes);
+//                if (stringBuilder.length() >= 50) {
+//                    stringBuilder.setLength(47);
+//                    stringBuilder.append("...");
+//                }
+//
+//                tvTitle.setText(horse.name+"'s General Notes");
+//                tvText.setText(stringBuilder.toString());
+//
+//                CardView cv = (CardView) findViewById(R.id.horse_only_note);
+//                cv.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//            public void onClick(View v) {
+//                        Intent intent = new Intent(getApplicationContext(), NoteActivity.class);
+//                        intent.putExtra("title", tvTitle.getText().toString());
+//                        intent.putExtra("note", horse.notes);
+//                        intent.putExtra("horseID", horseID);
+//                        startActivity(intent);
+//                    }
+//                });

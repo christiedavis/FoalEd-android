@@ -10,7 +10,7 @@ android:layout_height="match_parent">
     android:layout_height="48dp"
     android:padding="10dp"
     android:textColor="@android:color/white"
-    android:text="ExpandableLayout Header!"
+    android:text="General Notes"
     android:gravity="center"/>
 
 </RelativeLayout>

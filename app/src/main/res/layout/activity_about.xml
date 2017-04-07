@@ -21,4 +21,6 @@ tools:context="com.abc.foaled.Activity.FeedbackActivity">
 
 </android.support.design.widget.AppBarLayout>
 
+    <include layout="@layout/content_about" />
+
 </android.support.design.widget.CoordinatorLayout>
