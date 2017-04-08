@@ -3,6 +3,7 @@ package com.abc.foaled.Activity;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -79,7 +80,7 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
         ImageView iV = (ImageView) findViewById(R.id.add_horse_image);
         iV.setImageBitmap(ImageHelper.bitmapSmaller(imagePath, 200, 200));
 
-        String date = new SimpleDateFormat("dd/MM/yyyy", Locale.UK).format(Calendar.getInstance().getTime());
+        String date = new SimpleDateFormat("dd/MM/yyyy - HH:mm", Locale.UK).format(Calendar.getInstance().getTime());
         TextView dob = (TextView) findViewById(R.id.newHorseDOB);
 //        dob.setText(date);
         dob.setHint(date);
@@ -323,10 +324,12 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
     }
 
     public void selectDate(View view) {
-        EditText editText = (EditText) findViewById(R.id.newHorseDOB);
+        TextView editText = (TextView) findViewById(R.id.newHorseDOB);
 
         DialogFragment dialog = new DatePickerFragment();
         ((DatePickerFragment) dialog).setViewResult(editText);
+        dialog.setRetainInstance(true);
+//        ((DatePickerDialog)dialog.getDialog()).getDatePicker().setMaxDate(Calendar.getInstance().getTimeInMillis());
         dialog.show(getFragmentManager(), "datePicker");
 
 

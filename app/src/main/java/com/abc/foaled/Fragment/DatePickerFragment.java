@@ -10,7 +10,12 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.abc.foaled.R;
+
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 
 /**
@@ -41,6 +46,9 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
 
         int year, month, day;
         Calendar c = Calendar.getInstance();
+        year = c.get(Calendar.YEAR);
+        month = c.get(Calendar.MONTH);
+        day = c.get(Calendar.DAY_OF_MONTH);
         if (textBox != null) {
             String date = textBox.getText().toString();
 
@@ -49,15 +57,32 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
                 month = c.get(Calendar.MONTH);
                 day = c.get(Calendar.DAY_OF_MONTH);
             } else {
-                String[] dateArray = date.split("/");
 
-                year = Integer.parseInt(dateArray[2]);
-                month = Integer.parseInt(dateArray[1]) - 1;
-                day = Integer.parseInt(dateArray[0]);
+                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+                Date d = new Date();
+                try {
+                    d = format.parse(date);
+                    c.setTime(d);
+                    year = c.get(Calendar.YEAR);
+                    month = c.get(Calendar.MONTH);
+                    day = c.get(Calendar.DAY_OF_MONTH);
+/*                    String[] dateArray = date.split("/");
+
+                    year = Integer.parseInt(dateArray[2]);
+                    month = Integer.parseInt(dateArray[1]) - 1;
+                    day = Integer.parseInt(dateArray[0]);*/
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
-            //Create and return a new instance of TimePickerDialog
-            return new DatePickerDialog(getActivity(), this, year, month, day);
+            //sets the datepicker dialog to have a max of today, and min of 50 years ago
+            DatePickerDialog dialog = new DatePickerDialog(getActivity(), this, year, month, day);
+            dialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+            c.add(Calendar.YEAR, -50);
+            dialog.getDatePicker().setMinDate(c.getTimeInMillis());
+            return dialog;
         }
         else {
             year = c.get(Calendar.YEAR);
@@ -78,7 +103,19 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
      * @param day The day selected
      */
     public void onDateSet(DatePicker view, int year, int month, int day) {
-        if (textBox != null)
-            textBox.setText(day+"/"+ (month+1)+"/"+year);
+        if (textBox.getId() == R.id.newHorseDOB) {
+            DialogFragment dialog = new TimePickerFragment();
+            Bundle b = new Bundle();
+            b.putInt("year", year);
+            b.putInt("month", month);
+            b.putInt("day", day);
+            b.putInt("textBox", textBox.getId());
+            dialog.setArguments(b);
+
+            dialog.setRetainInstance(true);
+            dialog.show(getFragmentManager(), "timePicker");
+        }
+/*        if (textBox != null)
+            textBox.setText(day + "/" + (month + 1) + "/" + year);*/
     }
 }

@@ -16,14 +16,16 @@ import java.util.Date;
 @DatabaseTable(tableName = "births")
 public class Births {
 
+    public static String MARE_COLUMN_NAME = "mare";
+
     @DatabaseField(generatedId = true)
     private int id;
-    @DatabaseField(foreign = true)
-    public Horse horse;        //Foreign horse id
-    @DatabaseField(foreign = true)
-    private Horse sire;
-    @DatabaseField(foreign = true)
-    public Horse mare;
+    @DatabaseField()
+    public Integer horse;        //Foreign horse id //TODO make these ints, not foreign objects (too hard)
+    @DatabaseField(canBeNull = true)
+    private Integer sire;
+    @DatabaseField()
+    public Integer mare;
 
     @DatabaseField(dataType = DataType.DATE_STRING)
     public Date est_conception;
