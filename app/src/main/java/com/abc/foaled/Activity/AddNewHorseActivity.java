@@ -68,7 +68,7 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
         imagePath = getFilesDir().getAbsolutePath() + "/placeholder.jpg";
         this.userInfo = userInfo.getInstance();
 
-        ImageView iV = (ImageView) findViewById(R.id.imageView3);
+        ImageView iV = (ImageView) findViewById(R.id.add_horse_image_view);
         iV.setImageBitmap(ImageHelper.bitmapSmaller(imagePath, 200, 200));
 
         API_LEVEL = android.os.Build.VERSION.SDK_INT;
@@ -131,6 +131,8 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
                     cursor.close();
             }
 
+            //TODO: Brendan - make the default image drawable/brown-horse
+
             /*
                 Creates FIS from selected image path, then changes imagePath to be a new empty File
                 We then copy the bytes from the selected image into the new internal image file
@@ -154,7 +156,7 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
         }
 
         //Pull photo through bitmapFactory and display
-        ImageView iV = ((ImageView) findViewById(R.id.imageView3));
+        ImageView iV = ((ImageView) findViewById(R.id.add_horse_image_view));
         int height = iV.getHeight();
         int width = iV.getWidth();
         iV.setImageBitmap(ImageHelper.bitmapSmaller(imagePath, height, width));

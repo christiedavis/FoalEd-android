@@ -41,7 +41,7 @@
     <string name="dialog_ok">Confirm</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="male">Make</string>
-    <string name="female">Female?</string>
+    <string name="female">Female</string>
     <string name="colour">Colour</string>
     <string name="title_activity_home_page">HomePageActivity</string>
 

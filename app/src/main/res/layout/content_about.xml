@@ -19,7 +19,7 @@
         android:layout_width="80sp"
         android:layout_height="80dp"
         android:layout_gravity="center"
-        android:background="@drawable/christie"
+        android:background="@drawable/animal_brown_horse"
         android:cropToPadding="true"
         android:requiresFadingEdge="vertical"
         android:scaleType="matrix"
