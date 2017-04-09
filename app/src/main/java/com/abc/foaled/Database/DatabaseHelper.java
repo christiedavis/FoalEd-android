@@ -7,7 +7,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.abc.foaled.Models.Births;
+import com.abc.foaled.Models.Birth;
 import com.abc.foaled.Models.Horse;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
@@ -28,9 +28,9 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
     // the DAO object we use to access the Horse table
     private Dao<Horse, Integer> horseDao = null;
-    private Dao<Births, Integer> birthsDao = null;
+    private Dao<Birth, Integer> birthsDao = null;
     private RuntimeExceptionDao<Horse, Integer> horseRuntimeDao = null;
-    private RuntimeExceptionDao<Births, Integer> birthsRuntimeDao = null;
+    private RuntimeExceptionDao<Birth, Integer> birthsRuntimeDao = null;
 
     public DatabaseHelper(Context context) {
 //        super(context, DATABASE_NAME, null, DATABASE_VERSION, R.raw.ormlite_config);
@@ -47,7 +47,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         try {
             Log.i(DatabaseHelper.class.getName(), "onCreate");
             TableUtils.createTable(connectionSource, Horse.class);
-            TableUtils.createTable(connectionSource, Births.class);
+            TableUtils.createTable(connectionSource, Birth.class);
         } catch (SQLException e) {
             Log.e(DatabaseHelper.class.getName(), "Can't create database", e);
             throw new RuntimeException(e);
@@ -63,7 +63,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 /*        try {
             Log.i(DatabaseHelper.class.getName(), "onUpgrade");
             TableUtils.dropTable(connectionSource, Horse.class, true);
-            TableUtils.dropTable(connectionSource, Births.class, true);
+            TableUtils.dropTable(connectionSource, Birth.class, true);
             // after we drop the old databases, we create the new ones
             onCreate(db, connectionSource);
 
@@ -95,13 +95,13 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         return horseDao;
     }
 
-    public Dao<Births, Integer> getBirthsDao() throws  SQLException {
+    public Dao<Birth, Integer> getBirthsDao() throws  SQLException {
         if (birthsDao == null)
-            birthsDao = getDao(Births.class);
+            birthsDao = getDao(Birth.class);
         return birthsDao;
     }
 
-public void addNewHorse(Births birth, Horse horse) {
+public void addNewHorse(Birth birth, Horse horse) {
 
     try {
 
@@ -126,9 +126,9 @@ public void addNewHorse(Births birth, Horse horse) {
         return horseRuntimeDao;
     }
 
-    public RuntimeExceptionDao<Births, Integer> getBirthsDataDao() {
+    public RuntimeExceptionDao<Birth, Integer> getBirthsDataDao() {
         if (birthsRuntimeDao == null)
-            birthsRuntimeDao = getRuntimeExceptionDao(Births.class);
+            birthsRuntimeDao = getRuntimeExceptionDao(Birth.class);
         return birthsRuntimeDao;
     }
 

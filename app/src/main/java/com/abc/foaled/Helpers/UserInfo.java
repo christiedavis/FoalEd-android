@@ -1,17 +1,8 @@
 package com.abc.foaled.Helpers;
 
-import android.content.Context;
-
 import com.abc.foaled.Database.DatabaseHelper;
-import com.abc.foaled.Database.ORMBaseActivity;
-import com.abc.foaled.Models.Births;
+import com.abc.foaled.Models.Birth;
 import com.abc.foaled.Models.Horse;
-import com.j256.ormlite.dao.RuntimeExceptionDao;
-import com.j256.ormlite.stmt.PreparedQuery;
-import com.j256.ormlite.stmt.QueryBuilder;
-import com.j256.ormlite.stmt.Where;
-
-import org.joda.time.Period;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -53,11 +44,11 @@ public class UserInfo {
 
     }
 
-    public List<Births> getBirths() {
+    public List<Birth> getBirths() {
         return databaseHelper.getBirthsDataDao().queryForAll();
     }
 
-    public List<Births> getBirthsByHorseID(int id) throws SQLException {
+    public List<Birth> getBirthsByHorseID(int id) throws SQLException {
         return databaseHelper.getBirthsDataDao().queryBuilder().where().eq("mare", id).query();
     }
 

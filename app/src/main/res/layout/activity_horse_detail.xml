@@ -1,63 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:fitsSystemWindows="true"
-    tools:context="com.abc.foaled.Activity.HorseDetailActivity">
+    tools:context="com.abc.foaled.Activity.HorseDetailActivity"
+    android:id="@+id/horse_detail_screen"
+    >
 
-        <android.support.design.widget.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.AppBarOverlay">
-
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
-        </android.support.design.widget.AppBarLayout>
-
-        <include
-                layout="@layout/view_horse_header"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"  />
-
-    <Button
-        android:text="Add Pregnancy"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/button_add_pregnancy" />
+        >
 
-    <com.andexert.expandablelayout.library.ExpandableLayout xmlns:expandable="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/firstItem"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorAccent"
-        expandable:el_contentLayout="@layout/ex_layout_content_view"
+    <include layout="@layout/content_horse_detail"
 
-        expandable:el_headerLayout="@layout/ex_layout_header_view" />
+        />
 
-    <com.andexert.expandablelayout.library.ExpandableLayoutListView
-        android:id="@+id/exlistview"
-        android:layout_below="@+id/first"
-        android:layout_width="match_parent"
-        android:layout_marginTop="15dp"
-        android:layout_height="match_parent"/>
+    </ScrollView>
 
+    <!--TODO: add pregnancy floating action button-->
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/addPregnancyButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="right"
+        android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_menu_logout" />
+        android:src="@drawable/ic_menu_pregnancy"
+        android:clickable="true"
+        android:onClick="AddNewPregnancy"/>
 
-</LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>
 
 
 

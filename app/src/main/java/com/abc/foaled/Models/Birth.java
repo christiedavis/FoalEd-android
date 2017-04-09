@@ -6,6 +6,7 @@ import com.j256.ormlite.table.DatabaseTable;
 
 import org.joda.time.DateTime;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -14,7 +15,7 @@ import java.util.Date;
  *
  */
 @DatabaseTable(tableName = "births")
-public class Births {
+public class Birth implements Serializable {
 
     public static String MARE_COLUMN_NAME = "mare";
 
@@ -36,7 +37,7 @@ public class Births {
     @DatabaseField
     public String notes;
 
-    public Births() {
+    public Birth() {
         this.horse = null;
         this.sire = null;
         this.mare = null;

@@ -3,7 +3,6 @@ package com.abc.foaled.Models;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Environment;
 
 
 import com.abc.foaled.Helpers.DateTimeHelper;
@@ -15,8 +14,6 @@ import org.joda.time.Period;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
-
-import static android.R.attr.id;
 
 /**
  * Created by Brendan on 29/12/16.
@@ -69,7 +66,7 @@ public class Horse implements Serializable {
     @DatabaseField
     public String name;                        //NAME
     @DatabaseField(foreign = true, canBeNull = false, foreignAutoRefresh = true)
-    public Births birth;
+    public Birth birth;
     @DatabaseField
     private boolean sex;                       //SEX true - gal
     @DatabaseField
@@ -101,7 +98,7 @@ public class Horse implements Serializable {
                 + "/FoalEd/placeholder.jpg";
         this.image = BitmapFactory.decodeFile(bigImagePath);*/
     }
-    public Horse(String name, Births birth, String markings, String notes, boolean sex) {
+    public Horse(String name, Birth birth, String markings, String notes, boolean sex) {
         this.name = name;
         this.birth = birth;
         this.markings = markings;

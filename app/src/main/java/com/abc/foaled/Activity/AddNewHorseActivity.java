@@ -3,13 +3,11 @@ package com.abc.foaled.Activity;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -19,14 +17,11 @@ import android.support.v4.app.ActivityCompat;
 
 import android.app.DialogFragment;
 import android.support.v4.app.NavUtils;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,10 +30,7 @@ import com.abc.foaled.Database.ORMBaseActivity;
 import com.abc.foaled.Fragment.DatePickerFragment;
 import com.abc.foaled.Helpers.ImageHelper;
 import com.abc.foaled.Helpers.UserInfo;
-import com.abc.foaled.Models.Births;
-import com.abc.foaled.Models.Horse;
 import com.abc.foaled.R;
-import com.j256.ormlite.dao.RuntimeExceptionDao;
 
 
 import java.io.File;
@@ -209,7 +201,7 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
 
         Boolean sexIsFemale = ((RadioButton) findViewById(R.id.isFemaleRadioButton)).isChecked();
 
-        Births birth = new Births();
+        Birth birth = new Birth();
 
         Horse horse = new Horse(name, birth, marking, notes, sexIsFemale);
 
