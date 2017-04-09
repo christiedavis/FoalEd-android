@@ -26,8 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="30sp"
         android:layout_below="@+id/expandableLayoutTextContent"
-        android:background="@color/cardview_light_background"
+        android:background="@color/colorBrightGreen"
         android:text="Save note..."></Button>
-
 
 </RelativeLayout>
