@@ -107,8 +107,7 @@ public class Horse implements Serializable {
         this.sex = sex;
     }
 
-
-    public Period getAge(){
+    public int getAge(){
         return DateTimeHelper.getCurrentAge(this.birth.birth_time);
     }
     public int getHorseID() {
