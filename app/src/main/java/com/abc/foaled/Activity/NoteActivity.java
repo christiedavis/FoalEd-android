@@ -42,7 +42,7 @@ public class NoteActivity extends ORMBaseActivity<DatabaseHelper> {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note);
 
-        userInfo = UserInfo.getInstance();
+        userInfo = UserInfo.getInstance(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

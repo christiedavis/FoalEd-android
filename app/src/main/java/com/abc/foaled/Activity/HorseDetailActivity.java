@@ -38,7 +38,7 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_horse_detail);
-        this.userInfo = UserInfo.getInstance();
+        this.userInfo = UserInfo.getInstance(this);
 
         horseID = getIntent().getIntExtra("HorseID", 0);
         this.horse = this.userInfo.horses.get(horseID);

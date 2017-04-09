@@ -38,13 +38,15 @@ import com.abc.foaled.Models.Horse;
 import com.abc.foaled.Fragment.FavouriteHorsesFragment;
 import com.abc.foaled.Fragment.NotificationSettingsFragment;
 import com.abc.foaled.Notifications.NotificationScheduler;
+import com.j256.ormlite.android.apptools.OpenHelperManager;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 
-public class MainActivity extends ORMBaseActivity<DatabaseHelper>
-        implements NavigationView.OnNavigationItemSelectedListener, FavouriteHorsesFragment.OnListFragmentInteractionListener, NotificationSettingsFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener, FavouriteHorsesFragment.OnListFragmentInteractionListener,
+        NotificationSettingsFragment.OnFragmentInteractionListener {
 
     UserInfo userInfo;
 
@@ -62,7 +64,7 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
             // Set up Nav
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
-            this.userInfo = UserInfo.getInstance(getHelper());
+            this.userInfo = UserInfo.getInstance(this);
 
 //            getHelper().get
 
@@ -99,6 +101,12 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        userInfo.release();
     }
 
     @Override

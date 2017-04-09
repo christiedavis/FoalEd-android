@@ -6,6 +6,7 @@ import com.abc.foaled.Database.DatabaseHelper;
 import com.abc.foaled.Database.ORMBaseActivity;
 import com.abc.foaled.Models.Births;
 import com.abc.foaled.Models.Horse;
+import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
@@ -22,20 +23,14 @@ import java.util.List;
  */
 public class UserInfo {
 
-    private static UserInfo ourInstance;
     private static DatabaseHelper databaseHelper;
+    private static UserInfo ourInstance;
 
-    public static UserInfo getInstance(DatabaseHelper helper) {
+    public static UserInfo getInstance(Context context) {
         if (ourInstance == null)
             ourInstance = new UserInfo();
         if (databaseHelper == null)
-            databaseHelper = helper;
-        return ourInstance;
-    }
-
-    public static UserInfo getInstance() {
-        if (ourInstance == null)
-            ourInstance = new UserInfo();
+            databaseHelper = OpenHelperManager.getHelper(context, DatabaseHelper.class);
         return ourInstance;
     }
 
@@ -65,5 +60,10 @@ public class UserInfo {
         return databaseHelper;
     }
 
-
+    public void release() {
+        if (databaseHelper != null) {
+            OpenHelperManager.releaseHelper();
+            databaseHelper = null;
+        }
+    }
 }
