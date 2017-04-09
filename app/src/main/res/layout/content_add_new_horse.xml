@@ -10,7 +10,6 @@
     tools:context="com.abc.foaled.Activity.AddNewHorseActivity"
     tools:showIn="@layout/activity_add_new_horse">
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -159,6 +158,13 @@
                     android:layout_weight="1"
                     android:checked="false"/>
             </LinearLayout>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/addButton"
+                android:onClick="insert"
+                android:text="ADD HORSSE aidoifnoif"/>
 
         </LinearLayout>
 

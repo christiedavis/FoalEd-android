@@ -1,57 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.abc.foaled.Activity.HorseDetailActivity">
+    tools:context="com.abc.foaled.Activity.HorseDetailActivity"
+ >
 
-<android.support.design.widget.AppBarLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:theme="@style/AppTheme.AppBarOverlay">
+    <include layout="@layout/toolbar" />
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        app:popupTheme="@style/AppTheme.PopupOverlay" />
-    </android.support.design.widget.AppBarLayout>
-
-<include
-        layout="@layout/view_horse_header"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"  />
-
-    <Button
-    android:layout_marginTop="10dp"
-        android:text="Add Pregnancy"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/button_add_pregnancy"
-        android:background="@color/colorAccent"
-        android:layout_marginBottom="10dp"
-        android:clickable="true"
-        android:onClick="AddNewPregnancy"/>
+        >
 
-    <com.andexert.expandablelayout.library.ExpandableLayout xmlns:expandable="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/firstItem"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        expandable:el_contentLayout="@layout/ex_layout_content_view"
-        expandable:el_headerLayout="@layout/ex_layout_header_view"
-        />
+        android:orientation="vertical">
 
-    <com.andexert.expandablelayout.library.ExpandableLayoutListView
-        android:id="@+id/exlistview"
-        android:layout_below="@+id/first"
-        android:layout_width="match_parent"
-        android:layout_marginTop="5dp"
-        android:layout_height="300dp"
-        android:background="@color/colorPrimary"/>
+            <include layout="@layout/view_horse_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+            <Button
+                android:layout_marginTop="10dp"
+                android:text="Add Pregnancy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/button_add_pregnancy"
+                android:background="@color/colorAccent"
+                android:layout_marginBottom="10dp"
+                android:clickable="true"
+                android:onClick="AddNewPregnancy"/>
+
+                <com.andexert.expandablelayout.library.ExpandableLayout xmlns:expandable="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/firstItem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                expandable:el_contentLayout="@layout/ex_layout_content_view"
+                expandable:el_headerLayout="@layout/ex_layout_header_view"
+                    />
+
+                <com.andexert.expandablelayout.library.ExpandableLayoutListView
+                android:id="@+id/exlistview"
+                android:layout_below="@+id/first"
+                android:layout_width="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_height="300dp"
+                android:background="@color/colorPrimary"/>
+            </LinearLayout>
+
+        </ScrollView>
 
 </LinearLayout>

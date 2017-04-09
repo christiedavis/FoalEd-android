@@ -43,6 +43,7 @@ public class UserInfo {
         if (this.horses == null) {
             this.horses = new LinkedList<>();
         }
+        this.horses = getHelper().refreshHorseList();
         return this.horses;
     }
 
@@ -50,13 +51,7 @@ public class UserInfo {
         if (this.births == null) {
             this.births = new LinkedList<>();
         }
-//        try {
-//            this.births = databaseHelper.getBirthDao().queryForAll();
-//        }
-//        catch (Exception ex) {
-//            System.out.println("Error on getting all births from the database");
-//        }
-
+//        this.births = getHelper().refreshBirthList();
         return this.births;
     }
 

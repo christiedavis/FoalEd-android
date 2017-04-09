@@ -44,6 +44,15 @@ public class DateTimeHelper {
         return age;
     }
 
+    public static String getAgeString(int age) {
+        if (age == 0) {
+            return "Recently born";
+        }
+
+        //TODO: other states
+        return Integer.toString(age);
+    }
+
     public static int getYear(Date date) {
 
         Calendar calendar = Calendar.getInstance();

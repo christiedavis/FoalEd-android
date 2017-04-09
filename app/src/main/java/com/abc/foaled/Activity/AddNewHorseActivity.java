@@ -30,6 +30,8 @@ import com.abc.foaled.Database.ORMBaseActivity;
 import com.abc.foaled.Fragment.DatePickerFragment;
 import com.abc.foaled.Helpers.ImageHelper;
 import com.abc.foaled.Helpers.UserInfo;
+import com.abc.foaled.Models.Birth;
+import com.abc.foaled.Models.Horse;
 import com.abc.foaled.R;
 
 
@@ -194,12 +196,11 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
      */
     public void insert(View view) {
 
-/*
-        String name = ((EditText) findViewById(R.id.add_horse_name)).getText().toString();
-        String marking = ((EditText) findViewById(R.id.add_markings_text)).getText().toString();
-        String notes = ((EditText) findViewById(R.id.add_notes_text)).getText().toString();
+        String name = "Christie"; //((EditText) findViewById(R.id.add_horse_name)).getText().toString();
+        String marking = "Brown brown"; //((EditText) findViewById(R.id.add_markings_text)).getText().toString();
+        String notes = "notes notes"; // ((EditText) findViewById(R.id.add_notes_text)).getText().toString();
 
-        Boolean sexIsFemale = ((RadioButton) findViewById(R.id.isFemaleRadioButton)).isChecked();
+        Boolean sexIsFemale = true; //((RadioButton) findViewById(R.id.isFemaleRadioButton)).isChecked();
 
         Birth birth = new Birth();
 
@@ -208,8 +209,6 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
         horse.setImagePath(imagePath);
 
         getHelper().addNewHorse(birth, horse);
-*/
-
 
         showSuccessConfirmation();
     }
@@ -291,7 +290,6 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
      */
     private void showSuccessConfirmation() {
         Toast.makeText(this, "Horse added successfully", Toast.LENGTH_SHORT).show();
-        userInfo.horses = getHelper().refreshHorseList();
         NavUtils.navigateUpFromSameTask(this);
     }
 

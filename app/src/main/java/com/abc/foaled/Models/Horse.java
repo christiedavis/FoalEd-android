@@ -122,7 +122,6 @@ public class Horse implements Serializable {
         this.sex = sex;
     }
 
-
     public int getAge(){
         return DateTimeHelper.getCurrentAge(this.currentBirth.birth_time);
     }

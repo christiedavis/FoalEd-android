@@ -66,13 +66,14 @@ public class HorseDetailActivity extends AppCompatActivity
         this.horse = this.userInfo.getHorseAtIndex(horseID);
 
         Button horseAge = (Button)this.findViewById(R.id.buttonAge);
-        horseAge.setText(horse.getAge());
+        horseAge.setText("Age");
+        horseAge.setText(DateTimeHelper.getAgeString(horse.getAge()));
 
         TextView name = (TextView)this.findViewById(R.id.horse_name);
         name.setText(horse.name);
 
         TextView age = (TextView)this.findViewById(R.id.horse_age);
-        age.setText(horse.getAge());
+        age.setText(DateTimeHelper.getAgeString(horse.getAge()));
 
         TextView gender = (TextView)this.findViewById(R.id.buttonSex);
         gender.setText(horse.getSex());
