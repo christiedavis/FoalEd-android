@@ -11,6 +11,7 @@ import org.joda.time.format.PeriodFormat;
 import org.joda.time.format.PeriodFormatter;
 import org.joda.time.format.PeriodFormatterBuilder;
 
+import java.util.Date;
 import java.util.Calendar;
 
 public class DateTimeHelper {
@@ -41,5 +42,13 @@ public class DateTimeHelper {
         }
 
         return age;
+    }
+
+    public static int getYear(Date date) {
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+
+        return calendar.get(Calendar.YEAR);
     }
 }

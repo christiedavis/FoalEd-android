@@ -3,17 +3,26 @@ package com.abc.foaled.Models;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.text.Editable;
 
 
+import com.abc.foaled.Database.DatabaseHelper;
+import com.abc.foaled.Database.ORMBaseActivity;
 import com.abc.foaled.Helpers.DateTimeHelper;
+import com.abc.foaled.Helpers.UserInfo;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 import org.joda.time.Period;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * Created by Brendan on 29/12/16.
@@ -66,7 +75,7 @@ public class Horse implements Serializable {
     @DatabaseField
     public String name;                        //NAME
     @DatabaseField(foreign = true, canBeNull = false, foreignAutoRefresh = true)
-    public Birth birth;
+    public Birth currentBirth;
     @DatabaseField
     private boolean sex;                       //SEX true - gal
     @DatabaseField
@@ -84,10 +93,11 @@ public class Horse implements Serializable {
     public String bigImagePath;
 
     private Bitmap image;
+    private List<Birth> births;
 
     public Horse() {
         this.name = null;
-        this.birth = null;
+        this.currentBirth = null;
         this.markings = null;
         this.notes = null;
         this.status = null;
@@ -98,17 +108,23 @@ public class Horse implements Serializable {
                 + "/FoalEd/placeholder.jpg";
         this.image = BitmapFactory.decodeFile(bigImagePath);*/
     }
+    public Horse(String name) {
+        // this constructer is used only for father horses
+
+        this.name = name;
+    }
     public Horse(String name, Birth birth, String markings, String notes, boolean sex) {
         this.name = name;
-        this.birth = birth;
+        this.currentBirth = birth;
         this.markings = markings;
         this.notes = notes;
         this.status = HORSE_STATUS.HORSE_STATUS_DORMANT;
         this.sex = sex;
     }
 
+
     public int getAge(){
-        return DateTimeHelper.getCurrentAge(this.birth.birth_time);
+        return DateTimeHelper.getCurrentAge(this.currentBirth.birth_time);
     }
     public int getHorseID() {
         return this.horseID;
@@ -124,9 +140,14 @@ public class Horse implements Serializable {
         return this.status.getString();
     }
 
+    public Map<String, String> getBirthNotes() {
+        return UserInfo.getInstance().getBirthNotesForHorse(this.horseID);
+
+    }
+
     /**
      * @return A string representation of the row in the database
-     * TODO build this to be proper again - brendan
+     * TODO build this to be proper again - brendan - is this still being used?
      */
     @Override
     public String toString() {

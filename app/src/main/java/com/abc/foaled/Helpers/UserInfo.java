@@ -1,17 +1,23 @@
 package com.abc.foaled.Helpers;
 
 import com.abc.foaled.Database.DatabaseHelper;
+import com.abc.foaled.Database.ORMBaseActivity;
 import com.abc.foaled.Models.Birth;
 import com.abc.foaled.Models.Horse;
 
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by christie on 17/02/17.
  *
  */
 public class UserInfo {
+
+//} extends ORMBaseActivity<DatabaseHelper> {
 
     private static UserInfo ourInstance;
     private static DatabaseHelper databaseHelper;
@@ -31,21 +37,40 @@ public class UserInfo {
     }
 
     public List<Horse> horses;
+    public List<Birth> births;
 
     public List<Horse> getHorses() {
-            return this.horses;
+        if (this.horses == null) {
+            this.horses = new LinkedList<>();
+        }
+        return this.horses;
+    }
+
+    public List<Birth> getBirths() {
+        if (this.births == null) {
+            this.births = new LinkedList<>();
+        }
+//        try {
+//            this.births = databaseHelper.getBirthDao().queryForAll();
+//        }
+//        catch (Exception ex) {
+//            System.out.println("Error on getting all births from the database");
+//        }
+
+        return this.births;
     }
 
     public Horse getHorseAtIndex(int index) {
         return this.horses.get(index);
     }
+    public Map<String, String> getBirthNotesForHorse(int horseID) {
+//        this.births = getHelper().getBirthsForHorse(horseID);
 
-    private UserInfo() { // intiatializer
-
-    }
-
-    public List<Birth> getBirths() {
-        return databaseHelper.getBirthsDataDao().queryForAll();
+        Map<String, String> notesMap = new HashMap<String, String>();
+        for (Birth b : this.births) {
+            notesMap.put(b.getYearOfBirth(), b.notes);
+        }
+        return notesMap;
     }
 
     public List<Birth> getBirthsByHorseID(int id) throws SQLException {
