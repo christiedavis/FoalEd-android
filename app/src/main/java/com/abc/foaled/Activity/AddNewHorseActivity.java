@@ -291,7 +291,7 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
      */
     private void showSuccessConfirmation() {
         Toast.makeText(this, "Horse added successfully", Toast.LENGTH_SHORT).show();
-        userInfo.horses = getHelper().refresh();
+        userInfo.horses = getHelper().refreshHorseList();
         NavUtils.navigateUpFromSameTask(this);
     }
 

@@ -67,12 +67,11 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
 //            getHelper().get
 
             // SET UP FRAGMENT
-            this.userInfo.horses = userInfo.getHelper().refresh(); //get data
+            this.userInfo.horses = userInfo.getHelper().refreshHorseList(); //get data
             FragmentTransaction fragmentManager = getSupportFragmentManager().beginTransaction();
             FavouriteHorsesFragment fragment = FavouriteHorsesFragment.newInstance();
             fragment.setListToBeDisplayed(this.userInfo.horses);
             fragmentManager.replace(R.id.flContent, fragment).commit();
-
 
             //Settings drawer
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -106,7 +105,7 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
         super.onResume();
         //createPlaceholderImageFile();
         //TODO this seems like the wrong way to update the recycler view?
-            this.userInfo.horses = userInfo.getHelper().refresh(); //get data
+            this.userInfo.horses = userInfo.getHelper().refreshHorseList(); //get data
             FragmentTransaction fragmentManager = getSupportFragmentManager().beginTransaction();
             FavouriteHorsesFragment fragment = FavouriteHorsesFragment.newInstance();
             fragment.setListToBeDisplayed(this.userInfo.horses);
@@ -192,7 +191,6 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
             default:
                 fragmentClass = NotificationSettingsFragment.class;
         }
-
 
         try {
             fragment = (Fragment) fragmentClass.newInstance();

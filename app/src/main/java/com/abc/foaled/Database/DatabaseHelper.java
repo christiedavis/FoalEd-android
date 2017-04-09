@@ -113,7 +113,8 @@ public void addNewHorse(Birth birth, Horse horse) {
      //TODO: handle errors
     }
 }
-    public List<Horse> refresh() {
+
+    public List<Horse> refreshHorseList() {
         return getHorseDataDao().queryForAll();
     }
     /**
