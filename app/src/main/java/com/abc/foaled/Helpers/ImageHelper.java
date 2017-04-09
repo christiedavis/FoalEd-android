@@ -17,7 +17,8 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
- * Created by christie on 17/02/17.
+ * Created by christie & Brendan on 17/02/17.
+ *
  */
 
 public class ImageHelper {

@@ -3,6 +3,7 @@ package com.abc.foaled.Activity;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,17 +17,22 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 
+import android.app.DialogFragment;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.abc.foaled.Database.DatabaseHelper;
 import com.abc.foaled.Database.ORMBaseActivity;
+import com.abc.foaled.Fragment.DatePickerFragment;
 import com.abc.foaled.Helpers.ImageHelper;
 import com.abc.foaled.Helpers.UserInfo;
 import com.abc.foaled.Models.Births;
@@ -38,6 +44,9 @@ import com.j256.ormlite.dao.RuntimeExceptionDao;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
 
@@ -66,10 +75,15 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         imagePath = getFilesDir().getAbsolutePath() + "/placeholder.jpg";
-        this.userInfo = userInfo.getInstance();
+        this.userInfo = UserInfo.getInstance();
 
-        ImageView iV = (ImageView) findViewById(R.id.add_horse_image_view);
+        ImageView iV = (ImageView) findViewById(R.id.add_horse_image);
         iV.setImageBitmap(ImageHelper.bitmapSmaller(imagePath, 200, 200));
+
+        String date = new SimpleDateFormat("dd/MM/yyyy - HH:mm", Locale.UK).format(Calendar.getInstance().getTime());
+        TextView dob = (TextView) findViewById(R.id.newHorseDOB);
+//        dob.setText(date);
+        dob.setHint(date);
 
         API_LEVEL = android.os.Build.VERSION.SDK_INT;
     }
@@ -156,7 +170,7 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
         }
 
         //Pull photo through bitmapFactory and display
-        ImageView iV = ((ImageView) findViewById(R.id.add_horse_image_view));
+        ImageView iV = ((ImageView) findViewById(R.id.add_horse_image));
         int height = iV.getHeight();
         int width = iV.getWidth();
         iV.setImageBitmap(ImageHelper.bitmapSmaller(imagePath, height, width));
@@ -188,6 +202,7 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
      */
     public void insert(View view) {
 
+/*
         String name = ((EditText) findViewById(R.id.add_horse_name)).getText().toString();
         String marking = ((EditText) findViewById(R.id.add_markings_text)).getText().toString();
         String notes = ((EditText) findViewById(R.id.add_notes_text)).getText().toString();
@@ -201,6 +216,7 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
         horse.setImagePath(imagePath);
 
         getHelper().addNewHorse(birth, horse);
+*/
 
 
         showSuccessConfirmation();
@@ -285,6 +301,40 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
         Toast.makeText(this, "Horse added successfully", Toast.LENGTH_SHORT).show();
         userInfo.horses = getHelper().refresh();
         NavUtils.navigateUpFromSameTask(this);
+    }
+
+    public void toggleSex(View view) {
+        CheckBox checkBox = (CheckBox) view;
+        LinearLayout layout = (LinearLayout) findViewById(R.id.pregnantLayout);
+        if (checkBox.isChecked()) {
+            layout.setVisibility(View.VISIBLE);
+        } else {
+            layout.setVisibility(View.GONE);
+            findViewById(R.id.conceptionDateLayout).setVisibility(View.GONE);
+            ((CheckBox) findViewById(R.id.checkboxPregnant)).setChecked(false);
+        }
+    }
+
+    public void togglePregnant(View view) {
+        CheckBox checkBox = (CheckBox) view;
+        LinearLayout layout = (LinearLayout) findViewById(R.id.conceptionDateLayout);
+        if (checkBox.isChecked()) {
+            layout.setVisibility(View.VISIBLE);
+        } else {
+            layout.setVisibility(View.GONE);
+        }
+    }
+
+    public void selectDate(View view) {
+        TextView editText = (TextView) findViewById(R.id.newHorseDOB);
+
+        DialogFragment dialog = new DatePickerFragment();
+        ((DatePickerFragment) dialog).setViewResult(editText);
+        dialog.setRetainInstance(true);
+//        ((DatePickerDialog)dialog.getDialog()).getDatePicker().setMaxDate(Calendar.getInstance().getTimeInMillis());
+        dialog.show(getFragmentManager(), "datePicker");
+
+
     }
 
 }

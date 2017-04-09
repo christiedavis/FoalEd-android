@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.Toolbar;
 
@@ -52,7 +53,7 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
         super.onCreate(savedInstanceState);
         //TODO create default placeholder image file if it doesn't exist already (essentially creating on first run through)
         try {
-            createPlaceholderImageFile(getAssets().open("christie.jpg"));
+            createPlaceholderImageFile(getAssets().open("default_horse.jpg"));
 
             requestWindowFeature(Window.FEATURE_NO_TITLE);
             setContentView(R.layout.activity_main);
@@ -61,10 +62,12 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
             // Set up Nav
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
-            this.userInfo = UserInfo.getInstance();
+            this.userInfo = UserInfo.getInstance(getHelper());
+
+//            getHelper().get
 
             // SET UP FRAGMENT
-            this.userInfo.horses = getHelper().refresh(); //get data
+            this.userInfo.horses = userInfo.getHelper().refresh(); //get data
             FragmentTransaction fragmentManager = getSupportFragmentManager().beginTransaction();
             FavouriteHorsesFragment fragment = FavouriteHorsesFragment.newInstance();
             fragment.setListToBeDisplayed(this.userInfo.horses);
@@ -103,11 +106,11 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
         super.onResume();
         //createPlaceholderImageFile();
         //TODO this seems like the wrong way to update the recycler view?
-        this.userInfo.horses = getHelper().refresh(); //get data
-        FragmentTransaction fragmentManager = getSupportFragmentManager().beginTransaction();
-        FavouriteHorsesFragment fragment = FavouriteHorsesFragment.newInstance();
-        fragment.setListToBeDisplayed(this.userInfo.horses);
-        fragmentManager.replace(R.id.flContent, fragment).commit();
+            this.userInfo.horses = userInfo.getHelper().refresh(); //get data
+            FragmentTransaction fragmentManager = getSupportFragmentManager().beginTransaction();
+            FavouriteHorsesFragment fragment = FavouriteHorsesFragment.newInstance();
+            fragment.setListToBeDisplayed(this.userInfo.horses);
+            fragmentManager.replace(R.id.flContent, fragment).commit();
     }
 
     @Override
