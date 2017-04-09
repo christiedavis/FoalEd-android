@@ -69,7 +69,7 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         imagePath = getFilesDir().getAbsolutePath() + "/placeholder.jpg";
-        this.userInfo = UserInfo.getInstance();
+        this.userInfo = UserInfo.getInstance(this);
 
         ImageView iV = (ImageView) findViewById(R.id.add_horse_image);
         iV.setImageBitmap(ImageHelper.bitmapSmaller(imagePath, 200, 200));

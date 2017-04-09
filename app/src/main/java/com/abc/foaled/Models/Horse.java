@@ -167,10 +167,6 @@ public class Horse implements Serializable {
         Milestone milestone1 = new Milestone(Milestone.MILESTONE.MILESTONE_POOP);
     }
 
-
-
-
-
 //// Mark - Image helper methods
 
     /**
