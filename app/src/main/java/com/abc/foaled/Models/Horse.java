@@ -1,6 +1,7 @@
 package com.abc.foaled.Models;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.Editable;
@@ -139,8 +140,9 @@ public class Horse implements Serializable {
         return this.status.getString();
     }
 
-    public Map<String, String> getBirthNotes() {
-        return UserInfo.getInstance().getBirthNotesForHorse(this.horseID);
+    public Map<String, String> getBirthNotes(Context c) {
+        UserInfo userInfo = UserInfo.getInstance(c);
+        return userInfo.getBirthNotesForHorse(this.horseID);
 
     }
 

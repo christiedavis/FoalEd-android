@@ -84,23 +84,31 @@ public class HorseDetailActivity extends AppCompatActivity
         //sets up the photo
         ImageView personPhoto = (ImageView)this.findViewById(R.id.horse_photo);
         personPhoto.setImageBitmap(ImageHelper.bitmapSmaller(horse.smallImagePath, personPhoto.getMaxHeight(), personPhoto.getMaxWidth()));
+        updateNotesView();
+    }
 
-         /// TODO: Set up notes with birth info - see feedback screen to play around with this functionality
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        this.userInfo.release();
 
-//        Map<String, String> map = horse.getBirthNotes();
-//        List<String> notesList = new LinkedList<>();
-//        notesList.add("Current pregnancy");
-//        for (Map.Entry<String, String> entry : map.entrySet()) {
-//            notesList.add(entry.getKey());
-//        }
-//            String[] array = new String[notesList.size()];
-//            notesList.toArray(array);
-//
-//
-//        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.ex_layout_row_view, R.id.expandableLayoutHeaderText, array);
-//        final ExpandableLayoutListView expandableLayoutListView = (ExpandableLayoutListView) findViewById(R.id.exlistview);
-//
-//        expandableLayoutListView.setAdapter(arrayAdapter);
+    }
+
+    private void updateNotesView() {
+        /// TODO: Set up notes with birth info - see feedback screen to play around with this functionality
+
+        Map<String, String> map = horse.getBirthNotes(this);
+        List<String> notesList = new LinkedList<>();
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            notesList.add(entry.getKey());
+        }
+        String[] array = new String[notesList.size()];
+        notesList.toArray(array);
+
+        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.ex_layout_row_view, R.id.expandableLayoutHeaderText, array);
+        final ExpandableLayoutListView expandableLayoutListView = (ExpandableLayoutListView) findViewById(R.id.exlistview);
+
+        expandableLayoutListView.setAdapter(arrayAdapter);
     }
 
     @Override
@@ -147,19 +155,15 @@ public class HorseDetailActivity extends AppCompatActivity
 
         // get values
         EditText fatherName = (EditText)this.findViewById(R.id.fathers_name_textView);
-//        Horse fatherHorse = new Horse(fatherName.getText().toString());
+        Horse fatherHorse = new Horse(fatherName.getText().toString());
         //TODO: add horse 
 
-
         EditText conceptionDate = (EditText)this.findViewById(R.id.date_of_conception);
-        //turn to date -
-        Calendar conceptionDateMOCK = Calendar.getInstance();
-        conceptionDateMOCK.clear(Calendar.HOUR); conceptionDateMOCK.clear(Calendar.MINUTE); conceptionDateMOCK.clear(Calendar.SECOND);
-
+        //turn to date
 
         // add to database
-//        Birth newBirth = new Birth(this.horse.getHorseID(), fatherHorse.getHorseID(), conceptionDateMOCK);
-//        this.userInfo.getHelper().addNewBirth(newBirth);
+        Birth newBirth = new Birth(this.horse.getHorseID(), fatherHorse.getHorseID(), new Date());
+        this.userInfo.getHelper().addNewBirth(newBirth);
 
         // go back to horse detail and update
         FragmentTransaction fragmentManager = getSupportFragmentManager().beginTransaction();
@@ -167,6 +171,7 @@ public class HorseDetailActivity extends AppCompatActivity
         ViewGroup parent = (ViewGroup) findViewById(R.id.horse_detail_screen);
 
         View fragment = findViewById(R.id.add_pregnancy_fragment);
+        updateNotesView();
 
         parent.removeView(fragment);
     }

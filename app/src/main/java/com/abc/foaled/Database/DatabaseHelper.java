@@ -1,6 +1,7 @@
 package com.abc.foaled.Database;
 
 import java.sql.SQLException;
+import java.util.LinkedList;
 import java.util.List;
 
 import android.content.Context;
@@ -12,6 +13,7 @@ import com.abc.foaled.Models.Horse;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
+import com.j256.ormlite.stmt.Where;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
@@ -36,7 +38,6 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 //        super(context, DATABASE_NAME, null, DATABASE_VERSION, R.raw.ormlite_config);
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
-
 
     /**
      * This is called when the database is first created. Usually you should call createTable statements here to create
@@ -70,21 +71,42 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         return birthsDao;
     }
 
-public void addNewHorse(Birth birth, Horse horse) {
-
-    try {
-
-        getBirthsDao().create(birth);
-        getHorseDao().create(horse);
-
+    public void addNewHorse(Birth birth, Horse horse) {
+        try {
+            getBirthsDao().create(birth);
+            getHorseDao().create(horse);
+        }
+        catch (Exception ex){
+         //TODO: handle errors
+        }
     }
-    catch (Exception ex){
-     //TODO: handle errors
+
+    public void addNewBirth(Birth birth) {
+        try {
+            getBirthsDao().create(birth);
+        }
+        catch (Exception ex){
+            //TODO: handle errors
+        }
     }
-}
+
+    public List<Birth> getBirthsForHorse(int horseId) {
+        List<Birth> results;
+        try {
+            results = getBirthsDataDao().queryBuilder().where().eq("mare", horseId).query();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            results = new LinkedList<>();
+        }
+        return results;
+    }
 
     public List<Horse> refreshHorseList() {
         return getHorseDataDao().queryForAll();
+    }
+
+    public List<Birth> refreshBirthList() {
+        return getBirthsDataDao().queryForAll();
     }
     /**
      * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for database object classes. It will

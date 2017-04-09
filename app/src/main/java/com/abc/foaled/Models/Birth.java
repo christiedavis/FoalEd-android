@@ -23,11 +23,11 @@ public class Birth implements Serializable {
     @DatabaseField(generatedId = true)
     private int id;
     @DatabaseField()
-    public Integer horse;        //Foreign horse id //TODO make these ints, not foreign objects (too hard)
+    public int horse;        //Foreign horse id //TODO make these ints, not foreign objects (too hard)
     @DatabaseField(canBeNull = true)
-    private Integer sire;
+    private int sire;
     @DatabaseField()
-    public Integer mare;
+    public int mare;
 
 //    @DatabaseField(foreign = true)
 //    private Horse sire;
@@ -47,17 +47,17 @@ public class Birth implements Serializable {
     }
 
     public Birth() {
-        this.horse = null;
-        this.sire = null;
-        this.mare = null;
+        this.horse = 0;
+        this.sire = 0;
+        this.mare = 0;
         this.est_conception = null;
         this.birth_time = new DateTime();
         this.notes = null;
     }
 
     public Birth(int motherID, int fatherID, Date conception){
-        this.horse = null;
-        this.horse = null;
+        this.horse = 0;
+        this.horse = 0;
         this.mare = motherID;
         this.sire = fatherID;
         this.est_conception = conception;

@@ -24,18 +24,8 @@ import java.util.Map;
  */
 public class UserInfo {
 
-//} extends ORMBaseActivity<DatabaseHelper> {
-
     private static DatabaseHelper databaseHelper;
     private static UserInfo ourInstance;
-
-    public static UserInfo getInstance() {
-        if (ourInstance == null)
-            ourInstance = new UserInfo();
-//        if (databaseHelper == null)
-//            databaseHelper = OpenHelperManager.get
-        return ourInstance;
-    }
 
     public static UserInfo getInstance(Context context) {
         if (ourInstance == null)
@@ -52,7 +42,7 @@ public class UserInfo {
         if (this.horses == null) {
             this.horses = new LinkedList<>();
         }
-        this.horses = getHelper().refreshHorseList();
+        this.horses = databaseHelper.refreshHorseList();
         return this.horses;
     }
 
@@ -60,7 +50,7 @@ public class UserInfo {
         if (this.births == null) {
             this.births = new LinkedList<>();
         }
-//        this.births = getHelper().refreshBirthList();
+        this.births = databaseHelper.refreshBirthList();
         return this.births;
     }
 
@@ -68,7 +58,7 @@ public class UserInfo {
         return this.horses.get(index);
     }
     public Map<String, String> getBirthNotesForHorse(int horseID) {
-//        this.births = getHelper().getBirthsForHorse(horseID);
+        this.births = databaseHelper.getBirthsForHorse(horseID);
 
         Map<String, String> notesMap = new HashMap<String, String>();
         for (Birth b : this.births) {
