@@ -29,6 +29,7 @@ import com.j256.ormlite.dao.RuntimeExceptionDao;
 
 import org.joda.time.DateTime;
 
+import java.lang.reflect.Array;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -95,7 +96,6 @@ public class HorseDetailActivity extends AppCompatActivity
     }
 
     private void updateNotesView() {
-        /// TODO: Set up notes with birth info - see feedback screen to play around with this functionality
 
         Map<String, String> map = horse.getBirthNotes(this);
         List<String> notesList = new LinkedList<>();
@@ -105,10 +105,12 @@ public class HorseDetailActivity extends AppCompatActivity
         String[] array = new String[notesList.size()];
         notesList.toArray(array);
 
-        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.ex_layout_row_view, R.id.expandableLayoutHeaderText, array);
+        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, R.layout.ex_layout_row_view, R.id.expandableLayoutHeaderText, array);
+        final ArrayAdapter<String> notesAdapter = new ArrayAdapter<String>(this, R.layout.ex_layout_row_view, R.id.expandableLayoutTextContent, array);
         final ExpandableLayoutListView expandableLayoutListView = (ExpandableLayoutListView) findViewById(R.id.exlistview);
 
         expandableLayoutListView.setAdapter(arrayAdapter);
+        expandableLayoutListView.setAdapter(notesAdapter);
     }
 
     @Override
