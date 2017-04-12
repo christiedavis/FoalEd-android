@@ -43,12 +43,11 @@ public class RVAdaptor extends RecyclerView.Adapter<RVAdaptor.HorseViewHolder>{
             cv.setOnClickListener( new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int position = getAdapterPosition();
                     final Intent intent;
 
                     //TODO this needs to be better than just the position of the card
                     intent = new Intent(c, HorseDetailActivity.class);
-                    intent.putExtra("HorseID", position);
+                    intent.putExtra("HorseID", horseID);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     c.startActivity(intent);
 
@@ -58,7 +57,8 @@ public class RVAdaptor extends RecyclerView.Adapter<RVAdaptor.HorseViewHolder>{
             personName = (TextView)itemView.findViewById(R.id.horse_name);
             personAge = (TextView)itemView.findViewById(R.id.horse_age);
             personPhoto = (ImageView)itemView.findViewById(R.id.horse_photo);
-            horseID = getAdapterPosition();
+            //            horseID = getAdapterPosition(); //This is not needed, as onBindViewHolder gets called before the above
+            //                                  onClickListener, which means the horseID is not being found from card position
         }
     }
 
