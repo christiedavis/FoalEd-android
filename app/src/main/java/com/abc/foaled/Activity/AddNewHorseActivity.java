@@ -295,19 +295,19 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
 
     public void toggleSex(View view) {
         CheckBox checkBox = (CheckBox) view;
-        LinearLayout layout = (LinearLayout) findViewById(R.id.pregnantLayout);
+        LinearLayout layout = (LinearLayout) findViewById(R.id.pregnantRow);
         if (checkBox.isChecked()) {
             layout.setVisibility(View.VISIBLE);
         } else {
             layout.setVisibility(View.GONE);
-            findViewById(R.id.conceptionDateLayout).setVisibility(View.GONE);
+            findViewById(R.id.conceptionRow).setVisibility(View.GONE);
             ((CheckBox) findViewById(R.id.checkboxPregnant)).setChecked(false);
         }
     }
 
     public void togglePregnant(View view) {
         CheckBox checkBox = (CheckBox) view;
-        LinearLayout layout = (LinearLayout) findViewById(R.id.conceptionDateLayout);
+        LinearLayout layout = (LinearLayout) findViewById(R.id.conceptionRow);
         if (checkBox.isChecked()) {
             layout.setVisibility(View.VISIBLE);
         } else {

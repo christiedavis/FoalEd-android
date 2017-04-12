@@ -61,7 +61,7 @@ public class UserInfo {
     public Map<String, String> getBirthNotesForHorse(int horseID) {
         this.births = databaseHelper.getBirthsForHorse(horseID);
 
-        Map<String, String> notesMap = new HashMap<String, String>();
+        Map<String, String> notesMap = new HashMap<>();
         for (Birth b : this.births) {
             notesMap.put(b.getYearOfBirth(), b.notes);
         }
