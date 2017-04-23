@@ -57,6 +57,7 @@ public class UserInfo {
     public Horse getHorseAtIndex(int index) {
         return this.horses.get(index);
     }
+
     public Map<String, String> getBirthNotesForHorse(int horseID) {
         this.births = databaseHelper.getBirthsForHorse(horseID);
 
