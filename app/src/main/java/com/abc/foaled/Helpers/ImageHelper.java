@@ -126,18 +126,15 @@ public class ImageHelper {
         return BitmapFactory.decodeResource(resources, resID, options);
     }
 
-    public static String createImageFile(Activity a, StringBuilder imageFileName) {
+    public static String createImageFile(Activity a) {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
-        imageFileName.delete(0, imageFileName.length());
-        imageFileName.append("JPEG_" + timeStamp + ".jpg");
 
-        String imagePath = a.getFilesDir().getAbsolutePath() + "/" + imageFileName;
+        String imagePath = a.getFilesDir().getAbsolutePath() + "/JPEG_" + timeStamp + ".jpg";
         try {
             new File(imagePath).createNewFile();
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return imagePath;
     }
 }
