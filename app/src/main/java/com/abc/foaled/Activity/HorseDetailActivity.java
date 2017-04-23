@@ -106,11 +106,11 @@ public class HorseDetailActivity extends AppCompatActivity
         notesList.toArray(array);
 
         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, R.layout.ex_layout_row_view, R.id.expandableLayoutHeaderText, array);
-//        final ArrayAdapter<String> notesAdapter = new ArrayAdapter<String>(this, R.layout.ex_layout_row_view, R.id.expandableLayoutTextContent, array);
+        final ArrayAdapter<String> notesAdapter = new ArrayAdapter<String>(this, R.layout.ex_layout_row_view, R.id.expandableLayoutTextContent, array);
         final ExpandableLayoutListView expandableLayoutListView = (ExpandableLayoutListView) findViewById(R.id.exlistview);
 
         expandableLayoutListView.setAdapter(arrayAdapter);
-//        expandableLayoutListView.setAdapter(notesAdapter);
+        expandableLayoutListView.setAdapter(notesAdapter);
     }
 
     @Override
