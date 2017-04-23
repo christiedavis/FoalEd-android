@@ -62,7 +62,7 @@ public class HorseDetailActivity extends AppCompatActivity
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setTitle(horse.name);
         }
-        
+
 
         Button horseAge = (Button)this.findViewById(R.id.buttonAge);
         horseAge.setText("Age");
