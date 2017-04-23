@@ -1,3 +1,4 @@
+/*
 package com.abc.foaled.Adaptors;
 
 import android.content.Context;
@@ -10,9 +11,11 @@ import com.abc.foaled.Models.Birth;
 
 import java.util.ArrayList;
 
+*/
 /**
  * Created by christie on 9/04/17.
- */
+ *//*
+
 
 public class ExpandableListAdaptor implements ExpandableListAdapter{
 
@@ -132,4 +135,4 @@ public class ExpandableListAdaptor implements ExpandableListAdapter{
             return 0;
         }
     }
-}
+}*/

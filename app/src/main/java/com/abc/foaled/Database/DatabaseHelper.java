@@ -101,6 +101,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         return results;
     }
 
+    //TODO this should be called getHorseList as it is returning a horse list, or at least getRefreshedHorseList
     public List<Horse> refreshHorseList() {
         return getHorseDataDao().queryForAll();
     }

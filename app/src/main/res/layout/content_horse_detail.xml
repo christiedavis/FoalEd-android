@@ -42,15 +42,13 @@
                 android:layout_height="wrap_content"
                 android:background="@color/colorPrimary"
                 expandable:el_contentLayout="@layout/ex_layout_content_view"
-                expandable:el_headerLayout="@layout/ex_layout_header_view"
-                    />
+                expandable:el_headerLayout="@layout/ex_layout_header_view" />
 
                 <com.andexert.expandablelayout.library.ExpandableLayoutListView
                 android:id="@+id/exlistview"
-                android:layout_below="@+id/first"
                 android:layout_width="match_parent"
                 android:layout_marginTop="5dp"
-                android:layout_height="300dp"
+                android:layout_height="match_parent"
                 android:background="@color/colorPrimary"/>
             </LinearLayout>
 

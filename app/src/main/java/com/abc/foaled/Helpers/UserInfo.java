@@ -54,6 +54,10 @@ public class UserInfo {
         return this.births;
     }
 
+    public Horse getHorseByID(int id) {
+        return databaseHelper.getHorseDataDao().queryForId(id);
+    }
+
     public Horse getHorseAtIndex(int index) {
         return this.horses.get(index);
     }

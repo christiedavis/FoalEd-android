@@ -54,7 +54,7 @@ public class HorseDetailActivity extends AppCompatActivity
         this.userInfo = UserInfo.getInstance(this);
 
         horseID = getIntent().getIntExtra("HorseID", 0);
-        this.horse = this.userInfo.horses.get(horseID);
+        this.horse = this.userInfo.getHorseByID(horseID);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -62,9 +62,7 @@ public class HorseDetailActivity extends AppCompatActivity
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setTitle(horse.name);
         }
-
-        final int horseID = getIntent().getIntExtra("HorseID", 0);
-        this.horse = this.userInfo.getHorseAtIndex(horseID);
+        
 
         Button horseAge = (Button)this.findViewById(R.id.buttonAge);
         horseAge.setText("Age");
