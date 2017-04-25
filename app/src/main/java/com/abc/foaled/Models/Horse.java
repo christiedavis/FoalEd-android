@@ -101,7 +101,7 @@ public class Horse implements Serializable {
         this.currentBirth = null;
         this.markings = null;
         this.notes = null;
-        this.status = null;
+        this.status = HORSE_STATUS.HORSE_STATUS_DORMANT;
         this.sex = false;
 /*        this.smallImagePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
                 + "/FoalEd/Small_Versions/placeholder.jpg";;
@@ -110,9 +110,10 @@ public class Horse implements Serializable {
         this.image = BitmapFactory.decodeFile(bigImagePath);*/
     }
     public Horse(String name) {
-        // this constructer is used only for father horses
+        // this constructer is used only for father horses - is retired always
 
         this.name = name;
+        this.status = HORSE_STATUS.HORSE_STATUS_RETIRED;
     }
     public Horse(String name, Birth birth, String markings, String notes, boolean sex) {
         this.name = name;
@@ -136,6 +137,18 @@ public class Horse implements Serializable {
         else
             return "Male";
     }
+
+    public HORSE_STATUS getStatus() {
+        return this.status;
+    }
+    public void setStatus(HORSE_STATUS status) {
+        //perform nessacary checks
+
+        // if first pregnanancy - maiden else pregnant
+        // if from pregnant -> dormant  - remove current pregnancy
+        this.status = status;
+    }
+
     public String getStatusString() {
         return this.status.getString();
     }

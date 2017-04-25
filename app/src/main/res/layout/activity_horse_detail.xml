@@ -14,8 +14,6 @@
 
     <include layout="@layout/content_horse_detail" />
 
-    <!--TODO: add pregnancy floating action button-->
-
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/addPregnancyButton"
         android:layout_width="wrap_content"
@@ -25,8 +23,7 @@
         android:src="@drawable/ic_menu_pregnancy"
         android:clickable="true"
         android:onClick="AddNewPregnancy"/>
-
-
+    
 </android.support.design.widget.CoordinatorLayout>
 
 

@@ -1,11 +1,17 @@
 package com.abc.foaled.Activity;
 
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.DrawFilter;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,7 +56,7 @@ public class HorseDetailActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_horse_detail);
+
         this.userInfo = UserInfo.getInstance(this);
 
         horseID = getIntent().getIntExtra("HorseID", 0);
@@ -63,7 +69,35 @@ public class HorseDetailActivity extends AppCompatActivity
             getSupportActionBar().setTitle(horse.name);
         }
 
+        switch (horse.getStatus()) {
 
+            case HORSE_STATUS_FOAL:
+                setContentView(R.layout.activity_foal_detail);
+                setUpImageView();
+            break;
+
+            case HORSE_STATUS_RETIRED:
+                setContentView(R.layout.activity_horse_detail);
+                break;
+
+            case HORSE_STATUS_MAIDEN:
+                //ADD EXTRA NOTE VIEW SAYING RISKS OF MAIDEN PREGNANCY
+                setContentView(R.layout.activity_horse_detail);
+                break;
+
+            case HORSE_STATUS_DORMANT:
+                setContentView(R.layout.activity_horse_detail);
+                setUpImageView();
+                break;
+
+            case HORSE_STATUS_PREGNANT:
+                setContentView(R.layout.activity_horse_detail);
+                setUpImageView();
+                break;
+        }
+    }
+
+    private void setUpImageView() {
         Button horseAge = (Button)this.findViewById(R.id.buttonAge);
         horseAge.setText("Age");
         horseAge.setText(DateTimeHelper.getAgeString(horse.getAge()));
@@ -81,16 +115,29 @@ public class HorseDetailActivity extends AppCompatActivity
         status.setText(horse.getStatusString());
 
         //sets up the photo
-        ImageView personPhoto = (ImageView)this.findViewById(R.id.horse_photo);
-        personPhoto.setImageBitmap(ImageHelper.bitmapSmaller(horse.smallImagePath, personPhoto.getMaxHeight(), personPhoto.getMaxWidth()));
-        updateNotesView();
+        ImageView horsePhoto = (ImageView)this.findViewById(R.id.horse_photo);
+        if (horse.smallImagePath != null) {
+            horsePhoto.setImageBitmap(ImageHelper.bitmapSmaller(horse.smallImagePath, horsePhoto.getMaxHeight(), horsePhoto.getMaxWidth()));
+        }
+        else { // no horse photo, use default
+            if (horse.getStatus() == Horse.HORSE_STATUS.HORSE_STATUS_FOAL) {
+                //TODO: set to show default
+                Bitmap foalImage = BitmapFactory.decodeResource(getResources(), R.drawable.default_foal);
+                horsePhoto.setImageBitmap(ImageHelper.bitmapSmaller(Resources.getSystem(), R.drawable.default_foal, horsePhoto.getMaxHeight(), horsePhoto.getMaxWidth()));
+            } else {
+                Bitmap horseImage = BitmapFactory.decodeResource(getResources(), R.drawable.default_horse);
+                horsePhoto.setImageBitmap(horseImage);
+            }
+        }
+       if (horse.getStatus() != Horse.HORSE_STATUS.HORSE_STATUS_FOAL) {
+           updateNotesView();
+       }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         this.userInfo.release();
-
     }
 
     private void updateNotesView() {
@@ -139,17 +186,6 @@ public class HorseDetailActivity extends AppCompatActivity
         fragmentManager.replace(R.id.horse_detail_screen, fragment).commit();
     }
 
-
-    //TODO this is the delete Horse method - B
-    // WHat is this used for? Does it belong in this class - C
-    private boolean deleteHorse(int id) {
-        RuntimeExceptionDao<Horse, Integer> horseDao = this.userInfo.getHelper().getHorseDataDao();
-        Horse horse = horseDao.queryForId(id);
-        //returns true if deleted 1 row (which should be the case if ID exists)
-        //else returns false
-        return horseDao.delete(horse) == 1;
-    }
-
     public void AddPregnancy(View v) {
         System.out.println("Add pregnancy selected");
 
@@ -171,9 +207,29 @@ public class HorseDetailActivity extends AppCompatActivity
         ViewGroup parent = (ViewGroup) findViewById(R.id.horse_detail_screen);
 
         View fragment = findViewById(R.id.add_pregnancy_fragment);
+        horse.setStatus(Horse.HORSE_STATUS.HORSE_STATUS_PREGNANT);
         updateNotesView();
 
         parent.removeView(fragment);
+    }
+
+    public void AddFoal(View v) {
+        System.out.println("Add foal added");
+        // to do show a dialog with date sex etc
+
+        if (horse.getStatus() == Horse.HORSE_STATUS.HORSE_STATUS_PREGNANT) {
+
+            // set birth time
+            horse.currentBirth.birth_time = new DateTime();
+            Horse foal = new Horse("New Foal", horse.currentBirth, "Markings yolo", "Notes", true);
+            foal.setStatus(Horse.HORSE_STATUS.HORSE_STATUS_FOAL);
+            //set image to be default
+
+            this.userInfo.getHelper().addNewHorse(horse.currentBirth, foal);
+
+            horse.setStatus(Horse.HORSE_STATUS.HORSE_STATUS_DORMANT);
+            Log.d("Added horse gee", "gee");
+        }
     }
 
     @Override

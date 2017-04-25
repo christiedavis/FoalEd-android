@@ -56,6 +56,8 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="hi"/>
+        android:text="hi"
+        android:id="@+id/Add_foal_homie"
+        android:onClick="AddFoal"/>
 
 </LinearLayout>
