@@ -50,7 +50,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
                 android:id="@+id/add_horse_image"
-                android:scaleType="centerCrop"/>
+                android:onClick="selectPhoto"
+                android:scaleType="centerCrop"
+                android:contentDescription="Horse Photo"/>
 
             <android.support.v7.widget.CardView
                 xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -76,6 +78,7 @@
                             android:textAlignment="center"
                             android:text="Name"/>
                         <EditText
+                            android:id="@+id/add_new_horse_name"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
