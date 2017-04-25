@@ -35,7 +35,6 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private RuntimeExceptionDao<Birth, Integer> birthsRuntimeDao = null;
 
     public DatabaseHelper(Context context) {
-//        super(context, DATABASE_NAME, null, DATABASE_VERSION, R.raw.ormlite_config);
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -78,6 +77,15 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
         catch (Exception ex){
          //TODO: handle errors
+        }
+    }
+
+    public void updateHorse(Horse horse) {
+        try {
+            getHorseDao().update(horse);
+        }
+        catch (Exception ex) {
+            //TODO: Error handling
         }
     }
 
