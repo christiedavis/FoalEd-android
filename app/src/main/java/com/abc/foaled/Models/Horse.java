@@ -140,7 +140,7 @@ public class Horse implements Serializable {
         return this.status.getString();
     }
 
-    public Map<String, String> getBirthNotes(Context c) {
+    public Map<String, List<String>> getBirthNotes(Context c) {
         UserInfo userInfo = UserInfo.getInstance(c);
         return userInfo.getBirthNotesForHorse(this.horseID);
 

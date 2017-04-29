@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:expandable="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -36,21 +37,14 @@
                 android:clickable="true"
                 android:onClick="AddNewPregnancy"/>
 
-                <com.andexert.expandablelayout.library.ExpandableLayout xmlns:expandable="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/firstItem"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/colorPrimary"
-                expandable:el_contentLayout="@layout/ex_layout_content_view"
-                expandable:el_headerLayout="@layout/ex_layout_header_view" />
+        <include layout="@layout/ex_group_view" />
 
-                <com.andexert.expandablelayout.library.ExpandableLayoutListView
-                android:id="@+id/exlistview"
-                android:layout_width="match_parent"
-                android:layout_marginTop="5dp"
-                android:layout_height="match_parent"
-                android:background="@color/colorPrimary"/>
-            </LinearLayout>
+        <ExpandableListView
+            android:id="@id/exlistview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
 
         </ScrollView>
     <Button

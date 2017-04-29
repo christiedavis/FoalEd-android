@@ -12,11 +12,11 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.abc.foaled.Database.DatabaseHelper;
-import com.abc.foaled.Database.ORMBaseActivity;
+import com.abc.foaled.Adaptors.HorseNoteAdaptor;
 import com.abc.foaled.Fragment.AddPregnancyFragment;
 import com.abc.foaled.Helpers.DateTimeHelper;
 import com.abc.foaled.Helpers.ImageHelper;
@@ -27,17 +27,11 @@ import com.abc.foaled.R;
 import com.andexert.expandablelayout.library.ExpandableLayoutListView;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 
-import org.joda.time.DateTime;
-
-import java.lang.reflect.Array;
-import java.util.Calendar;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
 
 //FavouriteHorsesFragment.OnListFragmentInteractionListener, FavouriteHorsesFragment.OnListFragmentInteractionListener,
 public class HorseDetailActivity extends AppCompatActivity
@@ -95,20 +89,14 @@ public class HorseDetailActivity extends AppCompatActivity
 
     private void updateNotesView() {
 
-        Map<String, String> map = horse.getBirthNotes(this);
-        List<String> notesList = new LinkedList<>();
-        for (Map.Entry<String, String> entry : map.entrySet()) {
-            notesList.add(entry.getKey());
-        }
-        String[] array = new String[notesList.size()];
-        notesList.toArray(array);
+        Map<String, List<String>> map = horse.getBirthNotes(this);
+        List<String> years = new ArrayList<>(map.keySet());
 
-        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, R.layout.ex_layout_row_view, R.id.expandableLayoutHeaderText, array);
-        final ArrayAdapter<String> notesAdapter = new ArrayAdapter<String>(this, R.layout.ex_layout_row_view, R.id.expandableLayoutTextContent, array);
-        final ExpandableLayoutListView expandableLayoutListView = (ExpandableLayoutListView) findViewById(R.id.exlistview);
+        final ExpandableListView expandableLayoutListView = (ExpandableListView) findViewById(R.id.exlistview);
 
-        expandableLayoutListView.setAdapter(arrayAdapter);
-        expandableLayoutListView.setAdapter(notesAdapter);
+        HorseNoteAdaptor adaptor = new HorseNoteAdaptor(this, years, map);
+
+        expandableLayoutListView.setAdapter(adaptor);
     }
 
     @Override
