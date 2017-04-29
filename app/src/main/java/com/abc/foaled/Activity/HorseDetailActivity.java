@@ -87,6 +87,10 @@ public class HorseDetailActivity extends AppCompatActivity
 
     }
 
+    public void editNotesCallback(String note, String birthId) {
+        horse.updateBirth(this, birthId, note);
+    }
+
     private void updateNotesView() {
 
         Map<String, List<String>> map = horse.getBirthNotes(this);

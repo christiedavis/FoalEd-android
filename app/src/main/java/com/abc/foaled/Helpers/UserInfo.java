@@ -75,6 +75,10 @@ public class UserInfo {
         return notesMap;
     }
 
+    public void updateBirth(int horseId, String birthId, String note){
+        databaseHelper.updateBirth(horseId, birthId, note);
+    }
+
     public List<Birth> getBirthsByHorseID(int id) throws SQLException {
         return databaseHelper.getBirthsDataDao().queryBuilder().where().eq("mare", id).query();
     }

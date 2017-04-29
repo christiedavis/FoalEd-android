@@ -146,6 +146,10 @@ public class Horse implements Serializable {
 
     }
 
+    public void updateBirth(Context c, String birthId, String note) {
+        UserInfo.getInstance(c).updateBirth(this.horseID, birthId, note);
+    }
+
     /**
      * @return A string representation of the row in the database
      * TODO build this to be proper again - brendan - is this still being used?
