@@ -75,7 +75,9 @@ public class Horse implements Serializable {
     private int horseID;                             //ID
     @DatabaseField
     public String name;                        //NAME
-    @DatabaseField(foreign = true, canBeNull = false, foreignAutoRefresh = true)
+    @DatabaseField (foreign = true, canBeNull = false, foreignAutoRefresh = true)
+    public Birth dateOfBirth;
+    @DatabaseField (foreign = true, canBeNull = true, foreignAutoRefresh = true)
     public Birth currentBirth;
     @DatabaseField
     private boolean sex;                       //SEX true - gal
@@ -85,57 +87,83 @@ public class Horse implements Serializable {
     public String notes;
     @DatabaseField (unknownEnumName = "HORSE_STATUS_DORMANT")
     private HORSE_STATUS status;
-//    @DatabaseField
-//    private boolean favourite;
+    @DatabaseField
+    private boolean favourite;
     @DatabaseField
     public String smallImagePath;
-
     @DatabaseField
     public String bigImagePath;
 
     private Bitmap image;
     private List<Birth> births;
+    private boolean isMaiden = true;
+
+    public boolean isMaiden() {
+        return isMaiden;
+    }
+
+    public boolean isFavourite() {
+        return favourite;
+    }
 
     public Horse() {
         this.name = null;
+        this.dateOfBirth = null;
         this.currentBirth = null;
         this.markings = null;
         this.notes = null;
-        this.status = null;
+        this.status = HORSE_STATUS.HORSE_STATUS_DORMANT;
         this.sex = false;
-/*        this.smallImagePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
-                + "/FoalEd/Small_Versions/placeholder.jpg";;
-        this.bigImagePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
-                + "/FoalEd/placeholder.jpg";
-        this.image = BitmapFactory.decodeFile(bigImagePath);*/
+        this.favourite = false;
     }
     public Horse(String name) {
-        // this constructer is used only for father horses
+        // this constructer is used only for father horses - is retired always
 
         this.name = name;
+        this.status = HORSE_STATUS.HORSE_STATUS_RETIRED;
+        this.favourite = false;
     }
     public Horse(String name, Birth birth, String markings, String notes, boolean sex) {
         this.name = name;
-        this.currentBirth = birth;
+        this.dateOfBirth = birth;
+        this.currentBirth = null;
         this.markings = markings;
         this.notes = notes;
         this.status = HORSE_STATUS.HORSE_STATUS_DORMANT;
         this.sex = sex;
+        this.favourite = false;
     }
 
     public int getAge(){
-        return DateTimeHelper.getCurrentAge(this.currentBirth.birth_time);
+        return DateTimeHelper.getCurrentAge(this.dateOfBirth.birth_time);
     }
     public int getHorseID() {
         return this.horseID;
     }
+
     public String getSex() {
-        if (this.sex == true) {
-            return "Female";
-        }
-        else
-            return "Male";
+        return this.sex ? "Female" : "Male";
     }
+
+    public HORSE_STATUS getStatus() {
+        return this.status;
+    }
+    public void setStatus(HORSE_STATUS status) {
+        //perform nessacary checks
+
+        // if first pregnanancy - maiden else pregnant
+
+        if (status == HORSE_STATUS.HORSE_STATUS_PREGNANT && isMaiden) {
+            isMaiden = false;
+            this.status = HORSE_STATUS.HORSE_STATUS_MAIDEN;
+            return;
+        } else if ((this.status == HORSE_STATUS.HORSE_STATUS_PREGNANT || this.getStatus() == HORSE_STATUS.HORSE_STATUS_MAIDEN) && status == HORSE_STATUS.HORSE_STATUS_DORMANT) {
+            // if from pregnant -> dormant  - remove current pregnancy
+            this.currentBirth = null;
+        }
+        this.status = status;
+    }
+
     public String getStatusString() {
         return this.status.getString();
     }
@@ -193,9 +221,6 @@ public class Horse implements Serializable {
         this.smallImagePath = a.getFilesDir().getAbsolutePath() + "/placeholder.jpg";
         this.bigImagePath = a.getFilesDir().getAbsolutePath() + "/placeholder.jpg";
         this.image = BitmapFactory.decodeFile(bigImagePath);
-/*        bigImagePath = bigImage;
-        smallImagePath = smallImage;
-        image = BitmapFactory.decodeFile(smallImagePath);*/
     }
 
     public void setImagePath(String filePath) {

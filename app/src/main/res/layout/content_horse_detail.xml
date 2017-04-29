@@ -35,7 +35,7 @@
                 android:background="@color/colorAccent"
                 android:layout_marginBottom="10dp"
                 android:clickable="true"
-                android:onClick="AddNewPregnancy"/>
+                android:onClick="AddNewPregnancyFragment"/>
 
         <include layout="@layout/ex_group_view" />
 
@@ -50,6 +50,8 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="hi"/>
+        android:text="hi"
+        android:id="@+id/Add_foal_homie"
+        android:onClick="AddFoal"/>
 
 </LinearLayout>

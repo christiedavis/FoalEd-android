@@ -31,9 +31,11 @@ public class RVAdaptor extends RecyclerView.Adapter<RVAdaptor.HorseViewHolder>{
     public static class HorseViewHolder extends RecyclerView.ViewHolder {
 
         CardView cv;
-        TextView personName;
-        TextView personAge;
-        ImageView personPhoto;
+        TextView horseName;
+        TextView horseAge;
+        ImageView horsePhoto;
+        ImageView favouriteIcon;
+
         int horseID;
         private final Context c = itemView.getContext();
 
@@ -50,15 +52,12 @@ public class RVAdaptor extends RecyclerView.Adapter<RVAdaptor.HorseViewHolder>{
                     intent.putExtra("HorseID", horseID);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     c.startActivity(intent);
-
-
                 }
             });
-            personName = (TextView)itemView.findViewById(R.id.horse_name);
-            personAge = (TextView)itemView.findViewById(R.id.horse_age);
-            personPhoto = (ImageView)itemView.findViewById(R.id.horse_photo);
-            //            horseID = getAdapterPosition(); //This is not needed, as onBindViewHolder gets called before the above
-            //                                  onClickListener, which means the horseID is not being found from card position
+            horseName = (TextView)itemView.findViewById(R.id.horse_name);
+            horseAge = (TextView)itemView.findViewById(R.id.horse_age);
+            horsePhoto = (ImageView)itemView.findViewById(R.id.horse_photo);
+            favouriteIcon = (ImageView)itemView.findViewById(R.id.favourite);
         }
     }
 
@@ -76,9 +75,15 @@ public class RVAdaptor extends RecyclerView.Adapter<RVAdaptor.HorseViewHolder>{
 
     @Override
     public void onBindViewHolder(HorseViewHolder holder, int i) {
-        holder.personName.setText(horses.get(i).name);
+        holder.horseName.setText(horses.get(i).name);
+        holder.horseAge.setText(Integer.toString(horses.get(i).getAge()));
         holder.horseID = horses.get(i).getHorseID();
-        holder.personPhoto.setImageBitmap(ImageHelper.bitmapSmaller(horses.get(i).bigImagePath, 200, 200));
+        holder.horsePhoto.setImageBitmap(ImageHelper.bitmapSmaller(horses.get(i).bigImagePath, 200, 200));
+        if (horses.get(i).isFavourite()) {
+            //TODO: set favourited      holder.favouriteIcon
+        } else {
+            //TODO: set unfavourite
+        }
     }
 
     @Override

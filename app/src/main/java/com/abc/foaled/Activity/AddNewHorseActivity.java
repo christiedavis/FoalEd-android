@@ -61,6 +61,7 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
 
     //TODO reckon we can put all photo related methods in the ImageHelper class to be re-used everywhere else?
     //This would require a little bit of rework
+    //TODO: make the keyboard not come up straight away
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
