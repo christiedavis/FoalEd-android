@@ -1,20 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-android:layout_width="fill_parent"
-android:layout_height="wrap_content"
-android:orientation="vertical"
-android:padding="8dp"
-android:background="@color/cardview_shadow_start_color">
-
-
-<TextView
-    android:id="@+id/year_header"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft"
-    android:textSize="17dp"
-    android:textColor="#f9f93d" />
+    android:background="@color/cardview_shadow_start_color"
+    android:orientation="horizontal"
+    android:padding="8dp">
+
+
+    <TextView
+        android:id="@+id/year_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft"
+        android:text="Placeholder"
+        android:textColor="#f9f93d"
+        android:textSize="17dp" />
+
+    <ImageButton
+        android:id="@+id/add_pregnacy_note_detail_button"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        app:srcCompat="@drawable/ic_mode_edit_black_18dp" />
 
 
 </LinearLayout>

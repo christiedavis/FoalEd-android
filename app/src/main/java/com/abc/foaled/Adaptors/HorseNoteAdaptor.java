@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.abc.foaled.R;
@@ -74,14 +76,22 @@ public class HorseNoteAdaptor extends BaseExpandableListAdapter {
 
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        String headerTitle = yearHeaders.get(groupPosition);
+        final String headerTitle = yearHeaders.get(groupPosition);
         if(convertView == null) {
             LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.ex_group_view, null);
+            convertView = inflater.inflate(R.layout.ex_layout_group_header_view, null);
         }
 
-        TextView textView = (TextView)convertView.findViewById(R.id.expandableLayoutHeaderText);
+        TextView textView = (TextView)convertView.findViewById(R.id.year_header);
         textView.setText(headerTitle);
+
+        ImageButton addNoteButton = (ImageButton)convertView.findViewById(R.id.add_pregnacy_note_detail_button);
+        addNoteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("Pregnacney view", headerTitle + " button clicked");
+            }
+        });
 
 
         return convertView;
