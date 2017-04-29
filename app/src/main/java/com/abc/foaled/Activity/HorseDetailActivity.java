@@ -1,11 +1,17 @@
 package com.abc.foaled.Activity;
 
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +31,8 @@ import com.abc.foaled.Models.Birth;
 import com.abc.foaled.Models.Horse;
 import com.abc.foaled.R;
 import com.andexert.expandablelayout.library.ExpandableLayoutListView;
-import com.j256.ormlite.dao.RuntimeExceptionDao;
+
+import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -33,7 +40,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-//FavouriteHorsesFragment.OnListFragmentInteractionListener, FavouriteHorsesFragment.OnListFragmentInteractionListener,
 public class HorseDetailActivity extends AppCompatActivity
     implements AddPregnancyFragment.OnFragmentInteractionListener
 {
@@ -44,7 +50,7 @@ public class HorseDetailActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_horse_detail);
+
         this.userInfo = UserInfo.getInstance(this);
 
         horseID = getIntent().getIntExtra("HorseID", 0);
@@ -57,7 +63,65 @@ public class HorseDetailActivity extends AppCompatActivity
             getSupportActionBar().setTitle(horse.name);
         }
 
+        switch (horse.getStatus()) {
 
+            case HORSE_STATUS_FOAL:
+                setContentView(R.layout.activity_foal_detail);
+                setUpImageView();
+            break;
+
+            case HORSE_STATUS_RETIRED:
+                setContentView(R.layout.activity_horse_detail);
+                break;
+
+            case HORSE_STATUS_MAIDEN:
+                //ADD EXTRA thing VIEW SAYING RISKS OF MAIDEN PREGNANCY
+                setContentView(R.layout.activity_horse_detail);
+                setUpPregnant();
+                break;
+
+            case HORSE_STATUS_DORMANT:
+                setContentView(R.layout.activity_horse_detail);
+                setUpImageView();
+                break;
+
+            case HORSE_STATUS_PREGNANT:
+                setContentView(R.layout.activity_horse_detail);
+                setUpImageView();
+                setUpPregnant();
+                break;
+        }
+    }
+
+    private void setUpPregnant() {
+        Button haveBirth = (Button)this.findViewById(R.id.button_add_pregnancy);
+        haveBirth.setText("Give Birth");
+        if (horse.getStatus() == Horse.HORSE_STATUS.HORSE_STATUS_PREGNANT) {
+            haveBirth.setBackgroundColor(Color.RED);
+        } else {
+            haveBirth.setBackgroundColor(Color.BLUE);
+        }
+
+        haveBirth.setOnClickListener(new View.OnClickListener() {
+              public void onClick(View v) {
+                  AddFoal(v);
+              }
+        });
+    }
+
+    private void setupDormant() {
+        Button haveBirth = (Button)this.findViewById(R.id.button_add_pregnancy);
+        haveBirth.setText("Add Pregnancy");
+        haveBirth.setBackgroundColor( ContextCompat.getColor(this, R.color.colorAccent));
+
+        haveBirth.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                AddNewPregnancyFragment(v);
+            }
+        });
+    }
+
+    private void setUpImageView() {
         Button horseAge = (Button)this.findViewById(R.id.buttonAge);
         horseAge.setText("Age");
         horseAge.setText(DateTimeHelper.getAgeString(horse.getAge()));
@@ -74,17 +138,36 @@ public class HorseDetailActivity extends AppCompatActivity
         TextView status = (TextView)this.findViewById(R.id.buttonStatus);
         status.setText(horse.getStatusString());
 
+        if (horse.isFavourite()) {
+            //TODO: set favourited      holder.favouriteIcon
+        } else {
+            //TODO: set unfavourite
+        }
+
         //sets up the photo
-        ImageView personPhoto = (ImageView)this.findViewById(R.id.horse_photo);
-        personPhoto.setImageBitmap(ImageHelper.bitmapSmaller(horse.smallImagePath, personPhoto.getMaxHeight(), personPhoto.getMaxWidth()));
-        updateNotesView();
+        ImageView horsePhoto = (ImageView)this.findViewById(R.id.horse_photo);
+        if (horse.smallImagePath != null) {
+            horsePhoto.setImageBitmap(ImageHelper.bitmapSmaller(horse.smallImagePath, horsePhoto.getMaxHeight(), horsePhoto.getMaxWidth()));
+        }
+        else { // no horse photo, use default
+            if (horse.getStatus() == Horse.HORSE_STATUS.HORSE_STATUS_FOAL) {
+                //TODO: set to show default
+                Bitmap bitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.default_horse);
+                horsePhoto.setImageBitmap(bitmap);
+            } else {
+                Bitmap horseImage = BitmapFactory.decodeResource(getResources(), R.drawable.default_horse);
+                horsePhoto.setImageBitmap(horseImage);
+            }
+        }
+       if (horse.getStatus() != Horse.HORSE_STATUS.HORSE_STATUS_FOAL) {
+           updateNotesView();
+       }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         this.userInfo.release();
-
     }
 
     private void updateNotesView() {
@@ -102,6 +185,7 @@ public class HorseDetailActivity extends AppCompatActivity
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        this.userInfo.updateHorse(horse);
         NavUtils.navigateUpFromSameTask(this);
     }
 
@@ -116,7 +200,7 @@ public class HorseDetailActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    public void AddNewPregnancy(View v) {
+    public void AddNewPregnancyFragment(View v) {
         System.out.println("Add pregnancy clicked");
 
         //TODO: make it inflate properly
@@ -125,17 +209,10 @@ public class HorseDetailActivity extends AppCompatActivity
         AddPregnancyFragment fragment = AddPregnancyFragment.newInstance();
 
         fragmentManager.replace(R.id.horse_detail_screen, fragment).commit();
-    }
-
-
-    //TODO this is the delete Horse method - B
-    // WHat is this used for? Does it belong in this class - C
-    private boolean deleteHorse(int id) {
-        RuntimeExceptionDao<Horse, Integer> horseDao = this.userInfo.getHelper().getHorseDataDao();
-        Horse horse = horseDao.queryForId(id);
-        //returns true if deleted 1 row (which should be the case if ID exists)
-        //else returns false
-        return horseDao.delete(horse) == 1;
+//        if (horse.isMaiden()) {  - this doesnt work because i havent inflated my fragment
+//            TextView addPregnancyLabel = (TextView) fragment.findViewById(R.id.add_pregnancy_fragment_text);
+//            addPregnancyLabel.append("/nYour horse is a maiden pregnancy etc");
+//        }
     }
 
     public void AddPregnancy(View v) {
@@ -159,19 +236,41 @@ public class HorseDetailActivity extends AppCompatActivity
         ViewGroup parent = (ViewGroup) findViewById(R.id.horse_detail_screen);
 
         View fragment = findViewById(R.id.add_pregnancy_fragment);
-        updateNotesView();
+        horse.setStatus(Horse.HORSE_STATUS.HORSE_STATUS_PREGNANT);
+        horse.currentBirth = newBirth;
 
+        setUpImageView();
+        setUpPregnant();
         parent.removeView(fragment);
+    }
+
+    public void AddFoal(View v) {
+        System.out.println("Add foal added");
+        // to do show a dialog with date sex etc
+
+        if (horse.getStatus() == Horse.HORSE_STATUS.HORSE_STATUS_PREGNANT || horse.getStatus() == Horse.HORSE_STATUS.HORSE_STATUS_MAIDEN) {
+
+            // set birth time
+            horse.currentBirth.birth_time = new DateTime();
+            Horse foal = new Horse("New Foal", horse.currentBirth, "Markings yolo", "Notes", true);
+            foal.setStatus(Horse.HORSE_STATUS.HORSE_STATUS_FOAL);
+            //set image to be default
+
+            this.userInfo.getHelper().addNewHorse(horse.currentBirth, foal);
+
+            horse.setStatus(Horse.HORSE_STATUS.HORSE_STATUS_DORMANT);
+            setUpImageView();
+            setupDormant();
+            Log.d("Added horse gee", "gee");
+        }
     }
 
     @Override
     public void onAddPregnancyFragmentInteraction(Uri uri) {
-
     }
 
     public void ChooseDate(View v) {
-        // display date picker
-        // on selectiong - put in the thing
+        // display date picker-  on selecting - put in the thing
     }
 
     public void Cancel(View v) {
@@ -179,56 +278,3 @@ public class HorseDetailActivity extends AppCompatActivity
         // go back to horse detail
     }
 }
-
-
-//   This is brendan's fragment note stuff. TO be deleted if we decide we're not using it.
-//    @Override //needed
-//    public void onFragmentInteraction(Uri uri) {
-//
-//    }
-//  @Override
-//public void onListFragmentInteraction(Horse item) {
-//
-//}
-// @Override
-//    public void onResume() {
-//        this.horse = this.userInfo.horses.get(horseID);
-//        TextView tvText = (TextView) findViewById(R.id.horse_only_note_content);
-//
-//        StringBuilder stringBuilder = new StringBuilder(horse.notes);
-//        if (stringBuilder.length() >= 50) {
-//            stringBuilder.setLength(47);
-//            stringBuilder.append("...");
-//        }
-//
-//        tvText.setText(stringBuilder.toString());
-//        super.onResume();
-//    }
-//       FragmentTransaction fragmentManager = getSupportFragmentManager().beginTransaction();
-//                HorseNoteFragment fragment = HorseNoteFragment.newInstance();
-//
-//                fragmentManager.replace(R.id.horseDetailNotes, fragment).commit();
-//
-//                final TextView tvTitle = (TextView) findViewById(R.id.horse_only_note_title);
-//                TextView tvText = (TextView) findViewById(R.id.horse_only_note_content);
-//
-//                StringBuilder stringBuilder = new StringBuilder(horse.notes);
-//                if (stringBuilder.length() >= 50) {
-//                    stringBuilder.setLength(47);
-//                    stringBuilder.append("...");
-//                }
-//
-//                tvTitle.setText(horse.name+"'s General Notes");
-//                tvText.setText(stringBuilder.toString());
-//
-//                CardView cv = (CardView) findViewById(R.id.horse_only_note);
-//                cv.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//            public void onClick(View v) {
-//                        Intent intent = new Intent(getApplicationContext(), NoteActivity.class);
-//                        intent.putExtra("title", tvTitle.getText().toString());
-//                        intent.putExtra("note", horse.notes);
-//                        intent.putExtra("horseID", horseID);
-//                        startActivity(intent);
-//                    }
-//                });

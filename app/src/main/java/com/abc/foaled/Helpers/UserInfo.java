@@ -59,6 +59,10 @@ public class UserInfo {
         return databaseHelper.getHorseDataDao().queryForId(id);
     }
 
+    public void updateHorse(Horse horse) {
+        databaseHelper.updateHorse(horse);
+    }
+
     public Horse getHorseAtIndex(int index) {
         return this.horses.get(index);
     }
