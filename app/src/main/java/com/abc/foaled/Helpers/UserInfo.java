@@ -13,6 +13,7 @@ import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.Where;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -66,12 +67,14 @@ public class UserInfo {
         return this.horses.get(index);
     }
 
-    public Map<String, String> getBirthNotesForHorse(int horseID) {
+    public Map<String, List<String>> getBirthNotesForHorse(int horseID) {
         this.births = databaseHelper.getBirthsForHorse(horseID);
 
-        Map<String, String> notesMap = new HashMap<>();
+        Map<String, List<String>> notesMap = new HashMap<>();
         for (Birth b : this.births) {
-            notesMap.put(b.getYearOfBirth(), b.notes);
+            List<String> notes = new ArrayList<>();
+            notes.add(b.notes);
+            notesMap.put(b.getYearOfBirth(), notes);
         }
         return notesMap;
     }

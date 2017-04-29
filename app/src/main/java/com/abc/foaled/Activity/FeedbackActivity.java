@@ -29,7 +29,7 @@ public class FeedbackActivity extends AppCompatActivity {
         //TODO: this needs to be populated based on the horses previous births + General
         final String[] array = {"General Notes", "2015", "2014", "2013", "Awesome"};
 
-        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.ex_layout_row_view, R.id.expandableLayoutHeaderText, array);
+        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.ex_layout_group_header_view, R.id.expandableLayoutHeaderText, array);
         final ExpandableLayoutListView expandableLayoutListView = (ExpandableLayoutListView) findViewById(R.id.exlistview);
 
         expandableLayoutListView.setAdapter(arrayAdapter);

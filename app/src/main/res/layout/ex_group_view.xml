@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.andexert.expandablelayout.library.ExpandableLayout xmlns:expandable="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/firstItem"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimary"
+    expandable:el_contentLayout="@layout/ex_layout_content_view"
+    expandable:el_headerLayout="@layout/ex_layout_header_view"
+    tools:showIn="@layout/content_horse_detail">
+
+</com.andexert.expandablelayout.library.ExpandableLayout>
