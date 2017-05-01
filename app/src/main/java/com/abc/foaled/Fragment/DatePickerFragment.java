@@ -103,7 +103,7 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
      * @param day The day selected
      */
     public void onDateSet(DatePicker view, int year, int month, int day) {
-        if (textBox.getId() == R.id.newHorseDOB) {
+        if (textBox.getId() == R.id.newHorseDOB || textBox.getId() == R.id.newHorseConceptionDate) {
             DialogFragment dialog = new TimePickerFragment();
             Bundle b = new Bundle();
             b.putInt("year", year);

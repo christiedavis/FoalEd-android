@@ -82,13 +82,12 @@ public class Horse implements Serializable {
     @DatabaseField
     private boolean sex;                       //SEX true - gal
     @DatabaseField
-    private String markings;
-    @DatabaseField
     public String notes;
-    @DatabaseField (unknownEnumName = "HORSE_STATUS_DORMANT")
+    @DatabaseField(unknownEnumName = "HORSE_STATUS_DORMANT")
     private HORSE_STATUS status;
     @DatabaseField
     private boolean favourite;
+    //TODO remove one of these and just use the default one. Probably small?
     @DatabaseField
     public String smallImagePath;
     @DatabaseField
@@ -110,7 +109,6 @@ public class Horse implements Serializable {
         this.name = null;
         this.dateOfBirth = null;
         this.currentBirth = null;
-        this.markings = null;
         this.notes = null;
         this.status = HORSE_STATUS.HORSE_STATUS_DORMANT;
         this.sex = false;
@@ -123,11 +121,10 @@ public class Horse implements Serializable {
         this.status = HORSE_STATUS.HORSE_STATUS_RETIRED;
         this.favourite = false;
     }
-    public Horse(String name, Birth birth, String markings, String notes, boolean sex) {
+    public Horse(String name, Birth birth, String notes, boolean sex) {
         this.name = name;
         this.dateOfBirth = birth;
         this.currentBirth = null;
-        this.markings = markings;
         this.notes = notes;
         this.status = HORSE_STATUS.HORSE_STATUS_DORMANT;
         this.sex = sex;
@@ -137,6 +134,7 @@ public class Horse implements Serializable {
     public int getAge(){
         return DateTimeHelper.getCurrentAge(this.dateOfBirth.birth_time);
     }
+
     public int getHorseID() {
         return this.horseID;
     }
@@ -148,6 +146,7 @@ public class Horse implements Serializable {
     public HORSE_STATUS getStatus() {
         return this.status;
     }
+
     public void setStatus(HORSE_STATUS status) {
         //perform nessacary checks
 
@@ -166,6 +165,10 @@ public class Horse implements Serializable {
 
     public String getStatusString() {
         return this.status.getString();
+    }
+
+    public void setFavourite(boolean fav) {
+        favourite = fav;
     }
 
     public Map<String, String> getBirthNotes(Context c) {

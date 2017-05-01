@@ -151,13 +151,12 @@
                             android:textAlignment="center"
                             android:text="Conception Date?"/>
 
-                        <EditText
-                            android:id="@+id/random"
+                        <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
                             android:layout_weight="1"
-                            android:checked="false"/>
+                            android:id="@+id/newHorseConceptionDate"
+                            android:onClick="selectDate"/>
                     </TableRow>
                 </TableLayout>
             </android.support.v7.widget.CardView>

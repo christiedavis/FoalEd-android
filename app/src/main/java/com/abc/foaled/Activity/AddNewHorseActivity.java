@@ -23,6 +23,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -61,7 +62,6 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
 
     //TODO reckon we can put all photo related methods in the ImageHelper class to be re-used everywhere else?
     //This would require a little bit of rework
-    //TODO: make the keyboard not come up straight away
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,8 +79,10 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
 
         String date = new SimpleDateFormat("dd/MM/yyyy - HH:mm", Locale.UK).format(Calendar.getInstance().getTime());
         TextView dob = (TextView) findViewById(R.id.newHorseDOB);
+        TextView concep = (TextView) findViewById(R.id.newHorseConceptionDate);
 //        dob.setText(date);
         dob.setHint(date);
+        concep.setHint(date);
     }
 
     @Override
@@ -187,16 +189,13 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
         if (nameEditText.getText().toString().isEmpty())
             nameEditText.setError("Please don't leave name blank");
 
-
         Boolean sexIsFemale = ((CheckBox) findViewById(R.id.checkboxSex)).isChecked();
 
-        //TODO remove markings (just use normal notes)
         String name = nameEditText.getText().toString();
-        String marking = "Brown brown"; //((EditText) findViewById(R.id.add_markings_text)).getText().toString();
-        String notes = "notes notes"; // ((EditText) findViewById(R.id.add_notes_text)).getText().toString();
+        String notes = ""; // ((EditText) findViewById(R.id.add_notes_text)).getText().toString();
 
         Birth birth = new Birth();
-        Horse horse = new Horse(name, birth, marking, notes, sexIsFemale);
+        Horse horse = new Horse(name, birth, notes, sexIsFemale);
 
         horse.setImagePath(imagePath);
 
@@ -287,6 +286,7 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
 
     public void toggleSex(View view) {
         CheckBox checkBox = (CheckBox) view;
+        ScrollView scrollView = (ScrollView) findViewById(R.id.content_add_new_horse);
         LinearLayout layout = (LinearLayout) findViewById(R.id.pregnantRow);
         if (checkBox.isChecked()) {
             layout.setVisibility(View.VISIBLE);
@@ -295,6 +295,7 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
             findViewById(R.id.conceptionRow).setVisibility(View.GONE);
             ((CheckBox) findViewById(R.id.checkboxPregnant)).setChecked(false);
         }
+        scrollView.scrollTo(0, scrollView.getBottom());
     }
 
     public void togglePregnant(View view) {
@@ -308,8 +309,9 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
     }
 
     public void selectDate(View view) {
-        TextView editText = (TextView) findViewById(R.id.newHorseDOB);
+//        TextView editText = (TextView) findViewById(R.id.newHorseDOB);
 
+        TextView editText = (TextView) view;
         DialogFragment dialog = new DatePickerFragment();
         ((DatePickerFragment) dialog).setViewResult(editText);
         dialog.setRetainInstance(true);

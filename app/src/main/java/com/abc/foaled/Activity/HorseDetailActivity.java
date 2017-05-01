@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
@@ -135,26 +136,24 @@ public class HorseDetailActivity extends AppCompatActivity
         TextView status = (TextView)this.findViewById(R.id.buttonStatus);
         status.setText(horse.getStatusString());
 
-        if (horse.isFavourite()) {
-            //TODO: set favourited      holder.favouriteIcon
-        } else {
-            //TODO: set unfavourite
-        }
+        if (horse.isFavourite())
+            ((ImageView) findViewById(R.id.favourite)).setImageDrawable(ContextCompat.getDrawable(this, R.drawable.star));
+        else
+            ((ImageView) findViewById(R.id.favourite)).setImageDrawable(ContextCompat.getDrawable(this, R.drawable.star_hollowed));
+
 
         //sets up the photo
-        ImageView horsePhoto = (ImageView)this.findViewById(R.id.horse_photo);
-        if (horse.smallImagePath != null) {
-            horsePhoto.setImageBitmap(ImageHelper.bitmapSmaller(horse.smallImagePath, horsePhoto.getMaxHeight(), horsePhoto.getMaxWidth()));
-        }
-        else { // no horse photo, use default
-            if (horse.getStatus() == Horse.HORSE_STATUS.HORSE_STATUS_FOAL) {
-                //TODO: set to show default
-                Bitmap bitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.default_horse);
-                horsePhoto.setImageBitmap(bitmap);
-            } else {
-                Bitmap horseImage = BitmapFactory.decodeResource(getResources(), R.drawable.default_horse);
-                horsePhoto.setImageBitmap(horseImage);
-            }
+        ImageView horsePhoto = (ImageView) findViewById(R.id.horse_photo);
+        try {
+            if (horse.smallImagePath != null && horse.smallImagePath.contains("placeholder"))
+                if (horse.getStatus() == Horse.HORSE_STATUS.HORSE_STATUS_FOAL)
+                    horsePhoto.setImageDrawable(Drawable.createFromStream(getAssets().open("default_foal.jpg"), null));
+                else
+                    horsePhoto.setImageDrawable(Drawable.createFromStream(getAssets().open("default_horse.jpg"), null));
+            else
+                horsePhoto.setImageBitmap(ImageHelper.bitmapSmaller(horse.smallImagePath, 300, 300));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
        if (horse.getStatus() != Horse.HORSE_STATUS.HORSE_STATUS_FOAL) {
            updateNotesView();
@@ -207,6 +206,7 @@ public class HorseDetailActivity extends AppCompatActivity
         System.out.println("Add pregnancy clicked");
 
         //TODO: make it inflate properly
+        //How do we want it to inflate
 
         FragmentTransaction fragmentManager = getSupportFragmentManager().beginTransaction();
         AddPregnancyFragment fragment = AddPregnancyFragment.newInstance();
@@ -255,7 +255,7 @@ public class HorseDetailActivity extends AppCompatActivity
 
             // set birth time
             horse.currentBirth.birth_time = new DateTime();
-            Horse foal = new Horse("New Foal", horse.currentBirth, "Markings yolo", "Notes", true);
+            Horse foal = new Horse("New Foal", horse.currentBirth, "Notes", true);
             foal.setStatus(Horse.HORSE_STATUS.HORSE_STATUS_FOAL);
             //set image to be default
 
