@@ -292,7 +292,8 @@ public class HorseDetailActivity extends AppCompatActivity
             // set birth time
             horse.currentBirth.birth_time = new DateTime();
             Horse foal = new Horse(foalName.getText().toString(), horse.currentBirth, "Notes", true);
-            foal.createMilestones();
+            userInfo.getHelper().getHorseDataDao().assignEmptyForeignCollection(foal, "milestones");
+//            foal.createMilestones();
             foal.setStatus(Horse.HORSE_STATUS.FOAL, this);
 
             //set image to be default
