@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.Editable;
+import android.util.Log;
 
 
 import com.abc.foaled.Database.DatabaseHelper;
@@ -60,7 +61,7 @@ public class Horse implements Serializable {
                     return "Pregnant";
 
                 case HORSE_STATUS_FOAL:
-                    return "With foal";
+                    return "Recently born";
 
                 case HORSE_STATUS_RETIRED:
                     return "Retired";
@@ -95,10 +96,15 @@ public class Horse implements Serializable {
 
     private Bitmap image;
     private List<Birth> births;
-    private boolean isMaiden = true;
 
-    public boolean isMaiden() {
-        return isMaiden;
+    public boolean isMaiden(Context c) {
+
+        if (getBirthNotes(c) == null)
+            Log.d("No Birthnotes exist", "Maiden Pregnancy");
+        else
+            Log.d("There are birthnotes", "for this horse");
+
+        return getBirthNotes(c) == null;
     }
 
     public boolean isFavourite() {
@@ -115,7 +121,7 @@ public class Horse implements Serializable {
         this.favourite = false;
     }
     public Horse(String name) {
-        // this constructer is used only for father horses - is retired always
+        // this constructor is used only for father horses - is retired always
 
         this.name = name;
         this.status = HORSE_STATUS.HORSE_STATUS_RETIRED;
@@ -146,21 +152,19 @@ public class Horse implements Serializable {
     public HORSE_STATUS getStatus() {
         return this.status;
     }
-
-    public void setStatus(HORSE_STATUS status) {
+    public void setStatus(HORSE_STATUS newStatus, Context c) {
         //perform nessacary checks
 
-        // if first pregnanancy - maiden else pregnant
 
-        if (status == HORSE_STATUS.HORSE_STATUS_PREGNANT && isMaiden) {
-            isMaiden = false;
+        // if first pregnanancy - maiden else pregnant
+        if (newStatus == HORSE_STATUS.HORSE_STATUS_PREGNANT && isMaiden(c)) {
             this.status = HORSE_STATUS.HORSE_STATUS_MAIDEN;
             return;
-        } else if ((this.status == HORSE_STATUS.HORSE_STATUS_PREGNANT || this.getStatus() == HORSE_STATUS.HORSE_STATUS_MAIDEN) && status == HORSE_STATUS.HORSE_STATUS_DORMANT) {
+        } else if ((this.status == HORSE_STATUS.HORSE_STATUS_PREGNANT || this.getStatus() == HORSE_STATUS.HORSE_STATUS_MAIDEN) && newStatus == HORSE_STATUS.HORSE_STATUS_DORMANT) {
             // if from pregnant -> dormant  - remove current pregnancy
             this.currentBirth = null;
         }
-        this.status = status;
+        this.status = newStatus;
     }
 
     public String getStatusString() {
@@ -172,6 +176,9 @@ public class Horse implements Serializable {
     }
 
     public Map<String, List<String>> getBirthNotes(Context c) {
+        //TODO: Brendan this currently returns birth notes for a horse I just made
+        // In theroy it should return null when the horse has never had a foal before
+        //I wrote this but must've fucked up the SQL
         UserInfo userInfo = UserInfo.getInstance(c);
         return userInfo.getBirthNotesForHorse(this.horseID);
 

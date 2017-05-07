@@ -32,7 +32,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/horse_age"
+            android:id="@+id/horse_status"
             android:textColor="#FFFFFF"
             android:paddingLeft="50dp"
             android:layout_alignParentBottom="true"

@@ -12,8 +12,7 @@
 
     <dimen name="textbox_height">16dp</dimen>
 
-    <dimen name="cardView.height">215dp</dimen>
-
+    <dimen name="cardView.height">200dp</dimen>
 
     <dimen name="horseHeaderView.statusRow">24dp</dimen>
     <dimen name="horseHeaderView.height">240dp</dimen>

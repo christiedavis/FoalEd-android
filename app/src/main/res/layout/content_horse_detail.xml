@@ -19,15 +19,16 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:id="@+id/horse_detail_linear_layout">
 
-            <include layout="@layout/view_horse_header"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
+                <include layout="@layout/view_horse_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
 
             <Button
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="5dp"
                 android:text="Add Pregnancy"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -37,14 +38,14 @@
                 android:clickable="true"
                 android:onClick="AddNewPregnancyFragment"/>
 
-        <include layout="@layout/ex_group_view" />
+            <include layout="@layout/ex_group_view" />
 
-        <ExpandableListView
-            android:id="@id/exlistview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            <ExpandableListView
+                android:id="@id/exlistview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
-    </LinearLayout>
+            </LinearLayout>
 
         </ScrollView>
     <Button

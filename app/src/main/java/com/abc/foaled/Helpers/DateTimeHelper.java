@@ -46,7 +46,7 @@ public class DateTimeHelper {
 
     public static String getAgeString(int age) {
         if (age == 0) {
-            return "Recently born";
+            return "Foal";
         }
 
         //TODO: other states
