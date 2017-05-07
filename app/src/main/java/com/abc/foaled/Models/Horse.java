@@ -21,6 +21,7 @@ import org.joda.time.Period;
 
 import java.io.Serializable;
 import java.lang.reflect.Array;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -98,6 +99,11 @@ public class Horse implements Serializable {
     @DatabaseField
     public String bigImagePath;
 
+
+    @ForeignCollectionField(columnName = "milestones")
+    ForeignCollection<Milestone> milestones;
+
+
     private Bitmap image;
     private List<Birth> births;
 
@@ -168,7 +174,7 @@ public class Horse implements Serializable {
             this.currentBirth = null;
         }
         else if (newStatus == HORSE_STATUS.FOAL) {
-            addMilestones();
+            createMilestones();
         }
         this.status = newStatus;
     }
@@ -194,27 +200,21 @@ public class Horse implements Serializable {
         UserInfo.getInstance(c).updateBirth(this.horseID, birthId, note);
     }
 
-    /**
-     * @return A string representation of the row in the database
-     * TODO build this to be proper again - brendan - is this still being used?
-     */
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("id=").append(horseID);
-        sb.append(", ").append("name=").append(name);
-        SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MMM/yyyy", Locale.US);
-        sb.append(", ").append("sex=").append(sex);
-        sb.append(", ").append("photo=").append(smallImagePath+"");
-        return sb.toString();
-    }
-
     //TODO return method for age (done through birth dob field)
 
 
-    public void addMilestones() {
-        // add new milestone
-        Milestone milestone1 = new Milestone(0);
+    public void createMilestones() {
+//        milestones = new ArrayList<Milestone>();
+        milestones.add(new Milestone(0, this));
+        milestones.add(new Milestone(1, this));
+        milestones.add(new Milestone(2, this));
+        milestones.add(new Milestone(3, this));
+        try {
+            milestones.getDao().create(milestones);
+        } catch (SQLException e) {
+            Log.e("DATABASE", "Trouble creating initial milestones");
+            e.printStackTrace();
+        }
     }
 
 //// Mark - Image helper methods

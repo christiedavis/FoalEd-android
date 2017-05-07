@@ -10,6 +10,7 @@ import android.util.Log;
 
 import com.abc.foaled.Models.Birth;
 import com.abc.foaled.Models.Horse;
+import com.abc.foaled.Models.Milestone;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
@@ -31,8 +32,10 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     // the DAO object we use to access the Horse table
     private Dao<Horse, Integer> horseDao = null;
     private Dao<Birth, Integer> birthsDao = null;
+    private Dao<Milestone, Integer> milestoneDao = null;
     private RuntimeExceptionDao<Horse, Integer> horseRuntimeDao = null;
     private RuntimeExceptionDao<Birth, Integer> birthsRuntimeDao = null;
+    private RuntimeExceptionDao<Milestone, Integer> milestoneRuntimeDao = null;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -48,6 +51,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             Log.i(DatabaseHelper.class.getName(), "onCreate");
             TableUtils.createTable(connectionSource, Horse.class);
             TableUtils.createTable(connectionSource, Birth.class);
+            TableUtils.createTable(connectionSource, Milestone.class);
         } catch (SQLException e) {
             Log.e(DatabaseHelper.class.getName(), "Can't create database", e);
             throw new RuntimeException(e);
@@ -70,6 +74,12 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         return birthsDao;
     }
 
+    public Dao<Milestone, Integer> getMilestoneDao() throws SQLException {
+        if (milestoneDao == null)
+            milestoneDao = getDao(Milestone.class);
+        return milestoneDao;
+    }
+
     public void addNewHorse(Birth birth, Horse horse) {
         try {
             getBirthsDao().create(birth);
@@ -89,6 +99,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
     }
 
+    //TODO we need to move these types of methods to UserInfo or.. not here
     public void addNewBirth(Birth birth) {
         try {
             getBirthsDao().create(birth);
@@ -137,6 +148,12 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         return birthsRuntimeDao;
     }
 
+    public RuntimeExceptionDao<Milestone, Integer> getMilestonesDataDao() {
+        if (milestoneRuntimeDao == null)
+            milestoneRuntimeDao = getRuntimeExceptionDao(Milestone.class);
+        return milestoneRuntimeDao;
+    }
+
 
     /**
      * Close the database connections and clear any cached DAOs.
@@ -146,8 +163,10 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         super.close();
         horseDao = null;
         birthsDao = null;
+        milestoneDao = null;
         horseRuntimeDao = null;
         birthsRuntimeDao = null;
+        milestoneRuntimeDao = null;
     }
 
     /**

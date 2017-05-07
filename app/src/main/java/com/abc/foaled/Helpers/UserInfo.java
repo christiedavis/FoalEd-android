@@ -72,6 +72,7 @@ public class UserInfo {
 
         Map<String, List<String>> notesMap = new HashMap<>();
         for (Birth b : this.births) {
+            //TODO Chrisite, should this not just be a String and not a list of strings? I.e 'list' always has only one String object
             List<String> notes = new ArrayList<>();
             notes.add(b.notes);
             notesMap.put(b.getYearOfBirth(), notes);

@@ -186,8 +186,10 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
 
 //        String name = "Christie"; //((EditText) findViewById(R.id.add_horse_name)).getText().toString();
         EditText nameEditText = (EditText) findViewById(R.id.add_new_horse_name);
-        if (nameEditText.getText().toString().isEmpty())
+        if (nameEditText.getText().toString().isEmpty()) {
             nameEditText.setError("Please don't leave name blank");
+            return;
+        }
 
         Boolean sexIsFemale = ((CheckBox) findViewById(R.id.checkboxSex)).isChecked();
 
@@ -196,8 +198,10 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
 
         Birth birth = new Birth();
         Horse horse = new Horse(name, birth, notes, sexIsFemale);
-
         horse.setImagePath(imagePath);
+
+        getHelper().getHorseDataDao().assignEmptyForeignCollection(horse, "milestones");
+        horse.createMilestones();
 
         getHelper().addNewHorse(birth, horse);
 

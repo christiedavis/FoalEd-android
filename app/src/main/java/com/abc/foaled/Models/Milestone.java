@@ -7,6 +7,7 @@ import java.io.Serializable;
 
 /**
  * Created by Brendan on 7/02/2017.
+ *
  */
 
 @DatabaseTable(tableName = "milestone")
@@ -28,24 +29,33 @@ public class Milestone {
         public int getValue() { return value; }
     }
     //Variables
-    @DatabaseField(id = true)
+    @DatabaseField(generatedId = true)
     private int milestoneID;
     @DatabaseField(unknownEnumName = "POOP")
     MILESTONE milestone;
-    @DatabaseField()
+    @DatabaseField
     double startTime;
-    @DatabaseField()
+    @DatabaseField
     double snoozeTime;
-    @DatabaseField()
+    @DatabaseField
     String message;
-    @DatabaseField()
+    @DatabaseField
     String detail;
-    @DatabaseField()
+    @DatabaseField
     String notificationMessage;
-    @DatabaseField()
+    @DatabaseField
     Boolean completed = false;
 
-    public Milestone(int value) {
+    @DatabaseField(foreign = true)
+    Horse h;
+
+
+    public Milestone() {
+
+    }
+
+    public Milestone(int value, Horse horse) {
+        this.h = horse;
         //constructor stuff here
         this.milestone = MILESTONE.values() [value];
         milestoneID = milestone.getValue();
