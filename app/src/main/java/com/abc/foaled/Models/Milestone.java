@@ -28,13 +28,21 @@ public class Milestone {
         public int getValue() { return value; }
     }
     //Variables
+    @DatabaseField(id = true)
     private int milestoneID;
+    @DatabaseField(unknownEnumName = "POOP")
     MILESTONE milestone;
+    @DatabaseField()
     double startTime;
+    @DatabaseField()
     double snoozeTime;
+    @DatabaseField()
     String message;
+    @DatabaseField()
     String detail;
+    @DatabaseField()
     String notificationMessage;
+    @DatabaseField()
     Boolean completed = false;
 
     public Milestone(int value) {
