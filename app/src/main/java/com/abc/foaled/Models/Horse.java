@@ -12,7 +12,9 @@ import com.abc.foaled.Database.DatabaseHelper;
 import com.abc.foaled.Database.ORMBaseActivity;
 import com.abc.foaled.Helpers.DateTimeHelper;
 import com.abc.foaled.Helpers.UserInfo;
+import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
 import org.joda.time.Period;
@@ -20,6 +22,8 @@ import org.joda.time.Period;
 import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.List;
@@ -35,11 +39,11 @@ public class Horse implements Serializable {
 
     public enum HORSE_STATUS {
 
-        HORSE_STATUS_DORMANT(0),
-        HORSE_STATUS_MAIDEN(1),
-        HORSE_STATUS_PREGNANT(2),
-        HORSE_STATUS_FOAL(3),
-        HORSE_STATUS_RETIRED(4);
+        DORMANT(0),
+        MAIDEN(1),
+        PREGNANT(2),
+        FOAL(3),
+        RETIRED(4);
 
         private final int value;
 
@@ -51,19 +55,19 @@ public class Horse implements Serializable {
 
         public String getString() {
             switch (this) {
-                case HORSE_STATUS_DORMANT :
+                case DORMANT :
                     return "Dormant";
 
-                case HORSE_STATUS_MAIDEN:
+                case MAIDEN:
                     return "Maiden Pregnancy";
 
-                case HORSE_STATUS_PREGNANT:
+                case PREGNANT:
                     return "Pregnant";
 
-                case HORSE_STATUS_FOAL:
+                case FOAL:
                     return "Recently born";
 
-                case HORSE_STATUS_RETIRED:
+                case RETIRED:
                     return "Retired";
 
                 default:
@@ -84,11 +88,11 @@ public class Horse implements Serializable {
     private boolean sex;                       //SEX true - gal
     @DatabaseField
     public String notes;
-    @DatabaseField(unknownEnumName = "HORSE_STATUS_DORMANT")
+    @DatabaseField(unknownEnumName = "DORMANT")
     private HORSE_STATUS status;
     @DatabaseField
     private boolean favourite;
-    //TODO remove one of these and just use the default one. Probably small?
+    //TODO remove one of these and just use the default one. Probably small? - sounds good (Brendan)
     @DatabaseField
     public String smallImagePath;
     @DatabaseField
@@ -116,7 +120,7 @@ public class Horse implements Serializable {
         this.dateOfBirth = null;
         this.currentBirth = null;
         this.notes = null;
-        this.status = HORSE_STATUS.HORSE_STATUS_DORMANT;
+        this.status = HORSE_STATUS.DORMANT;
         this.sex = false;
         this.favourite = false;
     }
@@ -124,7 +128,7 @@ public class Horse implements Serializable {
         // this constructor is used only for father horses - is retired always
 
         this.name = name;
-        this.status = HORSE_STATUS.HORSE_STATUS_RETIRED;
+        this.status = HORSE_STATUS.RETIRED;
         this.favourite = false;
     }
     public Horse(String name, Birth birth, String notes, boolean sex) {
@@ -132,7 +136,7 @@ public class Horse implements Serializable {
         this.dateOfBirth = birth;
         this.currentBirth = null;
         this.notes = notes;
-        this.status = HORSE_STATUS.HORSE_STATUS_DORMANT;
+        this.status = HORSE_STATUS.DORMANT;
         this.sex = sex;
         this.favourite = false;
     }
@@ -153,16 +157,18 @@ public class Horse implements Serializable {
         return this.status;
     }
     public void setStatus(HORSE_STATUS newStatus, Context c) {
-        //perform nessacary checks
+        //perform necassary checks
 
-
-        // if first pregnanancy - maiden else pregnant
-        if (newStatus == HORSE_STATUS.HORSE_STATUS_PREGNANT && isMaiden(c)) {
-            this.status = HORSE_STATUS.HORSE_STATUS_MAIDEN;
+        // if first pregnancy - maiden else pregnant
+        if (newStatus == HORSE_STATUS.PREGNANT && isMaiden(c)) {
+            this.status = HORSE_STATUS.MAIDEN;
             return;
-        } else if ((this.status == HORSE_STATUS.HORSE_STATUS_PREGNANT || this.getStatus() == HORSE_STATUS.HORSE_STATUS_MAIDEN) && newStatus == HORSE_STATUS.HORSE_STATUS_DORMANT) {
+        } else if ((this.status == HORSE_STATUS.PREGNANT || this.getStatus() == HORSE_STATUS.MAIDEN) && newStatus == HORSE_STATUS.DORMANT) {
             // if from pregnant -> dormant  - remove current pregnancy
             this.currentBirth = null;
+        }
+        else if (newStatus == HORSE_STATUS.FOAL) {
+            addMilestones();
         }
         this.status = newStatus;
     }
@@ -208,7 +214,7 @@ public class Horse implements Serializable {
 
     public void addMilestones() {
         // add new milestone
-        Milestone milestone1 = new Milestone(Milestone.MILESTONE.MILESTONE_POOP);
+        Milestone milestone1 = new Milestone(0);
     }
 
 //// Mark - Image helper methods

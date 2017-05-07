@@ -5,10 +5,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 
+import com.abc.foaled.MainActivity;
 import com.abc.foaled.R;
 import com.andexert.expandablelayout.library.ExpandableLayoutListView;
+
+import net.hockeyapp.android.FeedbackManager;
 
 public class FeedbackActivity extends AppCompatActivity {
 
@@ -20,20 +25,22 @@ public class FeedbackActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_feedback);
-
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //TODO: this needs to be populated based on the horses previous births + General
-        final String[] array = {"General Notes", "2015", "2014", "2013", "Awesome"};
 
-        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.ex_layout_group_header_view, R.id.expandableLayoutHeaderText, array);
-        final ExpandableLayoutListView expandableLayoutListView = (ExpandableLayoutListView) findViewById(R.id.exlistview);
+        setContentView(R.layout.activity_feedback);
 
-        expandableLayoutListView.setAdapter(arrayAdapter);
+        FeedbackManager.register(this);
 
+        Button feedbackButton = (Button) findViewById(R.id.feedback_button);
+        feedbackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FeedbackManager.showFeedbackActivity(FeedbackActivity.this);
+            }
+        });
     }
 
     @Override

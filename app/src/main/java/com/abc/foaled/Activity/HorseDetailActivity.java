@@ -69,16 +69,16 @@ public class HorseDetailActivity extends AppCompatActivity
 
         switch (horse.getStatus()) {
 
-            case HORSE_STATUS_FOAL:
+            case FOAL:
                 setContentView(R.layout.activity_foal_detail);
                 setUpImageView();
                 break;
 
-            case HORSE_STATUS_RETIRED:
+            case RETIRED:
                 setContentView(R.layout.activity_horse_detail);
                 break;
 
-            case HORSE_STATUS_MAIDEN:
+            case MAIDEN:
                 //ADD EXTRA thing VIEW SAYING RISKS OF MAIDEN PREGNANCY
                 setContentView(R.layout.activity_horse_detail);
                 setUpImageView();
@@ -95,12 +95,12 @@ public class HorseDetailActivity extends AppCompatActivity
 
                 break;
 
-            case HORSE_STATUS_DORMANT:
+            case DORMANT:
                 setContentView(R.layout.activity_horse_detail);
                 setUpImageView();
                 break;
 
-            case HORSE_STATUS_PREGNANT:
+            case PREGNANT:
                 setContentView(R.layout.activity_horse_detail);
                 setUpImageView();
                 setUpPregnant();
@@ -111,7 +111,7 @@ public class HorseDetailActivity extends AppCompatActivity
     private void setUpPregnant() {
         Button haveBirth = (Button)this.findViewById(R.id.button_add_pregnancy);
         haveBirth.setText("Give Birth");
-        if (horse.getStatus() == Horse.HORSE_STATUS.HORSE_STATUS_PREGNANT) {
+        if (horse.getStatus() == Horse.HORSE_STATUS.PREGNANT) {
             haveBirth.setBackgroundColor(Color.RED);
         } else {
             haveBirth.setBackgroundColor(Color.BLUE);
@@ -170,7 +170,7 @@ public class HorseDetailActivity extends AppCompatActivity
         ImageView horsePhoto = (ImageView) findViewById(R.id.horse_photo);
         try {
             if (horse.smallImagePath != null && horse.smallImagePath.contains("placeholder"))
-                if (horse.getStatus() == Horse.HORSE_STATUS.HORSE_STATUS_FOAL)
+                if (horse.getStatus() == Horse.HORSE_STATUS.FOAL)
                     horsePhoto.setImageDrawable(Drawable.createFromStream(getAssets().open("default_foal.jpg"), null));
                 else
                     horsePhoto.setImageDrawable(Drawable.createFromStream(getAssets().open("default_horse.jpg"), null));
@@ -179,7 +179,7 @@ public class HorseDetailActivity extends AppCompatActivity
         } catch (Exception e) {
             e.printStackTrace();
         }
-       if (horse.getStatus() != Horse.HORSE_STATUS.HORSE_STATUS_FOAL) {
+       if (horse.getStatus() != Horse.HORSE_STATUS.FOAL) {
            updateNotesView();
        }
     }
@@ -261,7 +261,7 @@ public class HorseDetailActivity extends AppCompatActivity
         ViewGroup parent = (ViewGroup) findViewById(R.id.horse_detail_screen);
 
         View fragment = findViewById(R.id.add_pregnancy_fragment);
-        horse.setStatus(Horse.HORSE_STATUS.HORSE_STATUS_PREGNANT, this);
+        horse.setStatus(Horse.HORSE_STATUS.PREGNANT, this);
         horse.currentBirth = newBirth;
 
         setup();
@@ -283,7 +283,7 @@ public class HorseDetailActivity extends AppCompatActivity
         System.out.println("Add foal added");
         // to do show a dialog with date sex etc
 
-        if (horse.getStatus() == Horse.HORSE_STATUS.HORSE_STATUS_PREGNANT || horse.getStatus() == Horse.HORSE_STATUS.HORSE_STATUS_MAIDEN) {
+        if (horse.getStatus() == Horse.HORSE_STATUS.PREGNANT || horse.getStatus() == Horse.HORSE_STATUS.MAIDEN) {
 
             TextView foalName = (TextView) findViewById(R.id.news_foal_name_textView);
             //TODO: Get notes from horse current birth notes
@@ -291,12 +291,12 @@ public class HorseDetailActivity extends AppCompatActivity
             // set birth time
             horse.currentBirth.birth_time = new DateTime();
             Horse foal = new Horse(foalName.getText().toString(), horse.currentBirth, "Notes", true);
-            foal.setStatus(Horse.HORSE_STATUS.HORSE_STATUS_FOAL, this);
+            foal.setStatus(Horse.HORSE_STATUS.FOAL, this);
             //set image to be default
 
             this.userInfo.getHelper().addNewHorse(horse.currentBirth, foal);
 
-            horse.setStatus(Horse.HORSE_STATUS.HORSE_STATUS_DORMANT, this);
+            horse.setStatus(Horse.HORSE_STATUS.DORMANT, this);
             setUpImageView();
             setupDormant();
             Log.d("Added horse gee", "gee");
