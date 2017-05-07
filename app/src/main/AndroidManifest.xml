@@ -15,6 +15,8 @@
         android:label="FoalEd"
         android:supportsRtl="true"
         android:theme="@style/FoalEd">
+        <meta-data android:name="net.hockeyapp.android.appIdentifier" android:value="${HOCKEYAPP_APP_ID}" />
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.abc.foaled.fileprovider"

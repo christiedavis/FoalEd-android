@@ -40,6 +40,8 @@ import com.abc.foaled.Notifications.NotificationScheduler;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import net.hockeyapp.android.CrashManager;
+import net.hockeyapp.android.UpdateManager;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, FavouriteHorsesFragment.OnListFragmentInteractionListener,
@@ -94,24 +96,34 @@ public class MainActivity extends AppCompatActivity
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+        checkForUpdates();
+
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         userInfo.release();
+        unregisterManagers();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        unregisterManagers();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        //createPlaceholderImageFile();
         //TODO this seems like the wrong way to update the recycler view?
-            this.userInfo.horses = userInfo.getHelper().refreshHorseList(); //get data
-            FragmentTransaction fragmentManager = getSupportFragmentManager().beginTransaction();
-            FavouriteHorsesFragment fragment = FavouriteHorsesFragment.newInstance();
-            fragment.setListToBeDisplayed(this.userInfo.horses);
-            fragmentManager.replace(R.id.flContent, fragment).commit();
+        this.userInfo.horses = userInfo.getHelper().refreshHorseList(); //get data
+        FragmentTransaction fragmentManager = getSupportFragmentManager().beginTransaction();
+        FavouriteHorsesFragment fragment = FavouriteHorsesFragment.newInstance();
+        fragment.setListToBeDisplayed(this.userInfo.horses);
+        fragmentManager.replace(R.id.flContent, fragment).commit();
+        checkForCrashes();
+
     }
 
     @Override
@@ -293,5 +305,17 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    private void checkForCrashes() {
+        CrashManager.register(this);
+    }
+
+    private void checkForUpdates() {
+        // Remove this for store builds!
+        UpdateManager.register(this);
+    }
+
+    private void unregisterManagers() {
+        UpdateManager.unregister();
+    }
 
 }
