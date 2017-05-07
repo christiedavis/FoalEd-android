@@ -7,40 +7,41 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import com.abc.foaled.R;
 
-public class AddPregnancyFragment extends Fragment {
+public class AddFoalFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public AddPregnancyFragment() {
+    public AddFoalFragment() {
         // Required empty public constructor
     }
 
-    public static AddPregnancyFragment newInstance() {
-        return new AddPregnancyFragment();
+    // TODO: Rename and change types and number of parameters
+    public static AddFoalFragment newInstance() {
+        AddFoalFragment fragment = new AddFoalFragment();
+        Bundle args = new Bundle();
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_pregnancy, container, false);
+        return inflater.inflate(R.layout.fragment_add_foal, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
-            mListener.onAddPregnancyFragmentInteraction(uri);
+            mListener.onFragmentInteraction(uri);
         }
     }
 
@@ -63,6 +64,6 @@ public class AddPregnancyFragment extends Fragment {
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onAddPregnancyFragmentInteraction(Uri uri);
+        void onFragmentInteraction(Uri uri);
     }
 }

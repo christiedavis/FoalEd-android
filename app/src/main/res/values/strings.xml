@@ -63,4 +63,7 @@
     <string name="FAQ.Q5.Title">WHAT WILL I LEARN ABOUT IN A SEMINAR?</string>
     <string name="FAQ.Q5.Message">\nYou can find more information on what is covered in the seminar in the Intro to Foaling Seminar Page.</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

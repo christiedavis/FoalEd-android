@@ -3,7 +3,6 @@ package com.abc.foaled.Activity;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.speech.tts.TextToSpeech;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
 import android.os.Bundle;
@@ -14,8 +13,6 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewManager;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
@@ -31,13 +28,12 @@ import com.abc.foaled.Helpers.UserInfo;
 import com.abc.foaled.Models.Birth;
 import com.abc.foaled.Models.Horse;
 import com.abc.foaled.R;
-import com.andexert.expandablelayout.library.ExpandableLayoutListView;
 
 import org.joda.time.DateTime;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -123,7 +119,7 @@ public class HorseDetailActivity extends AppCompatActivity
 
         haveBirth.setOnClickListener(new View.OnClickListener() {
               public void onClick(View v) {
-                  AddFoal(v);
+                  AddFoalFragment(v);
               }
         });
     }
@@ -272,15 +268,29 @@ public class HorseDetailActivity extends AppCompatActivity
         parent.removeView(fragment);
     }
 
+    public void AddFoalFragment(View v) {
+        //TODO: make it inflate properly - Brendan
+        //Also hook it up
+
+        FragmentTransaction fragmentManager = getSupportFragmentManager().beginTransaction();
+        AddPregnancyFragment fragment = AddPregnancyFragment.newInstance();
+
+        fragmentManager.replace(R.id.horse_detail_screen, fragment).commit();
+    }
+
     public void AddFoal(View v) {
+
         System.out.println("Add foal added");
         // to do show a dialog with date sex etc
 
         if (horse.getStatus() == Horse.HORSE_STATUS.HORSE_STATUS_PREGNANT || horse.getStatus() == Horse.HORSE_STATUS.HORSE_STATUS_MAIDEN) {
 
+            TextView foalName = (TextView) findViewById(R.id.news_foal_name_textView);
+            //TODO: Get notes from horse current birth notes
+
             // set birth time
             horse.currentBirth.birth_time = new DateTime();
-            Horse foal = new Horse("New Foal", horse.currentBirth, "Notes", true);
+            Horse foal = new Horse(foalName.getText().toString(), horse.currentBirth, "Notes", true);
             foal.setStatus(Horse.HORSE_STATUS.HORSE_STATUS_FOAL, this);
             //set image to be default
 
@@ -290,9 +300,6 @@ public class HorseDetailActivity extends AppCompatActivity
             setUpImageView();
             setupDormant();
             Log.d("Added horse gee", "gee");
-
-            //TODO: Brendan (?) we need a dialog to pop up here asking for the foals name and birth date
-            // there should also be a message saying there will be a chance to edit later
         }
     }
 
