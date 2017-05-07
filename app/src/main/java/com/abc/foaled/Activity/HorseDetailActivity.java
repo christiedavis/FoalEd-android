@@ -1,10 +1,8 @@
 package com.abc.foaled.Activity;
 
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
+import android.speech.tts.TextToSpeech;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
 import android.os.Bundle;
@@ -15,11 +13,13 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.abc.foaled.Adaptors.HorseNoteAdaptor;
@@ -39,6 +39,8 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import static android.view.View.GONE;
 
 public class HorseDetailActivity extends AppCompatActivity
     implements AddPregnancyFragment.OnFragmentInteractionListener
@@ -62,13 +64,18 @@ public class HorseDetailActivity extends AppCompatActivity
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setTitle(horse.name);
         }
+        setup();
+    }
+
+    private void setup() {
+        Log.d("Horse Detail Activity", "- horse status" + horse.getStatusString());
 
         switch (horse.getStatus()) {
 
             case HORSE_STATUS_FOAL:
                 setContentView(R.layout.activity_foal_detail);
                 setUpImageView();
-            break;
+                break;
 
             case HORSE_STATUS_RETIRED:
                 setContentView(R.layout.activity_horse_detail);
@@ -77,7 +84,18 @@ public class HorseDetailActivity extends AppCompatActivity
             case HORSE_STATUS_MAIDEN:
                 //ADD EXTRA thing VIEW SAYING RISKS OF MAIDEN PREGNANCY
                 setContentView(R.layout.activity_horse_detail);
+                setUpImageView();
                 setUpPregnant();
+
+                LinearLayout layout =(LinearLayout) this.findViewById(R.id.horse_detail_linear_layout);
+                LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams( LinearLayout.LayoutParams.MATCH_PARENT,  LinearLayout.LayoutParams.WRAP_CONTENT);
+
+                TextView tv = new TextView(this);
+                tv.setId(R.id.maidenTextView);
+                tv.setText("This is a maiden pregnancy, make sure you take extra special care");
+                tv.setBackgroundColor(Color.BLUE);
+                layout.addView(tv, 1, lparams);
+
                 break;
 
             case HORSE_STATUS_DORMANT:
@@ -122,6 +140,12 @@ public class HorseDetailActivity extends AppCompatActivity
     }
 
     private void setUpImageView() {
+
+        TextView tv = (TextView)findViewById(R.id.maidenTextView);
+        if (tv != null) {
+            tv.setVisibility(GONE);
+        }
+
         Button horseAge = (Button)this.findViewById(R.id.buttonAge);
         horseAge.setText("Age");
         horseAge.setText(DateTimeHelper.getAgeString(horse.getAge()));
@@ -129,8 +153,9 @@ public class HorseDetailActivity extends AppCompatActivity
         TextView name = (TextView)this.findViewById(R.id.horse_name);
         name.setText(horse.name);
 
-        TextView age = (TextView)this.findViewById(R.id.horse_age);
-        age.setText(DateTimeHelper.getAgeString(horse.getAge()));
+        // TODO: If it's a foal display which notification it is up to
+        TextView age = (TextView)this.findViewById(R.id.horse_status);
+        age.setText(horse.getStatusString());
 
         TextView gender = (TextView)this.findViewById(R.id.buttonSex);
         gender.setText(horse.getSex());
@@ -139,7 +164,9 @@ public class HorseDetailActivity extends AppCompatActivity
         status.setText(horse.getStatusString());
 
         if (horse.isFavourite()) {
-            //TODO: set favourited      holder.favouriteIcon
+            //TODO: set favourited - Brendan
+            // We need to be able to set the image displayed in the image view programmatically from the drawable file
+            // I tried to do this for ages, can you have a look
         } else {
             //TODO: set unfavourite
         }
@@ -151,12 +178,9 @@ public class HorseDetailActivity extends AppCompatActivity
         }
         else { // no horse photo, use default
             if (horse.getStatus() == Horse.HORSE_STATUS.HORSE_STATUS_FOAL) {
-                //TODO: set to show default
-                Bitmap bitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.default_horse);
-                horsePhoto.setImageBitmap(bitmap);
+                //TODO: set to show default foal image
             } else {
-                Bitmap horseImage = BitmapFactory.decodeResource(getResources(), R.drawable.default_horse);
-                horsePhoto.setImageBitmap(horseImage);
+
             }
         }
        if (horse.getStatus() != Horse.HORSE_STATUS.HORSE_STATUS_FOAL) {
@@ -203,7 +227,8 @@ public class HorseDetailActivity extends AppCompatActivity
     public void AddNewPregnancyFragment(View v) {
         System.out.println("Add pregnancy clicked");
 
-        //TODO: make it inflate properly
+        //TODO: make it inflate properly - Brendan
+        //ALSO hook it up
 
         FragmentTransaction fragmentManager = getSupportFragmentManager().beginTransaction();
         AddPregnancyFragment fragment = AddPregnancyFragment.newInstance();
@@ -236,11 +261,10 @@ public class HorseDetailActivity extends AppCompatActivity
         ViewGroup parent = (ViewGroup) findViewById(R.id.horse_detail_screen);
 
         View fragment = findViewById(R.id.add_pregnancy_fragment);
-        horse.setStatus(Horse.HORSE_STATUS.HORSE_STATUS_PREGNANT);
+        horse.setStatus(Horse.HORSE_STATUS.HORSE_STATUS_PREGNANT, this);
         horse.currentBirth = newBirth;
 
-        setUpImageView();
-        setUpPregnant();
+        setup();
         parent.removeView(fragment);
     }
 
@@ -253,15 +277,18 @@ public class HorseDetailActivity extends AppCompatActivity
             // set birth time
             horse.currentBirth.birth_time = new DateTime();
             Horse foal = new Horse("New Foal", horse.currentBirth, "Markings yolo", "Notes", true);
-            foal.setStatus(Horse.HORSE_STATUS.HORSE_STATUS_FOAL);
+            foal.setStatus(Horse.HORSE_STATUS.HORSE_STATUS_FOAL, this);
             //set image to be default
 
             this.userInfo.getHelper().addNewHorse(horse.currentBirth, foal);
 
-            horse.setStatus(Horse.HORSE_STATUS.HORSE_STATUS_DORMANT);
+            horse.setStatus(Horse.HORSE_STATUS.HORSE_STATUS_DORMANT, this);
             setUpImageView();
             setupDormant();
             Log.d("Added horse gee", "gee");
+
+            //TODO: Brendan (?) we need a dialog to pop up here asking for the foals name and birth date
+            // there should also be a message saying there will be a chance to edit later
         }
     }
 
@@ -270,7 +297,7 @@ public class HorseDetailActivity extends AppCompatActivity
     }
 
     public void ChooseDate(View v) {
-        // display date picker-  on selecting - put in the thing
+        // TODO: Brendan - display date picker -  on selecting - put in the thing
     }
 
     public void Cancel(View v) {

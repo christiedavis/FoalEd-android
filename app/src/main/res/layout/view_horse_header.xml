@@ -12,7 +12,9 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="50dp"
+        android:paddingTop="5dp"
+        >
 
         <!--TODO: make content hold it's height-->
 
@@ -20,17 +22,17 @@
             android:id="@+id/buttonAge"
             android:layout_width="0px"
             android:layout_height="50dp"
-            android:layout_weight="1"
+            android:layout_marginLeft="5sp"
 
-            android:clickable="false"
-            android:text="Age"
-            android:textColor="@android:color/white"
+            android:layout_marginRight="5sp"
+            android:layout_weight="1"
             android:background="@color/colorPrimary"
+            android:clickable="false"
+            android:maxLines="1"
             android:paddingLeft="10sp"
             android:paddingRight="10sp"
-            android:layout_marginRight="5sp"
-            android:layout_marginLeft="5sp"
-            />
+            android:text="Age"
+            android:textColor="@android:color/white" />
 
         <Button
             android:text="Status"

@@ -32,7 +32,7 @@ public class RVAdaptor extends RecyclerView.Adapter<RVAdaptor.HorseViewHolder>{
 
         CardView cv;
         TextView horseName;
-        TextView horseAge;
+        TextView horseStatus;
         ImageView horsePhoto;
         ImageView favouriteIcon;
 
@@ -55,7 +55,7 @@ public class RVAdaptor extends RecyclerView.Adapter<RVAdaptor.HorseViewHolder>{
                 }
             });
             horseName = (TextView)itemView.findViewById(R.id.horse_name);
-            horseAge = (TextView)itemView.findViewById(R.id.horse_age);
+            horseStatus = (TextView)itemView.findViewById(R.id.horse_status);
             horsePhoto = (ImageView)itemView.findViewById(R.id.horse_photo);
             favouriteIcon = (ImageView)itemView.findViewById(R.id.favourite);
         }
@@ -76,7 +76,7 @@ public class RVAdaptor extends RecyclerView.Adapter<RVAdaptor.HorseViewHolder>{
     @Override
     public void onBindViewHolder(HorseViewHolder holder, int i) {
         holder.horseName.setText(horses.get(i).name);
-        holder.horseAge.setText(Integer.toString(horses.get(i).getAge()));
+        holder.horseStatus.setText(horses.get(i).getStatusString());
         holder.horseID = horses.get(i).getHorseID();
         holder.horsePhoto.setImageBitmap(ImageHelper.bitmapSmaller(horses.get(i).bigImagePath, 200, 200));
         if (horses.get(i).isFavourite()) {

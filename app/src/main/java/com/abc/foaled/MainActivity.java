@@ -30,15 +30,12 @@ import com.abc.foaled.Activity.faqActivity;
 import com.abc.foaled.Activity.FeedbackActivity;
 import com.abc.foaled.Activity.NotificationSettingsActivity;
 import com.abc.foaled.Activity.SettingsActivity;
-import com.abc.foaled.Database.DatabaseHelper;
 import com.abc.foaled.Database.DatabaseManager;
-import com.abc.foaled.Database.ORMBaseActivity;
 import com.abc.foaled.Helpers.UserInfo;
 import com.abc.foaled.Models.Horse;
 import com.abc.foaled.Fragment.FavouriteHorsesFragment;
 import com.abc.foaled.Fragment.NotificationSettingsFragment;
 import com.abc.foaled.Notifications.NotificationScheduler;
-import com.j256.ormlite.android.apptools.OpenHelperManager;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -65,8 +62,6 @@ public class MainActivity extends AppCompatActivity
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
             this.userInfo = UserInfo.getInstance(this);
-
-//            getHelper().get
 
             // SET UP FRAGMENT
             this.userInfo.horses = userInfo.getHelper().refreshHorseList(); //get data
