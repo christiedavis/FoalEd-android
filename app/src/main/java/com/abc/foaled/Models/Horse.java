@@ -171,10 +171,14 @@ public class Horse implements Serializable {
         favourite = fav;
     }
 
-    public Map<String, String> getBirthNotes(Context c) {
+    public Map<String, List<String>> getBirthNotes(Context c) {
         UserInfo userInfo = UserInfo.getInstance(c);
         return userInfo.getBirthNotesForHorse(this.horseID);
 
+    }
+
+    public void updateBirth(Context c, String birthId, String note) {
+        UserInfo.getInstance(c).updateBirth(this.horseID, birthId, note);
     }
 
     /**

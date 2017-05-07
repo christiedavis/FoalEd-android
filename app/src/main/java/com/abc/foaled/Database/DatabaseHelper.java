@@ -98,6 +98,10 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
     }
 
+    public void updateBirth(int horseId, String birthId, String note) {
+        //TODO: work out how to do this
+    }
+
     public List<Birth> getBirthsForHorse(int horseId) {
         List<Birth> results;
         try {
