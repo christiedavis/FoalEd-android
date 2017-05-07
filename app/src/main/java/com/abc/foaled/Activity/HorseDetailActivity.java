@@ -21,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.abc.foaled.Adaptors.HorseNoteAdaptor;
+import com.abc.foaled.Fragment.AddFoalFragment;
 import com.abc.foaled.Fragment.AddPregnancyFragment;
 import com.abc.foaled.Helpers.DateTimeHelper;
 import com.abc.foaled.Helpers.ImageHelper;
@@ -40,7 +41,7 @@ import java.util.Map;
 import static android.view.View.GONE;
 
 public class HorseDetailActivity extends AppCompatActivity
-    implements AddPregnancyFragment.OnFragmentInteractionListener
+    implements AddPregnancyFragment.OnFragmentInteractionListener, AddFoalFragment.OnFragmentInteractionListener
 {
     UserInfo userInfo;
     Horse horse;
@@ -273,7 +274,7 @@ public class HorseDetailActivity extends AppCompatActivity
         //Also hook it up
 
         FragmentTransaction fragmentManager = getSupportFragmentManager().beginTransaction();
-        AddPregnancyFragment fragment = AddPregnancyFragment.newInstance();
+        AddFoalFragment fragment = AddFoalFragment.newInstance();
 
         fragmentManager.replace(R.id.horse_detail_screen, fragment).commit();
     }
@@ -291,7 +292,9 @@ public class HorseDetailActivity extends AppCompatActivity
             // set birth time
             horse.currentBirth.birth_time = new DateTime();
             Horse foal = new Horse(foalName.getText().toString(), horse.currentBirth, "Notes", true);
+            foal.createMilestones();
             foal.setStatus(Horse.HORSE_STATUS.FOAL, this);
+
             //set image to be default
 
             this.userInfo.getHelper().addNewHorse(horse.currentBirth, foal);
@@ -300,11 +303,21 @@ public class HorseDetailActivity extends AppCompatActivity
             setUpImageView();
             setupDormant();
             Log.d("Added horse gee", "gee");
+
+            ViewGroup parent = (ViewGroup) findViewById(R.id.horse_detail_screen);
+            View fragment = findViewById(R.id.add_foal_fragment);
+
+            setup();
+            parent.removeView(fragment);
         }
     }
 
     @Override
     public void onAddPregnancyFragmentInteraction(Uri uri) {
+    }
+
+    @Override
+    public void onAddFoalFragmentInteraction(Uri uri) {
     }
 
     public void ChooseDate(View v) {
