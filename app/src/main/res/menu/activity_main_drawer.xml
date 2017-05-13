@@ -3,37 +3,37 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_horses"
+            android:id="@+id/nav_all_horses"
             android:icon="@drawable/ic_menu_horse"
-            android:title="My Horses" />
+            android:title="All horses" />
+        <item
+            android:id="@+id/nav_fav_horses"
+            android:icon="@drawable/star"
+            android:title="@string/my_favourite_horses" />
         <item
             android:id="@+id/nav_notifications"
             android:icon="@drawable/ic_menu_settings"
-            android:title="Notifications" />
-        <item
-            android:id="@+id/nav_settings"
-            android:icon="@drawable/ic_menu_settings"
-            android:title="Settings" />
+            android:title="@string/notifications" />
     </group>
 
-    <item android:title="Extras">
+    <item android:title="@string/menu_title">
         <menu>
             <item
                 android:id="@+id/nav_faq"
                 android:icon="@drawable/ic_menu_profile"
-                android:title="FAQ" />
+                android:title="@string/faq" />
             <item
             android:id="@+id/nav_about"
             android:icon="@drawable/ic_menu_horse"
-            android:title="About Us" />
+            android:title="@string/about_us" />
             <item
                 android:id="@+id/nav_feedback"
                 android:icon="@drawable/ic_menu_logout"
-                android:title="Feedback" />
+                android:title="@string/feedback" />
         </menu>
     </item>
 
-    <item android:title="Copyright 2017 FoalEd"
+    <item android:title="@string/copyright_2017_foaled"
         android:titleCondensed="Foaled"/>
 
 </menu>

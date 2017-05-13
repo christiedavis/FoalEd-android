@@ -19,10 +19,10 @@ import java.util.List;
 /**
  * A fragment representing a list of Items.
  * <p/>
- * Activities containing this fragment MUST implement the {@link FavouriteHorsesFragment.OnListFragmentInteractionListener}
+ * Activities containing this fragment MUST implement the {@link HorsesListFragment.OnListFragmentInteractionListener}
  * interface.
  */
-public class FavouriteHorsesFragment extends Fragment {
+public class HorsesListFragment extends Fragment {
 
     private List<Horse> mHorses;
     private OnListFragmentInteractionListener mListener;
@@ -32,12 +32,12 @@ public class FavouriteHorsesFragment extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public FavouriteHorsesFragment() {
+    public HorsesListFragment() {
     }
 
     @SuppressWarnings("unused")
-    public static FavouriteHorsesFragment newInstance() {
-        FavouriteHorsesFragment fragment = new FavouriteHorsesFragment();
+    public static HorsesListFragment newInstance() {
+        HorsesListFragment fragment = new HorsesListFragment();
         fragment.setArguments(new Bundle());
         return fragment;
     }
@@ -58,7 +58,7 @@ public class FavouriteHorsesFragment extends Fragment {
              Log.e(null, "onCreateView: ERROR no horses ", null);
          }
 
-         View view = inflater.inflate(R.layout.fragment_favourite_horses, container, false);
+         View view = inflater.inflate(R.layout.fragment_horses_list, container, false);
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
