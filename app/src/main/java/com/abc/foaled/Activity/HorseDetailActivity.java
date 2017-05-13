@@ -249,7 +249,7 @@ public class HorseDetailActivity extends AppCompatActivity
         Horse fatherHorse = new Horse(fatherName.getText().toString());
         //TODO: add horse 
 
-        EditText conceptionDate = (EditText)this.findViewById(R.id.date_of_conception);
+        TextView conceptionDate = (TextView)this.findViewById(R.id.date_of_conception);
         //turn to date
 
         // add to database

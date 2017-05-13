@@ -65,5 +65,8 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="feedback_heading">Something to say?</string>
+    <string name="feedback_message">Thanks for using FoalEd! We love hearing feedback about your experience on the app. Please email support@foaled.co.nz or submit feedback below!</string>
+    <string name="feedback_button">Give feedback</string>
 
 </resources>
