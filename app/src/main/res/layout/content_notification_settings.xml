@@ -13,4 +13,14 @@
     tools:context="com.abc.foaled.Activity.NotificationSettingsActivity"
     tools:showIn="@layout/activity_notification_settings">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical|center_horizontal|fill_horizontal"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:text="This is where any notification settings will live. "
+        android:textAlignment="center"
+        android:textSize="18sp" />
+
 </RelativeLayout>

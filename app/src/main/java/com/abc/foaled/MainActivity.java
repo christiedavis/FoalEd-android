@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -29,11 +28,10 @@ import com.abc.foaled.Activity.AddNewHorseActivity;
 import com.abc.foaled.Activity.faqActivity;
 import com.abc.foaled.Activity.FeedbackActivity;
 import com.abc.foaled.Activity.NotificationSettingsActivity;
-import com.abc.foaled.Activity.SettingsActivity;
 import com.abc.foaled.Database.DatabaseManager;
 import com.abc.foaled.Helpers.UserInfo;
 import com.abc.foaled.Models.Horse;
-import com.abc.foaled.Fragment.FavouriteHorsesFragment;
+import com.abc.foaled.Fragment.HorsesListFragment;
 import com.abc.foaled.Fragment.NotificationSettingsFragment;
 import com.abc.foaled.Notifications.NotificationScheduler;
 
@@ -44,7 +42,7 @@ import net.hockeyapp.android.CrashManager;
 import net.hockeyapp.android.UpdateManager;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, FavouriteHorsesFragment.OnListFragmentInteractionListener,
+        implements NavigationView.OnNavigationItemSelectedListener, HorsesListFragment.OnListFragmentInteractionListener,
         NotificationSettingsFragment.OnFragmentInteractionListener {
 
     UserInfo userInfo;
@@ -68,7 +66,7 @@ public class MainActivity extends AppCompatActivity
             // SET UP FRAGMENT
             this.userInfo.horses = userInfo.getHelper().refreshHorseList(); //get data
             FragmentTransaction fragmentManager = getSupportFragmentManager().beginTransaction();
-            FavouriteHorsesFragment fragment = FavouriteHorsesFragment.newInstance();
+            HorsesListFragment fragment = HorsesListFragment.newInstance();
             fragment.setListToBeDisplayed(this.userInfo.horses);
             fragmentManager.replace(R.id.flContent, fragment).commit();
 
@@ -119,11 +117,10 @@ public class MainActivity extends AppCompatActivity
         //TODO this seems like the wrong way to update the recycler view?
         this.userInfo.horses = userInfo.getHelper().refreshHorseList(); //get data
         FragmentTransaction fragmentManager = getSupportFragmentManager().beginTransaction();
-        FavouriteHorsesFragment fragment = FavouriteHorsesFragment.newInstance();
+        HorsesListFragment fragment = HorsesListFragment.newInstance();
         fragment.setListToBeDisplayed(this.userInfo.horses);
         fragmentManager.replace(R.id.flContent, fragment).commit();
         checkForCrashes();
-
     }
 
     @Override
@@ -150,11 +147,6 @@ public class MainActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -162,28 +154,23 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         Fragment fragment = null;
-        Class fragmentClass;
+        Class fragmentClass = NotificationSettingsFragment.class;
         int id = item.getItemId();
         Intent intent;
+        Boolean favourite = false;
 
         switch (id) {
-            case R.id.nav_horses :  // new fragment
-                fragmentClass = NotificationSettingsFragment.class;
+            case R.id.nav_all_horses :  // new fragment
+                fragmentClass = HorsesListFragment.class;
+                break;
 
-                //These fragments aren't being used anymore
-//            case R.id.nav_foals : // new fragment
-//                fragmentClass = NotificationSettingsFragment.class;
-
-//            case R.id.nav_mares :     // new fragment
-//                fragmentClass = NotificationSettingsFragment.class;
+            case R.id.nav_fav_horses :  // new fragment
+                fragmentClass = HorsesListFragment.class;
+                favourite = true;
+                break;
 
             case R.id.nav_notifications :
                 intent = new Intent(this, NotificationSettingsActivity.class);
-                this.startActivity(intent);
-                return true;
-
-            case R.id.nav_settings:
-                intent = new Intent(this, SettingsActivity.class);
                 this.startActivity(intent);
                 return true;
 
@@ -201,9 +188,6 @@ public class MainActivity extends AppCompatActivity
                 intent = new Intent(this, FeedbackActivity.class);
                 this.startActivity(intent);
                 return true;
-
-            default:
-                fragmentClass = NotificationSettingsFragment.class;
         }
 
         try {
@@ -211,14 +195,24 @@ public class MainActivity extends AppCompatActivity
         } catch (Exception e) {
             e.printStackTrace();
         }
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+
+        FragmentTransaction fragmentManager = getSupportFragmentManager().beginTransaction();
+
+
+        if (fragmentClass == HorsesListFragment.class) {
+            this.userInfo.horses = userInfo.getHelper().refreshHorseList();
+            if (favourite) {
+                ((HorsesListFragment) fragment).setListToBeDisplayed(this.userInfo.getFavouriteHorses());
+            } else {
+                ((HorsesListFragment) fragment).setListToBeDisplayed(this.userInfo.getHorses());
+            }
+        }
+
+        fragmentManager.replace(R.id.flContent, fragment).commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-
-      //  createNotification();
     }
 
     @Override //needed

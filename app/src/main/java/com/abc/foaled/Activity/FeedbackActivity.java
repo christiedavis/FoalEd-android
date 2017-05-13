@@ -17,30 +17,31 @@ import net.hockeyapp.android.FeedbackManager;
 
 public class FeedbackActivity extends AppCompatActivity {
 
-
-    //TODO: This is currently being used as a test screen to play with the notes.
-    //The notes need to add ability to scroll up when you click on one below the keyboard
-    // Also we need to save the note on button click
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_feedback);
+
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
-        setContentView(R.layout.activity_feedback);
-
         FeedbackManager.register(this);
+        final View feedbackView = (View) findViewById(R.id.feedback_view);
 
         Button feedbackButton = (Button) findViewById(R.id.feedback_button);
         feedbackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FeedbackManager.showFeedbackActivity(FeedbackActivity.this);
+                FeedbackManager.showFeedbackActivity(feedbackView.getContext());
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        FeedbackManager.unregister();
     }
 
     @Override

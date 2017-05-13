@@ -108,15 +108,6 @@
                 android:value="com.abc.foaled.MainActivity" />
         </activity>
 
-        <activity android:name=".Activity.SettingsActivity"
-            android:label="Settings"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-        <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value="com.abc.foaled.MainActivity"/>
-        </activity>
-
         <activity android:name=".Activity.AboutActivity"
             android:label="About Us"
             android:parentActivityName=".MainActivity"

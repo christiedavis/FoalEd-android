@@ -37,9 +37,19 @@ public class UserInfo {
     }
 
     public List<Horse> horses;
+
     public List<Birth> births;
 
     public List<Horse> getHorses() {
+        if (this.horses == null) {
+            this.horses = new LinkedList<>();
+        }
+        this.horses = databaseHelper.refreshHorseList();
+        return this.horses;
+    }
+
+    public List<Horse> getFavouriteHorses() {
+        //TODO: return only favourited horses
         if (this.horses == null) {
             this.horses = new LinkedList<>();
         }
