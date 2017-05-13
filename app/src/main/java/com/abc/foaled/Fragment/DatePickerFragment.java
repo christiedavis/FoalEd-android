@@ -24,6 +24,7 @@ import java.util.Locale;
 public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
     TextView textBox;
+    boolean time = true;
 
     /**
      * This is used to provide the destination of the value chosen
@@ -33,6 +34,9 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
         textBox = view;
     }
 
+    public void displayTimeDialog(boolean time) {
+        this.time = time;
+    }
     /**
      * If there is already a date set in the Text View, parse the string
      * and pass the relevant values in the DatePickerDialog creation. Or
@@ -43,6 +47,7 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
      */
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+
 
         int year, month, day;
         Calendar c = Calendar.getInstance();
@@ -103,7 +108,7 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
      * @param day The day selected
      */
     public void onDateSet(DatePicker view, int year, int month, int day) {
-        if (textBox.getId() == R.id.newHorseDOB || textBox.getId() == R.id.newHorseConceptionDate) {
+        if (time) {
             DialogFragment dialog = new TimePickerFragment();
             Bundle b = new Bundle();
             b.putInt("year", year);
@@ -114,8 +119,7 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
 
             dialog.setRetainInstance(true);
             dialog.show(getFragmentManager(), "timePicker");
-        }
-/*        if (textBox != null)
-            textBox.setText(day + "/" + (month + 1) + "/" + year);*/
+        } else
+            textBox.setText(day+"/"+(month+1)+"/"+year);
     }
 }

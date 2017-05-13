@@ -1,5 +1,6 @@
 package com.abc.foaled.Fragment;
 
+import android.app.DialogFragment;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,8 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.abc.foaled.R;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 public class AddPregnancyFragment extends Fragment {
 
@@ -34,7 +40,26 @@ public class AddPregnancyFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_pregnancy, container, false);
+        View view = inflater.inflate(R.layout.fragment_add_pregnancy, container, false);
+        TextView dateText = (TextView) view.findViewById(R.id.date_of_conception);
+
+        String date = new SimpleDateFormat("dd/MM/yyyy", Locale.UK).format(Calendar.getInstance().getTime());
+        dateText.setText(date);
+
+        dateText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatePickerFragment dialog = new DatePickerFragment();
+
+                dialog.displayTimeDialog(false);
+                dialog.setViewResult((TextView)v);
+                dialog.setRetainInstance(true);
+                dialog.show(getActivity().getFragmentManager(), "datePicker");
+            }
+        });
+
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

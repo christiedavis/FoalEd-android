@@ -45,14 +45,13 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         //if this dialog is a result from choose the date
         if (getArguments() != null
-                && getArguments().containsKey("textBox")
-                && getArguments().getInt("textBox") == R.id.newHorseDOB) {
+                && getArguments().containsKey("textBox")) {
 
             day = getArguments().getInt("day");
             month = getArguments().getInt("month");
             year = getArguments().getInt("year");
 
-            textBox = (TextView) getActivity().findViewById(R.id.newHorseDOB);
+            textBox = (TextView) getActivity().findViewById(getArguments().getInt("textBox"));
         }
         int minute, hour;
         Calendar cal = Calendar.getInstance();

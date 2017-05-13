@@ -13,19 +13,17 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     >
-    <ImageView
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_width="80sp"
-        android:layout_height="80dp"
-        android:layout_gravity="center"
-        android:background="@drawable/animal_brown_horse"
-        android:cropToPadding="true"
-        android:requiresFadingEdge="vertical"
-        android:scaleType="matrix"
-        android:paddingTop="20dp" />
 
-        <!--TODO: make circle imageview please brendan-->
+    <de.hdodenhof.circleimageview.CircleImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/about_circle_image_view"
+        android:layout_gravity="center"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        app:srcCompat="@drawable/animal_brown_horse"
+        app:civ_border_width="2dp"
+        app:civ_border_color="#FF000000"/>
+
 
     <TextView
         android:layout_width="wrap_content"

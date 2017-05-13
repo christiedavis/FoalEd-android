@@ -47,7 +47,6 @@ import java.util.Locale;
 
 public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
 
-    //TODO just checking that this bad boy actually works relatively well
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_IMAGE_SELECT = 2;
     private String imagePath = "";
