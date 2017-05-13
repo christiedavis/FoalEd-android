@@ -18,7 +18,7 @@ public class AboutActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Bitmap image = ImageHelper.bitmapSmaller(getResources(), R.drawable.animal_brown_horse, 200, 200);
+        Bitmap image = ImageHelper.bitmapSmaller(getResources(), R.drawable.about, 200, 200);
         setContentView(R.layout.activity_about);
         ImageView iV = (ImageView) findViewById(R.id.about_circle_image_view);
         iV.setImageBitmap(image);
