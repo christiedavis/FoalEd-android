@@ -287,7 +287,7 @@ public class HorseDetailActivity extends AppCompatActivity
         if (horse.getStatus() == Horse.HORSE_STATUS.PREGNANT || horse.getStatus() == Horse.HORSE_STATUS.MAIDEN) {
 
             TextView foalName = (TextView) findViewById(R.id.news_foal_name_textView);
-            //TODO: Get notes from horse current birth notes
+            //TODO: Get notes from horse current birth notes - also get image from default Brendan
 
             // set birth time
             horse.currentBirth.birth_time = new DateTime();
