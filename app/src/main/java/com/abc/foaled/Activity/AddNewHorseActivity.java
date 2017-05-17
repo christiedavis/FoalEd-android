@@ -18,6 +18,7 @@ import android.support.v4.app.ActivityCompat;
 import android.app.DialogFragment;
 import android.support.v4.app.NavUtils;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -39,7 +40,11 @@ import com.abc.foaled.R;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -99,7 +104,7 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        //If we just took a photo
+    /*    //If we just took a photo
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) { //RESULT_OK = -1
             try {
 
@@ -116,12 +121,12 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
         }
         //------------------If we just selected a photo from the gallery--------------
         else if(requestCode == REQUEST_IMAGE_SELECT && resultCode == RESULT_OK) {
-            /* //TODO need to keep a track of what images we take but don't save..
+            *//* //TODO need to keep a track of what images we take but don't save..
              * List all the media's, then query that media using returned uri
              * Go to the first option (which should be our file), and list
              *  file's absolute path. We then copy file from public directory in to private memory
              * Then make cursor null
-             */
+             *//*
             Cursor cursor = null;
             try {
                 String[] proj = {MediaStore.Images.Media.DATA};
@@ -132,8 +137,8 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
                 imagePath = cursor.getString(column_index);
 
 
-            /* Creates FIS from selected image path, then changes imagePath to be a new empty File
-                We then copy the bytes from the selected image into the new internal image file*/
+            *//* Creates FIS from selected image path, then changes imagePath to be a new empty File
+                We then copy the bytes from the selected image into the new internal image file*//*
 
                 FileChannel fis = new FileInputStream(new File(imagePath)).getChannel();
                 imagePath = ImageHelper.createImageFile(this);
@@ -154,7 +159,44 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
 //        Sets the image as the new select image
             ImageView iV = ((ImageView) findViewById(R.id.add_horse_image));
             iV.setImageBitmap(ImageHelper.bitmapSmaller(imagePath, iV.getHeight(), iV.getWidth()));
-        }
+        }*/
+
+	    if ((requestCode == REQUEST_IMAGE_CAPTURE || requestCode == REQUEST_IMAGE_SELECT) && resultCode == RESULT_OK) {
+		    InputStream is = null;
+
+		    try {
+			    if (requestCode == REQUEST_IMAGE_CAPTURE)
+				    is = new FileInputStream(new File(imagePath));
+			    else
+				    is = getContentResolver().openInputStream(data.getData());
+
+
+			    imagePath = ImageHelper.createImageFile(this);
+			    OutputStream fos = new FileOutputStream(imagePath);
+
+			    byte[] buffer = new byte[65536];
+			    int len;
+
+			    while ((len = is.read(buffer)) != -1)
+				    fos.write(buffer, 0, len);
+
+			    fos.close();
+			    is.close();
+		    } catch (FileNotFoundException e) {
+			    Log.e("PHOTO", "Unable to open input or output stream. Please view stack trace");
+			    e.printStackTrace();
+		    } catch (IOException e) {
+			    Log.e("PHOTO", "Unable to write to output stream. Please look at stack trace");
+			    e.printStackTrace();
+		    }
+	    }
+
+	    if (!imagePath.isEmpty()) {
+		    ImageView iV = ((ImageView) findViewById(R.id.add_horse_image));
+		    int height = iV.getHeight() == 0 ? 300 : iV.getHeight();
+		    int width = iV.getWidth() == 0 ? 300 : iV.getWidth();
+		    iV.setImageBitmap(ImageHelper.bitmapSmaller(imagePath, width, height));
+	    }
     }
 
 

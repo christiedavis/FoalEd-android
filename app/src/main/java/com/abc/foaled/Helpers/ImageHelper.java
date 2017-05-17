@@ -63,12 +63,12 @@ public class ImageHelper {
 
     }
 
-    public static Bitmap bitmapSmaller(String filePath, int reqHeight, int reqWidth) {
-        return decodeSampledBitmapFromString(filePath, reqHeight, reqWidth);
+    public static Bitmap bitmapSmaller(String filePath, int reqWidth, int reqHeight) {
+        return decodeSampledBitmapFromString(filePath, reqWidth, reqHeight);
     }
 
-    public static Bitmap bitmapSmaller(Resources resources, int resID, int reqHeight, int reqWidth) {
-        return decodeSampledBitmapFromResource(resources, resID, reqHeight, reqWidth);
+    public static Bitmap bitmapSmaller(Resources resources, int resID, int reqWidth, int reqHeight) {
+        return decodeSampledBitmapFromResource(resources, resID, reqWidth, reqHeight);
     }
 
     private static int calculateInSampleSize(
@@ -111,7 +111,7 @@ public class ImageHelper {
     }
 
     private static Bitmap decodeSampledBitmapFromResource(Resources resources,
-                                                          int resID, int reqHeight, int reqWidth) {
+                                                          int resID, int reqWidth, int reqHeight) {
 
         // First decode with inJustDecodeBounds=true to check dimensions
         final BitmapFactory.Options options = new BitmapFactory.Options();
@@ -131,7 +131,8 @@ public class ImageHelper {
 
         String imagePath = a.getFilesDir().getAbsolutePath() + "/JPEG_" + timeStamp + ".jpg";
         try {
-            new File(imagePath).createNewFile();
+            if (!new File(imagePath).createNewFile())
+            	throw new IOException("Unable to create new image file");
         } catch (Exception e) {
             e.printStackTrace();
         }
