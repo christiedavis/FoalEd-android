@@ -19,15 +19,19 @@
         android:layout_height="wrap_content"
         android:fontFamily="cursive"
         android:paddingBottom="5dp"
-        android:paddingTop="5dp"
+        android:paddingTop="2dp"
         android:text="@string/feedback_heading"
         android:textAlignment="center"
+        android:textSize="35sp"
         android:textStyle="bold" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/feedback_message"
+        android:paddingBottom="15dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         />
 
     <Button
