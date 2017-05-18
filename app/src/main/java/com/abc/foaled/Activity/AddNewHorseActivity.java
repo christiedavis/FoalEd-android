@@ -30,10 +30,10 @@ import com.abc.foaled.Database.DatabaseHelper;
 import com.abc.foaled.Database.ORMBaseActivity;
 import com.abc.foaled.Fragment.DatePickerFragment;
 import com.abc.foaled.Helpers.ImageHelper;
-import com.abc.foaled.Helpers.UserInfo;
 import com.abc.foaled.Models.Birth;
 import com.abc.foaled.Models.Horse;
 import com.abc.foaled.R;
+import com.j256.ormlite.dao.RuntimeExceptionDao;
 
 
 import java.io.File;
@@ -53,28 +53,24 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
     static final int REQUEST_IMAGE_SELECT = 2;
     private String imagePath = "";
 	private String tempPath = "";
-    private StringBuilder imageFileName = new StringBuilder();
     static final int API_LEVEL = android.os.Build.VERSION.SDK_INT;
 
-    private UserInfo userInfo;
-    private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
 
-    //TODO reckon we can put all photo related methods in the ImageHelper class to be re-used everywhere else?
-    //This would require a little bit of rework
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_horse);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+	    if (getSupportActionBar() != null)
+	        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         imagePath = getFilesDir().getAbsolutePath() + "/placeholder.jpg";
-        this.userInfo = UserInfo.getInstance(this);
 
         ImageView iV = (ImageView) findViewById(R.id.add_horse_image);
         iV.setImageBitmap(ImageHelper.bitmapSmaller(imagePath, 200, 200));
@@ -98,7 +94,7 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
      * @param requestCode The (hopefully) unique code that got sent with the intent
      * @param resultCode Successful or not code
      * @param data The data returned from the intent
-     *             //TODO Only create the new image on insert. Why am I doing it like this???
+     *   //Todo only create the image on insert
      */
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -182,10 +178,14 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
         Horse horse = new Horse(name, birth, notes, sexIsFemale);
         horse.setImagePath(imagePath);
 
-        getHelper().getHorseDataDao().assignEmptyForeignCollection(horse, "milestones");
+	    RuntimeExceptionDao<Horse, Integer> horseDao = getHelper().getHorseDataDao();
+	    horseDao.assignEmptyForeignCollection(horse, "milestones");
+	    horseDao.assignEmptyForeignCollection(horse, "births");
+
         horse.createMilestones();
 
-        getHelper().addNewHorse(birth, horse);
+        getHelper().getBirthsDataDao().create(birth);
+	    horseDao.create(horse);
 
         showSuccessConfirmation();
     }

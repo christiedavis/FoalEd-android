@@ -1,5 +1,6 @@
 package com.abc.foaled.Activity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -8,7 +9,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
@@ -24,29 +24,30 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.abc.foaled.Adaptors.HorseNoteAdaptor;
+import com.abc.foaled.Database.DatabaseHelper;
+import com.abc.foaled.Database.ORMBaseActivity;
 import com.abc.foaled.Fragment.AddFoalFragment;
 import com.abc.foaled.Fragment.AddPregnancyFragment;
 import com.abc.foaled.Helpers.DateTimeHelper;
 import com.abc.foaled.Helpers.ImageHelper;
-import com.abc.foaled.Helpers.UserInfo;
 import com.abc.foaled.Models.Birth;
 import com.abc.foaled.Models.Horse;
 import com.abc.foaled.R;
 
 import org.joda.time.DateTime;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static android.view.View.GONE;
 
-public class HorseDetailActivity extends AppCompatActivity
+public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
     implements AddPregnancyFragment.OnFragmentInteractionListener, AddFoalFragment.OnFragmentInteractionListener
 {
-    UserInfo userInfo;
     Horse horse;
     int horseID;
 
@@ -54,10 +55,8 @@ public class HorseDetailActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        this.userInfo = UserInfo.getInstance(this);
-
         horseID = getIntent().getIntExtra("HorseID", 0);
-        this.horse = this.userInfo.getHorseByID(horseID);
+	    horse = getHelper().getHorseDataDao().queryForId(horseID);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -191,17 +190,16 @@ public class HorseDetailActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        this.userInfo.updateHorse(this.horse);
-        this.userInfo.release();
-    }
-
-    public void editNotesCallback(String note, String birthId) {
-        horse.updateBirth(this, birthId, note);
     }
 
     private void updateNotesView() {
 
-        Map<String, List<String>> map = horse.getBirthNotes(this);
+        Map<String, String> map = new HashMap<>();
+	    Collection<Birth> births = horse.getBirths();
+
+	    for (Birth b : births)
+		    map.put(b.getYearOfBirth(), b.notes);
+
         List<String> years = new ArrayList<>(map.keySet());
 
         final ExpandableListView expandableLayoutListView = (ExpandableListView) findViewById(R.id.exlistview);
@@ -214,7 +212,6 @@ public class HorseDetailActivity extends AppCompatActivity
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        this.userInfo.updateHorse(horse);
         NavUtils.navigateUpFromSameTask(this);
     }
 
@@ -249,16 +246,17 @@ public class HorseDetailActivity extends AppCompatActivity
         System.out.println("Add pregnancy selected");
 
         // get values
-        EditText fatherName = (EditText) findViewById(R.id.fathers_name_textView);
-        Horse fatherHorse = new Horse(fatherName.getText().toString());
-        //TODO: add horse 
+/*        EditText fatherName = (EditText) findViewById(R.id.fathers_name_textView);
+        Horse fatherHorse = new Horse(fatherName.getText());*/
+		Horse fatherHorse = new Horse("PLACEHOLDER");
+        //TODO Move this method to the fragment. The fragment could then point back here.. but it needs to be moved to the fragment
 
         TextView conceptionDate = (TextView) findViewById(R.id.date_of_conception);
         //turn to date
 
         // add to database
-        Birth newBirth = new Birth(horse.getHorseID(), fatherHorse.getHorseID(), new Date());
-        userInfo.getHelper().addNewBirth(newBirth);
+        Birth newBirth = new Birth(horse, fatherHorse.getHorseID(), new Date());
+        getHelper().getBirthsDataDao().create(newBirth);
 
         // go back to horse detail and update
         FragmentTransaction fragmentManager = getSupportFragmentManager().beginTransaction();
@@ -296,13 +294,13 @@ public class HorseDetailActivity extends AppCompatActivity
             // set birth time
             horse.currentBirth.birth_time = new DateTime();
             Horse foal = new Horse(foalName.getText().toString(), horse.currentBirth, "Notes", true);
-            userInfo.getHelper().getHorseDataDao().assignEmptyForeignCollection(foal, "milestones");
+            getHelper().getHorseDataDao().assignEmptyForeignCollection(foal, "milestones");
 //            foal.createMilestones();
             foal.setStatus(Horse.HORSE_STATUS.FOAL, this);
 
-            //set image to be default
 
-            this.userInfo.getHelper().addNewHorse(horse.currentBirth, foal);
+	        getHelper().getBirthsDataDao().create(horse.currentBirth);
+	        getHelper().getHorseDataDao().create(foal);
 
             horse.setStatus(Horse.HORSE_STATUS.DORMANT, this);
             setUpImageView();
@@ -318,10 +316,13 @@ public class HorseDetailActivity extends AppCompatActivity
     }
 
     public void favouriteAction(View view) {
-        // To be implemented later when we want to favourite on the main screen
-        this.horse.setFavourite(!this.horse.isFavourite());
-        setup();
-        Log.d("", "");
+	    //Updates horse
+        horse.setFavourite(!this.horse.isFavourite());
+        getHelper().getHorseDataDao().update(horse);
+
+	    //Updates the star on the view
+	    int star = horse.isFavourite() ? R.drawable.star : R.drawable.star_hollowed;
+	    ((ImageView) findViewById(R.id.favourite)).setImageDrawable(ContextCompat.getDrawable(this, star));
     }
     @Override
     public void onAddPregnancyFragmentInteraction(Uri uri) {
@@ -338,5 +339,9 @@ public class HorseDetailActivity extends AppCompatActivity
     public void Cancel(View v) {
         System.out.println("Cancel birth");
         // TODO: leave fragmemt go back to horse detail
+    }
+
+    public void goToNotes(View v) {
+
     }
 }

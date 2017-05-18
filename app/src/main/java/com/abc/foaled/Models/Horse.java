@@ -4,31 +4,17 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.text.Editable;
 import android.util.Log;
 
-
-import com.abc.foaled.Database.DatabaseHelper;
-import com.abc.foaled.Database.ORMBaseActivity;
 import com.abc.foaled.Helpers.DateTimeHelper;
-import com.abc.foaled.Helpers.UserInfo;
 import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
-import org.joda.time.Period;
-
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Dictionary;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -102,18 +88,11 @@ public class Horse implements Serializable {
     @ForeignCollectionField(columnName = "milestones")
     ForeignCollection<Milestone> milestones;
 
+	@ForeignCollectionField(columnName = "births")
+	ForeignCollection<Birth> births;
+
     private Bitmap image;
-    private List<Birth> births;
 
-    public boolean isMaiden(Context c) {
-
-        if (getBirthNotes(c) == null)
-            Log.d("No Birthnotes exist", "Maiden Pregnancy");
-        else
-            Log.d("There are birthnotes", "for this horse");
-
-        return getBirthNotes(c) == null;
-    }
 
     public boolean isFavourite() {
         return favourite;
@@ -136,6 +115,7 @@ public class Horse implements Serializable {
         this.favourite = false;
     }
     public Horse(String name, Birth birth, String notes, boolean sex) {
+
         this.name = name;
         this.dateOfBirth = birth;
         this.currentBirth = null;
@@ -160,11 +140,12 @@ public class Horse implements Serializable {
     public HORSE_STATUS getStatus() {
         return this.status;
     }
+
     public void setStatus(HORSE_STATUS newStatus, Context c) {
         //perform necassary checks
 
         // if first pregnancy - maiden else pregnant
-        if (newStatus == HORSE_STATUS.PREGNANT && isMaiden(c)) {
+        if (newStatus == HORSE_STATUS.PREGNANT && births.isEmpty()) {
             this.status = HORSE_STATUS.MAIDEN;
             return;
         } else if ((this.status == HORSE_STATUS.PREGNANT || this.getStatus() == HORSE_STATUS.MAIDEN) && newStatus == HORSE_STATUS.DORMANT) {
@@ -177,6 +158,10 @@ public class Horse implements Serializable {
         this.status = newStatus;
     }
 
+    public ForeignCollection<Birth> getBirths() {
+	    return births;
+    }
+
     public String getStatusString() {
         return this.status.getString();
     }
@@ -185,18 +170,6 @@ public class Horse implements Serializable {
         favourite = fav;
     }
 
-    public Map<String, List<String>> getBirthNotes(Context c) {
-        //TODO: Brendan this currently returns birth notes for a horse I just made
-        // In theroy it should return null when the horse has never had a foal before
-        //I wrote this but must've fucked up the SQL
-        UserInfo userInfo = UserInfo.getInstance(c);
-        return userInfo.getBirthNotesForHorse(this.horseID);
-
-    }
-
-    public void updateBirth(Context c, String birthId, String note) {
-        UserInfo.getInstance(c).updateBirth(this.horseID, birthId, note);
-    }
 
     //TODO return method for age (done through birth dob field)
 
@@ -242,4 +215,12 @@ public class Horse implements Serializable {
         smallImagePath = bigImagePath;
         image = BitmapFactory.decodeFile(smallImagePath);
     }
+
+	public String getName() {
+		return name;
+	}
+
+	public String getNotes() {
+		return notes;
+	}
 }

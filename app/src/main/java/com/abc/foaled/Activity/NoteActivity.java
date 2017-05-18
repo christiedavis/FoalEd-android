@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import com.abc.foaled.Database.DatabaseHelper;
 import com.abc.foaled.Database.ORMBaseActivity;
-import com.abc.foaled.Helpers.UserInfo;
 import com.abc.foaled.Models.Horse;
 import com.abc.foaled.R;
 
@@ -27,7 +26,6 @@ import com.abc.foaled.R;
 public class NoteActivity extends ORMBaseActivity<DatabaseHelper> {
     TextView noteTitle;
     EditText noteContent;
-    UserInfo userInfo;
 
     String title;
     String note;
@@ -42,8 +40,6 @@ public class NoteActivity extends ORMBaseActivity<DatabaseHelper> {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note);
 
-        userInfo = UserInfo.getInstance(this);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -53,9 +49,9 @@ public class NoteActivity extends ORMBaseActivity<DatabaseHelper> {
         }
 
         horseID = getIntent().getIntExtra("horseID", 0);
-        horse = userInfo.getHorses().get(horseID);
-        title = getIntent().getStringExtra("title");
-        note = getIntent().getStringExtra("note");
+        horse = getHelper().getHorseDataDao().queryForId(horseID);
+        title = horse.getName() + "'s notes";
+        note = horse.getNotes();
 
         noteTitle = (TextView) findViewById(R.id.note_activity_title);
         noteContent = (EditText) findViewById(R.id.note_activity_content);

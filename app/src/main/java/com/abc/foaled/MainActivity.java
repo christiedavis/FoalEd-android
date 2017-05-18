@@ -12,9 +12,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.NotificationCompat;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 
 import android.os.Bundle;
@@ -29,25 +27,28 @@ import com.abc.foaled.Activity.AddNewHorseActivity;
 import com.abc.foaled.Activity.faqActivity;
 import com.abc.foaled.Activity.FeedbackActivity;
 import com.abc.foaled.Activity.NotificationSettingsActivity;
-import com.abc.foaled.Adaptors.RVAdaptor;
+import com.abc.foaled.Database.DatabaseHelper;
 import com.abc.foaled.Database.DatabaseManager;
-import com.abc.foaled.Helpers.UserInfo;
+import com.abc.foaled.Database.ORMBaseActivity;
 import com.abc.foaled.Models.Horse;
 import com.abc.foaled.Fragment.HorsesListFragment;
 import com.abc.foaled.Fragment.NotificationSettingsFragment;
 import com.abc.foaled.Notifications.NotificationScheduler;
+import com.j256.ormlite.stmt.QueryBuilder;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+
 import net.hockeyapp.android.CrashManager;
 import net.hockeyapp.android.UpdateManager;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends ORMBaseActivity<DatabaseHelper>
         implements NavigationView.OnNavigationItemSelectedListener, HorsesListFragment.OnListFragmentInteractionListener,
         NotificationSettingsFragment.OnFragmentInteractionListener {
 
-    UserInfo userInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,13 +64,11 @@ public class MainActivity extends AppCompatActivity
             // Set up Nav
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
-            this.userInfo = UserInfo.getInstance(this);
 
             // SET UP FRAGMENT
-            this.userInfo.horses = userInfo.getHelper().refreshHorseList(); //get data
             FragmentTransaction fragmentManager = getSupportFragmentManager().beginTransaction();
             HorsesListFragment fragment = HorsesListFragment.newInstance();
-            fragment.setListToBeDisplayed(this.userInfo.horses);
+            fragment.setListToBeDisplayed(getHelper().getHorseDataDao().queryForAll());
             fragmentManager.replace(R.id.flContent, fragment).commit();
 
             //Settings drawer
@@ -102,7 +101,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        userInfo.release();
         unregisterManagers();
     }
 
@@ -116,10 +114,9 @@ public class MainActivity extends AppCompatActivity
     public void onResume() {
         super.onResume();
         //TODO this seems like the wrong way to update the recycler view?
-        this.userInfo.horses = userInfo.getHelper().refreshHorseList(); //get data
         FragmentTransaction fragmentManager = getSupportFragmentManager().beginTransaction();
         HorsesListFragment fragment = HorsesListFragment.newInstance();
-        fragment.setListToBeDisplayed(this.userInfo.horses);
+        fragment.setListToBeDisplayed(getHelper().getHorseDataDao().queryForAll());
         fragmentManager.replace(R.id.flContent, fragment).commit();
         checkForCrashes();
     }
@@ -201,12 +198,10 @@ public class MainActivity extends AppCompatActivity
 
 
         if (fragmentClass == HorsesListFragment.class) {
-            this.userInfo.horses = userInfo.getHelper().refreshHorseList();
-            if (favourite) {
-                ((HorsesListFragment) fragment).setListToBeDisplayed(this.userInfo.getFavouriteHorses());
-            } else {
-                ((HorsesListFragment) fragment).setListToBeDisplayed(this.userInfo.getHorses());
-            }
+            if (favourite)
+                ((HorsesListFragment) fragment).setListToBeDisplayed(getFavouriteHorses());
+            else
+                ((HorsesListFragment) fragment).setListToBeDisplayed(getHelper().getHorseDataDao().queryForAll());
         }
 
         fragmentManager.replace(R.id.flContent, fragment).commit();
@@ -215,6 +210,25 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+	public List<Horse> getFavouriteHorses() {
+		try {
+			QueryBuilder<Horse, Integer> queryBuilder = getHelper().getHorseDataDao().queryBuilder();
+			return queryBuilder.where().eq("favourite", true).query();
+		} catch (Exception e) {
+			e.printStackTrace();
+			Log.e("Database Query", "Error querying for horses");
+
+			List<Horse> allHorses = getHelper().getHorseDataDao().queryForAll();
+			List<Horse> favouriteHorses = new ArrayList<>();
+
+			for (Horse h : allHorses)
+				if (h.isFavourite())
+					favouriteHorses.add(h);
+
+			return favouriteHorses;
+		}
+	}
 
     @Override //needed
     public void onFragmentInteraction(Uri uri) {

@@ -80,38 +80,6 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         return milestoneDao;
     }
 
-    public void addNewHorse(Birth birth, Horse horse) {
-        try {
-            getBirthsDao().create(birth);
-            getHorseDao().create(horse);
-        }
-        catch (Exception ex){
-         //TODO: handle errors
-        }
-    }
-
-    public void updateHorse(Horse horse) {
-        try {
-            getHorseDao().update(horse);
-        }
-        catch (Exception ex) {
-            //TODO: Error handling
-        }
-    }
-
-    //TODO we need to move these types of methods to UserInfo or.. not here
-    public void addNewBirth(Birth birth) {
-        try {
-            getBirthsDao().create(birth);
-        }
-        catch (Exception ex){
-            //TODO: handle errors
-        }
-    }
-
-    public void updateBirth(int horseId, String birthId, String note) {
-        //TODO: work out how to do this
-    }
 
     public List<Birth> getBirthsForHorse(int horseId) {
         List<Birth> results;
@@ -124,14 +92,6 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         return results;
     }
 
-    //TODO this should be called getHorseList as it is returning a horse list, or at least getRefreshedHorseList
-    public List<Horse> refreshHorseList() {
-        return getHorseDataDao().queryForAll();
-    }
-
-    public List<Birth> refreshBirthList() {
-        return getBirthsDataDao().queryForAll();
-    }
     /**
      * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for database object classes. It will
      * create it or just give the cached value. RuntimeExceptionDao only through RuntimeExceptions.

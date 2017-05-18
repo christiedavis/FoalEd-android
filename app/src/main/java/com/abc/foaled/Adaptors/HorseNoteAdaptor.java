@@ -6,8 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.abc.foaled.R;
@@ -24,9 +24,9 @@ public class HorseNoteAdaptor extends BaseExpandableListAdapter {
 
     private Context context;
     private List<String> yearHeaders;
-    private Map<String, List<String>> yearNotes;
+    private Map<String, String> yearNotes;
 
-    public HorseNoteAdaptor(Context context, List<String> yearHeaders, Map<String, List<String>> yearNotes) {
+    public HorseNoteAdaptor(Context context, List<String> yearHeaders, Map<String, String> yearNotes) {
         this.context = context;
         this.yearHeaders = yearHeaders;
         this.yearNotes = yearNotes;
@@ -39,7 +39,7 @@ public class HorseNoteAdaptor extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return yearNotes.get(yearHeaders.get(groupPosition)).size();
+        return 1;
     }
 
     @Override
@@ -49,7 +49,8 @@ public class HorseNoteAdaptor extends BaseExpandableListAdapter {
 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        return yearNotes.get(yearHeaders.get(groupPosition)).get(childPosition);
+//        return yearNotes.get(yearHeaders.get(groupPosition)).get(childPosition);
+	    return 1;
     }
 
     @Override
@@ -85,10 +86,19 @@ public class HorseNoteAdaptor extends BaseExpandableListAdapter {
         TextView textView = (TextView)convertView.findViewById(R.id.year_header);
         textView.setText(headerTitle);
 
-        ImageButton addNoteButton = (ImageButton)convertView.findViewById(R.id.add_pregnacy_note_detail_button);
+        ImageView addNoteButton = (ImageView) convertView.findViewById(R.id.add_pregnacy_note_detail_button);
         addNoteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+	            //TODO Steven, here the intent for the Note Activity needs to be started
+	            // In the onCreate, at the moment it is expecting a 'horseID' extra and will pull up it's general notes
+	            // This will need to be changed to pass through a birthID, because then we can get that births notes & the horse we're looking at
+
+	            /*
+	            	Intent intent = new Intent(this, NoteActivity.class);
+				    intent.putExtra("horseID", horseID);
+				    startActivity(intent);
+	             */
                 Log.i("Pregnacney view", headerTitle + " button clicked");
             }
         });
