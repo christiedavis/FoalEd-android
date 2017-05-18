@@ -1,6 +1,7 @@
 package com.abc.foaled.Activity;
 
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.v4.app.FragmentTransaction;
@@ -10,6 +11,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +20,7 @@ import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.abc.foaled.Adaptors.HorseNoteAdaptor;
@@ -226,35 +229,35 @@ public class HorseDetailActivity extends AppCompatActivity
     }
 
     public void AddNewPregnancyFragment(View v) {
-        System.out.println("Add pregnancy clicked");
+        Log.d("", "Add pregnancy button was clicked");
 
-        //TODO: make it inflate properly - Brendan
-        //ALSO hook it up
+	    View popupView = getLayoutInflater().inflate(R.layout.fragment_add_pregnancy, null);
 
-        FragmentTransaction fragmentManager = getSupportFragmentManager().beginTransaction();
-        AddPregnancyFragment fragment = AddPregnancyFragment.newInstance();
+	    PopupWindow popupWindow = new PopupWindow(popupView,
+			    ViewGroup.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
-        fragmentManager.replace(R.id.horse_detail_screen, fragment).commit();
-//        if (horse.isMaiden()) {  - this doesnt work because i havent inflated my fragment
-//            TextView addPregnancyLabel = (TextView) fragment.findViewById(R.id.add_pregnancy_fragment_text);
-//            addPregnancyLabel.append("/nYour horse is a maiden pregnancy etc");
-//        }
+	    popupWindow.setFocusable(true);
+	    popupWindow.setAnimationStyle(R.style.Animation);
+
+	    popupWindow.setBackgroundDrawable(new ColorDrawable());
+
+	    popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
     }
 
     public void AddPregnancy(View v) {
         System.out.println("Add pregnancy selected");
 
         // get values
-        EditText fatherName = (EditText)this.findViewById(R.id.fathers_name_textView);
+        EditText fatherName = (EditText) findViewById(R.id.fathers_name_textView);
         Horse fatherHorse = new Horse(fatherName.getText().toString());
         //TODO: add horse 
 
-        TextView conceptionDate = (TextView)this.findViewById(R.id.date_of_conception);
+        EditText conceptionDate = (EditText) findViewById(R.id.date_of_conception);
         //turn to date
 
         // add to database
-        Birth newBirth = new Birth(this.horse.getHorseID(), fatherHorse.getHorseID(), new Date());
-        this.userInfo.getHelper().addNewBirth(newBirth);
+        Birth newBirth = new Birth(horse.getHorseID(), fatherHorse.getHorseID(), new Date());
+        userInfo.getHelper().addNewBirth(newBirth);
 
         // go back to horse detail and update
         FragmentTransaction fragmentManager = getSupportFragmentManager().beginTransaction();

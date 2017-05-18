@@ -3,11 +3,9 @@ package com.abc.foaled.Activity;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -18,6 +16,7 @@ import android.support.v4.app.ActivityCompat;
 import android.app.DialogFragment;
 import android.support.v4.app.NavUtils;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -39,8 +38,11 @@ import com.abc.foaled.R;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.nio.channels.FileChannel;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -50,6 +52,7 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_IMAGE_SELECT = 2;
     private String imagePath = "";
+	private String tempPath = "";
     private StringBuilder imageFileName = new StringBuilder();
     static final int API_LEVEL = android.os.Build.VERSION.SDK_INT;
 
@@ -95,87 +98,67 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
      * @param requestCode The (hopefully) unique code that got sent with the intent
      * @param resultCode Successful or not code
      * @param data The data returned from the intent
+     *             //TODO Only create the new image on insert. Why am I doing it like this???
      */
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        //If we just took a photo
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) { //RESULT_OK = -1
-            try {
-
-                FileChannel fis = new FileInputStream(new File(imagePath)).getChannel();
-                imagePath = ImageHelper.createImageFile(this); //changes the imagePath variable to new empty file
-                int lastIndex = imagePath.lastIndexOf('/') + 1;
-                FileChannel fos = openFileOutput(imagePath.substring(lastIndex, imagePath.length()), MODE_PRIVATE).getChannel();
-                fos.transferFrom(fis, 0, fis.size());
-                fos.close();
-                fis.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        //------------------If we just selected a photo from the gallery--------------
-        else if(requestCode == REQUEST_IMAGE_SELECT && resultCode == RESULT_OK) {
-            /* //TODO need to keep a track of what images we take but don't save..
-             * List all the media's, then query that media using returned uri
-             * Go to the first option (which should be our file), and list
-             *  file's absolute path. We then copy file from public directory in to private memory
-             * Then make cursor null
-             */
-            Cursor cursor = null;
-            try {
-                String[] proj = {MediaStore.Images.Media.DATA};
-                cursor = this.getContentResolver().query(data.getData(), proj, null, null, null);
-
-                int column_index = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
-                cursor.moveToFirst();
-                imagePath = cursor.getString(column_index);
+	    //If we were taking a photo and we cancel, delete the temporary file we made. If unable to delete this file, throw an exception
+	    if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode != RESULT_OK) {
+		    File f = new File(tempPath);
+		    try {
+			    if (f.delete())
+				    throw new IOException("Unable to remove existing file");
+		    } catch (IOException e) {
+				e.printStackTrace();
+		    }
+	    }
 
 
-            /* Creates FIS from selected image path, then changes imagePath to be a new empty File
-                We then copy the bytes from the selected image into the new internal image file*/
+	    if ((requestCode == REQUEST_IMAGE_CAPTURE || requestCode == REQUEST_IMAGE_SELECT) && resultCode == RESULT_OK) {
+		    InputStream is;
 
-                FileChannel fis = new FileInputStream(new File(imagePath)).getChannel();
-                imagePath = ImageHelper.createImageFile(this);
-                int i = imagePath.lastIndexOf('/') + 1;
-                FileChannel fos = openFileOutput(imagePath.substring(i, imagePath.length()), Context.MODE_PRIVATE).getChannel();
-                fos.transferFrom(fis, 0, fis.size());
-                fos.close();
-                fis.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                if (cursor != null)
-                    cursor.close();
-            }
-        }
-//        If we selected an image
-        if (!imagePath.isEmpty()) {
-//        Sets the image as the new select image
-            ImageView iV = ((ImageView) findViewById(R.id.add_horse_image));
-            iV.setImageBitmap(ImageHelper.bitmapSmaller(imagePath, iV.getHeight(), iV.getWidth()));
-        }
+		    try {
+			    //If we took the photo, open inputStream from file that the photo was loaded in to
+			    if (requestCode == REQUEST_IMAGE_CAPTURE) {
+				    is = new FileInputStream(new File(tempPath));
+			    }
+			    else //else get it from the URI
+				    is = getContentResolver().openInputStream(data.getData());
+
+				//Create new internal file
+			    imagePath = ImageHelper.createImageFile(this);
+			    OutputStream fos = new FileOutputStream(imagePath);
+
+			    //Copy the external file to the internal file
+			    byte[] buffer = new byte[65536];
+			    int len;
+				if (is != null) {
+					while ((len = is.read(buffer)) != -1)
+						fos.write(buffer, 0, len);
+
+					fos.close();
+					is.close();
+				} else
+					throw new IOException();
+		    } catch (FileNotFoundException e) {
+			    Log.e("PHOTO", "Unable to open input or output stream. Please view stack trace");
+			    e.printStackTrace();
+		    } catch (IOException e) {
+			    Log.e("PHOTO", "Unable to write to output stream. Please look at stack trace");
+			    e.printStackTrace();
+		    }
+	    }
+
+	    //If we selected a new photo, set the new photo in the image view
+	    if (resultCode == RESULT_OK && !imagePath.isEmpty()) {
+		    ImageView iV = ((ImageView) findViewById(R.id.add_horse_image));
+		    int height = iV.getHeight() == 0 ? 300 : iV.getHeight();
+		    int width = iV.getWidth() == 0 ? 300 : iV.getWidth();
+		    iV.setImageBitmap(ImageHelper.bitmapSmaller(imagePath, width, height));
+	    }
     }
 
-
-    /**
-     * Checks if the app has permission to write to device storage
-     * If the app does not has permission then the user will be prompted to grant permissions
-     * @param activity The activity to check whether it has permissions or not
-     */
-    private static void verifyStoragePermissions(Activity activity) {
-        // Check if we have write permission
-        int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
-        if (permission != PackageManager.PERMISSION_GRANTED) {
-            // We don't have permission so prompt the user
-            ActivityCompat.requestPermissions(
-                    activity,
-                    PERMISSIONS_STORAGE,
-                    REQUEST_EXTERNAL_STORAGE
-            );
-        }
-    }
 
     /**
      *  Adds a horse to the database with the relevant information entered in this activity
@@ -205,78 +188,6 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
         getHelper().addNewHorse(birth, horse);
 
         showSuccessConfirmation();
-    }
-
-    /**
-     * Displays an alert dialog box that lets your select what source to get
-     * the image from; Camera or Gallery
-     * TODO This is not ideal and need to change how you select what source (from the positive/negative methods)
-     * @param view The control that calls this method
-     */
-    public void chooseImage(View view) {
-        //Checks to see whether the user has permission to read&write
-        if (API_LEVEL >= 23)
-            verifyStoragePermissions(this);
-
-
-        //Creates a dialog to choose where the photo comes from
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Choose photo source");
-
-        builder.setPositiveButton("Gallery", new DialogInterface.OnClickListener() {
-
-            public void onClick(DialogInterface dialog, int id) {
-                Intent intent = new Intent(
-                        Intent.ACTION_PICK,
-                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-                );
-
-                startActivityForResult(intent, REQUEST_IMAGE_SELECT);
-            }
-        });
-
-        builder.setNegativeButton("Camera", new DialogInterface.OnClickListener() {
-
-            public void onClick(DialogInterface dialog, int id) {
-                takeImage();
-            }
-        });
-        builder.show();
-    }
-
-    /**
-     * Creates the camera intent to take the photo. All photos that are accepted by this camera
-     * intent are saved as temporary files in a public directory (public because camera doesn't
-     * have permission to save to internal directory).
-     * TODO need to delete all left over photos on insert method
-     */
-    public void takeImage() {
-
-        if (this.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
-            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                //foal-ed public directory
-                File f = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
-                        + "/FoalEd");
-
-                File image = null;
-                try {
-                    //creates a temp file that gets deleted when app closes (hopefully)
-                    image = File.createTempFile(
-                            "temp",
-                            ".jpg",
-                            f
-                    );
-                    image.deleteOnExit();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                imagePath = image.getAbsolutePath();
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(image));
-                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-            }
-        }
     }
 
     /**
@@ -393,7 +304,7 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
             if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
                 //foal-ed public directory
                 File f = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
-                        + "/Friends");
+                        + "/FoalEd");
                 //TODO change this temporary file thing to go in the app's cache instead
 
                 try {
@@ -404,7 +315,7 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
                             f
                     );
                     image.deleteOnExit();
-                    imagePath = image.getAbsolutePath(); //creates a temporary file, saving path in imagePath
+                    tempPath = image.getAbsolutePath(); //creates a temporary file, saving path in imagePath
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(image));
                     startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
                 } catch (Exception e) {
@@ -421,7 +332,7 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
     private void removePhoto() {
         imagePath = getFilesDir().getAbsolutePath() + "/placeholder.jpg";
         ImageView iV = (ImageView) findViewById(R.id.add_horse_image);
-        iV.setImageBitmap(ImageHelper.bitmapSmaller(imagePath, iV.getHeight(), iV.getWidth()));
+        iV.setImageBitmap(ImageHelper.bitmapSmaller(imagePath, iV.getWidth(), iV.getHeight()));
     }
 
     /**
@@ -441,13 +352,5 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
     private void getPermissions(String[] permissions) {
         ActivityCompat.requestPermissions(this, permissions, 1);
     }
-
-    /**
-     * @return The current image path to the image in the image view. Will be and empty String if no image
-     */
-    public String getImagePath() {
-        return imagePath;
-    }
-
 
 }
