@@ -14,6 +14,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.NotificationCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 
 import android.os.Bundle;
@@ -28,6 +29,7 @@ import com.abc.foaled.Activity.AddNewHorseActivity;
 import com.abc.foaled.Activity.faqActivity;
 import com.abc.foaled.Activity.FeedbackActivity;
 import com.abc.foaled.Activity.NotificationSettingsActivity;
+import com.abc.foaled.Adaptors.RVAdaptor;
 import com.abc.foaled.Database.DatabaseManager;
 import com.abc.foaled.Helpers.UserInfo;
 import com.abc.foaled.Models.Horse;
@@ -95,7 +97,6 @@ public class MainActivity extends AppCompatActivity
             ex.printStackTrace();
         }
         checkForUpdates();
-
     }
 
     @Override
@@ -281,7 +282,6 @@ public class MainActivity extends AppCompatActivity
         Notification notification = mBuilder.build();
         notification.defaults |= Notification.DEFAULT_ALL;
 
-
         Intent notificationIntent = new Intent(this, NotificationPublisher.class);
         notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification);
         PendingIntent pendingIntent =
@@ -299,6 +299,12 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    public void favouriteAction(View view) {
+    // To be implemented later when we want to favourite on the main screen
+        Log.d("", "");
+    }
+
+    // for hockey app
     private void checkForCrashes() {
         CrashManager.register(this);
     }
@@ -311,5 +317,4 @@ public class MainActivity extends AppCompatActivity
     private void unregisterManagers() {
         UpdateManager.unregister();
     }
-
 }

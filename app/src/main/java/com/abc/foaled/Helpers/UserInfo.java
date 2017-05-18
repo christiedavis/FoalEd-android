@@ -66,6 +66,10 @@ public class UserInfo {
         return favouriteHorses;
     }
 
+    public void favourite(int index) {
+        horses.get(index).setFavourite(!horses.get(index).isFavourite());
+    }
+
     public List<Birth> getBirths() {
         if (this.births == null) {
             this.births = new LinkedList<>();

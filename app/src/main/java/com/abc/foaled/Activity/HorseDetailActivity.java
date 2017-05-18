@@ -191,6 +191,7 @@ public class HorseDetailActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        this.userInfo.updateHorse(this.horse);
         this.userInfo.release();
     }
 
@@ -252,7 +253,7 @@ public class HorseDetailActivity extends AppCompatActivity
         Horse fatherHorse = new Horse(fatherName.getText().toString());
         //TODO: add horse 
 
-        EditText conceptionDate = (EditText) findViewById(R.id.date_of_conception);
+        TextView conceptionDate = (TextView) findViewById(R.id.date_of_conception);
         //turn to date
 
         // add to database
@@ -316,6 +317,12 @@ public class HorseDetailActivity extends AppCompatActivity
         }
     }
 
+    public void favouriteAction(View view) {
+        // To be implemented later when we want to favourite on the main screen
+        this.horse.setFavourite(!this.horse.isFavourite());
+        setup();
+        Log.d("", "");
+    }
     @Override
     public void onAddPregnancyFragmentInteraction(Uri uri) {
     }
@@ -330,6 +337,6 @@ public class HorseDetailActivity extends AppCompatActivity
 
     public void Cancel(View v) {
         System.out.println("Cancel birth");
-        // go back to horse detail
+        // TODO: leave fragmemt go back to horse detail
     }
 }

@@ -47,7 +47,6 @@ public class RVAdaptor extends RecyclerView.Adapter<RVAdaptor.HorseViewHolder>{
                 public void onClick(View v) {
                     final Intent intent;
 
-                    //TODO this needs to be better than just the position of the card
                     intent = new Intent(c, HorseDetailActivity.class);
                     intent.putExtra("HorseID", horseID);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -76,13 +75,14 @@ public class RVAdaptor extends RecyclerView.Adapter<RVAdaptor.HorseViewHolder>{
     @Override
     public void onBindViewHolder(HorseViewHolder holder, int i) {
         holder.horseName.setText(horses.get(i).name);
+
         holder.horseStatus.setText(horses.get(i).getStatusString());
         holder.horseID = horses.get(i).getHorseID();
         holder.horsePhoto.setImageBitmap(ImageHelper.bitmapSmaller(horses.get(i).bigImagePath, 200, 200));
         if (horses.get(i).isFavourite()) {
-            //TODO: set favourited      holder.favouriteIcon
+            holder.favouriteIcon.setImageResource(R.drawable.ic_favourite_filled);
         } else {
-            //TODO: set unfavourite
+            holder.favouriteIcon.setImageResource(R.drawable.ic_favourite_unfilled);
         }
     }
 
@@ -90,4 +90,5 @@ public class RVAdaptor extends RecyclerView.Adapter<RVAdaptor.HorseViewHolder>{
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
     }
+
 }

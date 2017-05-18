@@ -45,7 +45,8 @@
             app:srcCompat="@drawable/star_hollowed"
             android:layout_alignTop="@+id/horse_name"
             android:layout_alignParentBottom="true"
-            android:layout_marginStart="10dp"/>
+            android:layout_marginStart="10dp"
+            android:onClick="favouriteAction"/>
 
     </RelativeLayout>
 
