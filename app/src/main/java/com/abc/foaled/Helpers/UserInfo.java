@@ -12,12 +12,15 @@ import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.Where;
 
+import java.lang.reflect.Array;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import static java.lang.System.in;
 
 /**
  * Created by christie on 17/02/17.
@@ -54,7 +57,13 @@ public class UserInfo {
             this.horses = new LinkedList<>();
         }
         this.horses = databaseHelper.refreshHorseList();
-        return this.horses;
+
+        ArrayList favouriteHorses = new ArrayList<Horse>();
+        for (int i =0 ; i < this.horses.size(); i ++)
+            if (this.horses.get(i).isFavourite()) {
+                favouriteHorses.add(this.horses.get(i));
+        }
+        return favouriteHorses;
     }
 
     public List<Birth> getBirths() {

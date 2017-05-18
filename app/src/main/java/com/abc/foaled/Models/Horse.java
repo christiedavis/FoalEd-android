@@ -99,10 +99,8 @@ public class Horse implements Serializable {
     @DatabaseField
     public String bigImagePath;
 
-
     @ForeignCollectionField(columnName = "milestones")
     ForeignCollection<Milestone> milestones;
-
 
     private Bitmap image;
     private List<Birth> births;
