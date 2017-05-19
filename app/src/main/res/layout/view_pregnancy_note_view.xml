@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     tools:ignore="ResAuto">
 
-    <com.abc.foaled.Views.pregnancy_note_view
+    <com.abc.foaled.views.pregnancy_note_view
         android:layout_width="300dp"
         android:layout_height="300dp"
         android:background="#ccc"
@@ -20,6 +20,6 @@
 
 
 
-        </com.abc.foaled.Views.pregnancy_note_view>
+        </com.abc.foaled.views.pregnancy_note_view>
 
 </FrameLayout>

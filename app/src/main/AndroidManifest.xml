@@ -27,7 +27,7 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <receiver android:name=".Notifications.NotificationPublisher" />
+        <receiver android:name="notifications.NotificationPublisher" />
 
         <activity
             android:name=".MainActivity"
@@ -42,7 +42,7 @@
         </activity>
 
         <!-- **  screens  ** -->
-        <activity android:name=".Activity.HorseDetailActivity"
+        <activity android:name=".activities.HorseDetailActivity"
             android:label="Horse Detail"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -52,7 +52,7 @@
         </activity>
 
         <activity
-            android:name=".Activity.ProfileActivity"
+            android:name=".activities.ProfileActivity"
             android:label="@string/title_activity_profile"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -62,7 +62,7 @@
         </activity>
 
         <activity
-            android:name=".Activity.NotificationSettingsActivity"
+            android:name=".activities.NotificationSettingsActivity"
             android:label="@string/title_activity_notification_settings"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -72,7 +72,7 @@
         </activity>
 
         <activity
-            android:name=".Activity.AddNewHorseActivity"
+            android:name=".activities.AddNewHorseActivity"
             android:label="@string/title_activity_add_new_horse"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
@@ -82,7 +82,7 @@
         </activity>
 
         <activity
-            android:name=".Activity.faqActivity"
+            android:name=".activities.faqActivity"
             android:label="FAQ"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -92,14 +92,14 @@
         </activity>
 
         <activity
-            android:name=".Activity.NoteActivity"
+            android:name=".activities.NoteActivity"
             android:label="Notes"
-            android:parentActivityName=".Activity.HorseDetailActivity"
+            android:parentActivityName=".activities.HorseDetailActivity"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
         <activity
-            android:name=".Activity.FeedbackActivity"
+            android:name=".activities.FeedbackActivity"
             android:label="Feedback"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -108,7 +108,7 @@
                 android:value="com.abc.foaled.MainActivity" />
         </activity>
 
-        <activity android:name=".Activity.AboutActivity"
+        <activity android:name=".activities.AboutActivity"
             android:label="About Us"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">

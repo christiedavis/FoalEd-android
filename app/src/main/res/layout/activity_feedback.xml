@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:fitsSystemWindows="true"
-    tools:context="com.abc.foaled.Activity.FeedbackActivity">
+    tools:context="com.abc.foaled.activities.FeedbackActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"

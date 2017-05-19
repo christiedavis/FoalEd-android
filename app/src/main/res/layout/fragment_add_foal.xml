@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.abc.foaled.Fragment.AddFoalFragment"
+    tools:context="com.abc.foaled.fragments.AddFoalFragment"
     android:background="@color/cardview_light_background"
     android:id="@+id/add_foal_fragment">
 
@@ -28,13 +28,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/news_foal_name_textView"
+            android:hint="Foals name"
             />
 
-        <Button
+        <Button android:id="@+id/add_foal_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Add foal"
-            android:onClick="AddFoal"/>
+            android:text="Add foal"/>
 
         <Button
             android:layout_width="match_parent"

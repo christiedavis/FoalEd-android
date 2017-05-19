@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <color name="accent_material_light">#81c784</color>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <color name="accent_material_light" tools:override="true">#81c784</color>
 </resources>

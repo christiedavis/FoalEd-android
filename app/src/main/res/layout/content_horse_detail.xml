@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.abc.foaled.Activity.HorseDetailActivity">
+    tools:context="com.abc.foaled.activities.HorseDetailActivity">
 
     <include layout="@layout/toolbar" />
 
@@ -49,7 +49,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="hi"
-        android:id="@+id/Add_foal_homie"
-        android:onClick="AddFoal"/>
+        android:id="@+id/Add_foal_homie"/>
 
 </LinearLayout>

@@ -1,7 +1,9 @@
 package com.abc.foaled;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.app.Notification;
 import android.content.Intent;
@@ -22,18 +24,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 
-import com.abc.foaled.Activity.AboutActivity;
-import com.abc.foaled.Activity.AddNewHorseActivity;
-import com.abc.foaled.Activity.faqActivity;
-import com.abc.foaled.Activity.FeedbackActivity;
-import com.abc.foaled.Activity.NotificationSettingsActivity;
-import com.abc.foaled.Database.DatabaseHelper;
-import com.abc.foaled.Database.DatabaseManager;
-import com.abc.foaled.Database.ORMBaseActivity;
-import com.abc.foaled.Models.Horse;
-import com.abc.foaled.Fragment.HorsesListFragment;
-import com.abc.foaled.Fragment.NotificationSettingsFragment;
-import com.abc.foaled.Notifications.NotificationScheduler;
+import com.abc.foaled.activities.AboutActivity;
+import com.abc.foaled.activities.AddNewHorseActivity;
+import com.abc.foaled.activities.faqActivity;
+import com.abc.foaled.activities.FeedbackActivity;
+import com.abc.foaled.activities.NotificationSettingsActivity;
+import com.abc.foaled.database.DatabaseHelper;
+import com.abc.foaled.database.DatabaseManager;
+import com.abc.foaled.database.ORMBaseActivity;
+import com.abc.foaled.models.Horse;
+import com.abc.foaled.fragments.HorsesListFragment;
+import com.abc.foaled.fragments.NotificationSettingsFragment;
+import com.abc.foaled.notifications.NotificationScheduler;
 import com.j256.ormlite.stmt.QueryBuilder;
 
 import java.io.File;
@@ -143,13 +145,12 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
         return super.onOptionsItemSelected(item);
     }
 
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         Fragment fragment = null;
         Class fragmentClass = NotificationSettingsFragment.class;
@@ -198,10 +199,13 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
 
 
         if (fragmentClass == HorsesListFragment.class) {
-            if (favourite)
-                ((HorsesListFragment) fragment).setListToBeDisplayed(getFavouriteHorses());
-            else
-                ((HorsesListFragment) fragment).setListToBeDisplayed(getHelper().getHorseDataDao().queryForAll());
+
+	        List<Horse> horses;
+	        horses = favourite ? getFavouriteHorses() : getHelper().getHorseDataDao().queryForAll();
+
+	        HorsesListFragment fragment1 = (HorsesListFragment) fragment;
+	        if (fragment1 != null)
+	            fragment1.setListToBeDisplayed(horses);
         }
 
         fragmentManager.replace(R.id.flContent, fragment).commit();
@@ -243,7 +247,9 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
     public void createPlaceholderImageFile(InputStream inputStream) {
         File f = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
                 + "/FoalEd");
-        f.mkdir();
+        if (!f.mkdir()) {
+	        Log.i("FILE", "Unable to create FoalEd directory. It either exists, or we were unable to write");
+        }
 
         File placeholderImage = new File(getFilesDir().getAbsolutePath() + "/placeholder.jpg");
         if (!placeholderImage.exists()) {
@@ -259,22 +265,22 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
         }
     }
 
-    private void createNotification() {
+/*    private void createNotification() {
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this);
 
-        notificationBuilder
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setCategory(Notification.CATEGORY_EVENT)
-                .setAutoCancel(true)
-                .setPriority(NotificationCompat.PRIORITY_MAX)
-                .setContentTitle("FoalEd")
-                .setContentText("<Insert notification here>");
+	    notificationBuilder
+	            .setSmallIcon(R.mipmap.ic_launcher)
+	            .setCategory(Notification.CATEGORY_EVENT)
+	            .setAutoCancel(true)
+	            .setPriority(NotificationCompat.PRIORITY_MAX)
+	            .setContentTitle("FoalEd")
+	            .setContentText("<Insert notification here>");
 
-        NotificationScheduler notificationScheduler = new NotificationScheduler(this);
+	    NotificationScheduler notificationScheduler = new NotificationScheduler(this);
         notificationScheduler.schedule(notificationBuilder.build(), 10000, new Intent(this, MainActivity.class));
 
-/*        Intent resultIntent = new Intent(this, HomePageActivity.class);
+        Intent resultIntent = new Intent(this, HomePageActivity.class);
         PendingIntent resultPendingIntent =
                 PendingIntent.getActivity(
                         this,
@@ -309,9 +315,9 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
 
         long futureInMillis = SystemClock.elapsedRealtime() + 5000;
         AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);*/
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
 
-    }
+    } */
 
     public void favouriteAction(View view) {
     // To be implemented later when we want to favourite on the main screen

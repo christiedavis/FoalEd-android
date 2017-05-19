@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:fitsSystemWindows="true"
-    tools:context="com.abc.foaled.Activity.HorseDetailActivity"
+    tools:context="com.abc.foaled.activities.HorseDetailActivity"
     android:id="@+id/horse_detail_screen"
     >
 

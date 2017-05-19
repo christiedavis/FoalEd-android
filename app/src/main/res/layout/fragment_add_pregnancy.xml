@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.abc.foaled.Fragment.AddPregnancyFragment"
+    tools:context="com.abc.foaled.fragments.AddPregnancyFragment"
     android:background="@color/cardview_light_background"
     android:id="@+id/add_pregnancy_fragment">
 
@@ -29,6 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/fathers_name_textView"
+            android:hint="Fathers name"
             />
        <TextView
            android:layout_width="match_parent"

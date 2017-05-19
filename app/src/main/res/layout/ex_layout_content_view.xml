@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+    >
 
     <EditText
         android:id="@+id/expandableLayoutTextContent"
@@ -27,6 +27,6 @@
         android:layout_height="30sp"
         android:layout_below="@+id/expandableLayoutTextContent"
         android:background="@color/colorBrightGreen"
-        android:text="Save note..."></Button>
+        android:text="Save note..."/>
 
 </RelativeLayout>
