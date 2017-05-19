@@ -1,5 +1,6 @@
 package com.abc.foaled.Activity;
 
+import android.app.DialogFragment;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -28,6 +29,7 @@ import com.abc.foaled.Database.DatabaseHelper;
 import com.abc.foaled.Database.ORMBaseActivity;
 import com.abc.foaled.Fragment.AddFoalFragment;
 import com.abc.foaled.Fragment.AddPregnancyFragment;
+import com.abc.foaled.Fragment.DatePickerFragment;
 import com.abc.foaled.Helpers.DateTimeHelper;
 import com.abc.foaled.Helpers.ImageHelper;
 import com.abc.foaled.Models.Birth;
@@ -329,11 +331,18 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
     }
 
     @Override
-    public void onAddFoalFragmentInteraction(Uri uri) {
+    public void onAddFoalFragmentInteraction (Uri uri) {
     }
 
     public void ChooseDate(View v) {
         // TODO: Brendan - display date picker -  on selecting - put in the thing
+
+	    TextView editText = (TextView) v.getRootView().findViewById(R.id.date_of_conception);
+	    DialogFragment dialog = new DatePickerFragment();
+	    ((DatePickerFragment) dialog).setViewResult(editText);
+	    dialog.setRetainInstance(true);
+//        ((DatePickerDialog)dialog.getDialog()).getDatePicker().setMaxDate(Calendar.getInstance().getTimeInMillis());
+	    dialog.show(getFragmentManager(), "datePicker");
     }
 
     public void Cancel(View v) {

@@ -20,11 +20,13 @@ import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
+ *
+ * Made by Brendan :)
  */
 public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
     TextView textBox;
-    boolean time = true;
+    boolean time = false;
 
     /**
      * This is used to provide the destination of the value chosen
