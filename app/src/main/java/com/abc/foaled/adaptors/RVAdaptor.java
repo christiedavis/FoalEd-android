@@ -69,7 +69,10 @@ public class RVAdaptor extends RecyclerView.Adapter<RVAdaptor.HorseViewHolder>{
 
     @Override
     public int getItemCount() {
-        return horses.size();
+        if ( horses != null ) {
+            return horses.size();
+        }
+        return 0;
     }
 
     @Override

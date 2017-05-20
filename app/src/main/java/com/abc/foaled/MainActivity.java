@@ -1,11 +1,9 @@
 package com.abc.foaled;
 
 import android.content.Context;
-import android.os.Build;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.app.Notification;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
@@ -14,7 +12,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.Toolbar;
 
 import android.os.Bundle;
@@ -35,7 +32,6 @@ import com.abc.foaled.database.ORMBaseActivity;
 import com.abc.foaled.models.Horse;
 import com.abc.foaled.fragments.HorsesListFragment;
 import com.abc.foaled.fragments.NotificationSettingsFragment;
-import com.abc.foaled.notifications.NotificationScheduler;
 import com.j256.ormlite.stmt.QueryBuilder;
 
 import java.io.File;
@@ -207,6 +203,7 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
 	        if (fragment1 != null)
 	            fragment1.setListToBeDisplayed(horses);
         }
+
 
         fragmentManager.replace(R.id.flContent, fragment).commit();
 

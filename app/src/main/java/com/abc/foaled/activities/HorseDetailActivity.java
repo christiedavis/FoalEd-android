@@ -341,6 +341,7 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 	    int star = horse.isFavourite() ? R.drawable.star : R.drawable.star_hollowed;
 	    ((ImageView) findViewById(R.id.favourite)).setImageDrawable(ContextCompat.getDrawable(this, star));
     }
+
     @Override
     public void onAddPregnancyFragmentInteraction(Uri uri) {
     }
