@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.support.v4.app.NavUtils;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
@@ -22,6 +23,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.abc.foaled.adaptors.HorseNoteAdaptor;
+import com.abc.foaled.adaptors.MilestoneAdaptor;
 import com.abc.foaled.database.DatabaseHelper;
 import com.abc.foaled.database.ORMBaseActivity;
 import com.abc.foaled.fragments.AddFoalFragment;
@@ -75,6 +77,7 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
             case FOAL:
                 setContentView(R.layout.activity_foal_detail);
                 setUpImageView();
+                setUpMilestones();
                 break;
 
             case RETIRED:
@@ -140,7 +143,6 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
     }
 
     private void setUpImageView() {
-
         TextView tv = (TextView)findViewById(R.id.maidenTextView);
         if (tv != null) {
             tv.setVisibility(GONE);
@@ -168,7 +170,6 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
         else
             ((ImageView) findViewById(R.id.favourite)).setImageDrawable(ContextCompat.getDrawable(this, R.drawable.star_hollowed));
 
-
         //sets up the photo
         ImageView horsePhoto = (ImageView) findViewById(R.id.horse_photo);
         try {
@@ -189,8 +190,15 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
         super.onDestroy();
     }
 
-    private void updateNotesView() {
+    private void setUpMilestones() {
 
+        final RecyclerView milestoneRV = (RecyclerView) findViewById(R.id.milestone_recycler_view);
+        MilestoneAdaptor adaptor = new MilestoneAdaptor(horse);
+        milestoneRV.setAdapter(adaptor);
+    }
+
+    private void updateNotesView() {
+        // used for notes for horse
         Map<String, String> map = new HashMap<>();
 	    Collection<Birth> births = horse.getBirths();
 
@@ -200,9 +208,7 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
         List<String> years = new ArrayList<>(map.keySet());
 
         final ExpandableListView expandableLayoutListView = (ExpandableListView) findViewById(R.id.exlistview);
-
         HorseNoteAdaptor adaptor = new HorseNoteAdaptor(this, years, map);
-
         expandableLayoutListView.setAdapter(adaptor);
     }
 
@@ -287,8 +293,6 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 	    popupWindow.setBackgroundDrawable(new ColorDrawable());
 
 	    popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
-
-
     }
 
     public void AddFoal(String s) {
@@ -310,7 +314,7 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 	        birthDao.update(birth);
 
 //            Horse foal = new Horse(s, birth, "Notes", true);
-	        Horse foal = new Horse(s, birth, true, "Notes", Horse.HORSE_STATUS.FOAL, null);
+	        Horse foal = new Horse(s, birth, true, "Notes", Horse.HORSE_STATUS.DORMANT, null);
             horseDao.assignEmptyForeignCollection(foal, "milestones");
             foal.setStatus(Horse.HORSE_STATUS.FOAL);
 	        horseDao.create(foal);
@@ -365,6 +369,10 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
     }
 
     public void goToNotes(View v) {
+
+    }
+
+    public void generalSaveNote(View v) {
 
     }
 }

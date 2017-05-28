@@ -24,7 +24,9 @@ public class Milestone {
             value = newValue;
         }
 
-        public int getValue() { return value; }
+        public int getValue() {
+            return value;
+        }
     }
     //Variables
     @DatabaseField(generatedId = true)
@@ -46,7 +48,6 @@ public class Milestone {
 
     @DatabaseField(foreign = true)
     Horse h;
-
 
     public Milestone() {
 
@@ -70,7 +71,7 @@ public class Milestone {
             case EAT:
                 startTime = 4;
                 snoozeTime = 1;
-                message = "Your horse should have pooped by now";
+                message = "Your horse should have eaten by now";
                 detail = "It's important your horse poos so that it can empty itself. You might need to give him a laxative.";
                 notificationMessage = "Has your foal pooed?";
                 break;
@@ -86,12 +87,19 @@ public class Milestone {
             case DRINK:
                 startTime = 4;
                 snoozeTime = 1;
-                message = "Your horse should have pooped by now";
+                message = "Your horse should have drunk by now";
                 detail = "It's important your horse poos so that it can empty itself. You might need to give him a laxative.";
                 notificationMessage = "Has your foal pooed?";
                 break;
         }
+    }
 
+    public Boolean isCompleted() {
+        return completed;
+    }
+
+    public String getTitle()  {
+        return message;
     }
 
     public void setCompleted() {

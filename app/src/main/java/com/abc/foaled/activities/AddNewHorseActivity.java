@@ -35,7 +35,6 @@ import com.abc.foaled.models.Horse;
 import com.abc.foaled.R;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 
-
 import org.joda.time.DateTime;
 
 import java.io.File;
@@ -47,7 +46,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
 public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
@@ -61,7 +59,6 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
     private static String[] PERMISSIONS_STORAGE = {
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +87,6 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
     protected void onDestroy() {
         super.onDestroy();
     }
-
 
     /**
      * This is called when an activity is called with an intent to return with a result.
@@ -226,16 +222,11 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
     }
 
     public void selectDate(View view) {
-//        TextView editText = (TextView) findViewById(R.id.newHorseDOB);
-
         TextView editText = (TextView) view;
         DialogFragment dialog = new DatePickerFragment();
         ((DatePickerFragment) dialog).setViewResult(editText);
         dialog.setRetainInstance(true);
-//        ((DatePickerDialog)dialog.getDialog()).getDatePicker().setMaxDate(Calendar.getInstance().getTimeInMillis());
         dialog.show(getFragmentManager(), "datePicker");
-
-
     }
 
     public void selectPhoto(View view) {
@@ -258,7 +249,6 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
                             case "Remove photo":
                                 removePhoto();
                                 break;
-
                         }
                     }
                 })
@@ -355,5 +345,4 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
     private void getPermissions(String[] permissions) {
         ActivityCompat.requestPermissions(this, permissions, 1);
     }
-
 }

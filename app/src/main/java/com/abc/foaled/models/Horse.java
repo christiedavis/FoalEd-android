@@ -5,12 +5,17 @@ import android.util.Log;
 
 import com.abc.foaled.helpers.DateTimeHelper;
 import com.j256.ormlite.dao.ForeignCollection;
+import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by Brendan on 29/12/16.
@@ -77,13 +82,13 @@ public class Horse implements Serializable {
     @DatabaseField(canBeNull = false)
     private String imagePath;
 
-    @ForeignCollectionField(columnName = "milestones")
-    private ForeignCollection<Milestone> milestones;
+    @ForeignCollectionField(eager = true, columnName = "milestones")
+    private Collection<Milestone> milestones;
+    private List<Milestone> milestoneList;
+
 
 	@ForeignCollectionField(columnName = "births")
 	private ForeignCollection<Birth> pastBirths;
-
-
 
     public Horse() {
     }
@@ -94,6 +99,9 @@ public class Horse implements Serializable {
 	    this.sex = sex;
 	    this.notes = notes != null ? notes : "";
 	    this.status = status != null ? status : HORSE_STATUS.DORMANT;
+//        if (this.status == HORSE_STATUS.FOAL) {
+//            createMilestones();
+//        }
 	    this.imagePath = imagePath != null ? imagePath : "";
     }
 
@@ -147,7 +155,7 @@ public class Horse implements Serializable {
 	}
 
 	public void setStatus(HORSE_STATUS newStatus) {
-		//perform necassary checks
+		//perform necessary checks
 
 		// if first pregnancy - maiden else pregnant
 		if (newStatus == HORSE_STATUS.PREGNANT && pastBirths.isEmpty()) {
@@ -163,7 +171,6 @@ public class Horse implements Serializable {
 		}
 		this.status = newStatus;
 	}
-
 
 	public boolean isFavourite() {
 		return favourite;
@@ -181,9 +188,9 @@ public class Horse implements Serializable {
 		return imagePath;
 	}
 
-	public void setImagePath(String imagePath) {
-		this.imagePath = imagePath;
-	}
+//	public void setImagePath(String imagePath) {
+//		this.imagePath = imagePath;
+//	}
 
 	public ForeignCollection<Birth> getBirths() {
 	    return pastBirths;
@@ -193,16 +200,38 @@ public class Horse implements Serializable {
         return this.status.getString();
     }
 
-    public void createMilestones() {
-        milestones.add(new Milestone(0, this));
-        milestones.add(new Milestone(1, this));
-        milestones.add(new Milestone(2, this));
-        milestones.add(new Milestone(3, this));
-        try {
-            milestones.getDao().create(milestones);
-        } catch (SQLException e) {
-            Log.e("DATABASE", "Trouble creating initial milestones");
-            e.printStackTrace();
+
+    public List<Milestone> getMilestones() {
+//        return (ArrayList<Milestone>) milestones;
+
+//        ArrayList<Milestone> usersArrayList = new ArrayList<Milestone>();
+//
+//        return usersArrayList;
+            if (milestones.size() == 0) {
+                createMilestones();
+            }
+
+        if (milestoneList == null) {
+            milestoneList = new ArrayList<Milestone>();
+            for (Milestone milestone : milestones) {
+                milestoneList.add(milestone);
+            }
         }
+        return milestoneList;
+    }
+
+    public void createMilestones() {
+
+//
+
+
+        ArrayList<Milestone> arrayList = new ArrayList<>(milestones);
+
+        arrayList.add(new Milestone(0, this));
+        arrayList.add(new Milestone(1, this));
+        arrayList.add(new Milestone(2, this));
+        arrayList.add(new Milestone(3, this));
+
+        milestones = arrayList;
     }
 }
