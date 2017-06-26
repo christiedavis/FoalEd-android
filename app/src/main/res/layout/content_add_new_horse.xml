@@ -27,6 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textAlignment="center"
+            android:onClick="cancel"
             android:text="CANCEL"
             style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"/>
     </LinearLayout>
@@ -89,10 +90,12 @@
                             android:id="@+id/add_new_horse_name"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:maxLines="1"
                             android:ellipsize="end"
                             android:layout_weight="1"
                             android:layout_gravity="center"
+                            android:inputType="textPersonName|textCapWords"
+                            android:maxLines="1"
+                            android:imeOptions="actionDone|flagNoExtractUi"
                             android:hint="Name of Horse"/>
                     </TableRow>
                     <!--DATE OF BIRTH-->

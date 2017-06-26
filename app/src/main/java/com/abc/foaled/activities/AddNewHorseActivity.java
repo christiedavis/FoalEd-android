@@ -151,66 +151,16 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
 				    Log.e("Image", "Unable to delete empty image that we were going to use for the photo");
 		    }
 	    }
-
-
-/*
-
-	    //If we were taking a photo and we cancel, delete the temporary file we made. If unable to delete this file, throw an exception
-	    if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode != RESULT_OK) {
-		    File f = new File(tempPath);
-		    try {
-			    if (f.delete())
-				    throw new IOException("Unable to remove existing file");
-		    } catch (IOException e) {
-				e.printStackTrace();
-		    }
-	    }
-
-
-	    if ((requestCode == REQUEST_IMAGE_CAPTURE || requestCode == REQUEST_IMAGE_SELECT) && resultCode == RESULT_OK) {
-		    InputStream is;
-
-		    try {
-			    //If we took the photo, open inputStream from file that the photo was loaded in to
-			    if (requestCode == REQUEST_IMAGE_CAPTURE) {
-				    is = new FileInputStream(new File(tempPath));
-			    }
-			    else //else get it from the URI
-				    is = getContentResolver().openInputStream(data.getData());
-
-				//Create new internal file
-			    imagePath = ImageHelper.createImageFile(this);
-			    OutputStream fos = new FileOutputStream(imagePath);
-
-			    //Copy the external file to the internal file
-			    byte[] buffer = new byte[65536];
-			    int len;
-				if (is != null) {
-					while ((len = is.read(buffer)) != -1)
-						fos.write(buffer, 0, len);
-
-					fos.close();
-					is.close();
-				} else
-					throw new IOException();
-		    } catch (FileNotFoundException e) {
-			    Log.e("PHOTO", "Unable to open input or output stream. Please view stack trace");
-			    e.printStackTrace();
-		    } catch (IOException e) {
-			    Log.e("PHOTO", "Unable to write to output stream. Please look at stack trace");
-			    e.printStackTrace();
-		    }
-	    }
-
-	    //If we selected a new photo, set the new photo in the image view
-	    if (resultCode == RESULT_OK && !imagePath.isEmpty()) {
-		    ImageView iV = ((ImageView) findViewById(R.id.add_horse_image));
-		    int height = iV.getHeight() == 0 ? 300 : iV.getHeight();
-		    int width = iV.getWidth() == 0 ? 300 : iV.getWidth();
-		    iV.setImageBitmap(ImageHelper.bitmapSmaller(imagePath, width, height));
-	    }*/
     }
 
+	/**
+	 * Finishes this activity because the user clicked the cancel button
+	 *
+	 * @param view cancel button
+	 */
+	public void cancel(View view) {
+	    finish();
+    }
 
     /**
      *  Adds a horse to the database with the relevant information entered in this activity
@@ -218,16 +168,32 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
      */
     public void insert(View view) {
 
-//        String name = "Christie"; //((EditText) findViewById(R.id.add_horse_name)).getText().toString();
         EditText nameEditText = (EditText) findViewById(R.id.add_new_horse_name);
         if (nameEditText.getText().toString().isEmpty()) {
             nameEditText.setError("Please don't leave name blank");
             return;
         }
 
-        Boolean sexIsFemale = ((CheckBox) findViewById(R.id.checkboxSex)).isChecked();
+        TextView dobTV = (TextView) findViewById(R.id.newHorseDOB);
 
-        String name = nameEditText.getText().toString();
+
+	    String name = nameEditText.getText().toString();
+		String dob = dobTV.getText().toString();
+
+	    Boolean female = false;
+	    Boolean pregnant = false;
+
+
+	    CheckBox femaleCB = (CheckBox) findViewById(R.id.checkboxSex);
+	    CheckBox pregnantCB = (CheckBox) findViewById(R.id.checkboxPregnant);
+
+	    if (femaleCB.isChecked()) {
+		    female = true;
+
+		    if (pregnantCB.isChecked())
+		    	pregnant = true;
+	    }
+
         String notes = ""; // ((EditText) findViewById(R.id.add_notes_text)).getText().toString();
 
 	    //TODO change date to be proper one
@@ -256,23 +222,35 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
 
     public void toggleSex(View view) {
         CheckBox checkBox = (CheckBox) view;
-        ScrollView scrollView = (ScrollView) findViewById(R.id.content_add_new_horse);
+        final ScrollView scrollView = (ScrollView) findViewById(R.id.content_add_new_horse);
         LinearLayout layout = (LinearLayout) findViewById(R.id.pregnantRow);
         if (checkBox.isChecked()) {
             layout.setVisibility(View.VISIBLE);
+	        scrollView.post(new Runnable() {
+		        @Override
+		        public void run() {
+			        scrollView.fullScroll(View.FOCUS_DOWN);
+		        }
+	        });
         } else {
             layout.setVisibility(View.GONE);
             findViewById(R.id.conceptionRow).setVisibility(View.GONE);
             ((CheckBox) findViewById(R.id.checkboxPregnant)).setChecked(false);
         }
-        scrollView.scrollTo(0, scrollView.getBottom());
     }
 
     public void togglePregnant(View view) {
         CheckBox checkBox = (CheckBox) view;
+	    final ScrollView scrollView = (ScrollView) findViewById(R.id.content_add_new_horse);
         LinearLayout layout = (LinearLayout) findViewById(R.id.conceptionRow);
         if (checkBox.isChecked()) {
             layout.setVisibility(View.VISIBLE);
+	        scrollView.post(new Runnable() {
+		        @Override
+		        public void run() {
+			        scrollView.fullScroll(View.FOCUS_DOWN);
+		        }
+	        });
         } else {
             layout.setVisibility(View.GONE);
         }
@@ -394,28 +372,6 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
 		            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
 		            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
 	            }
-
-
-/*                //foal-ed public directory
-                File f = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
-                        + "/FoalEd");
-                //TODO change this temporary file thing to go in the app's cache instead
-
-                try {
-                    //creates a temp file that gets deleted when app closes (hopefully)
-                    File image = File.createTempFile(
-                            "temp",
-                            ".jpg",
-                            f
-                    );
-                    image.deleteOnExit();
-                    tempPath = image.getAbsolutePath(); //creates a temporary file, saving path in imagePath
-                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(image));
-                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }*/
-
             }
         }
     }
