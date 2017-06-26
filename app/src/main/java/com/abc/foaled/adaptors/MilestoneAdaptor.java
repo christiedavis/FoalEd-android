@@ -62,7 +62,7 @@ public class MilestoneAdaptor extends RecyclerView.Adapter<MilestoneAdaptor.Mile
 
     @Override
     public int getItemCount() {
-        if ( horse.getMilestones() == null ) {
+        if (horse.getMilestones() == null ) {
             horse.createMilestones();
         }
 
@@ -72,7 +72,7 @@ public class MilestoneAdaptor extends RecyclerView.Adapter<MilestoneAdaptor.Mile
 
     @Override
     public void onBindViewHolder(MilestoneViewHolder holder, int i) {
-        holder.milestoneTitle.setText(horse.getMilestones().get(i).getTitle());
+        holder.milestoneTitle.setText(horse.getMilestones().get(i).getMessage());
         holder.completedIcon.setImageResource(R.drawable.ic_favourite_unfilled);
 
         if (horse.getMilestones().get(i).isCompleted())

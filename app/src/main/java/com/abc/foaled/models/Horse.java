@@ -99,9 +99,6 @@ public class Horse implements Serializable {
 	    this.sex = sex;
 	    this.notes = notes != null ? notes : "";
 	    this.status = status != null ? status : HORSE_STATUS.DORMANT;
-//        if (this.status == HORSE_STATUS.FOAL) {
-//            createMilestones();
-//        }
 	    this.imagePath = imagePath != null ? imagePath : "";
     }
 
@@ -188,9 +185,9 @@ public class Horse implements Serializable {
 		return imagePath;
 	}
 
-//	public void setImagePath(String imagePath) {
-//		this.imagePath = imagePath;
-//	}
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
+	}
 
 	public ForeignCollection<Birth> getBirths() {
 	    return pastBirths;
@@ -202,14 +199,8 @@ public class Horse implements Serializable {
 
 
     public List<Milestone> getMilestones() {
-//        return (ArrayList<Milestone>) milestones;
-
-//        ArrayList<Milestone> usersArrayList = new ArrayList<Milestone>();
-//
-//        return usersArrayList;
-            if (milestones.size() == 0) {
-                createMilestones();
-            }
+        if (milestones.size() == 0)
+            return null;
 
         if (milestoneList == null) {
             milestoneList = new ArrayList<Milestone>();
@@ -220,12 +211,11 @@ public class Horse implements Serializable {
         return milestoneList;
     }
 
-    public void createMilestones() {
-
-//
-
-
-        ArrayList<Milestone> arrayList = new ArrayList<>(milestones);
+	/**
+	 * Should only get called if the horse is a Foal
+	 */
+	public void createMilestones() {
+	    ArrayList<Milestone> arrayList = new ArrayList<>(milestones);
 
         arrayList.add(new Milestone(0, this));
         arrayList.add(new Milestone(1, this));

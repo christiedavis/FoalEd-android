@@ -38,6 +38,8 @@ import com.abc.foaled.R;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -64,10 +66,6 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
 	private String tempPath = "";
     static final int API_LEVEL = android.os.Build.VERSION.SDK_INT;
 
-    private static String[] PERMISSIONS_STORAGE = {
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-    };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,14 +76,9 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
 	    if (getSupportActionBar() != null)
 	        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-/*
-        ImageView iV = (ImageView) findViewById(R.id.add_horse_image);
-	    iV.setImageBitmap(ImageHelper.bitmapSmaller(imagePath, 200, 200));*/
-
-        String date = new SimpleDateFormat("dd/MM/yyyy - HH:mm", Locale.UK).format(Calendar.getInstance().getTime());
+        String date = new SimpleDateFormat("dd/MM/yyyy", Locale.UK).format(Calendar.getInstance().getTime());
         TextView dob = (TextView) findViewById(R.id.newHorseDOB);
         TextView concep = (TextView) findViewById(R.id.newHorseConceptionDate);
-//        dob.setText(date);
         dob.setHint(date);
         concep.setHint(date);
     }
@@ -168,21 +161,26 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
      */
     public void insert(View view) {
 
+	    //Get name. Throw error if no name supplied
         EditText nameEditText = (EditText) findViewById(R.id.add_new_horse_name);
         if (nameEditText.getText().toString().isEmpty()) {
             nameEditText.setError("Please don't leave name blank");
             return;
         }
-
-        TextView dobTV = (TextView) findViewById(R.id.newHorseDOB);
-
-
 	    String name = nameEditText.getText().toString();
-		String dob = dobTV.getText().toString();
+
+
+	    //parse date
+	    String dobString = ((TextView) findViewById(R.id.newHorseDOB)).getText().toString();
+	    DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/MM/yyyy");
+	    DateTime dob = formatter.parseDateTime(dobString);
+
+	    //create arbitrary birth instance
+	    Birth birth = new Birth(null, null, null, dob);
+
 
 	    Boolean female = false;
 	    Boolean pregnant = false;
-
 
 	    CheckBox femaleCB = (CheckBox) findViewById(R.id.checkboxSex);
 	    CheckBox pregnantCB = (CheckBox) findViewById(R.id.checkboxPregnant);
@@ -194,30 +192,20 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
 		    	pregnant = true;
 	    }
 
-        String notes = ""; // ((EditText) findViewById(R.id.add_notes_text)).getText().toString();
+		//TODO make a 'pick status' dialog that lets the user choose the status of the horse
+	    Horse horse = new Horse(name, birth, female, null, pregnant ? Horse.HORSE_STATUS.PREGNANT : Horse.HORSE_STATUS.DORMANT, imagePath);
 
-	    //TODO change date to be proper one
-        Birth birth = new Birth(null, null, null, new DateTime());
-
-	    Horse horse = new Horse(name, birth, true, notes, Horse.HORSE_STATUS.DORMANT, imagePath);
+	    //Needs to be done in this order
 	    RuntimeExceptionDao<Horse, Integer> horseDao = getHelper().getHorseDataDao();
 	    horseDao.assignEmptyForeignCollection(horse, "milestones");
 	    horseDao.assignEmptyForeignCollection(horse, "births");
         horse.createMilestones();
 	    horseDao.create(horse);
 
-//	    birth.setEstConception(new Date());
+		birth.setHorse(horse);
         getHelper().getBirthsDataDao().create(birth);
 
-        showSuccessConfirmation();
-    }
-
-    /**
-     * Success method to be called when a horse has been successfully added.
-     */
-    private void showSuccessConfirmation() {
-        Toast.makeText(this, "Horse added successfully", Toast.LENGTH_SHORT).show();
-        NavUtils.navigateUpFromSameTask(this);
+        finish();
     }
 
     public void toggleSex(View view) {
