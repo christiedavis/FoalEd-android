@@ -1,18 +1,12 @@
 package com.abc.foaled.models;
 
-import android.content.Context;
-import android.util.Log;
-
 import com.abc.foaled.helpers.DateTimeHelper;
 import com.j256.ormlite.dao.ForeignCollection;
-import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -178,7 +172,7 @@ public class Horse implements Serializable {
 	}
 
 	public String getAge(){
-		return DateTimeHelper.getCurrentAge(dateOfBirth.getBirthTime());
+		return DateTimeHelper.getCurrentAgeString(dateOfBirth.getBirthTime());
 	}
 
 	public String getImagePath() {

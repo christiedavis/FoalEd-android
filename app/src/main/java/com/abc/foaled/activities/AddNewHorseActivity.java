@@ -79,8 +79,8 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
         String date = new SimpleDateFormat("dd/MM/yyyy", Locale.UK).format(Calendar.getInstance().getTime());
         TextView dob = (TextView) findViewById(R.id.newHorseDOB);
         TextView concep = (TextView) findViewById(R.id.newHorseConceptionDate);
-        dob.setHint(date);
-        concep.setHint(date);
+        dob.setText(date);
+        concep.setText(date);
     }
 
     @Override

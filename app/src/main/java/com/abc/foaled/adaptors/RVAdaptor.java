@@ -2,8 +2,6 @@ package com.abc.foaled.adaptors;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -26,11 +24,11 @@ import java.util.List;
 
 public class RVAdaptor extends RecyclerView.Adapter<RVAdaptor.HorseViewHolder>{
 
-    List<Horse> horses;
+    private List<Horse> horses;
 
     public RVAdaptor(List<Horse> horses) { this.horses = horses; }
 
-    public static class HorseViewHolder extends RecyclerView.ViewHolder {
+    static class HorseViewHolder extends RecyclerView.ViewHolder {
 
         CardView cv;
         TextView horseName;
