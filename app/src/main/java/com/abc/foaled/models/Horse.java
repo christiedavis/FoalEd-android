@@ -177,7 +177,7 @@ public class Horse implements Serializable {
 		favourite = !favourite;
 	}
 
-	public int getAge(){
+	public String getAge(){
 		return DateTimeHelper.getCurrentAge(dateOfBirth.getBirthTime());
 	}
 

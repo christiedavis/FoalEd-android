@@ -4,59 +4,84 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <include
-        layout="@layout/view_card"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/cardView.height"/>
+        android:layout_height="215dp">
+
+        <ImageView
+            android:id="@+id/horse_photo"
+            android:layout_width="match_parent"
+            android:layout_height="215dp"
+            android:foreground="@drawable/crdgrad"
+            android:scaleType="centerCrop"
+            android:src="@drawable/default_horse"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/horse_status"
+            android:textColor="#FFFFFF"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_margin="10dp"/>
+    </RelativeLayout>
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="60dp"
         android:paddingTop="5dp">
 
-        <!--TODO: make content hold it's height-->
 
-        <Button
-            android:id="@+id/buttonAge"
-            android:layout_width="0px"
-            android:layout_height="50dp"
-            android:layout_marginLeft="5sp"
-
-            android:layout_marginRight="5sp"
+        <TextView
+            android:id="@+id/age"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="10dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="3dp"
+            android:paddingTop="3dp"
             android:background="@color/colorPrimary"
-            android:clickable="false"
-            android:maxLines="1"
-            android:paddingLeft="10sp"
-            android:paddingRight="10sp"
-            android:text="Age"
-            android:textColor="@android:color/white" />
-
-        <Button
-            android:text="Status"
-            android:layout_height="50dp"
-            android:id="@+id/buttonStatus"
-            android:layout_weight="1"
-            android:layout_width="0px"
-            android:clickable="false"
             android:textColor="@android:color/white"
-            android:background="@color/colorPrimary"
-            android:layout_marginLeft="5sp"
-            android:layout_marginRight="5sp"
-            />
+            android:gravity="center"/>
 
-        <Button
-            android:text="Sex"
-            android:layout_height="50dp"
-            android:id="@+id/buttonSex"
+        <TextView
+            android:id="@+id/sex"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:layout_width="0px"
-            android:clickable="false"
-            android:textColor="@android:color/white"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="3dp"
+            android:paddingTop="3dp"
             android:background="@color/colorPrimary"
-            android:layout_marginLeft="5sp"
-            android:layout_marginRight="5sp"
-            />
+            android:textColor="@android:color/white"
+            android:gravity="center"/>
+
+        <TextView
+            android:id="@+id/pregnantStatus"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="15dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="3dp"
+            android:paddingTop="3dp"
+            android:background="@color/colorPrimary"
+            android:textColor="@android:color/white"
+            android:gravity="center"/>
     </LinearLayout>
 </LinearLayout>

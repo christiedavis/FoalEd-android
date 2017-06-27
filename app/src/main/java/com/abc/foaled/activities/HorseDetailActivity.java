@@ -3,14 +3,19 @@ package com.abc.foaled.activities;
 import android.app.DialogFragment;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.NavUtils;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Layout;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,6 +67,20 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
         setup();
     }
 
+	/**
+	 * Inflates the custom menu items in to the menu on the toolbar
+	 * @param menu The menu to inflate my items in to
+	 * @return True if we were able to inflate it
+	 */
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.horse_detail, menu);
+
+		int star = horse.isFavourite() ? R.mipmap.star_white : R.mipmap.star_hollow_white;
+		menu.findItem(R.id.favourite_action).setIcon(star);
+		return true;
+	}
+
     private void setup() {
         Log.d("Horse Detail Activity", "- horse status" + horse.getStatusString());
 
@@ -112,6 +131,7 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 		    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		    getSupportActionBar().setTitle(horse.getName());
 	    }
+
     }
 
     private void setUpPregnant() {
@@ -148,27 +168,15 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
             tv.setVisibility(GONE);
         }
 
-        Button horseAge = (Button)this.findViewById(R.id.buttonAge);
-        horseAge.setText("Age");
-        horseAge.setText(DateTimeHelper.getAgeString(horse.getAge()));
-
-        TextView name = (TextView)this.findViewById(R.id.horse_name);
-        name.setText(horse.getName());
-
         // TODO: If it's a foal display which notification it is up to
-        TextView age = (TextView)this.findViewById(R.id.horse_status);
-        age.setText(horse.getStatusString());
+        TextView age = (TextView) findViewById(R.id.age);
+        age.setText(horse.getAge());
 
-        TextView gender = (TextView)this.findViewById(R.id.buttonSex);
+        TextView gender = (TextView) findViewById(R.id.sex);
         gender.setText(horse.isFemale() ? "Female" : "Male");
 
-        TextView status = (TextView)this.findViewById(R.id.buttonStatus);
+        TextView status = (TextView) findViewById(R.id.pregnantStatus);
         status.setText(horse.getStatusString());
-
-        if (horse.isFavourite())
-            ((ImageView) findViewById(R.id.favourite)).setImageDrawable(ContextCompat.getDrawable(this, R.drawable.star));
-        else
-            ((ImageView) findViewById(R.id.favourite)).setImageDrawable(ContextCompat.getDrawable(this, R.drawable.star_hollowed));
 
         //sets up the photo
         ImageView horsePhoto = (ImageView) findViewById(R.id.horse_photo);
@@ -336,14 +344,14 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
         }
     }
 
-    public void favouriteAction(View view) {
+    public void favouriteAction(MenuItem item) {
 	    //Updates horse
         horse.toggleFavourite();
         getHelper().getHorseDataDao().update(horse);
 
 	    //Updates the star on the view
-	    int star = horse.isFavourite() ? R.drawable.star : R.drawable.star_hollowed;
-	    ((ImageView) findViewById(R.id.favourite)).setImageDrawable(ContextCompat.getDrawable(this, star));
+	    int star = horse.isFavourite() ? R.mipmap.star_white : R.mipmap.star_hollow_white;
+	    item.setIcon(ContextCompat.getDrawable(this, star));
     }
 
     @Override
@@ -366,13 +374,5 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
     public void Cancel(View v) {
         System.out.println("Cancel birth");
         // TODO: leave fragmemt go back to horse detail
-    }
-
-    public void goToNotes(View v) {
-
-    }
-
-    public void generalSaveNote(View v) {
-
     }
 }

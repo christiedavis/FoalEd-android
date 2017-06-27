@@ -1,52 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:context="com.abc.foaled.activities.HorseDetailActivity"
-    android:layout_marginTop="?attr/actionBarSize">
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_marginTop="?attr/actionBarSize"
+              android:fitsSystemWindows="true"
+              android:orientation="vertical"
+              tools:context="com.abc.foaled.activities.HorseDetailActivity">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:id="@+id/horse_detail_linear_layout">
+        <LinearLayout
+            android:id="@+id/horse_detail_linear_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-                <include layout="@layout/view_horse_header"
+            <include
+                layout="@layout/view_horse_header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
-            <Button
-                android:layout_marginTop="5dp"
-                android:text="Add Pregnancy"
+<!--Redesidgning the page-->
+<!--            <Button
+                android:id="@+id/button_add_pregnancy"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/button_add_pregnancy"
-                android:background="@color/colorAccent"
                 android:layout_marginBottom="10dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/colorAccent"
                 android:clickable="true"
-                android:onClick="AddNewPregnancyFragment"/>
+                android:onClick="AddNewPregnancyFragment"
+                android:text="Add Pregnancy"/>-->
 
-            <include layout="@layout/ex_group_view" />
+            <include layout="@layout/ex_group_view"/>
 
             <ExpandableListView
                 android:id="@+id/exlistview"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"/>
 
-            </LinearLayout>
+        </LinearLayout>
 
-        </ScrollView>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="hi"
-        android:id="@+id/Add_foal_homie"/>
-
+    </ScrollView>
 </LinearLayout>
