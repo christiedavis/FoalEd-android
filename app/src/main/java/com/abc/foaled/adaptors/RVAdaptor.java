@@ -2,6 +2,8 @@ package com.abc.foaled.adaptors;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -77,20 +79,21 @@ public class RVAdaptor extends RecyclerView.Adapter<RVAdaptor.HorseViewHolder>{
 
     @Override
     public void onBindViewHolder(HorseViewHolder holder, int i) {
-        holder.horseName.setText(horses.get(i).getName());
+		Horse horse = horses.get(i);
+        holder.horseName.setText(horse.getName());
 
-        holder.horseStatus.setText(horses.get(i).getStatusString());
-        holder.horseID = horses.get(i).getHorseID();
+        holder.horseStatus.setText(horse.getStatusString());
+        holder.horseID = horse.getHorseID();
 
-	    if (horses.get(i).getStatus() == Horse.HORSE_STATUS.FOAL)
-	    	holder.horsePhoto.setImageResource(R.drawable.default_foal);
-        else
-        	holder.horsePhoto.setImageBitmap(ImageHelper.bitmapSmaller(horses.get(i).getImagePath(), 200, 200));
+		if (horse.getImagePath().isEmpty()) {
+			int image = horse.getStatus() == Horse.HORSE_STATUS.FOAL ? R.drawable.default_foal : R.drawable.default_horse;
+			holder.horsePhoto.setImageResource(image);
 
-        if (horses.get(i).isFavourite())
-            holder.favouriteIcon.setImageResource(R.drawable.ic_favourite_filled);
-        else
-            holder.favouriteIcon.setImageResource(R.drawable.ic_favourite_unfilled);
+		} else
+			holder.horsePhoto.setImageBitmap(ImageHelper.bitmapSmaller(horse.getImagePath(), 200, 200));
+
+		int star = horse.isFavourite() ? R.drawable.ic_favourite_filled : R.drawable.ic_favourite_unfilled;
+        holder.favouriteIcon.setImageResource(star);
     }
 
     @Override

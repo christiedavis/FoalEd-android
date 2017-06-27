@@ -135,7 +135,7 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
     }
 
     private void setUpPregnant() {
-        Button haveBirth = (Button)this.findViewById(R.id.button_add_pregnancy);
+/*        Button haveBirth = (Button) findViewById(R.id.button_add_pregnancy);
         haveBirth.setText("Give Birth");
         if (horse.getStatus() == Horse.HORSE_STATUS.PREGNANT) {
             haveBirth.setBackgroundColor(Color.RED);
@@ -147,11 +147,11 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
               public void onClick(View v) {
                   AddFoalFragment(v);
               }
-        });
+        });*/
     }
 
     private void setupDormant() {
-        Button haveBirth = (Button)this.findViewById(R.id.button_add_pregnancy);
+/*        Button haveBirth = (Button)this.findViewById(R.id.button_add_pregnancy);
         haveBirth.setText("Add Pregnancy");
         haveBirth.setBackgroundColor( ContextCompat.getColor(this, R.color.colorAccent));
 
@@ -159,7 +159,7 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
             public void onClick(View v) {
                 AddNewPregnancyFragment(v);
             }
-        });
+        });*/
     }
 
     private void setUpImageView() {
