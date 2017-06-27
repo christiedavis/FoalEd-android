@@ -13,8 +13,7 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:paddingTop="5dp"
-        >
+        android:paddingTop="5dp">
 
         <!--TODO: make content hold it's height-->
 

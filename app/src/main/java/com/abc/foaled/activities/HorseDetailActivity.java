@@ -106,7 +106,7 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
                 break;
         }
 
-	    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar3);
+	    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 	    setSupportActionBar(toolbar);
 	    if (getSupportActionBar() != null) {
 		    getSupportActionBar().setDisplayHomeAsUpEnabled(true);

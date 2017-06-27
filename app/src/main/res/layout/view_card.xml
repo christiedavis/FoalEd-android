@@ -20,35 +20,46 @@
             android:foreground="@drawable/crdgrad"
             android:scaleType="centerCrop"/>
 
-        <TextView
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/horse_name"
-            android:textColor="#FFFFFF"
-            android:paddingLeft="50dp"
+            android:orientation="horizontal"
             android:layout_alignParentBottom="true"
-            android:paddingBottom="25dp"
-            android:textSize="25sp"/>
+            android:layout_alignParentStart="true"
+            android:layout_margin="10dp">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/horse_status"
-            android:textColor="#FFFFFF"
-            android:paddingLeft="50dp"
-            android:layout_alignParentBottom="true"
-            android:paddingBottom="10dp"/>
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:id="@+id/favourite"
+                app:srcCompat="@drawable/star_hollowed"
+                android:onClick="favouriteAction"
+                android:layout_gravity="center_vertical"/>
 
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:id="@+id/favourite"
-            app:srcCompat="@drawable/star_hollowed"
-            android:layout_alignTop="@+id/horse_name"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="10dp"
-            android:onClick="favouriteAction"/>
 
+            <LinearLayout
+                android:id="@+id/horse_deets"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/horse_name"
+                    android:textColor="#FFFFFF"
+                    android:textSize="25sp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/horse_status"
+                    android:textColor="#FFFFFF"/>
+            </LinearLayout>
+        </LinearLayout>
     </RelativeLayout>
 
 </android.support.v7.widget.CardView>
