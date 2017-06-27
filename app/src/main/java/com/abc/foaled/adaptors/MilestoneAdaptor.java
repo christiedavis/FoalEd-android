@@ -17,6 +17,7 @@ import com.abc.foaled.models.Horse;
 
 /**
  * Created by christie on 20/05/17.
+ *
  */
 
 public class MilestoneAdaptor extends RecyclerView.Adapter<MilestoneAdaptor.MilestoneViewHolder> {

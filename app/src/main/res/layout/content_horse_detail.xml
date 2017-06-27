@@ -7,8 +7,6 @@
     android:fitsSystemWindows="true"
     tools:context="com.abc.foaled.activities.HorseDetailActivity">
 
-    <include layout="@layout/toolbar" />
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -21,8 +19,7 @@
 
                 <include layout="@layout/view_horse_header"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
+                android:layout_height="wrap_content"/>
 
             <Button
                 android:layout_marginTop="5dp"

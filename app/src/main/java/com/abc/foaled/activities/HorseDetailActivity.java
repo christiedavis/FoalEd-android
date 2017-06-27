@@ -59,13 +59,6 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 
         horseID = getIntent().getIntExtra("HorseID", 0);
 	    horse = getHelper().getHorseDataDao().queryForId(horseID);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle(horse.getName());
-        }
         setup();
     }
 
@@ -112,6 +105,13 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
                 setUpPregnant();
                 break;
         }
+
+	    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar3);
+	    setSupportActionBar(toolbar);
+	    if (getSupportActionBar() != null) {
+		    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		    getSupportActionBar().setTitle(horse.getName());
+	    }
     }
 
     private void setUpPregnant() {

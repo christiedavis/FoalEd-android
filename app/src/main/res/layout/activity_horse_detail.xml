@@ -9,8 +9,23 @@
     android:orientation="vertical"
     android:fitsSystemWindows="true"
     tools:context="com.abc.foaled.activities.HorseDetailActivity"
-    android:id="@+id/horse_detail_screen"
-    >
+    android:id="@+id/horse_detail_screen">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:background="?attr/colorPrimary"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar3"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+    </android.support.design.widget.AppBarLayout>
 
     <include layout="@layout/content_horse_detail" />
 
@@ -23,8 +38,5 @@
         android:src="@drawable/ic_menu_pregnancy"
         android:clickable="true"
         android:onClick="AddNewPregnancyFragment"/>
-    
+
 </android.support.design.widget.CoordinatorLayout>
-
-
-
