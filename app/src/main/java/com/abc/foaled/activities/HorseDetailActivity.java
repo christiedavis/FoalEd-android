@@ -452,6 +452,7 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 										}
 									});
 							//finish the activity
+							Toast.makeText(context, "Horse succesfully deleted", Toast.LENGTH_LONG).show();
 							finish();
 						} catch (SQLException e) {
 							Toast.makeText(context, "Unable to delete this horse", Toast.LENGTH_LONG).show();
