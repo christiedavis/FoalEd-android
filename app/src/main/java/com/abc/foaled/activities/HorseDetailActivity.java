@@ -39,6 +39,7 @@ import com.abc.foaled.helpers.ImageHelper;
 import com.abc.foaled.models.Birth;
 import com.abc.foaled.models.Horse;
 import com.abc.foaled.R;
+import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 
 import org.joda.time.DateTime;
@@ -84,7 +85,34 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
     private void setup() {
         Log.d("Horse Detail Activity", "- horse status" + horse.getStatusString());
 
-        switch (horse.getStatus()) {
+		setContentView(R.layout.activity_horse_detail);
+
+
+		TextView age = (TextView) findViewById(R.id.age);
+		age.setText(horse.getAge());
+
+		TextView gender = (TextView) findViewById(R.id.sex);
+		gender.setText(horse.isFemale() ? "Female" : "Male");
+
+		TextView status = (TextView) findViewById(R.id.pregnantStatus);
+		status.setText(horse.getStatusString());
+
+
+		//sets up the photo
+		ImageView horsePhoto = (ImageView) findViewById(R.id.horse_photo);
+
+		if (horse.getImagePath().isEmpty()) {
+			int photo = horse.getStatus() == Horse.HORSE_STATUS.FOAL ? R.drawable.default_foal : R.drawable.default_horse;
+			horsePhoto.setImageResource(photo);
+		} else
+			horsePhoto.setImageBitmap(ImageHelper.bitmapSmaller(horse.getImagePath(), 300, 300));
+
+
+		FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+
+
+
+/*        switch (horse.getStatus()) {
 
             case FOAL:
                 setContentView(R.layout.activity_foal_detail);
@@ -123,7 +151,7 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
                 setUpImageView();
                 setUpPregnant();
                 break;
-        }
+        }*/
 
 	    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 	    setSupportActionBar(toolbar);
@@ -163,7 +191,7 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
     }
 
     private void setUpImageView() {
-        TextView tv = (TextView)findViewById(R.id.maidenTextView);
+        TextView tv = (TextView) findViewById(R.id.maidenTextView);
         if (tv != null) {
             tv.setVisibility(GONE);
         }
@@ -198,6 +226,7 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
         super.onDestroy();
     }
 
+
     private void setUpMilestones() {
 
         final RecyclerView milestoneRV = (RecyclerView) findViewById(R.id.milestone_recycler_view);
@@ -206,7 +235,7 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
     }
 
     private void updateNotesView() {
-        // used for notes for horse
+/*        // used for notes for horse
         Map<String, String> map = new HashMap<>();
 	    Collection<Birth> births = horse.getBirths();
 
@@ -217,7 +246,7 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 
         final ExpandableListView expandableLayoutListView = (ExpandableListView) findViewById(R.id.exlistview);
         HorseNoteAdaptor adaptor = new HorseNoteAdaptor(this, years, map);
-        expandableLayoutListView.setAdapter(adaptor);
+        expandableLayoutListView.setAdapter(adaptor);*/
     }
 
     @Override

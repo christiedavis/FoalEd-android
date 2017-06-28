@@ -1,7 +1,6 @@
 package com.abc.foaled.activities;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,13 +8,10 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 
 import android.app.DialogFragment;
-import android.support.v4.app.NavUtils;
 import android.support.v4.content.FileProvider;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -31,6 +27,7 @@ import android.widget.Toast;
 import com.abc.foaled.database.DatabaseHelper;
 import com.abc.foaled.database.ORMBaseActivity;
 import com.abc.foaled.fragments.DatePickerFragment;
+import com.abc.foaled.helpers.DateTimeHelper;
 import com.abc.foaled.helpers.ImageHelper;
 import com.abc.foaled.models.Birth;
 import com.abc.foaled.models.Horse;
@@ -42,7 +39,6 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -169,7 +165,6 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
         }
 	    String name = nameEditText.getText().toString();
 
-
 	    //parse date
 	    String dobString = ((TextView) findViewById(R.id.newHorseDOB)).getText().toString();
 	    DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/MM/yyyy");
@@ -192,8 +187,16 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
 		    	pregnant = true;
 	    }
 
+		Horse.HORSE_STATUS status = Horse.HORSE_STATUS.DORMANT;
+
+		//assumes a horse can't get pregnant at less than a year old
+		if (DateTimeHelper.getAgeInYears(dob) < 1)
+			status = Horse.HORSE_STATUS.FOAL;
+		else if (pregnant)
+			status = Horse.HORSE_STATUS.PREGNANT;
+
 		//TODO make a 'pick status' dialog that lets the user choose the status of the horse
-	    Horse horse = new Horse(name, birth, female, null, pregnant ? Horse.HORSE_STATUS.PREGNANT : Horse.HORSE_STATUS.DORMANT, imagePath);
+	    Horse horse = new Horse(name, birth, female, null, status, imagePath);
 
 	    //Needs to be done in this order
 	    RuntimeExceptionDao<Horse, Integer> horseDao = getHelper().getHorseDataDao();
@@ -245,6 +248,7 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
     }
 
     public void selectDate(View view) {
+		//TODO display time picker below date, and on 2 days old, hide it
         TextView editText = (TextView) view;
         DialogFragment dialog = new DatePickerFragment();
         ((DatePickerFragment) dialog).setViewResult(editText);

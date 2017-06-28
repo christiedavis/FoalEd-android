@@ -4,4 +4,8 @@
     <color name="colorPrimaryDark">#15733b</color>
     <color name="colorBrightGreen">#1db65a</color>
     <color name="colorAccent">#7754a7</color>
+
+    <!--FAB colours-->
+    <color name="colorAccentLight">#9668d6</color>
+    <color name="black_semi_transparent">#B2000000</color>
 </resources>

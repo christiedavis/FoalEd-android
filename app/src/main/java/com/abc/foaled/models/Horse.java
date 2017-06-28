@@ -40,13 +40,13 @@ public class Horse implements Serializable {
                     return "Dormant";
 
                 case MAIDEN:
-                    return "Maiden Pregnancy";
+                    return "Maiden";
 
                 case PREGNANT:
                     return "Pregnant";
 
                 case FOAL:
-                    return "Recently born";
+                    return "Foal";
 
                 case RETIRED:
                     return "Retired";
@@ -188,7 +188,7 @@ public class Horse implements Serializable {
     }
 
     public String getStatusString() {
-        return this.status.getString();
+        return status.getString();
     }
 
 
