@@ -1,5 +1,6 @@
 package com.abc.foaled;
 
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.content.Intent;
@@ -27,11 +28,13 @@ import com.abc.foaled.activities.NotificationSettingsActivity;
 import com.abc.foaled.database.DatabaseHelper;
 import com.abc.foaled.database.DatabaseManager;
 import com.abc.foaled.database.ORMBaseActivity;
+import com.abc.foaled.helpers.DateTimeHelper;
 import com.abc.foaled.models.Horse;
 import com.abc.foaled.fragments.HorsesListFragment;
 import com.abc.foaled.fragments.NotificationSettingsFragment;
 import com.j256.ormlite.stmt.QueryBuilder;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,6 +86,34 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
 			}
 		});
 		checkForUpdates();
+
+		updateHorses();
+	}
+
+	/**
+	 * A background thread to update the horses's status in the background
+	 */
+	private void updateHorses() {
+		AsyncTask.execute(new Runnable() {
+			@Override
+			public void run() {
+
+				//Transforms all foals into either Maiden or Dormant (if female or male) after a year
+				try {
+					List<Horse> foals = getHelper().getHorseDataDao().queryBuilder().where().eq("status", Horse.HORSE_STATUS.FOAL).query();
+					for (Horse h : foals) {
+						if (DateTimeHelper.getAgeInDays(h.getDateOfBirth().getBirthTime()) > 365) {
+							if (h.isFemale())
+								h.setStatus(Horse.HORSE_STATUS.MAIDEN);
+							else h.setStatus(Horse.HORSE_STATUS.DORMANT);
+						}
+					}
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+
+			}
+		});
 	}
 
 	@Override
@@ -231,7 +262,7 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
 	}
 
 /*    private void createNotification() {
-        NotificationCompat.Builder notificationBuilder =
+		NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this);
 
 	    notificationBuilder
