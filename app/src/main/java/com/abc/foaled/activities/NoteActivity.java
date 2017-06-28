@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.abc.foaled.database.DatabaseHelper;
 import com.abc.foaled.database.ORMBaseActivity;
+import com.abc.foaled.models.Birth;
 import com.abc.foaled.models.Horse;
 import com.abc.foaled.R;
 
@@ -24,150 +25,168 @@ import com.abc.foaled.R;
  */
 
 public class NoteActivity extends ORMBaseActivity<DatabaseHelper> {
-    TextView noteTitle;
-    EditText noteContent;
+	TextView noteTitle;
+	EditText noteContent;
 
-    String title;
-    String note;
-    int horseID;
-    Horse horse;
+	String title;
+	String note;
+	int horseID;
+	int birthID;
+	Horse horse;
+	Birth birth;
 
-    boolean editing = false;
-    boolean dialogResult = true;
+	boolean editing = false;
+	boolean dialogResult = true;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_note);
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_note);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_black_18dp);
-        }
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+		setSupportActionBar(toolbar);
+		ActionBar actionBar = getSupportActionBar();
+		if (actionBar != null) {
+			actionBar.setDisplayHomeAsUpEnabled(true);
+			actionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_black_18dp);
+		}
 
-        horseID = getIntent().getIntExtra("horseID", 0);
-        horse = getHelper().getHorseDataDao().queryForId(horseID);
-        title = horse.getName() + "'s notes";
-        note = horse.getNotes();
+		horseID = getIntent().getIntExtra("horseID", 0);
+		if (horseID != 0) {
+			horse = getHelper().getHorseDataDao().queryForId(horseID);
+			title = horse.getName() + "'s notes";
+			note = horse.getNotes();
+		}
+		birthID = getIntent().getIntExtra("birthID", 0);
+		if (birthID != 0) {
+			birth = getHelper().getBirthsDataDao().queryForId(birthID);
+			title = birth.getYearOfBirth();
+			note = birth.getNotes();
+		}
 
-        noteTitle = (TextView) findViewById(R.id.note_activity_title);
-        noteContent = (EditText) findViewById(R.id.note_activity_content);
-        noteTitle.setText(title);
-        noteContent.setText(note);
-        noteContent.setFocusableInTouchMode(editing);
-    }
+		noteTitle = (TextView) findViewById(R.id.note_activity_title);
+		noteContent = (EditText) findViewById(R.id.note_activity_content);
+		noteTitle.setText(title);
+		noteContent.setText(note);
+		noteContent.setFocusableInTouchMode(editing);
+	}
 
-    @Override
-    public void onPause() {
-        if (isFinishing() && hasChanged())
-            Toast.makeText(this, "Note not saved", Toast.LENGTH_SHORT).show();
-        super.onPause();
-    }
+	@Override
+	public void onPause() {
+		if (isFinishing() && hasChanged())
+			Toast.makeText(this, "Note not saved", Toast.LENGTH_SHORT).show();
+		super.onPause();
+	}
 
-    /**
-     *
-     * @param menu The menu object to put items in
-     * @return Whether or not the menu items were added..?
-     */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.note_action_bar, menu);
-        return true;
-    }
+	/**
+	 * @param menu The menu object to put items in
+	 * @return Whether or not the menu items were added..?
+	 */
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.note_action_bar, menu);
+		return true;
+	}
 
-    /**
-     *
-     * @param item The item thatw as clicked in the menu
-     * @return Return false to allow normal menu processing to proceed, true to consume it here.
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            // Respond to the action bar's Up/Home button
-            case android.R.id.home:
-                this.finish();
-                return true;
-            case R.id.action_note:
-                if (editing)
-                    changeNote();
-                toggleEditMode(item);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+	/**
+	 * @param item The item thatw as clicked in the menu
+	 * @return Return false to allow normal menu processing to proceed, true to consume it here.
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			// Respond to the action bar's Up/Home button
+			case android.R.id.home:
+				this.finish();
+				return true;
+			case R.id.action_note:
+				if (editing)
+					changeNote();
+				toggleEditMode(item);
+				return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
 
-    /**
-     * @return Returns true if the note has changed
-     */
-    private boolean hasChanged() {
-        return !noteContent.getText().toString().equals(horse.getNotes());
-    }
+	/**
+	 * @return Returns true if the note has changed
+	 */
+	private boolean hasChanged() {
+		if (horse != null)
+			return !noteContent.getText().toString().equals(horse.getNotes());
 
-    /**
-     * Saves the new note
-     */
-    private void changeNote() {
-        if (hasChanged()) {
-            horse.setNotes(noteContent.getText().toString());
-            getHelper().getHorseDataDao().update(horse);
-            Toast.makeText(this, "Note saved", Toast.LENGTH_SHORT).show();
-        }
-    }
+		return birth != null && !noteContent.getText().toString().equals(birth.getNotes());
+	}
 
-    /**
-     * This method toggles this screen between edit and read-only mode
-     * @param item The item in the menu that was clicked
-     */
-    private void toggleEditMode(MenuItem item) {
+	/**
+	 * Saves the new note
+	 */
+	private void changeNote() {
+		if (hasChanged()) {
+			if (horse != null) {
+				horse.setNotes(noteContent.getText().toString());
+				getHelper().getHorseDataDao().update(horse);
+			} else if (birth != null) {
+				birth.setNotes(noteContent.getText().toString());
+				getHelper().getBirthsDataDao().update(birth);
+			}
+			Toast.makeText(this, "Note saved", Toast.LENGTH_SHORT).show();
+			finish();
+		}
+	}
 
-        editing = !editing;
-        int actionBarIcon = editing ? R.drawable.ic_done_black_18dp : R.drawable.ic_mode_edit_black_18dp;
-        item.setIcon(actionBarIcon);
+	/**
+	 * This method toggles this screen between edit and read-only mode
+	 *
+	 * @param item The item in the menu that was clicked
+	 */
+	private void toggleEditMode(MenuItem item) {
 
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        noteContent.setFocusableInTouchMode(editing);
+		editing = !editing;
+		int actionBarIcon = editing ? R.drawable.ic_done_black_18dp : R.drawable.ic_mode_edit_black_18dp;
+		item.setIcon(actionBarIcon);
 
-        if (editing) {
-            noteContent.setSelection(noteContent.getText().length());
-            noteContent.requestFocus();
-            imm.showSoftInput(noteContent, InputMethodManager.SHOW_IMPLICIT);
-        } else {
-            noteContent.setSelection(0);
-            noteContent.clearFocus();
-            imm.hideSoftInputFromWindow(noteContent.getWindowToken(), 0);
-        }
-    }
+		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		noteContent.setFocusableInTouchMode(editing);
 
-    //TODO get this confirmation dialog working?
-    private boolean confirmLeave() {
-        dialogResult = true;
-        if (hasChanged()) {
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(noteContent.getWindowToken(), 0);
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Keep changes?")
-                    .setPositiveButton("KEEP", new DialogInterface.OnClickListener() {
+		if (editing) {
+			noteContent.setSelection(noteContent.getText().length());
+			noteContent.requestFocus();
+			imm.showSoftInput(noteContent, InputMethodManager.SHOW_IMPLICIT);
+		} else {
+			noteContent.setSelection(0);
+			noteContent.clearFocus();
+			imm.hideSoftInputFromWindow(noteContent.getWindowToken(), 0);
+		}
+	}
 
-                        public void onClick(DialogInterface dialog, int id) {
-                            changeNote();
-                        }
-                    })
-                    .setNegativeButton("DISCARD", new DialogInterface.OnClickListener() {
+	//TODO get this confirmation dialog working?
+	private boolean confirmLeave() {
+		dialogResult = true;
+		if (hasChanged()) {
+			InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+			imm.hideSoftInputFromWindow(noteContent.getWindowToken(), 0);
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle("Keep changes?")
+					.setPositiveButton("KEEP", new DialogInterface.OnClickListener() {
 
-                        public void onClick(DialogInterface dialog, int id) {
+						public void onClick(DialogInterface dialog, int id) {
+							changeNote();
+						}
+					})
+					.setNegativeButton("DISCARD", new DialogInterface.OnClickListener() {
 
-                        }
-                    })
-                    .setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss(DialogInterface dialog) {
-                            dialogResult = false;
-                        }
-                    }).show();
-        }
-        return dialogResult;
-    }
+						public void onClick(DialogInterface dialog, int id) {
+
+						}
+					})
+					.setOnDismissListener(new DialogInterface.OnDismissListener() {
+						@Override
+						public void onDismiss(DialogInterface dialog) {
+							dialogResult = false;
+						}
+					}).show();
+		}
+		return dialogResult;
+	}
 }

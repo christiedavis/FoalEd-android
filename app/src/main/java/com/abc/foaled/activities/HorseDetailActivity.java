@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -34,6 +35,8 @@ import com.abc.foaled.database.ORMBaseActivity;
 import com.abc.foaled.fragments.AddFoalFragment;
 import com.abc.foaled.fragments.AddPregnancyFragment;
 import com.abc.foaled.fragments.DatePickerFragment;
+import com.abc.foaled.fragments.HorseBirthNotesFragment;
+import com.abc.foaled.fragments.HorseNoteFragment;
 import com.abc.foaled.helpers.DateTimeHelper;
 import com.abc.foaled.helpers.ImageHelper;
 import com.abc.foaled.models.Birth;
@@ -108,9 +111,20 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 			horsePhoto.setImageBitmap(ImageHelper.bitmapSmaller(horse.getImagePath(), 300, 300));
 
 
-		FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+		if (horse.getStatus() != Horse.HORSE_STATUS.FOAL) {
+			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
+			if (getSupportFragmentManager().findFragmentByTag("GENERAL_NOTES") == null) {
+				HorseNoteFragment fragment = HorseNoteFragment.newInstance(horse);
+				transaction.add(R.id.horse_detail_linear_layout, fragment, "GENERAL_NOTES");
+			}
 
+			if (getSupportFragmentManager().findFragmentByTag("BIRTH_NOTES") == null && horse.isFemale()) {
+				HorseBirthNotesFragment birthNotesFragment = HorseBirthNotesFragment.newInstance(horse);
+				transaction.add(R.id.horse_detail_linear_layout, birthNotesFragment, "BIRTH_NOTES");
+			}
+			transaction.commit();
+		}
 
 /*        switch (horse.getStatus()) {
 

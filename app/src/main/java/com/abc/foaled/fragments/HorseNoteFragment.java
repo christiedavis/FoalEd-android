@@ -1,30 +1,26 @@
 package com.abc.foaled.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
-import com.abc.foaled.adaptors.NoteAdaptor;
+import com.abc.foaled.activities.NoteActivity;
 import com.abc.foaled.models.Horse;
 import com.abc.foaled.R;
 
 /**
  * A fragment representing a list of Items.
- * <p/>
- * Activities containing this fragment MUST implement the {@link HorseNoteFragment.OnListFragmentInteractionListener}
- * interface.
  */
 public class HorseNoteFragment extends Fragment {
 
-    private String[] birthNotes;
-    private String horseNote;
-    private OnListFragmentInteractionListener mListener;
-
+	private Horse horse;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -34,9 +30,11 @@ public class HorseNoteFragment extends Fragment {
     }
 
     @SuppressWarnings("unused")
-    public static HorseNoteFragment newInstance() {
+    public static HorseNoteFragment newInstance(Horse h) {
         HorseNoteFragment fragment = new HorseNoteFragment();
+		fragment.horse = h;
         fragment.setArguments(new Bundle());
+        fragment.setRetainInstance(true);
         return fragment;
     }
 
@@ -50,47 +48,31 @@ public class HorseNoteFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-         View view = inflater.inflate(R.layout.fragment_horse_note, container, false);
-        // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            recyclerView.setAdapter(new NoteAdaptor(horseNote, birthNotes));
-        }
-        return view;
-    }
+		LinearLayout baseLayout = (LinearLayout) inflater.inflate(R.layout.note_layout, container, false);
+		((TextView) baseLayout.findViewById(R.id.card_header)).setText("Notes");
+		CardView cv = (CardView) inflater.inflate(R.layout.note, baseLayout, false);
+		cv.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(v.getContext(), NoteActivity.class);
+				intent.putExtra("horseID", horse.getHorseID());
+				startActivity(intent);
+			}
+		});
 
-    public void setListToBeDisplayed(String horseNote, String[] birthNotes) {
-        this.horseNote = horseNote;
-        this.birthNotes = birthNotes;
+		String note = horse.getNotes().isEmpty() ? "Click here to add notes" : horse.getNotes();
+		((TextView) cv.findViewById(R.id.horse_note_card_view_note)).setText(note);
+		baseLayout.addView(cv);
+        return baseLayout;
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-/*        if (context instanceof OnListFragmentInteractionListener) {
-            mListener = (OnListFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnListFragmentInteractionListener");
-        }*/
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     */
-    public interface OnListFragmentInteractionListener {
-        void onListFragmentInteraction(Horse horse);
-
     }
 }

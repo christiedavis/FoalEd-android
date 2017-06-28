@@ -1,6 +1,5 @@
 package com.abc.foaled.models;
 
-import com.abc.foaled.helpers.DateTimeHelper;
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -40,11 +39,15 @@ public class Birth implements Serializable {
     public Birth(Horse mother, String father, Date conception, DateTime dob){
 	    horse = null;
         mare = mother;
-        sire = father != null ? father : "";
+        sire = father;
 	    notes = "";
         estConception = conception;
         birthTime = dob;
     }
+
+	public int getId() {
+		return id;
+	}
 
 	public Horse getHorse() {
 		return horse;
@@ -91,6 +94,6 @@ public class Birth implements Serializable {
 	}
 
 	public String getYearOfBirth() {
-		return Integer.toString(DateTimeHelper.getYear(estConception));
+		return Integer.toString(birthTime.getYear());
 	}
 }

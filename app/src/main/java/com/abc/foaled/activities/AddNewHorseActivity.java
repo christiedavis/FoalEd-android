@@ -205,7 +205,7 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
         horse.createMilestones();
 	    horseDao.create(horse);
 
-		birth.setHorse(horse);
+		birth.setMare(horse);
         getHelper().getBirthsDataDao().create(birth);
 
         finish();
