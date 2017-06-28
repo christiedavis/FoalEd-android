@@ -1,6 +1,8 @@
 package com.abc.foaled.activities;
 
 import android.app.DialogFragment;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -11,6 +13,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Layout;
@@ -27,6 +30,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.abc.foaled.adaptors.HorseNoteAdaptor;
 import com.abc.foaled.adaptors.MilestoneAdaptor;
@@ -44,35 +48,38 @@ import com.abc.foaled.models.Horse;
 import com.abc.foaled.R;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
+import com.j256.ormlite.misc.TransactionManager;
 
 import org.joda.time.DateTime;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 import static android.view.View.GONE;
 
 public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
-    implements AddPregnancyFragment.OnFragmentInteractionListener, AddFoalFragment.OnFragmentInteractionListener
-{
-    Horse horse;
-    int horseID;
+		implements AddPregnancyFragment.OnFragmentInteractionListener, AddFoalFragment.OnFragmentInteractionListener {
+	Horse horse;
+	int horseID;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
-        horseID = getIntent().getIntExtra("HorseID", 0);
-	    horse = getHelper().getHorseDataDao().queryForId(horseID);
-        setup();
-    }
+		horseID = getIntent().getIntExtra("HorseID", 0);
+		horse = getHelper().getHorseDataDao().queryForId(horseID);
+		setup();
+	}
 
 	/**
 	 * Inflates the custom menu items in to the menu on the toolbar
+	 *
 	 * @param menu The menu to inflate my items in to
 	 * @return True if we were able to inflate it
 	 */
@@ -85,8 +92,8 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 		return true;
 	}
 
-    private void setup() {
-        Log.d("Horse Detail Activity", "- horse status" + horse.getStatusString());
+	private void setup() {
+		Log.d("Horse Detail Activity", "- horse status" + horse.getStatusString());
 
 		setContentView(R.layout.activity_horse_detail);
 
@@ -167,18 +174,18 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
                 break;
         }*/
 
-	    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-	    setSupportActionBar(toolbar);
-	    if (getSupportActionBar() != null) {
-		    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		    getSupportActionBar().setTitle(horse.getName());
-	    }
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+		setSupportActionBar(toolbar);
+		if (getSupportActionBar() != null) {
+			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+			getSupportActionBar().setTitle(horse.getName());
+		}
 
-    }
+	}
 
-    private void setUpPregnant() {
+	private void setUpPregnant() {
 /*        Button haveBirth = (Button) findViewById(R.id.button_add_pregnancy);
-        haveBirth.setText("Give Birth");
+		haveBirth.setText("Give Birth");
         if (horse.getStatus() == Horse.HORSE_STATUS.PREGNANT) {
             haveBirth.setBackgroundColor(Color.RED);
         } else {
@@ -190,11 +197,11 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
                   AddFoalFragment(v);
               }
         });*/
-    }
+	}
 
-    private void setupDormant() {
+	private void setupDormant() {
 /*        Button haveBirth = (Button)this.findViewById(R.id.button_add_pregnancy);
-        haveBirth.setText("Add Pregnancy");
+		haveBirth.setText("Add Pregnancy");
         haveBirth.setBackgroundColor( ContextCompat.getColor(this, R.color.colorAccent));
 
         haveBirth.setOnClickListener(new View.OnClickListener() {
@@ -202,55 +209,55 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
                 AddNewPregnancyFragment(v);
             }
         });*/
-    }
+	}
 
-    private void setUpImageView() {
-        TextView tv = (TextView) findViewById(R.id.maidenTextView);
-        if (tv != null) {
-            tv.setVisibility(GONE);
-        }
+	private void setUpImageView() {
+		TextView tv = (TextView) findViewById(R.id.maidenTextView);
+		if (tv != null) {
+			tv.setVisibility(GONE);
+		}
 
-        // TODO: If it's a foal display which notification it is up to
-        TextView age = (TextView) findViewById(R.id.age);
-        age.setText(horse.getAge());
+		// TODO: If it's a foal display which notification it is up to
+		TextView age = (TextView) findViewById(R.id.age);
+		age.setText(horse.getAge());
 
-        TextView gender = (TextView) findViewById(R.id.sex);
-        gender.setText(horse.isFemale() ? "Female" : "Male");
+		TextView gender = (TextView) findViewById(R.id.sex);
+		gender.setText(horse.isFemale() ? "Female" : "Male");
 
-        TextView status = (TextView) findViewById(R.id.pregnantStatus);
-        status.setText(horse.getStatusString());
+		TextView status = (TextView) findViewById(R.id.pregnantStatus);
+		status.setText(horse.getStatusString());
 
-        //sets up the photo
-        ImageView horsePhoto = (ImageView) findViewById(R.id.horse_photo);
-        try {
-            if (horse.getImagePath().isEmpty() && horse.getStatus() == Horse.HORSE_STATUS.FOAL)
-            	horsePhoto.setImageResource(R.drawable.default_foal);
-            else
-                horsePhoto.setImageBitmap(ImageHelper.bitmapSmaller(horse.getImagePath(), 300, 300));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-       if (horse.getStatus() != Horse.HORSE_STATUS.FOAL) {
-           updateNotesView();
-       }
-    }
+		//sets up the photo
+		ImageView horsePhoto = (ImageView) findViewById(R.id.horse_photo);
+		try {
+			if (horse.getImagePath().isEmpty() && horse.getStatus() == Horse.HORSE_STATUS.FOAL)
+				horsePhoto.setImageResource(R.drawable.default_foal);
+			else
+				horsePhoto.setImageBitmap(ImageHelper.bitmapSmaller(horse.getImagePath(), 300, 300));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if (horse.getStatus() != Horse.HORSE_STATUS.FOAL) {
+			updateNotesView();
+		}
+	}
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+	}
 
 
-    private void setUpMilestones() {
+	private void setUpMilestones() {
 
-        final RecyclerView milestoneRV = (RecyclerView) findViewById(R.id.milestone_recycler_view);
-        MilestoneAdaptor adaptor = new MilestoneAdaptor(horse);
-        milestoneRV.setAdapter(adaptor);
-    }
+		final RecyclerView milestoneRV = (RecyclerView) findViewById(R.id.milestone_recycler_view);
+		MilestoneAdaptor adaptor = new MilestoneAdaptor(horse);
+		milestoneRV.setAdapter(adaptor);
+	}
 
-    private void updateNotesView() {
+	private void updateNotesView() {
 /*        // used for notes for horse
-        Map<String, String> map = new HashMap<>();
+		Map<String, String> map = new HashMap<>();
 	    Collection<Birth> births = horse.getBirths();
 
 	    for (Birth b : births)
@@ -261,161 +268,212 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
         final ExpandableListView expandableLayoutListView = (ExpandableListView) findViewById(R.id.exlistview);
         HorseNoteAdaptor adaptor = new HorseNoteAdaptor(this, years, map);
         expandableLayoutListView.setAdapter(adaptor);*/
-    }
+	}
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        NavUtils.navigateUpFromSameTask(this);
-    }
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		NavUtils.navigateUpFromSameTask(this);
+	}
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            // Respond to the action bar's Up/Home button
-            case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			// Respond to the action bar's Up/Home button
+			case android.R.id.home:
+				NavUtils.navigateUpFromSameTask(this);
+				return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
 
-    public void AddNewPregnancyFragment(View v) {
-        Log.d("", "Add pregnancy button was clicked");
+	public void AddNewPregnancyFragment(View v) {
+		Log.d("", "Add pregnancy button was clicked");
 
-	    View popupView = getLayoutInflater().inflate(R.layout.fragment_add_pregnancy, null);
+		View popupView = getLayoutInflater().inflate(R.layout.fragment_add_pregnancy, null);
 
-	    PopupWindow popupWindow = new PopupWindow(popupView,
-			    ViewGroup.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+		PopupWindow popupWindow = new PopupWindow(popupView,
+				ViewGroup.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
-	    popupWindow.setFocusable(true);
-	    popupWindow.setAnimationStyle(R.style.Animation);
+		popupWindow.setFocusable(true);
+		popupWindow.setAnimationStyle(R.style.Animation);
 
-	    popupWindow.setBackgroundDrawable(new ColorDrawable());
+		popupWindow.setBackgroundDrawable(new ColorDrawable());
 
-	    popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
-    }
+		popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
+	}
 
-    public void AddPregnancy(View v) {
-        System.out.println("Add pregnancy selected");
+	public void AddPregnancy(View v) {
+		System.out.println("Add pregnancy selected");
 
-        // get values
+		// get values
 /*        EditText fatherName = (EditText) findViewById(R.id.fathers_name_textView);
         Horse fatherHorse = new Horse(fatherName.getText());*/
-        //TODO Move this method to the fragment. The fragment could then point back here.. but it needs to be moved to the fragment
+		//TODO Move this method to the fragment. The fragment could then point back here.. but it needs to be moved to the fragment
 
-        TextView conceptionDate = (TextView) findViewById(R.id.date_of_conception);
-        //turn to date
+		TextView conceptionDate = (TextView) findViewById(R.id.date_of_conception);
+		//turn to date
 
-        // add to database
-	    //TODO change 2nd parameter to be Father's name, date to be the date that was selected
-        Birth newBirth = new Birth(horse, "TEMP", new Date(), new DateTime());
-        getHelper().getBirthsDataDao().create(newBirth);
+		// add to database
+		//TODO change 2nd parameter to be Father's name, date to be the date that was selected
+		Birth newBirth = new Birth(horse, "TEMP", new Date(), new DateTime());
+		getHelper().getBirthsDataDao().create(newBirth);
 
-        ViewGroup parent = (ViewGroup) findViewById(R.id.horse_detail_screen);
+		ViewGroup parent = (ViewGroup) findViewById(R.id.horse_detail_screen);
 
-        View fragment = findViewById(R.id.add_pregnancy_fragment);
-        horse.setStatus(Horse.HORSE_STATUS.PREGNANT);
-        horse.setCurrentBirth(newBirth);
-	    getHelper().getHorseDataDao().update(horse);
+		View fragment = findViewById(R.id.add_pregnancy_fragment);
+		horse.setStatus(Horse.HORSE_STATUS.PREGNANT);
+		horse.setCurrentBirth(newBirth);
+		getHelper().getHorseDataDao().update(horse);
 
-        setup();
-        parent.removeView(fragment);
-    }
+		setup();
+		parent.removeView(fragment);
+	}
 
-    public void AddFoalFragment(View v) {
-	    final View popupView = getLayoutInflater().inflate(R.layout.fragment_add_foal, null);
+	public void AddFoalFragment(View v) {
+		final View popupView = getLayoutInflater().inflate(R.layout.fragment_add_foal, null);
 
-	    final PopupWindow popupWindow = new PopupWindow(popupView,
-			    ViewGroup.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+		final PopupWindow popupWindow = new PopupWindow(popupView,
+				ViewGroup.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
-	    Button b = (Button) popupView.findViewById(R.id.add_foal_button);
+		Button b = (Button) popupView.findViewById(R.id.add_foal_button);
 
-	    b.setOnClickListener(new View.OnClickListener() {
-		    @Override
-		    public void onClick(View v) {
-			    AddFoal(((EditText)popupWindow.getContentView().findViewById(R.id.news_foal_name_textView)).getText().toString());
-			    popupWindow.dismiss();
-		    }
-	    });
-	    popupWindow.setFocusable(true);
-	    popupWindow.setAnimationStyle(R.style.Animation);
+		b.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				AddFoal(((EditText) popupWindow.getContentView().findViewById(R.id.news_foal_name_textView)).getText().toString());
+				popupWindow.dismiss();
+			}
+		});
+		popupWindow.setFocusable(true);
+		popupWindow.setAnimationStyle(R.style.Animation);
 
-	    popupWindow.setBackgroundDrawable(new ColorDrawable());
+		popupWindow.setBackgroundDrawable(new ColorDrawable());
 
-	    popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
-    }
+		popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
+	}
 
-    public void AddFoal(String s) {
+	public void AddFoal(String s) {
 
-        System.out.println("Add foal added");
-        // to do show a dialog with date sex etc
+		System.out.println("Add foal added");
+		// to do show a dialog with date sex etc
 
-        if (horse.getStatus() == Horse.HORSE_STATUS.PREGNANT || horse.getStatus() == Horse.HORSE_STATUS.MAIDEN) {
+		if (horse.getStatus() == Horse.HORSE_STATUS.PREGNANT || horse.getStatus() == Horse.HORSE_STATUS.MAIDEN) {
 
 //            TextView foalName = (TextView) v.findViewById(R.id.news_foal_name_textView);
-            //TODO: Get notes from horse current birth notes - also get image from default Brendan
+			//TODO: Get notes from horse current birth notes - also get image from default Brendan
 
-	        RuntimeExceptionDao<Horse, Integer> horseDao = getHelper().getHorseDataDao();
-	        RuntimeExceptionDao<Birth, Integer> birthDao = getHelper().getBirthsDataDao();
+			RuntimeExceptionDao<Horse, Integer> horseDao = getHelper().getHorseDataDao();
+			RuntimeExceptionDao<Birth, Integer> birthDao = getHelper().getBirthsDataDao();
 
-            // set birth time
-	        Birth birth = horse.getCurrentBirth();
-	        birth.setBirthTime(new DateTime());
-	        birthDao.update(birth);
-
-//            Horse foal = new Horse(s, birth, "Notes", true);
-	        Horse foal = new Horse(s, birth, true, "Notes", Horse.HORSE_STATUS.DORMANT, null);
-            horseDao.assignEmptyForeignCollection(foal, "milestones");
-            foal.setStatus(Horse.HORSE_STATUS.FOAL);
-	        horseDao.create(foal);
-
-	        birth.setHorse(foal);
+			// set birth time
+			Birth birth = horse.getCurrentBirth();
+			birth.setBirthTime(new DateTime());
 			birthDao.update(birth);
 
-            horse.setStatus(Horse.HORSE_STATUS.DORMANT);
-	        horseDao.update(horse);
-            setUpImageView();
-            setupDormant();
-            Log.d("Added horse gee", "gee");
+//            Horse foal = new Horse(s, birth, "Notes", true);
+			Horse foal = new Horse(s, birth, true, "Notes", Horse.HORSE_STATUS.DORMANT, null);
+			horseDao.assignEmptyForeignCollection(foal, "milestones");
+			foal.setStatus(Horse.HORSE_STATUS.FOAL);
+			horseDao.create(foal);
 
-            ViewGroup parent = (ViewGroup) findViewById(R.id.horse_detail_screen);
-            View fragment = findViewById(R.id.add_foal_fragment);
+			birth.setHorse(foal);
+			birthDao.update(birth);
 
-            setup();
-            parent.removeView(fragment);
-        }
-    }
+			horse.setStatus(Horse.HORSE_STATUS.DORMANT);
+			horseDao.update(horse);
+			setUpImageView();
+			setupDormant();
+			Log.d("Added horse gee", "gee");
 
-    public void favouriteAction(MenuItem item) {
-	    //Updates horse
-        horse.toggleFavourite();
-        getHelper().getHorseDataDao().update(horse);
+			ViewGroup parent = (ViewGroup) findViewById(R.id.horse_detail_screen);
+			View fragment = findViewById(R.id.add_foal_fragment);
 
-	    //Updates the star on the view
-	    int star = horse.isFavourite() ? R.mipmap.star_white : R.mipmap.star_hollow_white;
-	    item.setIcon(ContextCompat.getDrawable(this, star));
-    }
+			setup();
+			parent.removeView(fragment);
+		}
+	}
 
-    @Override
-    public void onAddPregnancyFragmentInteraction(Uri uri) {
-    }
+	public void favouriteAction(MenuItem item) {
+		//Updates horse
+		horse.toggleFavourite();
+		getHelper().getHorseDataDao().update(horse);
 
-    @Override
-    public void onAddFoalFragmentInteraction (Uri uri) {
-    }
+		//Updates the star on the view
+		int star = horse.isFavourite() ? R.mipmap.star_white : R.mipmap.star_hollow_white;
+		item.setIcon(ContextCompat.getDrawable(this, star));
+	}
 
-    public void ChooseDate(View v) {
-	    TextView editText = (TextView) v.getRootView().findViewById(R.id.date_of_conception);
-	    DialogFragment dialog = new DatePickerFragment();
-	    ((DatePickerFragment) dialog).setViewResult(editText);
-	    dialog.setRetainInstance(true);
+	@Override
+	public void onAddPregnancyFragmentInteraction(Uri uri) {
+	}
+
+	@Override
+	public void onAddFoalFragmentInteraction(Uri uri) {
+	}
+
+	public void ChooseDate(View v) {
+		TextView editText = (TextView) v.getRootView().findViewById(R.id.date_of_conception);
+		DialogFragment dialog = new DatePickerFragment();
+		((DatePickerFragment) dialog).setViewResult(editText);
+		dialog.setRetainInstance(true);
 //        ((DatePickerDialog)dialog.getDialog()).getDatePicker().setMaxDate(Calendar.getInstance().getTimeInMillis());
-	    dialog.show(getFragmentManager(), "datePicker");
-    }
+		dialog.show(getFragmentManager(), "datePicker");
+	}
 
-    public void Cancel(View v) {
-        System.out.println("Cancel birth");
-        // TODO: leave fragmemt go back to horse detail
-    }
+	public void Cancel(View v) {
+		System.out.println("Cancel birth");
+		// TODO: leave fragmemt go back to horse detail
+	}
+
+	/**
+	 * Deletes the horse we are currently looking at
+	 *
+	 * @param v The view that led us here
+	 */
+	public void deleteHorse(View v) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		final AlertDialog dialog;
+		final Context context = this;
+
+		dialog = builder.setMessage("Are you sure you want to delete this horse? You cannot retrieve this information!")
+				.setNegativeButton("DELETE", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+
+						//Do this database transaction in case we accidentally delete more than one horse
+						try {
+							TransactionManager.callInTransaction(getConnectionSource(),
+									new Callable<Void>() {
+										public Void call() throws Exception {
+											if (getHelper().getHorseDataDao().delete(horse) != 1)
+												throw new SQLException("0 or greater than 1 horse were to be deleted");
+											return null;
+										}
+									});
+							//finish the activity
+							finish();
+						} catch (SQLException e) {
+							Toast.makeText(context, "Unable to delete this horse", Toast.LENGTH_LONG).show();
+							e.printStackTrace();
+						}
+
+					}
+				}).setPositiveButton("CANCEL", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+
+			}
+		}).create();
+
+		dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+			@Override
+			public void onShow(DialogInterface dialogInterface) {
+				dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(context, R.color.redPrimary));
+			}
+		});
+		dialog.show();
+
+	}
+
 }
