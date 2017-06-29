@@ -103,7 +103,7 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
 					List<Horse> foals = getHelper().getHorseDataDao().queryBuilder().where().eq("status", Horse.HORSE_STATUS.FOAL).query();
 
 					for (Horse h : foals) {
-						if (DateTimeHelper.getAgeInDays(h.getDateOfBirth().getBirthTime()) > 365) {
+						if (DateTimeHelper.getAgeInDays(h.getDateOfBirth().getBirthTime()) > R.integer.foal_to_horse_days) {
 							if (h.isFemale())
 								h.setStatus(Horse.HORSE_STATUS.MAIDEN);
 							else h.setStatus(Horse.HORSE_STATUS.DORMANT);

@@ -287,7 +287,7 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
 
 		DateTime dob = dateFormatter.parseDateTime(((TextView) findViewById(R.id.newHorseDOB)).getText().toString());
         if (checkBox.isChecked()) {
-			if (Days.daysBetween(dob, DateTime.now()).getDays() > 365) {
+			if (Days.daysBetween(dob, DateTime.now()).getDays() > R.integer.foal_to_horse_days) {
 				layout.setVisibility(View.VISIBLE);
 				scrollView.post(new Runnable() {
 					@Override
