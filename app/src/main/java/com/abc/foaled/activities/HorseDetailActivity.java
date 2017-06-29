@@ -415,7 +415,6 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 	public void ChooseDate(View v) {
 		TextView editText = (TextView) v.getRootView().findViewById(R.id.date_of_conception);
 		DialogFragment dialog = new DatePickerFragment();
-		((DatePickerFragment) dialog).setViewResult(editText);
 		dialog.setRetainInstance(true);
 //        ((DatePickerDialog)dialog.getDialog()).getDatePicker().setMaxDate(Calendar.getInstance().getTimeInMillis());
 		dialog.show(getFragmentManager(), "datePicker");

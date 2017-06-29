@@ -49,7 +49,6 @@ public class AddPregnancyFragment extends Fragment {
                 DatePickerFragment dialog = new DatePickerFragment();
 
                 dialog.displayTimeDialog(false);
-                dialog.setViewResult((TextView)v);
                 dialog.setRetainInstance(true);
                 dialog.show(getActivity().getFragmentManager(), "datePicker");
             }

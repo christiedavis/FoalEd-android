@@ -1,153 +1,181 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
     <LinearLayout
         android:id="@+id/add_horse_buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
         <Button
+            style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
             android:layout_weight="1"
-            android:text="SAVE"
             android:onClick="insert"
-            style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"/>
+            android:text="SAVE"
+            android:textAlignment="center"/>
+
         <View
             android:layout_width="1dp"
             android:layout_height="fill_parent"
-            android:background="#FF000000" />
+            android:background="#FF000000"/>
+
         <Button
+            style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textAlignment="center"
             android:onClick="cancel"
             android:text="CANCEL"
-            style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"/>
+            android:textAlignment="center"/>
     </LinearLayout>
 
     <ScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/content_add_new_horse"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/add_horse_buttons"
-        android:isScrollContainer="true"
-        android:id="@+id/content_add_new_horse">
+        android:isScrollContainer="true">
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+                      xmlns:app="http://schemas.android.com/apk/res-auto"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:orientation="vertical"
+                      app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <ImageView
+                android:id="@+id/add_horse_image"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
-                android:id="@+id/add_horse_image"
+                android:contentDescription="Horse Photo"
                 android:onClick="selectPhoto"
                 android:scaleType="centerCrop"
-                android:src="@drawable/default_horse"
-                android:contentDescription="Horse Photo"/>
+                android:src="@drawable/default_horse"/>
 
             <android.support.v7.widget.CardView
                 xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                card_view:cardElevation="4dp"
-                card_view:cardUseCompatPadding="true"
                 android:id="@+id/add_horse_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
                 android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp">
+                android:layout_marginTop="10dp"
+                card_view:cardElevation="4dp"
+                card_view:cardUseCompatPadding="true">
 
                 <TableLayout
                     android:id="@+id/add_horse_table_layout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="25dp"
-                    android:layout_marginEnd="25dp">
+                    android:layout_marginEnd="25dp"
+                    android:layout_marginStart="25dp">
                     <!--HORSE NAME-->
                     <TableRow
                         android:paddingBottom="5dp">
+
                         <TextView
-                            android:labelFor="@+id/add_new_horse_name"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:layout_gravity="center"
+                            android:layout_weight="1"
                             android:gravity="start"
-                            android:textAppearance="?android:attr/textAppearanceLarge"
-                            android:text="Name"/>
+                            android:labelFor="@+id/add_new_horse_name"
+                            android:text="Name"
+                            android:textAppearance="?android:attr/textAppearanceLarge"/>
+
                         <EditText
                             android:id="@+id/add_new_horse_name"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:ellipsize="end"
-                            android:layout_weight="1"
                             android:layout_gravity="center"
-                            android:inputType="textPersonName|textCapWords"
-                            android:maxLines="1"
+                            android:layout_weight="1"
+                            android:ellipsize="end"
+                            android:hint="Name of Horse"
                             android:imeOptions="actionDone|flagNoExtractUi"
-                            android:hint="Name of Horse"/>
+                            android:inputType="textPersonName|textCapWords"
+                            android:maxLines="1"/>
                     </TableRow>
                     <!--DATE OF BIRTH-->
                     <!--TODO Make sizes consistent-->
                     <TableRow
                         android:paddingBottom="5dp">
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:textAppearance="?android:attr/textAppearanceLarge"
-                            android:text="Date of Birth"/>
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:text="Date of Birth"
+                            android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+                        <TextView
                             android:id="@+id/newHorseDOB"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
                             android:layout_gravity="center"
+                            android:layout_weight="1"
                             android:onClick="selectDate"/>
                     </TableRow>
-                    <!--SEX-->
+                    <!--TIME OF BIRTH-->
                     <TableRow
+                        android:id="@+id/tobRow"
                         android:paddingBottom="5dp">
+
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:textAppearance="?android:attr/textAppearanceLarge"
-                            android:text="Female"/>
+                            android:text="Time of Birth"
+                            android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+                        <TextView
+                            android:id="@+id/newHorseTOB"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:onClick="selectTime"/>
+                    </TableRow>
+                    <!--SEX-->
+                    <TableRow
+                        android:paddingBottom="5dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Female"
+                            android:textAppearance="?android:attr/textAppearanceLarge"/>
 
                         <!--TODO align checkbox in middle of view?-->
                         <CheckBox
                             android:id="@+id/checkboxSex"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:layout_gravity="center"
+                            android:layout_weight="1"
                             android:checked="false"
                             android:onClick="toggleSex"/>
                     </TableRow>
                     <!--PREGNANT-->
                     <TableRow
-                        android:paddingBottom="5dp"
                         android:id="@+id/pregnantRow"
+                        android:paddingBottom="5dp"
                         android:visibility="gone">
+
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:textAppearance="?android:attr/textAppearanceLarge"
-                            android:text="Pregnant"/>
+                            android:text="Pregnant"
+                            android:textAppearance="?android:attr/textAppearanceLarge"/>
 
                         <CheckBox
                             android:id="@+id/checkboxPregnant"
@@ -160,25 +188,26 @@
                     </TableRow>
                     <!--CONCEPTION DATE-->
                     <TableRow
-                        android:paddingBottom="5dp"
-                        android:layout_marginBottom="10dp"
                         android:id="@+id/conceptionRow"
+                        android:layout_marginBottom="10dp"
+                        android:paddingBottom="5dp"
                         android:visibility="gone">
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:layout_gravity="center"
-                            android:textAppearance="?android:attr/textAppearanceLarge"
-                            android:text="Conception"/>
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="center"
                             android:layout_weight="1"
+                            android:text="Conception"
+                            android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+                        <TextView
                             android:id="@+id/newHorseConceptionDate"
-                            android:onClick="selectDate"
-                            android:layout_gravity="center"/>
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:onClick="selectDate"/>
                     </TableRow>
                 </TableLayout>
             </android.support.v7.widget.CardView>
@@ -188,273 +217,273 @@
     </ScrollView>
 </RelativeLayout>
 
-<!--<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/content_add_new_horse"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.abc.foaled.Activity.AddNewHorseActivity"
-    tools:showIn="@layout/activity_add_new_horse">
-
-    <RelativeLayout
+    <!--<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/content_add_new_horse"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2"
-        android:orientation="vertical">
-        <ImageView
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context="com.abc.foaled.Activity.AddNewHorseActivity"
+        tools:showIn="@layout/activity_add_new_horse">
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/add_horse_image"
-            android:scaleType="centerCrop"/>
-
-        &lt;!&ndash;TODO why is this image view not showing up?&ndash;&gt;
-&lt;!&ndash;        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@android:color/black"
-            android:src="@drawable/ic_menu_camera"
-            android:layout_gravity="bottom|start" />&ndash;&gt;
-
-    </RelativeLayout>
-
-    <android.support.v7.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        card_view:cardElevation="4dp"
-        card_view:cardUseCompatPadding="true"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="3"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp">
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
-            android:paddingTop="5dp">
-
-            &lt;!&ndash;NAME&ndash;&gt;
-            <LinearLayout
-                android:orientation="horizontal"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:orientation="vertical">
+            <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent"
+                android:id="@+id/add_horse_image"
+                android:scaleType="centerCrop"/>
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Name"/>
-                <EditText
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:hint="Name of Horse"/>
-            </LinearLayout>
-
-            &lt;!&ndash;DATE OF BIRTH&ndash;&gt;
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Date of Birth"/>
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:id="@+id/newHorseDOB"
-
-                    android:onClick="selectDate"/>
-            </LinearLayout>
-
-            &lt;!&ndash;SEX&ndash;&gt;
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Female?"/>
-
-                <CheckBox
-                    android:id="@+id/checkboxSex"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_weight="1"
-                    android:checked="false"
-                    android:onClick="toggleSex"/>
-            </LinearLayout>
-
-            &lt;!&ndash;PREGNANT&ndash;&gt;
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/pregnantLayout"
-                android:visibility="gone">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Pregnant?"/>
-
-                <CheckBox
-                    android:id="@+id/checkboxPregnant"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_weight="1"
-                    android:checked="false"
-                    android:onClick="togglePregnant"/>
-            </LinearLayout>
-
-            &lt;!&ndash;CONCEPTION DATE&ndash;&gt;
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/conceptionDateLayout"
-                android:animateLayoutChanges="true"
-                android:visibility="gone">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Conception Date?"/>
-
-                <EditText
-                    android:id="@+id/random"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_weight="1"
-                    android:checked="false"/>
-            </LinearLayout>
-
-            <Button
+            &lt;!&ndash;TODO why is this image view not showing up?&ndash;&gt;
+    &lt;!&ndash;        <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/addButton"
-                android:onClick="insert"
-                android:text="ADD HORSSE aidoifnoif"/>
+                android:background="@android:color/black"
+                android:src="@drawable/ic_menu_camera"
+                android:layout_gravity="bottom|start" />&ndash;&gt;
 
-        </LinearLayout>
+        </RelativeLayout>
 
-    </android.support.v7.widget.CardView>
+        <android.support.v7.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            card_view:cardElevation="4dp"
+            card_view:cardUseCompatPadding="true"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp">
 
-    <Button
-        style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="SAVE" />-->
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:paddingTop="5dp">
+
+                &lt;!&ndash;NAME&ndash;&gt;
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Name"/>
+                    <EditText
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="Name of Horse"/>
+                </LinearLayout>
+
+                &lt;!&ndash;DATE OF BIRTH&ndash;&gt;
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Date of Birth"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:id="@+id/newHorseDOB"
+
+                        android:onClick="selectDate"/>
+                </LinearLayout>
+
+                &lt;!&ndash;SEX&ndash;&gt;
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Female?"/>
+
+                    <CheckBox
+                        android:id="@+id/checkboxSex"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_weight="1"
+                        android:checked="false"
+                        android:onClick="toggleSex"/>
+                </LinearLayout>
+
+                &lt;!&ndash;PREGNANT&ndash;&gt;
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/pregnantLayout"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Pregnant?"/>
+
+                    <CheckBox
+                        android:id="@+id/checkboxPregnant"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_weight="1"
+                        android:checked="false"
+                        android:onClick="togglePregnant"/>
+                </LinearLayout>
+
+                &lt;!&ndash;CONCEPTION DATE&ndash;&gt;
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/conceptionDateLayout"
+                    android:animateLayoutChanges="true"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Conception Date?"/>
+
+                    <EditText
+                        android:id="@+id/random"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_weight="1"
+                        android:checked="false"/>
+                </LinearLayout>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/addButton"
+                    android:onClick="insert"
+                    android:text="ADD HORSSE aidoifnoif"/>
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <Button
+            style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SAVE" />-->
 
 
-<!--    <EditText
-        android:id="@+id/add_horse_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:ems="10"
-        android:hint="@string/name"
-        android:inputType="textPersonName"
-        android:text="" />
-
-    <EditText
-        android:id="@+id/add_markings_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="13dp"
-        android:layout_marginStart="16dp"
-        android:ems="10"
-        android:hint="Markings" />
-
-    <EditText
-        android:id="@+id/add_notes_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="13dp"
-        android:layout_marginStart="16dp"
-        android:ems="10"
-        android:hint="Add notes"
-        />
-    <RadioGroup
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/sex_radioButton"
-        android:layout_alignParentStart="true"
-        android:id="@+id/sex_radioGroup">
-
-        <RadioButton
-            android:id="@+id/isFemaleRadioButton"
+    <!--    <EditText
+            android:id="@+id/add_horse_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/editText3"
-            android:layout_below="@+id/button8"
-            android:layout_marginTop="55dp"
-            android:text="@string/female" />
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:ems="10"
+            android:hint="@string/name"
+            android:inputType="textPersonName"
+            android:text="" />
 
-    </RadioGroup>
+        <EditText
+            android:id="@+id/add_markings_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="13dp"
+            android:layout_marginStart="16dp"
+            android:ems="10"
+            android:hint="Markings" />
 
-    <TextView
-        android:text=""
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView4"
-        android:hint="@string/database_results"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="25dp"
-        android:layout_marginTop="25dp"/>
+        <EditText
+            android:id="@+id/add_notes_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="13dp"
+            android:layout_marginStart="16dp"
+            android:ems="10"
+            android:hint="Add notes"
+            />
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/sex_radioButton"
+            android:layout_alignParentStart="true"
+            android:id="@+id/sex_radioGroup">
 
-    <Button
-        android:id="@+id/button6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/textView4"
-        android:layout_alignEnd="@+id/radioGroup"
-        android:layout_marginBottom="10dp"
-        android:onClick="insert"
-        android:text="@string/insert" />
+            <RadioButton
+                android:id="@+id/isFemaleRadioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/editText3"
+                android:layout_below="@+id/button8"
+                android:layout_marginTop="55dp"
+                android:text="@string/female" />
 
-      <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/ic_menu_camera"
-        android:id="@+id/imageButton"
-        android:contentDescription="Image for horse"
-        android:onClick="chooseImage"
-        android:layout_alignBottom="@+id/editText2"
-        android:layout_alignParentEnd="true" />
+        </RadioGroup>
 
-        <ImageView
-            android:layout_width="90dp"
-            android:layout_height="90dp"
-            app:srcCompat="@color/cardview_light_background"
-            android:id="@+id/imageView3"
-            android:layout_below="@+id/imageButton"
-            android:layout_alignBottom="@+id/radioGroup"
+        <TextView
+            android:text=""
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView4"
+            android:hint="@string/database_results"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
-            android:layout_toEndOf="@+id/button7" />-->
+            android:layout_marginBottom="25dp"
+            android:layout_marginTop="25dp"/>
+
+        <Button
+            android:id="@+id/button6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/textView4"
+            android:layout_alignEnd="@+id/radioGroup"
+            android:layout_marginBottom="10dp"
+            android:onClick="insert"
+            android:text="@string/insert" />
+
+          <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_menu_camera"
+            android:id="@+id/imageButton"
+            android:contentDescription="Image for horse"
+            android:onClick="chooseImage"
+            android:layout_alignBottom="@+id/editText2"
+            android:layout_alignParentEnd="true" />
+
+            <ImageView
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                app:srcCompat="@color/cardview_light_background"
+                android:id="@+id/imageView3"
+                android:layout_below="@+id/imageButton"
+                android:layout_alignBottom="@+id/radioGroup"
+                android:layout_alignParentEnd="true"
+                android:layout_toEndOf="@+id/button7" />-->
 
 

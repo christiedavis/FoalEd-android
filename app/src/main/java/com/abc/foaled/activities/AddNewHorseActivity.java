@@ -2,6 +2,8 @@ package com.abc.foaled.activities;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -17,16 +19,19 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.abc.foaled.database.DatabaseHelper;
 import com.abc.foaled.database.ORMBaseActivity;
 import com.abc.foaled.fragments.DatePickerFragment;
+import com.abc.foaled.fragments.TimePickerFragment;
 import com.abc.foaled.helpers.DateTimeHelper;
 import com.abc.foaled.helpers.ImageHelper;
 import com.abc.foaled.models.Birth;
@@ -35,6 +40,7 @@ import com.abc.foaled.R;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 
 import org.joda.time.DateTime;
+import org.joda.time.Days;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -45,7 +51,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -53,7 +58,9 @@ import java.util.Locale;
 import static com.abc.foaled.helpers.PermissionsHelper.hasPermissions;
 import static com.abc.foaled.helpers.PermissionsHelper.getPermissions;
 
-public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
+public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> implements
+		TimePickerDialog.OnTimeSetListener,
+		DatePickerDialog.OnDateSetListener {
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_IMAGE_SELECT = 2;
@@ -61,6 +68,10 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
     private String imagePath = "";
 	private String tempPath = "";
     static final int API_LEVEL = android.os.Build.VERSION.SDK_INT;
+
+	DateTimeFormatter dateFormatter = DateTimeFormat.forPattern("dd/MM/yyyy");
+	DateTimeFormatter timeFormatter = DateTimeFormat.forPattern("HH:mm");
+	DateTimeFormatter dateAndTimeFormatter = DateTimeFormat.forPattern("dd/mm/yyyy - HH:mm");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,24 +83,26 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
 	    if (getSupportActionBar() != null)
 	        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        String date = new SimpleDateFormat("dd/MM/yyyy", Locale.UK).format(Calendar.getInstance().getTime());
+
+
+//        String date = new SimpleDateFormat("dd/MM/yyyy", Locale.UK).format(Calendar.getInstance().getTime());
+		String date = DateTime.now().toString(dateFormatter);
+		String time = DateTime.now().toString(timeFormatter);
+
         TextView dob = (TextView) findViewById(R.id.newHorseDOB);
+		TextView tob = (TextView) findViewById(R.id.newHorseTOB);
         TextView concep = (TextView) findViewById(R.id.newHorseConceptionDate);
         dob.setText(date);
+		tob.setText(time);
         concep.setText(date);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
 
     /**
      * This is called when an activity is called with an intent to return with a result.
      * @param requestCode The (hopefully) unique code that got sent with the intent
      * @param resultCode Successful or not code
      * @param data The data returned from the intent
-     *   //Todo only create the image on insert
      */
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -157,6 +170,8 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
      */
     public void insert(View view) {
 
+
+
 	    //Get name. Throw error if no name supplied
         EditText nameEditText = (EditText) findViewById(R.id.add_new_horse_name);
         if (nameEditText.getText().toString().isEmpty()) {
@@ -167,8 +182,20 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
 
 	    //parse date
 	    String dobString = ((TextView) findViewById(R.id.newHorseDOB)).getText().toString();
-	    DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/MM/yyyy");
-	    DateTime dob = formatter.parseDateTime(dobString);
+		String tobString = ((TextView) findViewById(R.id.newHorseTOB)).getText().toString();
+
+	    DateTime dob = dateFormatter.parseDateTime(dobString);
+
+
+		//If horse is less than 2 days old
+		if (findViewById(R.id.tobRow).getVisibility() == View.VISIBLE) {
+
+			dob = dateAndTimeFormatter.parseDateTime(dobString + " - " + tobString);
+			if (dob.isAfter(DateTime.now())) {
+				Toast.makeText(this, "Date of birth cannot be set in the future", Toast.LENGTH_LONG).show();
+				return;
+			}
+		}
 
 	    //create arbitrary birth instance
 	    Birth birth = new Birth(null, null, null, dob);
@@ -211,7 +238,7 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
         finish();
     }
 
-    public void toggleSex(View view) {
+    public void toggleSex(final View view) {
         CheckBox checkBox = (CheckBox) view;
         final ScrollView scrollView = (ScrollView) findViewById(R.id.content_add_new_horse);
         LinearLayout layout = (LinearLayout) findViewById(R.id.pregnantRow);
@@ -230,7 +257,7 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
         }
     }
 
-    public void togglePregnant(View view) {
+    public void togglePregnant(final View view) {
         CheckBox checkBox = (CheckBox) view;
 	    final ScrollView scrollView = (ScrollView) findViewById(R.id.content_add_new_horse);
         LinearLayout layout = (LinearLayout) findViewById(R.id.conceptionRow);
@@ -248,13 +275,42 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
     }
 
     public void selectDate(View view) {
-		//TODO display time picker below date, and on 2 days old, hide it
-        TextView editText = (TextView) view;
-        DialogFragment dialog = new DatePickerFragment();
-        ((DatePickerFragment) dialog).setViewResult(editText);
-        dialog.setRetainInstance(true);
+		String date = ((TextView) view).getText().toString();
+
+        DialogFragment dialog = DatePickerFragment.newInstance(date, this);
         dialog.show(getFragmentManager(), "datePicker");
     }
+
+    @Override
+	public void onDateSet(DatePicker view, int year, int month, int day) {
+		TextView dob = (TextView) findViewById(R.id.newHorseDOB);
+		String parsedDob = day + "/" + (month + 1) + "/" + year;
+		dob.setText(parsedDob);
+		DateTime birth = dateFormatter.parseDateTime(parsedDob);
+
+		final LinearLayout tobRow = (LinearLayout) findViewById(R.id.tobRow);
+		if (Days.daysBetween(birth, DateTime.now()).getDays() > 2)
+			tobRow.setVisibility(View.GONE);
+		else {
+			tobRow.setVisibility(View.VISIBLE);
+		}
+	}
+
+
+    public void selectTime(View view) {
+		String time = ((TextView) view).getText().toString();
+
+		DialogFragment dialog = TimePickerFragment.newInstance(time, this);
+		dialog.show(getFragmentManager(), "timePicker");
+	}
+
+	@Override
+	public void onTimeSet(TimePicker view, int hour, int minute) {
+		String _minute = (minute < 10) ? "0" + minute : "" + minute;
+		String _hour = (hour < 10) ? "0" + hour : "" + hour;
+		TextView tob = (TextView) findViewById(R.id.newHorseTOB);
+		tob.setText(_hour + ":" + _minute);
+	}
 
     public void selectPhoto(View view) {
 
