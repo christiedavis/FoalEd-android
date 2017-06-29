@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Build;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
 import android.os.Bundle;
@@ -39,6 +41,7 @@ import com.abc.foaled.models.Birth;
 import com.abc.foaled.models.Horse;
 import com.abc.foaled.R;
 import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.misc.TransactionManager;
 
@@ -54,12 +57,14 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 	Horse horse;
 	int horseID;
 
+	private PopupWindow currPopupWindow;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		horseID = getIntent().getIntExtra("HorseID", 0);
 		horse = getHelper().getHorseDataDao().queryForId(horseID);
+
 		setup();
 	}
 
@@ -89,6 +94,11 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 		Log.d("Horse Detail Activity", "- horse status" + horse.getStatusString());
 
 		setContentView(R.layout.activity_horse_detail);
+
+
+		CoordinatorLayout layout = (CoordinatorLayout) findViewById(R.id.horse_detail_screen);
+		if (Build.VERSION.SDK_INT > 22)
+			layout.getForeground().setAlpha(0);
 
 		//age
 		TextView age = (TextView) findViewById(R.id.age);
@@ -292,20 +302,32 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 		return super.onOptionsItemSelected(item);
 	}
 
-	public void AddNewPregnancyFragment(View v) {
+	public void addNewPregnancyFragment(View v) {
+
+		FloatingActionsMenu fab = (FloatingActionsMenu) v.getParent();
+		fab.collapse();
+		CoordinatorLayout layout = (CoordinatorLayout) findViewById(R.id.horse_detail_screen);
+
 		Log.d("", "Add pregnancy button was clicked");
 
 		View popupView = getLayoutInflater().inflate(R.layout.fragment_add_pregnancy, null);
 
-		PopupWindow popupWindow = new PopupWindow(popupView,
+		currPopupWindow = new PopupWindow(popupView,
 				ViewGroup.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
-		popupWindow.setFocusable(true);
-		popupWindow.setAnimationStyle(R.style.Animation);
-
-		popupWindow.setBackgroundDrawable(new ColorDrawable());
-
-		popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
+		currPopupWindow.setFocusable(true);
+		currPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+			@Override
+			public void onDismiss() {
+				CoordinatorLayout layout = (CoordinatorLayout) findViewById(R.id.horse_detail_screen);
+				if (Build.VERSION.SDK_INT > 22)
+					layout.getForeground().setAlpha(0);
+			}
+		});
+		currPopupWindow.setAnimationStyle(R.style.Animation);
+		currPopupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
+		if (Build.VERSION.SDK_INT > 22)
+			layout.getForeground().setAlpha(220);
 	}
 
 	public void AddPregnancy(View v) {
@@ -426,8 +448,7 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 	}
 
 	public void Cancel(View v) {
-		System.out.println("Cancel birth");
-		// TODO: leave fragmemt go back to horse detail
+		currPopupWindow.dismiss();
 	}
 
 	/**
