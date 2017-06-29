@@ -179,9 +179,10 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
             nameEditText.setError("Please don't leave name blank");
             return;
         }
+        //NAME---------------------------------
 	    String name = nameEditText.getText().toString();
 
-	    //parse date
+		//DOB------------------------------------------
 	    String dobString = ((TextView) findViewById(R.id.newHorseDOB)).getText().toString();
 		String tobString = ((TextView) findViewById(R.id.newHorseTOB)).getText().toString();
 
@@ -192,13 +193,16 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
 
 			dob = dateAndTimeFormatter.parseDateTime(dobString + " - " + tobString);
 			DateTime curr = DateTime.now();
+			//If date is in future
 			if (dob.isAfter(curr)) {
 				Toast.makeText(this, "Date of birth cannot be set in the future", Toast.LENGTH_LONG).show();
 				return;
 			}
 		}
 
-	    //create arbitrary birth instance
+
+
+	    //create empty birth instance for horse
 	    Birth birth = new Birth(null, null, null, dob);
 
 
@@ -245,6 +249,7 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
         LinearLayout layout = (LinearLayout) findViewById(R.id.pregnantRow);
         if (checkBox.isChecked()) {
             layout.setVisibility(View.VISIBLE);
+			findViewById(R.id.maidenRow).setVisibility(View.VISIBLE);
 	        scrollView.post(new Runnable() {
 		        @Override
 		        public void run() {
@@ -254,9 +259,16 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
         } else {
             layout.setVisibility(View.GONE);
             findViewById(R.id.conceptionRow).setVisibility(View.GONE);
+			findViewById(R.id.maidenRow).setVisibility(View.GONE);
             ((CheckBox) findViewById(R.id.checkboxPregnant)).setChecked(false);
+			((CheckBox) findViewById(R.id.checkboxMaiden)).setChecked(false);
         }
     }
+
+	public void toggleMaiden(View view) {
+		CheckBox checkBox = (CheckBox) view;
+
+	}
 
     public void togglePregnant(final View view) {
         CheckBox checkBox = (CheckBox) view;

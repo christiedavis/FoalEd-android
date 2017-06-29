@@ -49,7 +49,7 @@ public class Horse implements Serializable {
                     return "Foal";
 
                 case RETIRED:
-                    return "Retired";
+                    return "Retired"; //is this needed?
 
                 default:
                     return "Dormant";

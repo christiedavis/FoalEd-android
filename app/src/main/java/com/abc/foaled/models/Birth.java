@@ -6,15 +6,12 @@ import com.j256.ormlite.table.DatabaseTable;
 
 import org.joda.time.DateTime;
 
-import java.io.Serializable;
-import java.util.Date;
-
 /**
  * Created by Brendan on 6/02/2017.
  *
  */
 @DatabaseTable(tableName = "births")
-public class Birth implements Serializable {
+public class Birth {
 
 
     @DatabaseField(generatedId = true)
@@ -27,8 +24,8 @@ public class Birth implements Serializable {
     private String sire;        //Name of dad
 	@DatabaseField(canBeNull = false)
 	private String notes;
-    @DatabaseField(dataType = DataType.DATE_STRING)
-    private Date estConception;
+    @DatabaseField(dataType = DataType.DATE_TIME)
+    private DateTime estConception;
     @DatabaseField(dataType = DataType.DATE_TIME)
     private DateTime birthTime;
 
@@ -36,7 +33,7 @@ public class Birth implements Serializable {
     public Birth() {
     }
 
-    public Birth(Horse mother, String father, Date conception, DateTime dob){
+    public Birth(Horse mother, String father, DateTime conception, DateTime dob){
 	    horse = null;
         mare = mother;
         sire = father;
@@ -77,11 +74,11 @@ public class Birth implements Serializable {
 		this.notes = notes;
 	}
 
-	public Date getEstConception() {
+	public DateTime getEstConception() {
 		return estConception;
 	}
 
-	public void setEstConception(Date estConception) {
+	public void setEstConception(DateTime estConception) {
 		this.estConception = estConception;
 	}
 
