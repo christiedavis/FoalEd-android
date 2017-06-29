@@ -242,11 +242,13 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
 	    horseDao.create(horse);
 
 		//Make a new birth object if the horse is pregnant
-		if (horse.isPregnant()) {
+		if (horse.getStatus() == Horse.HORSE_STATUS.PREGNANT) {
 			String concep = ((TextView) findViewById(R.id.newHorseConceptionDate)).getText().toString();
 			DateTime conceptionDate = dateFormatter.parseDateTime(concep);
-			Birth b = new Birth(horse, null, conceptionDate, null);
+			Birth b = new Birth(horse, null, conceptionDate, conceptionDate.plusMonths(11));
 			getHelper().getBirthsDataDao().create(b);
+			horse.setCurrentBirth(b);
+			horseDao.update(horse);
 		}
 
 		//make the horse the mother in the birth object
@@ -282,14 +284,21 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
         CheckBox checkBox = (CheckBox) view;
 	    final ScrollView scrollView = (ScrollView) findViewById(R.id.content_add_new_horse);
         LinearLayout layout = (LinearLayout) findViewById(R.id.conceptionRow);
+
+		DateTime dob = dateFormatter.parseDateTime(((TextView) findViewById(R.id.newHorseDOB)).getText().toString());
         if (checkBox.isChecked()) {
-            layout.setVisibility(View.VISIBLE);
-	        scrollView.post(new Runnable() {
-		        @Override
-		        public void run() {
-			        scrollView.fullScroll(View.FOCUS_DOWN);
-		        }
-	        });
+			if (Days.daysBetween(dob, DateTime.now()).getDays() > 365) {
+				layout.setVisibility(View.VISIBLE);
+				scrollView.post(new Runnable() {
+					@Override
+					public void run() {
+						scrollView.fullScroll(View.FOCUS_DOWN);
+					}
+				});
+			} else {
+				Toast.makeText(this, "Your horse is too young to get pregnant!", Toast.LENGTH_LONG).show();
+				checkBox.setChecked(false);
+			}
         } else {
             layout.setVisibility(View.GONE);
         }

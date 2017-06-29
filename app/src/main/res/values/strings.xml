@@ -13,6 +13,10 @@
     <string name="side_nav_horses">My Horses</string>
     <string name="title_activity_new_horse">Add Horse</string>
 
+    <!--Horse detail-->
+    <string name="horse_age">%1$s old</string>
+    <string name="pregnancy_left_time">Approx. %1$s left till birth!</string>
+
     <string name="cancel">Cancel</string>
 
     <!-- Screen names -->

@@ -3,12 +3,8 @@ package com.abc.foaled.activities;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Build;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
 import android.os.Bundle;
@@ -16,7 +12,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.Layout;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -25,14 +20,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.abc.foaled.adaptors.HorseNoteAdaptor;
 import com.abc.foaled.adaptors.MilestoneAdaptor;
 import com.abc.foaled.database.DatabaseHelper;
 import com.abc.foaled.database.ORMBaseActivity;
@@ -41,7 +34,6 @@ import com.abc.foaled.fragments.AddPregnancyFragment;
 import com.abc.foaled.fragments.DatePickerFragment;
 import com.abc.foaled.fragments.HorseBirthNotesFragment;
 import com.abc.foaled.fragments.HorseNoteFragment;
-import com.abc.foaled.helpers.DateTimeHelper;
 import com.abc.foaled.helpers.ImageHelper;
 import com.abc.foaled.models.Birth;
 import com.abc.foaled.models.Horse;
@@ -53,12 +45,6 @@ import com.j256.ormlite.misc.TransactionManager;
 import org.joda.time.DateTime;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.Callable;
 
 import static android.view.View.GONE;
@@ -97,20 +83,24 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 
 		setContentView(R.layout.activity_horse_detail);
 
-
+		//age
 		TextView age = (TextView) findViewById(R.id.age);
-		age.setText(horse.getAge());
-
+		age.setText(getString(R.string.horse_age, horse.getAge()));
+		//gender
 		TextView gender = (TextView) findViewById(R.id.sex);
 		gender.setText(horse.isFemale() ? "Female" : "Male");
-
+		//status
 		TextView status = (TextView) findViewById(R.id.pregnantStatus);
 		status.setText(horse.getStatusString());
 
 
-		//sets up the photo
-		ImageView horsePhoto = (ImageView) findViewById(R.id.horse_photo);
+		if (!horse.isFemale() || horse.getStatus() == Horse.HORSE_STATUS.FOAL) {
+			FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_pregnancy);
+			fab.setVisibility(View.GONE);
+		}
 
+		//---------SET UP PHOTO------------
+		ImageView horsePhoto = (ImageView) findViewById(R.id.horse_photo);
 		if (horse.getImagePath().isEmpty()) {
 			int photo = horse.getStatus() == Horse.HORSE_STATUS.FOAL ? R.drawable.default_foal : R.drawable.default_horse;
 			horsePhoto.setImageResource(photo);
@@ -118,7 +108,8 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 			horsePhoto.setImageBitmap(ImageHelper.bitmapSmaller(horse.getImagePath(), 300, 300));
 
 
-		if (horse.getStatus() != Horse.HORSE_STATUS.FOAL) {
+
+		if (horse.getStatus() == Horse.HORSE_STATUS.DORMANT) {
 			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
 			if (getSupportFragmentManager().findFragmentByTag("GENERAL_NOTES") == null) {
@@ -131,6 +122,9 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 				transaction.add(R.id.horse_detail_linear_layout, birthNotesFragment, "BIRTH_NOTES");
 			}
 			transaction.commit();
+		} else if (horse.getStatus() == Horse.HORSE_STATUS.PREGNANT) {
+			TextView prengnacyStatus = (TextView) findViewById(R.id.horse_status);
+			prengnacyStatus.setText(getString(R.string.pregnancy_left_time, horse.getCurrentBirth().getBirthDurationAsString()));
 		}
 
 /*        switch (horse.getStatus()) {

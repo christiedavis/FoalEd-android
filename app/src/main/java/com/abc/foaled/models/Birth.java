@@ -1,5 +1,6 @@
 package com.abc.foaled.models;
 
+import com.abc.foaled.helpers.DateTimeHelper;
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -25,7 +26,7 @@ public class Birth {
 	@DatabaseField(canBeNull = false)
 	private String notes;
     @DatabaseField(dataType = DataType.DATE_TIME)
-    private DateTime estConception;
+    private DateTime conception;
     @DatabaseField(dataType = DataType.DATE_TIME)
     private DateTime birthTime;
 
@@ -38,7 +39,7 @@ public class Birth {
         mare = mother;
         sire = father;
 	    notes = "";
-        estConception = conception;
+        this.conception = conception;
         birthTime = dob;
     }
 
@@ -74,12 +75,12 @@ public class Birth {
 		this.notes = notes;
 	}
 
-	public DateTime getEstConception() {
-		return estConception;
+	public DateTime getConception() {
+		return conception;
 	}
 
-	public void setEstConception(DateTime estConception) {
-		this.estConception = estConception;
+	public void setConception(DateTime conception) {
+		this.conception = conception;
 	}
 
 	public DateTime getBirthTime() {
@@ -93,4 +94,9 @@ public class Birth {
 	public String getYearOfBirth() {
 		return Integer.toString(birthTime.getYear());
 	}
+
+	public String getBirthDurationAsString() {
+		return DateTimeHelper.getBirthTimeLeft(conception);
+	}
+
 }
