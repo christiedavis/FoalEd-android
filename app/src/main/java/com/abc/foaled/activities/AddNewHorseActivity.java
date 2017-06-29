@@ -40,6 +40,7 @@ import com.abc.foaled.R;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.joda.time.Days;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -71,7 +72,7 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
 
 	DateTimeFormatter dateFormatter = DateTimeFormat.forPattern("dd/MM/yyyy");
 	DateTimeFormatter timeFormatter = DateTimeFormat.forPattern("HH:mm");
-	DateTimeFormatter dateAndTimeFormatter = DateTimeFormat.forPattern("dd/mm/yyyy - HH:mm");
+	DateTimeFormatter dateAndTimeFormatter = DateTimeFormat.forPattern("dd/MM/yyyy - HH:mm");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -186,12 +187,12 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
 
 	    DateTime dob = dateFormatter.parseDateTime(dobString);
 
-
 		//If horse is less than 2 days old
 		if (findViewById(R.id.tobRow).getVisibility() == View.VISIBLE) {
 
 			dob = dateAndTimeFormatter.parseDateTime(dobString + " - " + tobString);
-			if (dob.isAfter(DateTime.now())) {
+			DateTime curr = DateTime.now();
+			if (dob.isAfter(curr)) {
 				Toast.makeText(this, "Date of birth cannot be set in the future", Toast.LENGTH_LONG).show();
 				return;
 			}
