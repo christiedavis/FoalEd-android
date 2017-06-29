@@ -133,6 +133,10 @@ public class Horse implements Serializable {
 	    this.sex = sex;
     }
 
+    public boolean isPregnant() {
+		return currentBirth != null;
+	}
+
 	public String getNotes() {
 		return notes;
 	}

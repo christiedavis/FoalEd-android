@@ -201,12 +201,12 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
 		}
 
 
-
 	    //create empty birth instance for horse
 	    Birth birth = new Birth(null, null, null, dob);
 
 
 	    Boolean female = false;
+		Boolean maiden = false;
 	    Boolean pregnant = false;
 
 	    CheckBox femaleCB = (CheckBox) findViewById(R.id.checkboxSex);
@@ -215,17 +215,21 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
 	    if (femaleCB.isChecked()) {
 		    female = true;
 
-		    if (pregnantCB.isChecked())
-		    	pregnant = true;
+			maiden = ((CheckBox) findViewById(R.id.checkboxMaiden)).isChecked();
+		    pregnant = pregnantCB.isChecked();
 	    }
 
+	    //status of horse
 		Horse.HORSE_STATUS status = Horse.HORSE_STATUS.DORMANT;
+
+
 
 		//assumes a horse can't get pregnant at less than a year old
 		if (DateTimeHelper.getAgeInYears(dob) < 1)
 			status = Horse.HORSE_STATUS.FOAL;
 		else if (pregnant)
 			status = Horse.HORSE_STATUS.PREGNANT;
+
 
 		//TODO make a 'pick status' dialog that lets the user choose the status of the horse
 	    Horse horse = new Horse(name, birth, female, null, status, imagePath);
@@ -237,6 +241,15 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
         horse.createMilestones();
 	    horseDao.create(horse);
 
+		//Make a new birth object if the horse is pregnant
+		if (horse.isPregnant()) {
+			String concep = ((TextView) findViewById(R.id.newHorseConceptionDate)).getText().toString();
+			DateTime conceptionDate = dateFormatter.parseDateTime(concep);
+			Birth b = new Birth(horse, null, conceptionDate, null);
+			getHelper().getBirthsDataDao().create(b);
+		}
+
+		//make the horse the mother in the birth object
 		birth.setMare(horse);
         getHelper().getBirthsDataDao().create(birth);
 
@@ -265,11 +278,6 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
         }
     }
 
-	public void toggleMaiden(View view) {
-		CheckBox checkBox = (CheckBox) view;
-
-	}
-
     public void togglePregnant(final View view) {
         CheckBox checkBox = (CheckBox) view;
 	    final ScrollView scrollView = (ScrollView) findViewById(R.id.content_add_new_horse);
@@ -288,24 +296,37 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
     }
 
     public void selectDate(View view) {
+
 		String date = ((TextView) view).getText().toString();
 
-        DialogFragment dialog = DatePickerFragment.newInstance(date, this);
-        dialog.show(getFragmentManager(), "datePicker");
+		DateTime conception = view.getId() == R.id.newHorseConceptionDate ? DateTime.now().minusYears(1) : null;
+
+		DialogFragment dialog = DatePickerFragment.newInstance(date, this, conception);
+		//used to distinguish between selection dob and conception dates
+		String tag = view.getId() == R.id.newHorseDOB ? "dobPicker" : "conceptionDatePicker";
+        dialog.show(getFragmentManager(), tag);
     }
 
     @Override
 	public void onDateSet(DatePicker view, int year, int month, int day) {
-		TextView dob = (TextView) findViewById(R.id.newHorseDOB);
+		int textViewID;
+		if (getFragmentManager().findFragmentByTag("dobPicker") != null) {
+			textViewID = R.id.newHorseDOB;
+		} else
+			textViewID = R.id.newHorseConceptionDate;
+
+		TextView dateField = (TextView) findViewById(textViewID);
 		String parsedDob = day + "/" + (month + 1) + "/" + year;
-		dob.setText(parsedDob);
+		dateField.setText(parsedDob);
 		DateTime birth = dateFormatter.parseDateTime(parsedDob);
 
-		final LinearLayout tobRow = (LinearLayout) findViewById(R.id.tobRow);
-		if (Days.daysBetween(birth, DateTime.now()).getDays() > 2)
-			tobRow.setVisibility(View.GONE);
-		else {
-			tobRow.setVisibility(View.VISIBLE);
+		if (textViewID == R.id.newHorseDOB) {
+			final LinearLayout tobRow = (LinearLayout) findViewById(R.id.tobRow);
+			if (Days.daysBetween(birth, DateTime.now()).getDays() > 2)
+				tobRow.setVisibility(View.GONE);
+			else {
+				tobRow.setVisibility(View.VISIBLE);
+			}
 		}
 	}
 

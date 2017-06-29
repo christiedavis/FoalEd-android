@@ -101,6 +101,7 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
 				//Transforms all foals into either Maiden or Dormant (if female or male) after a year
 				try {
 					List<Horse> foals = getHelper().getHorseDataDao().queryBuilder().where().eq("status", Horse.HORSE_STATUS.FOAL).query();
+
 					for (Horse h : foals) {
 						if (DateTimeHelper.getAgeInDays(h.getDateOfBirth().getBirthTime()) > 365) {
 							if (h.isFemale())

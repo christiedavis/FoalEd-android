@@ -316,7 +316,7 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 
 		// add to database
 		//TODO change 2nd parameter to be Father's name, date to be the date that was selected
-		Birth newBirth = new Birth(horse, "TEMP", new Date(), new DateTime());
+		Birth newBirth = new Birth(horse, "TEMP", new DateTime(), new DateTime());
 		getHelper().getBirthsDataDao().create(newBirth);
 
 		ViewGroup parent = (ViewGroup) findViewById(R.id.horse_detail_screen);

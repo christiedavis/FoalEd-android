@@ -33,11 +33,21 @@ public class DatePickerFragment extends DialogFragment {
 
 	private String date;
 	private DatePickerDialog.OnDateSetListener listener;
+	private DateTime minimumDate;
 
 	public static DatePickerFragment newInstance(String date, DatePickerDialog.OnDateSetListener listener) {
 		DatePickerFragment dialog = new DatePickerFragment();
 		dialog.date = date;
 		dialog.listener = listener;
+		dialog.setRetainInstance(true);
+		return dialog;
+	}
+
+	public static DatePickerFragment newInstance(String date, DatePickerDialog.OnDateSetListener listener, DateTime min) {
+		DatePickerFragment dialog = new DatePickerFragment();
+		dialog.date = date;
+		dialog.listener = listener;
+		dialog.minimumDate = min;
 		dialog.setRetainInstance(true);
 		return dialog;
 	}
@@ -84,7 +94,10 @@ public class DatePickerFragment extends DialogFragment {
 		//sets the datepicker dialog to have a max of today, and min of 50 years ago
 		DatePickerDialog dialog = new DatePickerDialog(getActivity(), listener, year, month, day);
 		dialog.getDatePicker().setMaxDate(current.getMillis());
-		dialog.getDatePicker().setMinDate(current.minusYears(50).getMillis());
+		if (minimumDate != null)
+			dialog.getDatePicker().setMinDate(minimumDate.getMillis());
+		else
+			dialog.getDatePicker().setMinDate(current.minusYears(50).getMillis());
 		return dialog;
 	}
 
