@@ -63,6 +63,13 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 		setup();
 	}
 
+	@Override
+	public void onResume() {
+		super.onResume();
+//		setup();
+	}
+
+
 	/**
 	 * Inflates the custom menu items in to the menu on the toolbar
 	 *
@@ -115,16 +122,20 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 			if (getSupportFragmentManager().findFragmentByTag("GENERAL_NOTES") == null) {
 				HorseNoteFragment fragment = HorseNoteFragment.newInstance(horse);
 				transaction.add(R.id.horse_detail_linear_layout, fragment, "GENERAL_NOTES");
+//				transaction.commit();
 			}
 
 			if (getSupportFragmentManager().findFragmentByTag("BIRTH_NOTES") == null && horse.isFemale()) {
 				HorseBirthNotesFragment birthNotesFragment = HorseBirthNotesFragment.newInstance(horse);
 				transaction.add(R.id.horse_detail_linear_layout, birthNotesFragment, "BIRTH_NOTES");
+//				transaction.commit();
 			}
 			transaction.commit();
 		} else if (horse.getStatus() == Horse.HORSE_STATUS.PREGNANT) {
 			TextView prengnacyStatus = (TextView) findViewById(R.id.horse_status);
 			prengnacyStatus.setText(getString(R.string.pregnancy_left_time, horse.getCurrentBirth().getBirthDurationAsString()));
+
+
 		}
 
 /*        switch (horse.getStatus()) {
@@ -470,4 +481,7 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 
 	}
 
+	public void makePregnant(View view) {
+
+	}
 }

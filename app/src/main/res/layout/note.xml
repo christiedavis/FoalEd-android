@@ -4,7 +4,9 @@
     android:id="@+id/cv"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="20dp"
+    android:layout_marginStart="20dp"
+    android:layout_marginEnd="20dp"
+    android:layout_marginBottom="10dp"
     android:clickable="true">
 
     <TextView
@@ -12,9 +14,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="10sp"
-        android:paddingEnd="10sp"
-        android:paddingStart="10sp"
-        android:paddingTop="10sp"
+        android:paddingEnd="10dp"
+        android:paddingStart="10dp"
+        android:paddingTop="10dp"
         android:maxLines="3"
         android:ellipsize="end"/>
 

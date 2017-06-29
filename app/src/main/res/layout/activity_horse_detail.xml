@@ -56,6 +56,7 @@
             android:id="@+id/add_pregnancy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="makePregnant"
             android:src="@drawable/ic_menu_pregnancy"
             fab:fab_colorNormal="@color/colorAccent"
             fab:fab_colorPressed="@color/colorAccentLight"
