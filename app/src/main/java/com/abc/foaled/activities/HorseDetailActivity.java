@@ -78,7 +78,7 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
 		if (currPopupWindow != null && currPopupWindow.isShowing()) {
-			EditText et = (EditText) currPopupWindow.getContentView().findViewById(R.id.sires_name);
+			EditText et = (EditText) currPopupWindow.getContentView().findViewById(R.id.siresName);
 			savedInstanceState.putString("sire", et.getText().toString());
 		}
 	}
@@ -328,12 +328,11 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 
 		View popupView = getLayoutInflater().inflate(R.layout.fragment_add_pregnancy, null);
 		if (sire != null)
-			((EditText) popupView.findViewById(R.id.sires_name)).setText(sire);
+			((EditText) popupView.findViewById(R.id.siresName)).setText(sire);
 
 		currPopupWindow = new PopupWindow(popupView,
-				ViewGroup.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+				ViewGroup.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, true);
 
-		currPopupWindow.setFocusable(true);
 		currPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
 			@Override
 			public void onDismiss() {
@@ -363,7 +362,7 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 		Horse fatherHorse = new Horse(fatherName.getText());*/
 		//TODO Move this method to the fragment. The fragment could then point back here.. but it needs to be moved to the fragment
 
-		TextView conceptionDate = (TextView) findViewById(R.id.date_of_conception);
+		TextView conceptionDate = (TextView) findViewById(R.id.conceptionDate);
 		//turn to date
 
 		// add to database
@@ -465,7 +464,7 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 	}
 
 	public void ChooseDate(View v) {
-		TextView editText = (TextView) v.getRootView().findViewById(R.id.date_of_conception);
+		TextView editText = (TextView) v.getRootView().findViewById(R.id.conceptionDate);
 		DialogFragment dialog = new DatePickerFragment();
 		dialog.setRetainInstance(true);
 //        ((DatePickerDialog)dialog.getDialog()).getDatePicker().setMaxDate(Calendar.getInstance().getTimeInMillis());

@@ -40,7 +40,6 @@ import com.abc.foaled.R;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.joda.time.Days;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -174,7 +173,7 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
 
 
 	    //Get name. Throw error if no name supplied
-        EditText nameEditText = (EditText) findViewById(R.id.add_new_horse_name);
+        EditText nameEditText = (EditText) findViewById(R.id.siresName);
         if (nameEditText.getText().toString().isEmpty()) {
             nameEditText.setError("Please don't leave name blank");
             return;

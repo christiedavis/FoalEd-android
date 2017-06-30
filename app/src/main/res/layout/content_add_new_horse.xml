@@ -87,12 +87,12 @@
                             android:layout_gravity="center"
                             android:layout_weight="1"
                             android:gravity="start"
-                            android:labelFor="@+id/add_new_horse_name"
+                            android:labelFor="@+id/siresName"
                             android:text="Name"
                             android:textAppearance="?android:attr/textAppearanceLarge"/>
 
                         <EditText
-                            android:id="@+id/add_new_horse_name"
+                            android:id="@+id/siresName"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"

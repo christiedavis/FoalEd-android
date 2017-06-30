@@ -10,56 +10,138 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="20dp"
         android:background="@color/cardview_light_background"
-        android:orientation="vertical"
-        android:layout_margin="20dp">
+        android:orientation="vertical">
 
-        <!-- TODO: do view stuff -->
         <TextView
-            android:id="@+id/add_pregnancy_fragment_text"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="Congratulations on your new pregnancy"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingStart="5dp"
-            android:text="Sire's name"/>
-
-        <EditText
-            android:id="@+id/sires_name"
-            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"/>
+            android:textColor="@android:color/black"
+            android:textStyle="bold"
+            android:text="Add Pregnancy"/>
 
-        <TextView
+        <TableLayout
             android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TableRow>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="start"
+                    android:text="Conception Date"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/conceptionDate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:text="2017/5/29"/>
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="start"
+                    android:text="Sire's name"
+                    android:textStyle="bold"
+                    android:labelFor="@+id/siresName"/>
+
+                <EditText
+                    android:id="@+id/siresName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:hint="Sire's Name"
+                    android:imeOptions="actionDone|flagNoExtractUi"
+                    android:inputType="textPersonName|textCapWords"
+                    android:maxLines="1"/>
+            </TableRow>
+
+        </TableLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Date of conception"/>
+            android:orientation="horizontal"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="50dp">
 
-        <TextView
-            android:id="@+id/date_of_conception"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimaryDark"
+                android:padding="10dp"
+                android:textColor="@android:color/white"
+                android:text="Add"/>
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="ChooseDate"
-            android:text="Choose Date"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimaryDark"
+                android:padding="10dp"
+                android:textColor="@android:color/white"
+                android:text="Cancel"/>
+        </LinearLayout>
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="AddPregnancy"
-            android:text="Add pregnancy"/>
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="Cancel"
-            android:text="Cancel"/>
+        <!-- &lt;!&ndash; TODO: do view stuff &ndash;&gt;
+         <TextView
+             android:id="@+id/add_pregnancy_fragment_text"
+             android:layout_width="wrap_content"
+             android:layout_height="match_parent"
+             android:text="Congratulations on your new pregnancy"/>
+
+         <TextView
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:paddingStart="5dp"
+             android:text="Sire's name"/>
+
+         <EditText
+             android:id="@+id/sires_name"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:gravity="center"/>
+
+         <TextView
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:text="Date of conception"/>
+
+         <TextView
+             android:id="@+id/date_of_conception"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"/>-->
+
+        <!--        <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="ChooseDate"
+                    android:text="Choose Date"/>
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="AddPregnancy"
+                    android:text="Add pregnancy"/>
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="Cancel"
+                    android:text="Cancel"/>-->
 
     </LinearLayout>
 
