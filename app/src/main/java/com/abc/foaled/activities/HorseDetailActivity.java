@@ -58,6 +58,9 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 	int horseID;
 
 	private PopupWindow currPopupWindow;
+	private String sire;
+	private CoordinatorLayout layout;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -65,13 +68,26 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 		horseID = getIntent().getIntExtra("HorseID", 0);
 		horse = getHelper().getHorseDataDao().queryForId(horseID);
 
+		if (savedInstanceState != null && savedInstanceState.containsKey("sire")) {
+			sire = savedInstanceState.getString("sire");
+		}
+
 		setup();
 	}
 
 	@Override
-	public void onResume() {
-		super.onResume();
-//		setup();
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+		if (currPopupWindow != null && currPopupWindow.isShowing()) {
+			EditText et = (EditText) currPopupWindow.getContentView().findViewById(R.id.sires_name);
+			savedInstanceState.putString("sire", et.getText().toString());
+		}
+	}
+
+	@Override
+	public void onStop() {
+		if (currPopupWindow != null)
+			currPopupWindow.dismiss();
+		super.onStop();
 	}
 
 
@@ -93,12 +109,15 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 	private void setup() {
 		Log.d("Horse Detail Activity", "- horse status" + horse.getStatusString());
 
+
 		setContentView(R.layout.activity_horse_detail);
+		layout = (CoordinatorLayout) findViewById(R.id.horse_detail_screen);
 
-
-		CoordinatorLayout layout = (CoordinatorLayout) findViewById(R.id.horse_detail_screen);
 		if (Build.VERSION.SDK_INT > 22)
-			layout.getForeground().setAlpha(0);
+			if (sire == null) {
+				layout.getForeground().setAlpha(0);
+			} else
+				layout.getForeground().setAlpha(220);
 
 		//age
 		TextView age = (TextView) findViewById(R.id.age);
@@ -125,29 +144,28 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 			horsePhoto.setImageBitmap(ImageHelper.bitmapSmaller(horse.getImagePath(), 300, 300));
 
 
-
 		if (horse.getStatus() == Horse.HORSE_STATUS.DORMANT) {
 			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
 			if (getSupportFragmentManager().findFragmentByTag("GENERAL_NOTES") == null) {
 				HorseNoteFragment fragment = HorseNoteFragment.newInstance(horse);
 				transaction.add(R.id.horse_detail_linear_layout, fragment, "GENERAL_NOTES");
-//				transaction.commit();
 			}
 
 			if (getSupportFragmentManager().findFragmentByTag("BIRTH_NOTES") == null && horse.isFemale()) {
 				HorseBirthNotesFragment birthNotesFragment = HorseBirthNotesFragment.newInstance(horse);
 				transaction.add(R.id.horse_detail_linear_layout, birthNotesFragment, "BIRTH_NOTES");
-//				transaction.commit();
 			}
 			transaction.commit();
 		} else if (horse.getStatus() == Horse.HORSE_STATUS.PREGNANT) {
-			TextView prengnacyStatus = (TextView) findViewById(R.id.horse_status);
-			prengnacyStatus.setText(getString(R.string.pregnancy_left_time, horse.getCurrentBirth().getBirthDurationAsString()));
-
+			TextView pregnancyStatus = (TextView) findViewById(R.id.horse_status);
+			pregnancyStatus.setText(getString(R.string.pregnancy_left_time, horse.getCurrentBirth().getBirthDurationAsString()));
 
 		}
 
+
+		if (sire != null)
+			addNewPregnancyFragment(layout);
 /*        switch (horse.getStatus()) {
 
             case FOAL:
@@ -304,13 +322,13 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 
 	public void addNewPregnancyFragment(View v) {
 
-		FloatingActionsMenu fab = (FloatingActionsMenu) v.getParent();
-		fab.collapse();
-		CoordinatorLayout layout = (CoordinatorLayout) findViewById(R.id.horse_detail_screen);
 
-		Log.d("", "Add pregnancy button was clicked");
+		FloatingActionsMenu fab = (FloatingActionsMenu) findViewById(R.id.multiple_actions);
+		fab.collapse();
 
 		View popupView = getLayoutInflater().inflate(R.layout.fragment_add_pregnancy, null);
+		if (sire != null)
+			((EditText) popupView.findViewById(R.id.sires_name)).setText(sire);
 
 		currPopupWindow = new PopupWindow(popupView,
 				ViewGroup.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -325,17 +343,24 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 			}
 		});
 		currPopupWindow.setAnimationStyle(R.style.Animation);
-		currPopupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
-		if (Build.VERSION.SDK_INT > 22)
-			layout.getForeground().setAlpha(220);
+		layout.post(new Runnable() {
+			@Override
+			public void run() {
+				currPopupWindow.showAtLocation(layout, Gravity.CENTER, 0, 0);
+				if (Build.VERSION.SDK_INT > 22)
+					layout.getForeground().setAlpha(220);
+			}
+		});
+
 	}
+
 
 	public void AddPregnancy(View v) {
 		System.out.println("Add pregnancy selected");
 
 		// get values
 /*        EditText fatherName = (EditText) findViewById(R.id.fathers_name_textView);
-        Horse fatherHorse = new Horse(fatherName.getText());*/
+		Horse fatherHorse = new Horse(fatherName.getText());*/
 		//TODO Move this method to the fragment. The fragment could then point back here.. but it needs to be moved to the fragment
 
 		TextView conceptionDate = (TextView) findViewById(R.id.date_of_conception);
@@ -486,11 +511,11 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 
 					}
 				}).setPositiveButton("CANCEL", new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
 
-			}
-		}).create();
+					}
+				}).create();
 
 		dialog.setOnShowListener(new DialogInterface.OnShowListener() {
 			@Override

@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.abc.foaled.R;
@@ -24,7 +25,9 @@ public class AddPregnancyFragment extends Fragment {
     }
 
     public static AddPregnancyFragment newInstance() {
-        return new AddPregnancyFragment();
+		AddPregnancyFragment fragment = new AddPregnancyFragment();
+		fragment.setRetainInstance(true);
+        return fragment;
     }
 
     @Override
@@ -39,6 +42,7 @@ public class AddPregnancyFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add_pregnancy, container, false);
         TextView dateText = (TextView) view.findViewById(R.id.date_of_conception);
+
 
         String date = new SimpleDateFormat("dd/MM/yyyy", Locale.UK).format(Calendar.getInstance().getTime());
         dateText.setText(date);

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.abc.foaled">
+          package="com.abc.foaled">
 
     <uses-feature
         android:name="android.hardware.camera"
-        android:required="false" />
+        android:required="false"/>
 
     <!-- Allows writes and reads from shared public photo storage -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -15,7 +15,9 @@
         android:label="FoalEd"
         android:supportsRtl="true"
         android:theme="@style/FoalEd">
-        <meta-data android:name="net.hockeyapp.android.appIdentifier" android:value="${HOCKEYAPP_APP_ID}" />
+        <meta-data
+            android:name="net.hockeyapp.android.appIdentifier"
+            android:value="${HOCKEYAPP_APP_ID}"/>
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -24,31 +26,33 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
+                android:resource="@xml/file_paths"/>
         </provider>
 
-        <receiver android:name="notifications.NotificationPublisher" />
+        <receiver android:name="notifications.NotificationPublisher"/>
 
         <activity
             android:name=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
                 <category
                     android:name="android.intent.category.LAUNCHER"
-                    android:launchMode="singleTask" />
+                    android:launchMode="singleTask"/>
             </intent-filter>
         </activity>
 
         <!-- **  screens  ** -->
-        <activity android:name=".activities.HorseDetailActivity"
+        <activity
+            android:name=".activities.HorseDetailActivity"
+            android:configChanges="orientation|keyboard"
             android:label="Horse Detail"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
-        <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value="com.abc.foaled.MainActivity" />
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.abc.foaled.MainActivity"/>
         </activity>
 
         <activity
@@ -58,7 +62,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.abc.foaled.MainActivity" />
+                android:value="com.abc.foaled.MainActivity"/>
         </activity>
 
         <activity
@@ -68,17 +72,17 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.abc.foaled.MainActivity" />
+                android:value="com.abc.foaled.MainActivity"/>
         </activity>
 
         <activity
             android:name=".activities.AddNewHorseActivity"
             android:label="@string/title_activity_add_new_horse"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait"
             android:parentActivityName=".MainActivity"
-            android:windowSoftInputMode="stateHidden"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden">
         </activity>
 
         <activity
@@ -88,7 +92,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.abc.foaled.MainActivity" />
+                android:value="com.abc.foaled.MainActivity"/>
         </activity>
 
         <activity
@@ -105,16 +109,17 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.abc.foaled.MainActivity" />
+                android:value="com.abc.foaled.MainActivity"/>
         </activity>
 
-        <activity android:name=".activities.AboutActivity"
+        <activity
+            android:name=".activities.AboutActivity"
             android:label="About Us"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.abc.foaled.MainActivity" />
+                android:value="com.abc.foaled.MainActivity"/>
         </activity>
     </application>
 

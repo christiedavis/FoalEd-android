@@ -12,25 +12,26 @@
         android:layout_height="wrap_content"
         android:background="@color/cardview_light_background"
         android:orientation="vertical"
-        >
+        android:layout_margin="20dp">
+
         <!-- TODO: do view stuff -->
         <TextView
             android:id="@+id/add_pregnancy_fragment_text"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="Congratulations on your new pregnancy"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Father"/>
+            android:paddingStart="5dp"
+            android:text="Sire's name"/>
 
         <EditText
-            android:id="@+id/fathers_name_textView"
+            android:id="@+id/sires_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Fathers name"
-            />
+            android:gravity="center"/>
 
         <TextView
             android:layout_width="match_parent"
