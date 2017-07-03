@@ -1,5 +1,7 @@
 package com.abc.foaled.models;
 
+import android.content.Context;
+
 import com.abc.foaled.helpers.DateTimeHelper;
 import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
@@ -123,6 +125,7 @@ public class Horse implements Serializable {
 
 	public void setCurrentBirth(Birth currentBirth) {
 		this.currentBirth = currentBirth;
+		this.status = HORSE_STATUS.PREGNANT;
 	}
 
 	public boolean isFemale() {
@@ -150,20 +153,6 @@ public class Horse implements Serializable {
 	}
 
 	public void setStatus(HORSE_STATUS newStatus) {
-		//perform necessary checks
-
-		// if first pregnancy - maiden else pregnant
-		if (newStatus == HORSE_STATUS.PREGNANT && pastBirths.isEmpty()) {
-			status = HORSE_STATUS.MAIDEN;
-			return;
-		} else if ((status == HORSE_STATUS.PREGNANT || status == HORSE_STATUS.MAIDEN) && newStatus == HORSE_STATUS.DORMANT) {
-			// if from pregnant -> dormant  - remove current pregnancy
-			pastBirths.add(currentBirth);
-			this.currentBirth = null;
-		}
-		else if (newStatus == HORSE_STATUS.FOAL) {
-			createMilestones();
-		}
 		this.status = newStatus;
 	}
 
@@ -212,14 +201,15 @@ public class Horse implements Serializable {
 	/**
 	 * Should only get called if the horse is a Foal
 	 */
-	public void createMilestones() {
-	    ArrayList<Milestone> arrayList = new ArrayList<>(milestones);
+	public void createMilestones(Context context) {
+//	    ArrayList<Milestone> arrayList = new ArrayList<>(milestones);
+		this.milestones.add(new Milestone(0, this, context));
 
-        arrayList.add(new Milestone(0, this));
-        arrayList.add(new Milestone(1, this));
-        arrayList.add(new Milestone(2, this));
-        arrayList.add(new Milestone(3, this));
+		milestones.add(new Milestone(0, this, context));
+		milestones.add(new Milestone(1, this, context));
+		milestones.add(new Milestone(2, this, context));
+		milestones.add(new Milestone(3, this, context));
 
-        milestones = arrayList;
+//        milestones = arrayList;
     }
 }

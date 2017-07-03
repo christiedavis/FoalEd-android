@@ -63,6 +63,16 @@
             fab:fab_colorPressed="@color/colorAccentLight"
             fab:fab_title="Add pregnancy"/>
 
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/give_birth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="giveBirth"
+            android:src="@drawable/ic_menu_pregnancy"
+            fab:fab_colorNormal="@color/colorAccent"
+            fab:fab_colorPressed="@color/colorAccentLight"
+            fab:fab_title="Give birth"/>
+
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
 </android.support.design.widget.CoordinatorLayout>

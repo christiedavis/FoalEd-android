@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.abc.foaled.activities.HorseDetailActivity;
 import com.abc.foaled.activities.NoteActivity;
 import com.abc.foaled.models.Horse;
 import com.abc.foaled.R;
@@ -74,7 +75,7 @@ public class HorseNoteFragment extends Fragment {
 
     @Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//		updateNote = requestCode == GENERAL_NOTE_EDIT;
+//		((TextView) getFragmentManager().findFragmentByTag("GENERAL_NOTES").getView().findViewById(R.id.horse_note_card_view_note)).setText(horse.getNotes());
 	}
 
 

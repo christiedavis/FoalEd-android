@@ -8,6 +8,7 @@
 
     <!-- Allows writes and reads from shared public photo storage -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:allowBackup="true"
@@ -29,7 +30,7 @@
                 android:resource="@xml/file_paths"/>
         </provider>
 
-        <receiver android:name="notifications.NotificationPublisher"/>
+        <receiver android:name=".notifications.NotificationPublisher" />
 
         <activity
             android:name=".MainActivity"

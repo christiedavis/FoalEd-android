@@ -41,7 +41,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="end"
-                    android:text="2017/5/29"/>
+                    android:text=""
+                    android:onClick="selectDate"/>
             </TableRow>
 
             <TableRow>
@@ -84,7 +85,8 @@
                 android:background="@color/colorPrimaryDark"
                 android:padding="10dp"
                 android:textColor="@android:color/white"
-                android:text="Add"/>
+                android:text="Add"
+                android:onClick="makePregnant"/>
 
             <Button
                 android:layout_width="wrap_content"
@@ -92,7 +94,8 @@
                 android:background="@color/colorPrimaryDark"
                 android:padding="10dp"
                 android:textColor="@android:color/white"
-                android:text="Cancel"/>
+                android:text="Cancel"
+                android:onClick="cancel"/>
         </LinearLayout>
 
 
@@ -140,8 +143,8 @@
                 <Button
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:onClick="Cancel"
-                    android:text="Cancel"/>-->
+                    android:onClick="cancel"
+                    android:text="cancel"/>-->
 
     </LinearLayout>
 

@@ -1,15 +1,21 @@
 package com.abc.foaled.activities;
 
+import android.app.AlarmManager;
+import android.app.DatePickerDialog;
 import android.app.DialogFragment;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
+import android.media.RingtoneManager;
 import android.os.Build;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -21,6 +27,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -31,8 +38,6 @@ import android.widget.Toast;
 import com.abc.foaled.adaptors.MilestoneAdaptor;
 import com.abc.foaled.database.DatabaseHelper;
 import com.abc.foaled.database.ORMBaseActivity;
-import com.abc.foaled.fragments.AddFoalFragment;
-import com.abc.foaled.fragments.AddPregnancyFragment;
 import com.abc.foaled.fragments.DatePickerFragment;
 import com.abc.foaled.fragments.HorseBirthNotesFragment;
 import com.abc.foaled.fragments.HorseNoteFragment;
@@ -40,12 +45,15 @@ import com.abc.foaled.helpers.ImageHelper;
 import com.abc.foaled.models.Birth;
 import com.abc.foaled.models.Horse;
 import com.abc.foaled.R;
+import com.abc.foaled.notifications.NotificationPublisher;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.misc.TransactionManager;
 
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import java.sql.SQLException;
 import java.util.concurrent.Callable;
@@ -53,24 +61,35 @@ import java.util.concurrent.Callable;
 import static android.view.View.GONE;
 
 public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
-		implements AddPregnancyFragment.OnFragmentInteractionListener, AddFoalFragment.OnFragmentInteractionListener {
+	implements DatePickerDialog.OnDateSetListener {
+
 	Horse horse;
 	int horseID;
 
 	private PopupWindow currPopupWindow;
 	private String sire;
+	private String currDate = "";
 	private CoordinatorLayout layout;
+	DateTimeFormatter dateFormatter = DateTimeFormat.forPattern("dd/MM/yyyy");
+	DateTimeFormatter dateAndTimeFormatter = DateTimeFormat.forPattern("dd/MM/yyyy - HH:mm");
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		horseID = getIntent().getIntExtra("HorseID", 0);
+		if (savedInstanceState != null && savedInstanceState.containsKey("horseID"))
+			horseID = savedInstanceState.getInt("HorseID");
+		else
+			horseID = getIntent().getIntExtra("HorseID", 0);
+
 		horse = getHelper().getHorseDataDao().queryForId(horseID);
 
 		if (savedInstanceState != null && savedInstanceState.containsKey("sire")) {
 			sire = savedInstanceState.getString("sire");
 		}
+
+		if (savedInstanceState != null && savedInstanceState.containsKey("date"))
+			currDate = savedInstanceState.getString("date");
 
 		setup();
 	}
@@ -80,13 +99,19 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 		if (currPopupWindow != null && currPopupWindow.isShowing()) {
 			EditText et = (EditText) currPopupWindow.getContentView().findViewById(R.id.siresName);
 			savedInstanceState.putString("sire", et.getText().toString());
+			TextView date = (TextView) currPopupWindow.getContentView().findViewById(R.id.conceptionDate);
+			savedInstanceState.putString("date", date.getText().toString());
 		}
+
+		savedInstanceState.putInt("horseID", horseID);
 	}
 
 	@Override
 	public void onStop() {
-		if (currPopupWindow != null)
+		if (currPopupWindow != null) {
 			currPopupWindow.dismiss();
+			currPopupWindow = null;
+		}
 		super.onStop();
 	}
 
@@ -106,8 +131,9 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 		return true;
 	}
 
-	private void setup() {
-		Log.d("Horse Detail Activity", "- horse status" + horse.getStatusString());
+	public void setup() {
+
+
 
 
 		setContentView(R.layout.activity_horse_detail);
@@ -130,7 +156,7 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 		status.setText(horse.getStatusString());
 
 
-		if (!horse.isFemale() || horse.getStatus() == Horse.HORSE_STATUS.FOAL) {
+		if (!horse.isFemale() || horse.getStatus() == Horse.HORSE_STATUS.FOAL || horse.getStatus() == Horse.HORSE_STATUS.PREGNANT) {
 			FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_pregnancy);
 			fab.setVisibility(View.GONE);
 		}
@@ -146,6 +172,7 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 
 		if (horse.getStatus() == Horse.HORSE_STATUS.DORMANT) {
 			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
 
 			if (getSupportFragmentManager().findFragmentByTag("GENERAL_NOTES") == null) {
 				HorseNoteFragment fragment = HorseNoteFragment.newInstance(horse);
@@ -214,22 +241,6 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 			getSupportActionBar().setTitle(horse.getName());
 		}
 
-	}
-
-	private void setUpPregnant() {
-/*        Button haveBirth = (Button) findViewById(R.id.button_add_pregnancy);
-		haveBirth.setText("Give Birth");
-        if (horse.getStatus() == Horse.HORSE_STATUS.PREGNANT) {
-            haveBirth.setBackgroundColor(Color.RED);
-        } else {
-            haveBirth.setBackgroundColor(Color.BLUE);
-        }
-
-        haveBirth.setOnClickListener(new View.OnClickListener() {
-              public void onClick(View v) {
-                  AddFoalFragment(v);
-              }
-        });*/
 	}
 
 	private void setupDormant() {
@@ -329,6 +340,10 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 		View popupView = getLayoutInflater().inflate(R.layout.fragment_add_pregnancy, null);
 		if (sire != null)
 			((EditText) popupView.findViewById(R.id.siresName)).setText(sire);
+		if (!currDate.isEmpty())
+			((TextView) popupView.findViewById(R.id.conceptionDate)).setText(currDate);
+		else
+			((TextView) popupView.findViewById(R.id.conceptionDate)).setText(DateTime.now().toString(dateFormatter));
 
 		currPopupWindow = new PopupWindow(popupView,
 				ViewGroup.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, true);
@@ -455,25 +470,6 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 		item.setIcon(ContextCompat.getDrawable(this, star));
 	}
 
-	@Override
-	public void onAddPregnancyFragmentInteraction(Uri uri) {
-	}
-
-	@Override
-	public void onAddFoalFragmentInteraction(Uri uri) {
-	}
-
-	public void ChooseDate(View v) {
-		TextView editText = (TextView) v.getRootView().findViewById(R.id.conceptionDate);
-		DialogFragment dialog = new DatePickerFragment();
-		dialog.setRetainInstance(true);
-//        ((DatePickerDialog)dialog.getDialog()).getDatePicker().setMaxDate(Calendar.getInstance().getTimeInMillis());
-		dialog.show(getFragmentManager(), "datePicker");
-	}
-
-	public void Cancel(View v) {
-		currPopupWindow.dismiss();
-	}
 
 	/**
 	 * Deletes the horse we are currently looking at
@@ -495,13 +491,17 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 							TransactionManager.callInTransaction(getConnectionSource(),
 									new Callable<Void>() {
 										public Void call() throws Exception {
+											Birth b = horse.getCurrentBirth();
 											if (getHelper().getHorseDataDao().delete(horse) != 1)
 												throw new SQLException("0 or greater than 1 horse were to be deleted");
+
+											if (getHelper().getBirthsDataDao().delete(b) != 1)
+												throw new SQLException("0 or greater than 1 birth were to be deleted, while we need it to be 1");
 											return null;
 										}
 									});
 							//finish the activity
-							Toast.makeText(context, "Horse succesfully deleted", Toast.LENGTH_LONG).show();
+							Toast.makeText(context, "Horse successfully deleted", Toast.LENGTH_LONG).show();
 							finish();
 						} catch (SQLException e) {
 							Toast.makeText(context, "Unable to delete this horse", Toast.LENGTH_LONG).show();
@@ -526,7 +526,95 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 
 	}
 
+	public void cancel(View v) {
+		currPopupWindow.dismiss();
+		currPopupWindow = null;
+	}
+
 	public void makePregnant(View view) {
+
+		view = view.getRootView();
+
+		String conceptionDateString = ((TextView) view.findViewById(R.id.conceptionDate)).getText().toString();
+		DateTime conceptionDate = dateFormatter.parseDateTime(conceptionDateString);
+
+		String sire = ((TextView) view.findViewById(R.id.siresName)).getText().toString();
+
+		Birth birth = new Birth(horse, sire, conceptionDate, conceptionDate.plusDays(R.integer.days_to_birth));
+		getHelper().getBirthsDataDao().create(birth);
+
+		horse.setCurrentBirth(birth);
+		getHelper().getHorseDataDao().update(horse);
+
+		cancel(view);
+	}
+
+	public void selectDate(View view) {
+		String date = ((TextView) view).getText().toString();
+
+		DateTime conceptionMin = DateTime.now().minusYears(1);
+		DialogFragment dialog = DatePickerFragment.newInstance(date, this, conceptionMin);
+		dialog.show(getFragmentManager(), "conceptionDatePicker");
+	}
+
+	@Override
+	public void onDateSet(DatePicker view, int year, int month, int day) {
+		int textViewID = R.id.conceptionDate;
+
+		TextView dateField = (TextView) currPopupWindow.getContentView().findViewById(textViewID);
+		String parsedDob = day + "/" + (month + 1) + "/" + year;
+		dateField.setText(parsedDob);
+	}
+
+	public void giveBirth(View view) {
+
+/*		Birth b = horse.getCurrentBirth();
+		b.setBirthTime(DateTime.now());
+
+		Horse foal = new Horse("new_horse", horse.getCurrentBirth(), true, "notes", Horse.HORSE_STATUS.FOAL, null);
+		getHelper().getHorseDataDao().assignEmptyForeignCollection(foal, "milestones");
+		getHelper().getHorseDataDao().create(foal);
+
+		foal.createMilestones(this);
+
+		b.setHorse(foal);
+		getHelper().getBirthsDataDao().update(b);
+
+		horse.setCurrentBirth(null);
+//		horse.getBirths().add(b);
+		horse.setStatus(Horse.HORSE_STATUS.DORMANT);*/
+		Intent horseIntent = new Intent(this, HorseDetailActivity.class);
+		horseIntent.putExtra("HorseID", horseID);
+
+		TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+		stackBuilder.addParentStack(HorseDetailActivity.class);
+		stackBuilder.addNextIntent(horseIntent);
+
+		PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
+		DateTime time = DateTime.now().plusSeconds(10);
+
+		NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+				.setContentTitle("Message")
+				.setContentText("I got a message")
+				.setAutoCancel(true)
+				.setPriority(NotificationCompat.PRIORITY_HIGH)
+
+				.setSmallIcon(R.mipmap.ic_launcher)
+				.setLargeIcon(ImageHelper.bitmapSmaller(getResources(), R.drawable.default_foal, 50, 50))
+				.setContentIntent(resultPendingIntent)
+				.setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+				.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+
+
+		Intent notificationIntent = new Intent(this, NotificationPublisher.class);
+		notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, Integer.parseInt(horseID+""+3));
+		notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, builder.build());
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(this, (int) System.currentTimeMillis(), notificationIntent, PendingIntent.FLAG_ONE_SHOT);
+
+		long futureInMillis = time.getMillis();
+		AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+		alarmManager.set(AlarmManager.RTC_WAKEUP, futureInMillis, pendingIntent);
 
 	}
 }

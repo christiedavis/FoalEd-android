@@ -237,7 +237,7 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
 	    RuntimeExceptionDao<Horse, Integer> horseDao = getHelper().getHorseDataDao();
 	    horseDao.assignEmptyForeignCollection(horse, "milestones");
 	    horseDao.assignEmptyForeignCollection(horse, "births");
-        horse.createMilestones();
+        horse.createMilestones(this);
 	    horseDao.create(horse);
 
 		//Make a new birth object if the horse is pregnant

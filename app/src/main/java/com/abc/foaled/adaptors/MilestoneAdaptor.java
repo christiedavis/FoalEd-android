@@ -63,9 +63,11 @@ public class MilestoneAdaptor extends RecyclerView.Adapter<MilestoneAdaptor.Mile
 
     @Override
     public int getItemCount() {
+/*
         if (horse.getMilestones() == null ) {
             horse.createMilestones();
         }
+*/
 
             Log.d("Size = " +  Integer.toString(horse.getMilestones().size()), "");
             return horse.getMilestones().size();
