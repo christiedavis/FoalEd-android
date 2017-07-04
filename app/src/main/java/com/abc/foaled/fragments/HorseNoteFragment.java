@@ -1,16 +1,15 @@
 package com.abc.foaled.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.abc.foaled.activities.HorseDetailActivity;
 import com.abc.foaled.activities.NoteActivity;
 import com.abc.foaled.models.Horse;
 import com.abc.foaled.R;
@@ -70,6 +69,7 @@ public class HorseNoteFragment extends Fragment {
 
     @Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-	    getActivity().recreate();
+	    if (requestCode == GENERAL_NOTE_EDIT && resultCode == Activity.RESULT_OK)
+	        getActivity().recreate();
 	}
 }

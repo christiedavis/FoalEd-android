@@ -3,6 +3,7 @@ package com.abc.foaled.activities;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
@@ -21,7 +22,6 @@ import com.abc.foaled.R;
 
 /**
  * Created by Brendan on 24/02/2017.
- *
  */
 
 public class NoteActivity extends ORMBaseActivity<DatabaseHelper> {
@@ -131,8 +131,12 @@ public class NoteActivity extends ORMBaseActivity<DatabaseHelper> {
 				getHelper().getBirthsDataDao().update(birth);
 			}
 			Toast.makeText(this, "Note saved", Toast.LENGTH_SHORT).show();
-			finish();
+			setResult(RESULT_OK);
+		} else {
+			Toast.makeText(this, "Note not changed", Toast.LENGTH_SHORT).show();
+			setResult(RESULT_CANCELED);
 		}
+		finish();
 	}
 
 	/**
