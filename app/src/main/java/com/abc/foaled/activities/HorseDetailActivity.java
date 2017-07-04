@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.FragmentTransaction;
@@ -12,15 +11,12 @@ import android.support.v4.app.NavUtils;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -29,7 +25,6 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.abc.foaled.adaptors.MilestoneAdaptor;
 import com.abc.foaled.database.DatabaseHelper;
 import com.abc.foaled.database.ORMBaseActivity;
 import com.abc.foaled.fragments.DatePickerFragment;
@@ -38,9 +33,7 @@ import com.abc.foaled.helpers.ImageHelper;
 import com.abc.foaled.models.Birth;
 import com.abc.foaled.models.Horse;
 import com.abc.foaled.R;
-import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
-import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.misc.TransactionManager;
 
 import org.joda.time.DateTime;
@@ -49,8 +42,6 @@ import org.joda.time.format.DateTimeFormatter;
 
 import java.sql.SQLException;
 import java.util.concurrent.Callable;
-
-import static android.view.View.GONE;
 
 public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 	implements DatePickerDialog.OnDateSetListener {
@@ -70,10 +61,6 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 		super.onCreate(savedInstanceState);
 
 
-		if (!getIntent().getBooleanExtra("complete_milestone", false)) {
-			completeMilestone(getIntent().getIntExtra("milestone_id", -1));
-		}
-
 		if (savedInstanceState != null && savedInstanceState.containsKey("horseID"))
 			horseID = savedInstanceState.getInt(Horse.HORSE_ID, 0);
 		else
@@ -91,6 +78,27 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 		setup();
 	}
 
+	/**
+	 * Inflates the custom menu items in to the menu on the toolbar
+	 *
+	 * @param menu The menu to inflate my items in to
+	 * @return True if we were able to inflate it
+	 */
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.horse_detail, menu);
+
+		int star = horse.isFavourite() ? R.mipmap.star_white : R.mipmap.star_hollow_white;
+		menu.findItem(R.id.favourite_action).setIcon(star);
+		return true;
+	}
+
+
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		NavUtils.navigateUpFromSameTask(this);
+	}
 
 
 	@Override
@@ -115,49 +123,38 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 	}
 
 
-	/**
-	 * Inflates the custom menu items in to the menu on the toolbar
-	 *
-	 * @param menu The menu to inflate my items in to
-	 * @return True if we were able to inflate it
-	 */
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.horse_detail, menu);
-
-		int star = horse.isFavourite() ? R.mipmap.star_white : R.mipmap.star_hollow_white;
-		menu.findItem(R.id.favourite_action).setIcon(star);
-		return true;
-	}
-
 	public void setup() {
 
-
 		setContentView(R.layout.activity_horse_detail);
-		layout = (CoordinatorLayout) findViewById(R.id.horse_detail_screen);
-
-		if (Build.VERSION.SDK_INT > 22)
-			if (sire == null) {
-				layout.getForeground().setAlpha(0);
-			} else
-				layout.getForeground().setAlpha(220);
-
-		//age
-		TextView age = (TextView) findViewById(R.id.age);
-		age.setText(getString(R.string.horse_age, horse.getAge()));
-		//gender
-		TextView gender = (TextView) findViewById(R.id.sex);
-		gender.setText(horse.isFemale() ? "Female" : "Male");
-		//status
-		TextView status = (TextView) findViewById(R.id.pregnantStatus);
-		status.setText(horse.getStatusString());
 
 
-		if (!horse.isFemale() || horse.getStatus() == Horse.HORSE_STATUS.FOAL || horse.getStatus() == Horse.HORSE_STATUS.PREGNANT) {
-			FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_pregnancy);
-			fab.setVisibility(View.GONE);
+		if (horse.isFemale() && horse.getStatus() == Horse.HORSE_STATUS.DORMANT)
+			findViewById(R.id.add_pregnancy).setVisibility(View.VISIBLE);
+
+		if (horse.getStatus() == Horse.HORSE_STATUS.PREGNANT)
+			findViewById(R.id.give_birth).setVisibility(View.VISIBLE);
+
+		setUpHeader();
+
+
+		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+		HorseDetailsFragment fragment = HorseDetailsFragment.newInstance(horse);
+		transaction.replace(R.id.horseDetails,  fragment, HorseDetailsFragment.FRAGMENT_TAG).commit();
+
+
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+		setSupportActionBar(toolbar);
+		if (getSupportActionBar() != null) {
+			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+			getSupportActionBar().setTitle(horse.getName());
 		}
 
+	}
+
+	/**
+	 * sets up the image view and top three buttons
+	 */
+	private void setUpHeader() {
 		//---------SET UP PHOTO------------
 		ImageView horsePhoto = (ImageView) findViewById(R.id.horse_photo);
 		if (horse.getImagePath().isEmpty()) {
@@ -171,97 +168,19 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 			pregnancyStatus.setText(getString(R.string.pregnancy_left_time, horse.getCurrentBirth().getBirthDurationAsString()));
 		}
 
-
-		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-
-		HorseDetailsFragment fragment = HorseDetailsFragment.newInstance(horse);
-		transaction.replace(R.id.horseDetails,  fragment, HorseDetailsFragment.FRAGMENT_TAG).commit();
-
-		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-		setSupportActionBar(toolbar);
-		if (getSupportActionBar() != null) {
-			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-			getSupportActionBar().setTitle(horse.getName());
-		}
-
-	}
-
-	private void setupDormant() {
-/*        Button haveBirth = (Button)this.findViewById(R.id.button_add_pregnancy);
-		haveBirth.setText("Add Pregnancy");
-        haveBirth.setBackgroundColor( ContextCompat.getColor(this, R.color.colorAccent));
-
-        haveBirth.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                AddNewPregnancyFragment(v);
-            }
-        });*/
-	}
-
-	private void setUpImageView() {
-		TextView tv = (TextView) findViewById(R.id.maidenTextView);
-		if (tv != null) {
-			tv.setVisibility(GONE);
-		}
-
-		// TODO: If it's a foal display which notification it is up to
+		//age
 		TextView age = (TextView) findViewById(R.id.age);
-		age.setText(horse.getAge());
-
+		age.setText(getString(R.string.horse_age, horse.getAge()));
+		//gender
 		TextView gender = (TextView) findViewById(R.id.sex);
 		gender.setText(horse.isFemale() ? "Female" : "Male");
-
+		//status
 		TextView status = (TextView) findViewById(R.id.pregnantStatus);
 		status.setText(horse.getStatusString());
-
-		//sets up the photo
-		ImageView horsePhoto = (ImageView) findViewById(R.id.horse_photo);
-		try {
-			if (horse.getImagePath().isEmpty() && horse.getStatus() == Horse.HORSE_STATUS.FOAL)
-				horsePhoto.setImageResource(R.drawable.default_foal);
-			else
-				horsePhoto.setImageBitmap(ImageHelper.bitmapSmaller(horse.getImagePath(), 300, 300));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		if (horse.getStatus() != Horse.HORSE_STATUS.FOAL) {
-			updateNotesView();
-		}
-	}
-
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
 	}
 
 
-	private void setUpMilestones() {
 
-		final RecyclerView milestoneRV = (RecyclerView) findViewById(R.id.milestone_recycler_view);
-		MilestoneAdaptor adaptor = new MilestoneAdaptor(horse);
-		milestoneRV.setAdapter(adaptor);
-	}
-
-	private void updateNotesView() {
-/*        // used for notes for horse
-		Map<String, String> map = new HashMap<>();
-	    Collection<Birth> births = horse.getBirths();
-
-	    for (Birth b : births)
-		    map.put(b.getYearOfBirth(), b.getNotes());
-
-        List<String> years = new ArrayList<>(map.keySet());
-
-        final ExpandableListView expandableLayoutListView = (ExpandableListView) findViewById(R.id.exlistview);
-        HorseNoteAdaptor adaptor = new HorseNoteAdaptor(this, years, map);
-        expandableLayoutListView.setAdapter(adaptor);*/
-	}
-
-	@Override
-	public void onBackPressed() {
-		super.onBackPressed();
-		NavUtils.navigateUpFromSameTask(this);
-	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -310,70 +229,8 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 
 	}
 
-	public void AddFoalFragment(View v) {
-		final View popupView = getLayoutInflater().inflate(R.layout.fragment_add_foal, null);
 
-		final PopupWindow popupWindow = new PopupWindow(popupView,
-				ViewGroup.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
-		Button b = (Button) popupView.findViewById(R.id.add_foal_button);
-
-		b.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				AddFoal(((EditText) popupWindow.getContentView().findViewById(R.id.news_foal_name_textView)).getText().toString());
-				popupWindow.dismiss();
-			}
-		});
-		popupWindow.setFocusable(true);
-		popupWindow.setAnimationStyle(R.style.Animation);
-
-		popupWindow.setBackgroundDrawable(new ColorDrawable());
-
-		popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
-	}
-
-	public void AddFoal(String s) {
-
-		System.out.println("Add foal added");
-		// to do show a dialog with date sex etc
-
-		if (horse.getStatus() == Horse.HORSE_STATUS.PREGNANT || horse.getStatus() == Horse.HORSE_STATUS.MAIDEN) {
-
-//            TextView foalName = (TextView) v.findViewById(R.id.news_foal_name_textView);
-			//TODO: Get notes from horse current birth notes - also get image from default Brendan
-
-			RuntimeExceptionDao<Horse, Integer> horseDao = getHelper().getHorseDataDao();
-			RuntimeExceptionDao<Birth, Integer> birthDao = getHelper().getBirthsDataDao();
-
-			// set birth time
-			Birth birth = horse.getCurrentBirth();
-			birth.setBirthTime(new DateTime());
-			birthDao.update(birth);
-
-//            Horse foal = new Horse(s, birth, "Notes", true);
-			Horse foal = new Horse(s, birth, true, "Notes", Horse.HORSE_STATUS.DORMANT, null);
-			horseDao.assignEmptyForeignCollection(foal, "milestones");
-			foal.setStatus(Horse.HORSE_STATUS.FOAL);
-			horseDao.create(foal);
-
-			birth.setHorse(foal);
-			birthDao.update(birth);
-
-			horse.setStatus(Horse.HORSE_STATUS.DORMANT);
-			horseDao.update(horse);
-			setUpImageView();
-			setupDormant();
-			Log.d("Added horse gee", "gee");
-
-			ViewGroup parent = (ViewGroup) findViewById(R.id.horse_detail_screen);
-			View fragment = findViewById(R.id.add_foal_fragment);
-
-			setup();
-			parent.removeView(fragment);
-		}
-	}
-
+	//Toggles favouring horse
 	public void favouriteAction(MenuItem item) {
 		//Updates horse
 		horse.toggleFavourite();
@@ -504,10 +361,4 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 		finish();
 	}
 
-
-
-
-	private void completeMilestone(int milestone_id) {
-
-	}
 }
