@@ -1,18 +1,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="@dimen/activity_vertical_margin"
-    android:orientation="vertical"
-    tools:context="com.abc.foaled.fragments.HorsePregnancyFragment">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_margin="@dimen/activity_vertical_margin"
+              android:orientation="vertical"
+              tools:context="com.abc.foaled.fragments.HorsePregnancyFragment">
 
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="Pregnancy"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
@@ -30,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@+id/conceptionDate"
                 android:layout_alignParentStart="true"
-                android:text="Conception Date" />
+                android:text="Conception Date"/>
 
             <TextView
                 android:id="@+id/conceptionDate"
@@ -38,14 +38,14 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:paddingBottom="24dp"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@+id/birthDate"
                 android:layout_alignParentStart="true"
-                android:text="Expected Birth Date" />
+                android:text="Expected Birth Date"/>
 
             <TextView
                 android:id="@+id/birthDate"
@@ -54,7 +54,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_below="@+id/conceptionDate"
                 android:paddingBottom="24dp"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
 
 
             <TextView
@@ -62,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@+id/horseName"
                 android:layout_alignParentStart="true"
-                android:text="Sire" />
+                android:text="Sire"/>
 
             <TextView
                 android:id="@+id/horseName"
@@ -70,18 +70,45 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_below="@+id/birthDate"
-                android:paddingBottom="16dp"
-                android:textStyle="bold" />
+                android:paddingBottom="24dp"
+                android:textStyle="bold"/>
 
+            <TextView
+                android:id="@+id/notesTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/horseName"
+                android:paddingBottom="8dp"
+                android:text="Notes"/>
+
+            <TextView
+                android:id="@+id/notes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/notesTitle"
+                android:layout_centerHorizontal="true"
+                android:ellipsize="end"
+                android:maxLines="3"
+                android:paddingBottom="16dp"/>
+
+            <Button
+                android:id="@+id/editNotes"
+                style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/notes"
+                android:layout_centerHorizontal="true"
+                android:text="Edit Notes"/>
 
             <Button
                 android:id="@+id/editPregnancy"
                 style="@style/Widget.AppCompat.Button.Borderless.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/horseName"
+                android:layout_below="@+id/editNotes"
                 android:layout_centerHorizontal="true"
-                android:text="Edit Pregnancy" />
+                android:text="Edit Pregnancy"/>
 
 
             <Button
@@ -91,7 +118,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/editPregnancy"
                 android:layout_centerHorizontal="true"
-                android:text="Give Birth" />
+                android:text="Give Birth"/>
 
         </RelativeLayout>
     </android.support.v7.widget.CardView>

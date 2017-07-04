@@ -48,6 +48,9 @@ public class HorsePregnancyFragment extends Fragment {
 
 			TextView siresName = (TextView) view.findViewById(R.id.horseName);
 			siresName.setText(this.horse.getCurrentBirth().getSire());
+
+			TextView notes = (TextView) view.findViewById(R.id.notes);
+			notes.setText(this.horse.getCurrentBirth().getNotes());
 		}
 		// Inflate the layout for this fragment
 		return view;
