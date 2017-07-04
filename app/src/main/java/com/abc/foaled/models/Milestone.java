@@ -1,19 +1,19 @@
 package com.abc.foaled.models;
 
 import android.app.AlarmManager;
-import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
-import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 
 import com.abc.foaled.R;
 import com.abc.foaled.activities.HorseDetailActivity;
 import com.abc.foaled.helpers.ImageHelper;
+import com.abc.foaled.notifications.CompleteNotification;
 import com.abc.foaled.notifications.NotificationPublisher;
+import com.abc.foaled.notifications.SnoozeNotification;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
@@ -29,7 +29,8 @@ import org.joda.time.Days;
 @DatabaseTable(tableName = "milestone")
 public class Milestone {
 
-    public enum MILESTONE{
+
+	public enum MILESTONE{
 
         POOP(0), //2 hours from birth
         EAT(1), //4 hours from birth
@@ -56,13 +57,13 @@ public class Milestone {
 	@DatabaseField
 	private DateTime emergencyTime; //if this milestone reaches this emergency time before being completed.. seek help
     @DatabaseField
-    private double snoozeTime;
+    private long snoozeTime;
     @DatabaseField
     private String message;
     @DatabaseField
-    private String detail;
-    @DatabaseField
     private String notificationMessage;
+    @DatabaseField
+    private String notificationTitle;
     @DatabaseField
     private Boolean completed = false;
 
@@ -85,12 +86,12 @@ public class Milestone {
         switch (this.milestone) {
             case POOP:
 
-				startTime = birthTime.plusMinutes(2);
+				startTime = birthTime.plusSeconds(10);
 	            emergencyTime = startTime.plusHours(1);
-                snoozeTime = 1000 * 60 * 5; // 5 minutes
+                snoozeTime = 1000 * 15; // 15 seconds
                 message = "Your horse should have pooped by now";
-                detail = "It's important your horse poos so that it can empty itself. You might need to give them a laxative.";
-                notificationMessage = "Has your foal pooed?";
+                notificationMessage = "It's important your horse poos so that it can empty itself. You might need to give them a laxative.";
+                notificationTitle = "Has your foal pooed?";
                 break;
 
             case EAT:
@@ -98,8 +99,8 @@ public class Milestone {
 	            emergencyTime = startTime.plusHours(1);
                 snoozeTime = 1000 * 60 * 5;
                 message = "Your horse should have eaten by now";
-                detail = "It's important your horse eats";
-                notificationMessage = "Has your foal eaten?";
+                notificationMessage = "It's important your horse eats";
+                notificationTitle = "Has your foal eaten?";
                 break;
 
             case STAND:
@@ -107,21 +108,21 @@ public class Milestone {
 	            emergencyTime = startTime.plusHours(1);
                 snoozeTime = 1000 * 60 * 5;
                 message = "Your horse should have stood by now";
-                detail = "It's important your horse stands so that his legs work";
-                notificationMessage = "Has your horse stood?";
+                notificationMessage = "It's important your horse stands so that his legs work";
+                notificationTitle = "Has your horse stood?";
                 break;
 
             case DRINK:
-                startTime = birthTime.plusMinutes(1);
+                startTime = birthTime.plusSeconds(60);
 	            emergencyTime = startTime.plusHours(1);
                 snoozeTime = 1000 * 60 * 5;
                 message = "Your horse should have drunk by now";
-                detail = "It's important your horse drinks.";
-                notificationMessage = "Has your foal drunk yet?";
+                notificationMessage = "It's important your horse drinks.";
+                notificationTitle = "Has your foal drunk yet?";
                 break;
         }
         if (Days.daysBetween(h.getDateOfBirth().getBirthTime(), DateTime.now()).getDays() < 50) {
-			scheduleNotification(context, startTime, milestone.getValue());
+			scheduleNotification(context, startTime, snoozeTime, milestone.getValue());
 		}
     }
 
@@ -133,20 +134,20 @@ public class Milestone {
 		this.message = message;
 	}
 
-	public String getDetail() {
-		return detail;
-	}
-
-	public void setDetail(String detail) {
-		this.detail = detail;
-	}
-
 	public String getNotificationMessage() {
 		return notificationMessage;
 	}
 
 	public void setNotificationMessage(String notificationMessage) {
 		this.notificationMessage = notificationMessage;
+	}
+
+	public String getNotificationTitle() {
+		return notificationTitle;
+	}
+
+	public void setNotificationTitle(String notificationTitle) {
+		this.notificationTitle = notificationTitle;
 	}
 
 	public Boolean isCompleted() {
@@ -157,38 +158,73 @@ public class Milestone {
 		this.completed = completed;
 	}
 
-	private void scheduleNotification(Context context, DateTime time, int notificationId) {//delay is after how much time(in millis) from current time you want to schedule the notification
+	private void scheduleNotification(Context context, DateTime time, long snoozeTime, int notificationId) {//delay is after how much time(in millis) from current time you want to schedule the notification
+
+		//Notification and intent ID.. these should really be different /-:
+		//	combination of horseID and milestoneID (5 & 3 = 53)
+		//	results in no conflicting IDs
+		int actualID = Integer.parseInt(h.getHorseID()+""+notificationId);
+
+
+		//-----ON CLICK INTENT, takes you to the horse view-------
 		Intent horseIntent = new Intent(context, HorseDetailActivity.class);
-		horseIntent.putExtra("horseID", h.getHorseID());
+		horseIntent.putExtra(Horse.HORSE_ID, h.getHorseID());
 
 		TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
 		stackBuilder.addParentStack(HorseDetailActivity.class);
 		stackBuilder.addNextIntent(horseIntent);
 
 		PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+		//----------------------------------------------------------
 
 
+		//Done action on the notification
+		Intent completeIntent = new Intent(context, CompleteNotification.class);
+		PendingIntent completePendingIntent = PendingIntent.getBroadcast(context, actualID, completeIntent, 0);
+		NotificationCompat.Action doneAction = new NotificationCompat.Action(R.drawable.ic_done_black_18dp, "Done", completePendingIntent);
+
+
+		//Snooze action on the notification
+		Intent snoozeIntent = new Intent(context, SnoozeNotification.class);
+		snoozeIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, actualID);
+		snoozeIntent.putExtra(NotificationPublisher.NOTIFICATION_MESSAGE, notificationTitle);
+		snoozeIntent.putExtra(NotificationPublisher.NOTIFICATION_TITLE, notificationMessage);
+		snoozeIntent.putExtra(NotificationPublisher.NOTIFICATION_RESULT_INTENT, resultPendingIntent);
+		snoozeIntent.putExtra(NotificationPublisher.SNOOZE_TIME, snoozeTime);
+		PendingIntent snoozePendingIntent = PendingIntent.getBroadcast(context, 1111, snoozeIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+		NotificationCompat.Action snoozeAction = new NotificationCompat.Action(R.drawable.ic_add_white_18dp, "snooze (5 mins)", snoozePendingIntent);
+
+
+		//Builds the notification
 		NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-				.setContentTitle(notificationMessage)
-				.setContentText(detail)
+				.setContentTitle(notificationTitle)
+				.setContentText(notificationMessage)
 				.setAutoCancel(true)
+				.addAction(doneAction)
+				.addAction(snoozeAction)
 				.setPriority(NotificationCompat.PRIORITY_HIGH)
-				.setSmallIcon(R.mipmap.ic_launcher)
-				.setLargeIcon(ImageHelper.bitmapSmaller(context.getResources(), R.drawable.default_foal, 50, 50))
+				.setSmallIcon(R.drawable.ic_menu_pregnancy)
+				.setLargeIcon(ImageHelper.bitmapSmaller(context.getResources(), R.drawable.ic_menu_pregnancy, 50, 50))
 				.setContentIntent(resultPendingIntent)
 				.setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
 				.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
 
 
+
 		Intent notificationIntent = new Intent(context, NotificationPublisher.class);
-		notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, Integer.parseInt(h.getHorseID()+""+notificationId));
+		notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, actualID);
+		notificationIntent.putExtra(NotificationPublisher.SNOOZE_TIME, snoozeTime);
+		notificationIntent.putExtra(NotificationPublisher.INTENT_ID, actualID);
 		notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, builder.build());
-		PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+		//Pending intent
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(context, actualID, notificationIntent, 0);
+
 
 		long futureInMillis = time.getMillis();
-		long now = System.currentTimeMillis();
-		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-		alarmManager.set(AlarmManager.RTC_WAKEUP, futureInMillis, pendingIntent);
-	}
 
+		//sets an alarm at the exact time given.
+		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+		alarmManager.setExact(AlarmManager.RTC_WAKEUP, futureInMillis, pendingIntent);
+	}
 }

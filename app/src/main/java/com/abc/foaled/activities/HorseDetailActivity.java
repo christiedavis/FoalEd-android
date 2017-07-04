@@ -1,21 +1,15 @@
 package com.abc.foaled.activities;
 
-import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.DialogFragment;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
-import android.media.RingtoneManager;
 import android.os.Build;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
 import android.os.Bundle;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -45,7 +39,6 @@ import com.abc.foaled.helpers.ImageHelper;
 import com.abc.foaled.models.Birth;
 import com.abc.foaled.models.Horse;
 import com.abc.foaled.R;
-import com.abc.foaled.notifications.NotificationPublisher;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
@@ -77,10 +70,15 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+
+		if (!getIntent().getBooleanExtra("complete_milestone", false)) {
+			completeMilestone(getIntent().getIntExtra("milestone_id", -1));
+		}
+
 		if (savedInstanceState != null && savedInstanceState.containsKey("horseID"))
-			horseID = savedInstanceState.getInt("HorseID");
+			horseID = savedInstanceState.getInt(Horse.HORSE_ID, 0);
 		else
-			horseID = getIntent().getIntExtra("HorseID", 0);
+			horseID = getIntent().getIntExtra(Horse.HORSE_ID, 0);
 
 		horse = getHelper().getHorseDataDao().queryForId(horseID);
 
@@ -93,6 +91,8 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 
 		setup();
 	}
+
+
 
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
@@ -541,8 +541,8 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 		String sire = ((TextView) view.findViewById(R.id.siresName)).getText().toString();
 
 		Birth birth = new Birth(horse, sire, conceptionDate, conceptionDate.plusDays(R.integer.days_to_birth));
-		getHelper().getBirthsDataDao().create(birth);
 
+		horse.getBirths().add(birth);
 		horse.setCurrentBirth(birth);
 		getHelper().getHorseDataDao().update(horse);
 
@@ -567,54 +567,29 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 	}
 
 	public void giveBirth(View view) {
-
-/*		Birth b = horse.getCurrentBirth();
+		Birth b = horse.getCurrentBirth();
 		b.setBirthTime(DateTime.now());
 
 		Horse foal = new Horse("new_horse", horse.getCurrentBirth(), true, "notes", Horse.HORSE_STATUS.FOAL, null);
 		getHelper().getHorseDataDao().assignEmptyForeignCollection(foal, "milestones");
 		getHelper().getHorseDataDao().create(foal);
-
 		foal.createMilestones(this);
 
 		b.setHorse(foal);
 		getHelper().getBirthsDataDao().update(b);
 
 		horse.setCurrentBirth(null);
-//		horse.getBirths().add(b);
-		horse.setStatus(Horse.HORSE_STATUS.DORMANT);*/
-		Intent horseIntent = new Intent(this, HorseDetailActivity.class);
-		horseIntent.putExtra("HorseID", horseID);
+		horse.setStatus(Horse.HORSE_STATUS.DORMANT);
+		getHelper().getHorseDataDao().update(horse);
 
-		TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-		stackBuilder.addParentStack(HorseDetailActivity.class);
-		stackBuilder.addNextIntent(horseIntent);
-
-		PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-
-		DateTime time = DateTime.now().plusSeconds(10);
-
-		NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-				.setContentTitle("Message")
-				.setContentText("I got a message")
-				.setAutoCancel(true)
-				.setPriority(NotificationCompat.PRIORITY_HIGH)
-
-				.setSmallIcon(R.mipmap.ic_launcher)
-				.setLargeIcon(ImageHelper.bitmapSmaller(getResources(), R.drawable.default_foal, 50, 50))
-				.setContentIntent(resultPendingIntent)
-				.setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-				.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+		FloatingActionsMenu fab = (FloatingActionsMenu) findViewById(R.id.multiple_actions);
+		fab.collapse();
+	}
 
 
-		Intent notificationIntent = new Intent(this, NotificationPublisher.class);
-		notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, Integer.parseInt(horseID+""+3));
-		notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, builder.build());
-		PendingIntent pendingIntent = PendingIntent.getBroadcast(this, (int) System.currentTimeMillis(), notificationIntent, PendingIntent.FLAG_ONE_SHOT);
 
-		long futureInMillis = time.getMillis();
-		AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-		alarmManager.set(AlarmManager.RTC_WAKEUP, futureInMillis, pendingIntent);
+
+	private void completeMilestone(int milestone_id) {
 
 	}
 }

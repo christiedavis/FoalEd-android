@@ -1,5 +1,7 @@
 package com.abc.foaled;
 
+import android.app.AlarmManager;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -46,9 +48,15 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
 		NotificationSettingsFragment.OnFragmentInteractionListener {
 
 
+
+	public static AlarmManager alarmManager;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		if (alarmManager == null)
+			alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);

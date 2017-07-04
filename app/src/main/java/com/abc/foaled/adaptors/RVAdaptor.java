@@ -48,7 +48,7 @@ public class RVAdaptor extends RecyclerView.Adapter<RVAdaptor.HorseViewHolder>{
                     final Intent intent;
 
                     intent = new Intent(c, HorseDetailActivity.class);
-                    intent.putExtra("HorseID", horseID);
+                    intent.putExtra(Horse.HORSE_ID, horseID);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     c.startActivity(intent);
                 }

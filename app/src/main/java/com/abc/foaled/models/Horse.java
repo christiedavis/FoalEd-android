@@ -20,6 +20,8 @@ import java.util.List;
 @DatabaseTable(tableName = "horse")
 public class Horse implements Serializable {
 
+	public static final String HORSE_ID = "HorseID";
+
     public enum HORSE_STATUS {
 
         DORMANT(0),
@@ -205,11 +207,12 @@ public class Horse implements Serializable {
 //	    ArrayList<Milestone> arrayList = new ArrayList<>(milestones);
 		this.milestones.add(new Milestone(0, this, context));
 
-		milestones.add(new Milestone(0, this, context));
-		milestones.add(new Milestone(1, this, context));
+//		milestones.add(new Milestone(0, this, context));
+/*		milestones.add(new Milestone(1, this, context));
 		milestones.add(new Milestone(2, this, context));
-		milestones.add(new Milestone(3, this, context));
+		milestones.add(new Milestone(3, this, context));*/
 
 //        milestones = arrayList;
     }
+
 }
