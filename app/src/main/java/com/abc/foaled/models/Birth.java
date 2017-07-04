@@ -14,6 +14,7 @@ import org.joda.time.DateTime;
 @DatabaseTable(tableName = "births")
 public class Birth {
 
+	public static final String BIRTH_ID = "birthID";
 
     @DatabaseField(generatedId = true)
     private int id;

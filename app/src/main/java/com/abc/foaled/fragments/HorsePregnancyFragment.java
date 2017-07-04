@@ -1,6 +1,7 @@
 package com.abc.foaled.fragments;
 
-
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,17 +11,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.abc.foaled.R;
+import com.abc.foaled.activities.NoteActivity;
 import com.abc.foaled.helpers.DateTimeHelper;
+import com.abc.foaled.models.Birth;
 import com.abc.foaled.models.Horse;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link HorsePregnancyFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class HorsePregnancyFragment extends Fragment {
 
 	public static final String FRAGMENT_TAG = "CURRENT_PREGNANCY_FRAGMENT";
+
+	private static final int GENERAL_NOTE_EDIT = 1;
+
 	private Horse horse;
 	public HorsePregnancyFragment() {
 		// Required empty public constructor
@@ -50,11 +51,27 @@ public class HorsePregnancyFragment extends Fragment {
 			siresName.setText(this.horse.getCurrentBirth().getSire());
 
 			TextView notes = (TextView) view.findViewById(R.id.notes);
-			notes.setText(this.horse.getCurrentBirth().getNotes());
+			String note = horse.getCurrentBirth().getNotes().isEmpty() ? "No notes yet" : horse.getCurrentBirth().getNotes();
+			notes.setText(note);
+
+
+			view.findViewById(R.id.editNotes).setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Intent intent = new Intent(v.getContext(), NoteActivity.class);
+					intent.putExtra(Birth.BIRTH_ID, horse.getCurrentBirth().getId());
+					startActivityForResult(intent, GENERAL_NOTE_EDIT);
+				}
+			});
 		}
-		// Inflate the layout for this fragment
 		return view;
 
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == GENERAL_NOTE_EDIT && resultCode == Activity.RESULT_OK)
+			getActivity().recreate();
 	}
 
 }

@@ -22,9 +22,16 @@ import com.abc.foaled.R;
 
 /**
  * Created by Brendan on 24/02/2017.
+ *
  */
 
 public class NoteActivity extends ORMBaseActivity<DatabaseHelper> {
+
+/*
+	public static final int HORSE_NOTE = 1;
+	public static final int BIRTH_NOTE = 2;
+*/
+
 	TextView noteTitle;
 	EditText noteContent;
 
@@ -43,6 +50,7 @@ public class NoteActivity extends ORMBaseActivity<DatabaseHelper> {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_note);
 
+
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 		ActionBar actionBar = getSupportActionBar();
@@ -57,10 +65,10 @@ public class NoteActivity extends ORMBaseActivity<DatabaseHelper> {
 			title = horse.getName() + "'s notes";
 			note = horse.getNotes();
 		}
-		birthID = getIntent().getIntExtra("birthID", 0);
+		birthID = getIntent().getIntExtra(Birth.BIRTH_ID, 0);
 		if (birthID != 0) {
 			birth = getHelper().getBirthsDataDao().queryForId(birthID);
-			title = birth.getYearOfBirth();
+			title = birth.getMare().getName() + "'s " + birth.getYearOfBirth() + " birth notes";
 			note = birth.getNotes();
 		}
 
