@@ -1,6 +1,7 @@
 package com.abc.foaled.notifications;
 
 import android.app.AlarmManager;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -21,10 +22,14 @@ public class SnoozeNotification extends BroadcastReceiver {
 
 	public void onReceive(Context context, Intent intent) {
 
+		NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+
 
 		Log.d("NOTIFICATION", "Snoozed notification");
 
 		int actualID = intent.getIntExtra(NotificationPublisher.NOTIFICATION_ID, 0);
+
+		notificationManager.cancel(actualID);
 		Log.d("NOTIFICATION", "Snoozed notification with "+actualID);
 
 		String notificationTitle = intent.getStringExtra(NotificationPublisher.NOTIFICATION_TITLE);

@@ -102,7 +102,7 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 			savedInstanceState.putString("date", date.getText().toString());
 		}
 
-		savedInstanceState.putInt("horseID", horseID);
+		savedInstanceState.putInt(Horse.HORSE_ID, horseID);
 	}
 
 	@Override
@@ -176,70 +176,6 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 
 		HorseDetailsFragment fragment = HorseDetailsFragment.newInstance(horse);
 		transaction.replace(R.id.horseDetails,  fragment, HorseDetailsFragment.FRAGMENT_TAG).commit();
-
-/*		if (horse.getStatus() == Horse.HORSE_STATUS.DORMANT) {
-			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-
-
-			if (getSupportFragmentManager().findFragmentByTag("GENERAL_NOTES") == null) {
-				HorseNoteFragment fragment = HorseNoteFragment.newInstance(horse);
-				transaction.add(R.id.horse_detail_linear_layout, fragment, "GENERAL_NOTES");
-			}
-
-			if (getSupportFragmentManager().findFragmentByTag("BIRTH_NOTES") == null && horse.isFemale()) {
-				HorseBirthNotesFragment birthNotesFragment = HorseBirthNotesFragment.newInstance(horse);
-				transaction.add(R.id.horse_detail_linear_layout, birthNotesFragment, "BIRTH_NOTES");
-			}
-			transaction.commit();
-		} else if (horse.getStatus() == Horse.HORSE_STATUS.PREGNANT) {
-			TextView pregnancyStatus = (TextView) findViewById(R.id.horse_status);
-			pregnancyStatus.setText(getString(R.string.pregnancy_left_time, horse.getCurrentBirth().getBirthDurationAsString()));
-
-		}*/
-
-
-/*		if (sire != null)
-			addNewPregnancyFragment(layout);*/
-/*        switch (horse.getStatus()) {
-
-            case FOAL:
-                setContentView(R.layout.activity_foal_detail);
-                setUpImageView();
-                setUpMilestones();
-                break;
-
-            case RETIRED:
-                setContentView(R.layout.activity_horse_detail);
-                break;
-
-            case MAIDEN:
-                //ADD EXTRA thing VIEW SAYING RISKS OF MAIDEN PREGNANCY
-                setContentView(R.layout.activity_horse_detail);
-                setUpImageView();
-                setUpPregnant();
-
-                LinearLayout layout =(LinearLayout) this.findViewById(R.id.horse_detail_linear_layout);
-                LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams( LinearLayout.LayoutParams.MATCH_PARENT,  LinearLayout.LayoutParams.WRAP_CONTENT);
-
-                TextView tv = new TextView(this);
-                tv.setId(R.id.maidenTextView);
-                tv.setText("This is a maiden pregnancy, make sure you take extra special care");
-                tv.setBackgroundColor(Color.BLUE);
-                layout.addView(tv, 1, lparams);
-
-                break;
-
-            case DORMANT:
-                setContentView(R.layout.activity_horse_detail);
-                setUpImageView();
-                break;
-
-            case PREGNANT:
-                setContentView(R.layout.activity_horse_detail);
-                setUpImageView();
-                setUpPregnant();
-                break;
-        }*/
 
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
@@ -338,8 +274,7 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 		return super.onOptionsItemSelected(item);
 	}
 
-	public void addNewPregnancyFragment(View v) {
-
+	public void addNewPregnancy(View v) {
 
 		FloatingActionsMenu fab = (FloatingActionsMenu) findViewById(R.id.multiple_actions);
 		fab.collapse();
@@ -373,34 +308,6 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 			}
 		});
 
-	}
-
-
-	public void AddPregnancy(View v) {
-		System.out.println("Add pregnancy selected");
-
-		// get values
-/*        EditText fatherName = (EditText) findViewById(R.id.fathers_name_textView);
-		Horse fatherHorse = new Horse(fatherName.getText());*/
-		//TODO Move this method to the fragment. The fragment could then point back here.. but it needs to be moved to the fragment
-
-//		TextView conceptionDate = (TextView) findViewById(R.id.conceptionDate);
-		//turn to date
-
-		// add to database
-		//TODO change 2nd parameter to be Father's name, date to be the date that was selected
-		Birth newBirth = new Birth(horse, "TEMP", new DateTime(), new DateTime());
-		getHelper().getBirthsDataDao().create(newBirth);
-
-		ViewGroup parent = (ViewGroup) findViewById(R.id.horse_detail_screen);
-
-		View fragment = findViewById(R.id.add_pregnancy_fragment);
-		horse.setStatus(Horse.HORSE_STATUS.PREGNANT);
-		horse.setCurrentBirth(newBirth);
-		getHelper().getHorseDataDao().update(horse);
-
-		setup();
-		parent.removeView(fragment);
 	}
 
 	public void AddFoalFragment(View v) {
@@ -554,6 +461,7 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 		getHelper().getHorseDataDao().update(horse);
 
 		cancel(view);
+		recreate();
 	}
 
 	public void selectDate(View view) {
