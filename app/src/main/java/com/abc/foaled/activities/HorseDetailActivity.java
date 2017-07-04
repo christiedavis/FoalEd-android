@@ -361,4 +361,8 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 		finish();
 	}
 
+	public void deleteBirth(Birth b) {
+
+	}
+
 }

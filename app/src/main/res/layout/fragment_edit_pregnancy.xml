@@ -1,0 +1,109 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:id="@+id/add_pregnancy_fragment"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:background="@color/cardview_light_background"
+             tools:context="com.abc.foaled.fragments.AddPregnancyFragment">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="24dp"
+        android:background="@color/cardview_light_background">
+
+        <TextView
+            android:id="@+id/editPregnancyTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="16dp"
+            android:text="Edit Pregnancy"
+            android:textColor="@android:color/black"
+            android:textStyle="bold"/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/conceptionDate"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="16dp"
+            android:labelFor="@+id/conceptionDate"
+            android:text="Conception Date"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/conceptionDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/editPregnancyTitle"
+            android:layout_marginBottom="16dp"
+            android:onClick="selectDate"/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/siresName"
+            android:labelFor="@+id/siresName"
+            android:text="Sire's name"
+            android:textStyle="bold"/>
+
+        <EditText
+            android:id="@+id/siresName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@id/conceptionDate"
+            android:ellipsize="end"
+            android:hint="Sire's Name"
+            android:imeOptions="actionDone|flagNoExtractUi"
+            android:inputType="textPersonName|textCapWords"
+            android:maxLines="1"/>
+
+
+        <LinearLayout
+            android:id="@+id/buttons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/siresName"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/editPregnancy"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:onClick="makePregnant"
+                android:text="Save"/>
+
+            <Button
+                android:id="@+id/cancel"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:onClick="cancel"
+                android:text="Cancel"/>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/deletePregnancy"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/buttons"
+            android:layout_centerHorizontal="true"
+            android:background="@color/redAccent"
+            android:onClick="cancel"
+            android:text="@string/delete"/>
+
+    </RelativeLayout>
+
+</FrameLayout>
