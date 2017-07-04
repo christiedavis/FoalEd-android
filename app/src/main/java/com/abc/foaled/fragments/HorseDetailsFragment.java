@@ -7,6 +7,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 
 import com.abc.foaled.R;
 import com.abc.foaled.models.Horse;
@@ -40,10 +42,25 @@ public class HorseDetailsFragment extends Fragment {
 		FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
 		if (horse.getStatus() == Horse.HORSE_STATUS.PREGNANT) {
+
+			//shuffles the general notes card to the bottom, and the current pregnancy card to the top
+			FrameLayout pregnancyContainer = (FrameLayout) view.findViewById(R.id.pregnancyCard);
+			RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) pregnancyContainer.getLayoutParams();
+			params.removeRule(RelativeLayout.BELOW);
+			pregnancyContainer.setLayoutParams(params);
+
+			FrameLayout generalNotesContainer = (FrameLayout) view.findViewById(R.id.generalNotesCard);
+			params = (RelativeLayout.LayoutParams) generalNotesContainer.getLayoutParams();
+			params.addRule(RelativeLayout.BELOW, R.id.previousPregnanciesCard);
+			generalNotesContainer.setLayoutParams(params);
+
+			//Adds the pregnancy card to the horse
 			HorsePregnancyFragment fragment = HorsePregnancyFragment.newInstance(horse);
 			transaction.replace(R.id.pregnancyCard, fragment, HorsePregnancyFragment.FRAGMENT_TAG);
 		}
 
+		HorseNoteFragment fragment = HorseNoteFragment.newInstance(horse);
+		transaction.replace(R.id.generalNotesCard, fragment, HorseNoteFragment.TAG);
 
 
 		transaction.commit();

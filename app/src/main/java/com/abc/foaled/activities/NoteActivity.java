@@ -51,7 +51,7 @@ public class NoteActivity extends ORMBaseActivity<DatabaseHelper> {
 			actionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_black_18dp);
 		}
 
-		horseID = getIntent().getIntExtra("horseID", 0);
+		horseID = getIntent().getIntExtra(Horse.HORSE_ID, 0);
 		if (horseID != 0) {
 			horse = getHelper().getHorseDataDao().queryForId(horseID);
 			title = horse.getName() + "'s notes";

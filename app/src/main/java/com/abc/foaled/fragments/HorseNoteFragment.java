@@ -20,10 +20,10 @@ import com.abc.foaled.R;
  */
 public class HorseNoteFragment extends Fragment {
 
+	public static final String TAG = "horse-general-note-fragment";
+
 	private static final int GENERAL_NOTE_EDIT = 1;
 	private Horse horse;
-	private boolean updateNote = false;
-	private CardView cv;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -51,22 +51,20 @@ public class HorseNoteFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-		LinearLayout baseLayout = (LinearLayout) inflater.inflate(R.layout.note_layout, container, false);
-		((TextView) baseLayout.findViewById(R.id.card_header)).setText("Notes");
-		cv = (CardView) inflater.inflate(R.layout.note, baseLayout, false);
-		cv.setOnClickListener(new View.OnClickListener() {
+		LinearLayout baseLayout = (LinearLayout) inflater.inflate(R.layout.fragment_horse_note, container, false);
+
+	    baseLayout.findViewById(R.id.cv).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(v.getContext(), NoteActivity.class);
-				intent.putExtra("horseID", horse.getHorseID());
+				intent.putExtra(Horse.HORSE_ID, horse.getHorseID());
 				startActivityForResult(intent, GENERAL_NOTE_EDIT);
 			}
 		});
 
-		TextView noteView = (TextView) cv.findViewById(R.id.horse_note_card_view_note);
+		TextView noteView = (TextView) baseLayout.findViewById(R.id.horseNotes);
 		String note = horse.getNotes().isEmpty() ? "Click here to add notes" : horse.getNotes();
 		noteView.setText(note);
-		baseLayout.addView(cv);
         return baseLayout;
     }
 

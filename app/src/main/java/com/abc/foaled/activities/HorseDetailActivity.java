@@ -62,7 +62,7 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 
 
 
-		if (savedInstanceState != null && savedInstanceState.containsKey("horseID"))
+		if (savedInstanceState != null && savedInstanceState.containsKey(Horse.HORSE_ID))
 			horseID = savedInstanceState.getInt(Horse.HORSE_ID, 0);
 		else
 			horseID = getIntent().getIntExtra(Horse.HORSE_ID, 0);

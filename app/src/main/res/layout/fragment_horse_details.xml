@@ -1,22 +1,24 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             tools:context="com.abc.foaled.fragments.HorseDetailsFragment">
-
-    <FrameLayout
-        android:id="@+id/pregnancyCard"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <FrameLayout
-        android:id="@+id/previousPregnanciesCard"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:context="com.abc.foaled.fragments.HorseDetailsFragment">
 
     <FrameLayout
         android:id="@+id/generalNotesCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-</FrameLayout>
+    <FrameLayout
+        android:id="@+id/pregnancyCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/generalNotesCard"/>
+
+    <FrameLayout
+        android:id="@+id/previousPregnanciesCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/pregnancyCard"/>
+
+</RelativeLayout>
