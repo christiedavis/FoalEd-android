@@ -16,8 +16,6 @@ import com.abc.foaled.activities.NoteActivity;
 import com.abc.foaled.models.Birth;
 import com.abc.foaled.models.Horse;
 
-import java.util.Collections;
-
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link HorseBirthNotesFragment#newInstance} factory method to

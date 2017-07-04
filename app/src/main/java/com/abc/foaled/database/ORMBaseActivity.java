@@ -1,9 +1,5 @@
 package com.abc.foaled.database;
 
-/**
- * Created by Brendan on 15/01/2017.
- *
- */
 
 import android.content.Context;
 import android.os.Bundle;

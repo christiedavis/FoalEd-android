@@ -1,10 +1,5 @@
 package com.abc.foaled.database;
 
-/**
- * Created by Brendan on 15/01/2017.
- *
- */
-
 import java.sql.SQLException;
 import java.util.List;
 

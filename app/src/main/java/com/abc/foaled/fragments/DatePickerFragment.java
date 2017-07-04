@@ -6,19 +6,10 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.os.Bundle;
-import android.widget.DatePicker;
-import android.widget.TextView;
-
-import com.abc.foaled.activities.AddNewHorseActivity;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 
 
 /**
@@ -100,32 +91,6 @@ public class DatePickerFragment extends DialogFragment {
 			dialog.getDatePicker().setMinDate(current.minusYears(50).getMillis());
 		return dialog;
 	}
-
-/*	*//**
-	 * Sets the Date of Birth TextView to the value specified in the
-	 * DateTimePicker Dialog FragmentExtender. This is the onTimeSet() callback
-	 * method, and gets called when the user chooses the date
-	 *
-	 * @param view  The DatePicker view that was being interacted with
-	 * @param year  The year selected
-	 * @param month The month selected
-	 * @param day   The day selected
-	 *//*
-	public void onDateSet(DatePicker view, int year, int month, int day) {
-		if (time) {
-			DialogFragment dialog = new TimePickerFragment();
-			Bundle b = new Bundle();
-			b.putInt("year", year);
-			b.putInt("month", month);
-			b.putInt("day", day);
-			b.putInt("textBox", textBox.getId());
-			dialog.setArguments(b);
-
-			dialog.setRetainInstance(true);
-			dialog.show(getFragmentManager(), "timePicker");
-		} else
-			textBox.setText(day + "/" + (month + 1) + "/" + year);
-	}*/
 
 
 }

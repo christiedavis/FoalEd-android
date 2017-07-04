@@ -205,7 +205,7 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
 
 
 	    Boolean female = false;
-		Boolean maiden = false;
+//		Boolean maiden = false;
 	    Boolean pregnant = false;
 
 	    CheckBox femaleCB = (CheckBox) findViewById(R.id.checkboxSex);
@@ -214,7 +214,7 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
 	    if (femaleCB.isChecked()) {
 		    female = true;
 
-			maiden = ((CheckBox) findViewById(R.id.checkboxMaiden)).isChecked();
+//			maiden = ((CheckBox) findViewById(R.id.checkboxMaiden)).isChecked();
 		    pregnant = pregnantCB.isChecked();
 	    }
 

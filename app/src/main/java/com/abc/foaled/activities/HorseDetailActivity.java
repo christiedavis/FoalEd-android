@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
 import android.os.Bundle;
@@ -34,6 +35,7 @@ import com.abc.foaled.database.DatabaseHelper;
 import com.abc.foaled.database.ORMBaseActivity;
 import com.abc.foaled.fragments.DatePickerFragment;
 import com.abc.foaled.fragments.HorseBirthNotesFragment;
+import com.abc.foaled.fragments.HorseDetailsFragment;
 import com.abc.foaled.fragments.HorseNoteFragment;
 import com.abc.foaled.helpers.ImageHelper;
 import com.abc.foaled.models.Birth;
@@ -134,8 +136,6 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 	public void setup() {
 
 
-
-
 		setContentView(R.layout.activity_horse_detail);
 		layout = (CoordinatorLayout) findViewById(R.id.horse_detail_screen);
 
@@ -169,8 +169,18 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 		} else
 			horsePhoto.setImageBitmap(ImageHelper.bitmapSmaller(horse.getImagePath(), 300, 300));
 
+		if (horse.getStatus() == Horse.HORSE_STATUS.PREGNANT) {
+			TextView pregnancyStatus = (TextView) findViewById(R.id.horse_status);
+			pregnancyStatus.setText(getString(R.string.pregnancy_left_time, horse.getCurrentBirth().getBirthDurationAsString()));
+		}
 
-		if (horse.getStatus() == Horse.HORSE_STATUS.DORMANT) {
+
+		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+		HorseDetailsFragment fragment = HorseDetailsFragment.newInstance(horse);
+		transaction.replace(R.id.horseDetails,  fragment, HorseDetailsFragment.FRAGMENT_TAG).commit();
+
+/*		if (horse.getStatus() == Horse.HORSE_STATUS.DORMANT) {
 			FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
 
@@ -188,11 +198,11 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 			TextView pregnancyStatus = (TextView) findViewById(R.id.horse_status);
 			pregnancyStatus.setText(getString(R.string.pregnancy_left_time, horse.getCurrentBirth().getBirthDurationAsString()));
 
-		}
+		}*/
 
 
-		if (sire != null)
-			addNewPregnancyFragment(layout);
+/*		if (sire != null)
+			addNewPregnancyFragment(layout);*/
 /*        switch (horse.getStatus()) {
 
             case FOAL:
@@ -377,7 +387,7 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 		Horse fatherHorse = new Horse(fatherName.getText());*/
 		//TODO Move this method to the fragment. The fragment could then point back here.. but it needs to be moved to the fragment
 
-		TextView conceptionDate = (TextView) findViewById(R.id.conceptionDate);
+//		TextView conceptionDate = (TextView) findViewById(R.id.conceptionDate);
 		//turn to date
 
 		// add to database
@@ -570,7 +580,8 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 		Birth b = horse.getCurrentBirth();
 		b.setBirthTime(DateTime.now());
 
-		Horse foal = new Horse("new_horse", horse.getCurrentBirth(), true, "notes", Horse.HORSE_STATUS.FOAL, null);
+		//name = horse's foal //birth = current horses birth object //true for female //null for notes //foal status //no image
+		Horse foal = new Horse(horse.getName()+"'s foal", horse.getCurrentBirth(), true, null, Horse.HORSE_STATUS.FOAL, null);
 		getHelper().getHorseDataDao().assignEmptyForeignCollection(foal, "milestones");
 		getHelper().getHorseDataDao().create(foal);
 		foal.createMilestones(this);
@@ -584,6 +595,8 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 
 		FloatingActionsMenu fab = (FloatingActionsMenu) findViewById(R.id.multiple_actions);
 		fab.collapse();
+
+		finish();
 	}
 
 

@@ -7,11 +7,15 @@ import org.joda.time.Minutes;
 import org.joda.time.Months;
 import org.joda.time.Weeks;
 import org.joda.time.Years;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import java.util.Date;
 import java.util.Calendar;
 
 public class DateTimeHelper {
+
+	public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormat.forPattern("dd/MM/yyyy");
 
 	/**
 	 * Calculates the age of a horse and returns the string representation of the age
