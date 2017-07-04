@@ -7,6 +7,7 @@
     android:id="@+id/horse_detail_screen"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:foreground="@drawable/dim_effect"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
     tools:context="com.abc.foaled.activities.HorseDetailActivity">

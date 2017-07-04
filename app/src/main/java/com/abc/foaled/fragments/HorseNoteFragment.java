@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.abc.foaled.activities.HorseDetailActivity;
 import com.abc.foaled.activities.NoteActivity;
 import com.abc.foaled.models.Horse;
 import com.abc.foaled.R;
@@ -71,19 +72,6 @@ public class HorseNoteFragment extends Fragment {
 
     @Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//		((TextView) getFragmentManager().findFragmentByTag("GENERAL_NOTES").getView().findViewById(R.id.horse_note_card_view_note)).setText(horse.getNotes());
+	    getActivity().recreate();
 	}
-
-
-	//TODO make the note update on activity result.
-	@Override
-	public void onResume() {
-/*		if (updateNote) {
-			String note = horse.getNotes().isEmpty() ? "Click here to add notes" : horse.getNotes();
-			((TextView) cv.findViewById(R.id.horse_note_card_view_note)).setText(note);
-			updateNote = false;
-		}*/
-		super.onResume();
-	}
-
 }
