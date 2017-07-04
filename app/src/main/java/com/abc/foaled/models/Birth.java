@@ -67,6 +67,10 @@ public class Birth {
 		return sire;
 	}
 
+	public void setSire(String sire) {
+		this.sire = sire;
+	}
+
 	public String getNotes() {
 		return notes;
 	}

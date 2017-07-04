@@ -244,7 +244,8 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
 		if (horse.getStatus() == Horse.HORSE_STATUS.PREGNANT) {
 			String concep = ((TextView) findViewById(R.id.newHorseConceptionDate)).getText().toString();
 			DateTime conceptionDate = dateFormatter.parseDateTime(concep);
-			Birth b = new Birth(horse, null, conceptionDate, conceptionDate.plusMonths(11));
+			String sire = ((TextView) findViewById(R.id.siresName)).getText().toString();
+			Birth b = new Birth(horse, sire, conceptionDate, conceptionDate.plusDays(getResources().getInteger(R.integer.days_to_birth)));
 			getHelper().getBirthsDataDao().create(b);
 			horse.setCurrentBirth(b);
 			horseDao.update(horse);

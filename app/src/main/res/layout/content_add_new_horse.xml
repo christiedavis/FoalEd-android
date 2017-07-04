@@ -246,7 +246,7 @@
                             android:layout_gravity="center"
                             android:layout_weight="1"
                             android:ellipsize="end"
-                            android:hint="Horse's name"
+                            android:hint="Sire's name"
                             android:imeOptions="actionDone|flagNoExtractUi"
                             android:inputType="textPersonName|textCapWords"
                             android:maxLines="1" />
