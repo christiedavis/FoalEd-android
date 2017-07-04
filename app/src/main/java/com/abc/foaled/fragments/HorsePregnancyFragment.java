@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -51,11 +52,15 @@ public class HorsePregnancyFragment extends Fragment {
 			siresName.setText(this.horse.getCurrentBirth().getSire());
 
 			TextView notes = (TextView) view.findViewById(R.id.notes);
-			String note = horse.getCurrentBirth().getNotes().isEmpty() ? "No notes yet" : horse.getCurrentBirth().getNotes();
+			boolean noNotes = horse.getCurrentBirth().getNotes().isEmpty();
+			String note = noNotes ? "No notes yet" : horse.getCurrentBirth().getNotes();
 			notes.setText(note);
 
+			Button button = (Button) view.findViewById(R.id.viewNotes);
+			button.setText(noNotes ? "Add a note" : "View notes");
 
-			view.findViewById(R.id.editNotes).setOnClickListener(new View.OnClickListener() {
+
+			view.findViewById(R.id.viewNotes).setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					Intent intent = new Intent(v.getContext(), NoteActivity.class);
