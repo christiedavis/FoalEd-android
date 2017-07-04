@@ -61,6 +61,7 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 		super.onCreate(savedInstanceState);
 
 
+
 		if (savedInstanceState != null && savedInstanceState.containsKey("horseID"))
 			horseID = savedInstanceState.getInt(Horse.HORSE_ID, 0);
 		else
@@ -127,6 +128,9 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 
 		setContentView(R.layout.activity_horse_detail);
 
+		layout = (CoordinatorLayout) findViewById(R.id.horse_detail_screen);
+		if (Build.VERSION.SDK_INT > 22)
+			layout.getForeground().setAlpha(0);
 
 		if (horse.isFemale() && horse.getStatus() == Horse.HORSE_STATUS.DORMANT)
 			findViewById(R.id.add_pregnancy).setVisibility(View.VISIBLE);

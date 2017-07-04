@@ -17,9 +17,7 @@ import java.util.Locale;
 
 public class AddPregnancyFragment extends Fragment {
 
-    public AddPregnancyFragment() {
-        // Required empty public constructor
-    }
+    public static final String TAG = "add-pregnancy-fragment-tag";
 
     public static AddPregnancyFragment newInstance() {
 		AddPregnancyFragment fragment = new AddPregnancyFragment();

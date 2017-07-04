@@ -8,7 +8,6 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.abc.foaled.R;
@@ -21,6 +20,8 @@ import com.abc.foaled.models.Birth;
  * A simple {@link Fragment} subclass.
  */
 public class EditPregnancyFragment extends Fragment {
+
+	public static final String TAG = "edit-pregnancy-fragment-tag";
 
 	private Birth birth;
 	private DatabaseHelper helper;

@@ -37,12 +37,14 @@ public class HorseDetailsFragment extends Fragment {
 							 Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_horse_details, container, false);
 
-		FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+		FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
 		if (horse.getStatus() == Horse.HORSE_STATUS.PREGNANT) {
 			HorsePregnancyFragment fragment = HorsePregnancyFragment.newInstance(horse);
 			transaction.replace(R.id.pregnancyCard, fragment, HorsePregnancyFragment.FRAGMENT_TAG);
 		}
+
+
 
 		transaction.commit();
 		return view;
