@@ -68,7 +68,7 @@ public class NoteActivity extends ORMBaseActivity<DatabaseHelper> {
 		birthID = getIntent().getIntExtra(Birth.BIRTH_ID, 0);
 		if (birthID != 0) {
 			birth = getHelper().getBirthsDataDao().queryForId(birthID);
-			title = birth.getMare().getName() + "'s " + birth.getYearOfBirth() + " birth notes";
+			title = birth.getMare().getName() + "'s birth notes";
 			note = birth.getNotes();
 		}
 

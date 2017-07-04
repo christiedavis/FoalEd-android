@@ -20,7 +20,7 @@ public class Birth {
     private int id;
     @DatabaseField(foreign = true)
     private Horse horse;        //Foreign horse
-	@DatabaseField(foreign = true)
+	@DatabaseField(foreign = true, foreignAutoRefresh = true, maxForeignAutoRefreshLevel = 1)
 	private Horse mare;          //Foreign mother
     @DatabaseField
     private String sire;        //Name of dad

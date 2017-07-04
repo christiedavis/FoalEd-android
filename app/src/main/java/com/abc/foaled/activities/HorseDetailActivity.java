@@ -315,9 +315,9 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 
 		String sire = ((TextView) view.findViewById(R.id.horseName)).getText().toString();
 
-		Birth birth = new Birth(horse, sire, conceptionDate, conceptionDate.plusDays(R.integer.days_to_birth));
+		Birth birth = new Birth(horse, sire, conceptionDate, conceptionDate.plusDays(getResources().getInteger(R.integer.days_to_birth)));
+		getHelper().getBirthsDataDao().create(birth);
 
-		horse.getBirths().add(birth);
 		horse.setCurrentBirth(birth);
 		getHelper().getHorseDataDao().update(horse);
 
