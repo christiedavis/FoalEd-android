@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="?attr/actionBarSize">
 
     <LinearLayout
         android:id="@+id/add_horse_buttons"
@@ -18,12 +18,12 @@
             android:layout_weight="1"
             android:onClick="insert"
             android:text="SAVE"
-            android:textAlignment="center"/>
+            android:textAlignment="center" />
 
         <View
             android:layout_width="1dp"
             android:layout_height="fill_parent"
-            android:background="#FF000000"/>
+            android:background="#FF000000" />
 
         <Button
             style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
@@ -32,11 +32,10 @@
             android:layout_weight="1"
             android:onClick="cancel"
             android:text="CANCEL"
-            android:textAlignment="center"/>
+            android:textAlignment="center" />
     </LinearLayout>
 
-    <ScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/content_add_new_horse"
         android:layout_width="match_parent"
@@ -45,11 +44,11 @@
         android:isScrollContainer="true">
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                      xmlns:app="http://schemas.android.com/apk/res-auto"
-                      android:layout_width="match_parent"
-                      android:layout_height="wrap_content"
-                      android:orientation="vertical"
-                      app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <ImageView
                 android:id="@+id/add_horse_image"
@@ -58,10 +57,9 @@
                 android:contentDescription="Horse Photo"
                 android:onClick="selectPhoto"
                 android:scaleType="centerCrop"
-                android:src="@drawable/default_horse"/>
+                android:src="@drawable/default_horse" />
 
-            <android.support.v7.widget.CardView
-                xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/add_horse_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -78,41 +76,39 @@
                     android:layout_marginEnd="25dp"
                     android:layout_marginStart="25dp">
                     <!--HORSE NAME-->
-                    <TableRow
-                        android:paddingBottom="5dp">
+                    <TableRow android:paddingBottom="5dp">
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
+                            android:layout_gravity="bottom"
                             android:layout_weight="1"
                             android:gravity="start"
-                            android:labelFor="@+id/siresName"
+                            android:labelFor="@+id/horseName"
                             android:text="Name"
-                            android:textAppearance="?android:attr/textAppearanceLarge"/>
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
 
                         <EditText
-                            android:id="@+id/siresName"
+                            android:id="@+id/horseName"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
+                            android:layout_gravity="center_vertical"
                             android:layout_weight="1"
                             android:ellipsize="end"
                             android:hint="Name of Horse"
                             android:imeOptions="actionDone|flagNoExtractUi"
                             android:inputType="textPersonName|textCapWords"
-                            android:maxLines="1"/>
+                            android:maxLines="1" />
                     </TableRow>
                     <!--DATE OF BIRTH-->
-                    <!--TODO Make sizes consistent-->
-                    <TableRow
-                        android:paddingBottom="5dp">
+                    <TableRow android:paddingBottom="5dp">
+
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="Date of Birth"
-                            android:textAppearance="?android:attr/textAppearanceLarge"/>
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
 
                         <TextView
                             android:id="@+id/newHorseDOB"
@@ -120,7 +116,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_weight="1"
-                            android:onClick="selectDate"/>
+                            android:onClick="selectDate" />
                     </TableRow>
                     <!--TIME OF BIRTH-->
                     <TableRow
@@ -132,7 +128,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="Time of Birth"
-                            android:textAppearance="?android:attr/textAppearanceLarge"/>
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
 
                         <TextView
                             android:id="@+id/newHorseTOB"
@@ -140,18 +136,17 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_weight="1"
-                            android:onClick="selectTime"/>
+                            android:onClick="selectTime" />
                     </TableRow>
                     <!--SEX-->
-                    <TableRow
-                        android:paddingBottom="5dp">
+                    <TableRow android:paddingBottom="5dp">
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="Female"
-                            android:textAppearance="?android:attr/textAppearanceLarge"/>
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
 
 
                         <CheckBox
@@ -161,19 +156,20 @@
                             android:layout_gravity="center"
                             android:layout_weight="1"
                             android:checked="false"
-                            android:onClick="toggleSex"/>
+                            android:onClick="toggleSex" />
                     </TableRow>
                     <!--MAIDEN-->
                     <TableRow
                         android:id="@+id/maidenRow"
                         android:paddingBottom="5dp"
                         android:visibility="gone">
+
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="Maiden"
-                            android:textAppearance="?android:attr/textAppearanceLarge"/>
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
 
                         <CheckBox
                             android:id="@+id/checkboxMaiden"
@@ -181,7 +177,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_weight="1"
-                            android:checked="false"/>
+                            android:checked="false" />
                     </TableRow>
                     <!--PREGNANT-->
                     <TableRow
@@ -194,7 +190,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="Pregnant"
-                            android:textAppearance="?android:attr/textAppearanceLarge"/>
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
 
                         <CheckBox
                             android:id="@+id/checkboxPregnant"
@@ -203,12 +199,11 @@
                             android:layout_gravity="center"
                             android:layout_weight="1"
                             android:checked="false"
-                            android:onClick="togglePregnant"/>
+                            android:onClick="togglePregnant" />
                     </TableRow>
                     <!--CONCEPTION DATE-->
                     <TableRow
                         android:id="@+id/conceptionRow"
-                        android:layout_marginBottom="10dp"
                         android:paddingBottom="5dp"
                         android:visibility="gone">
 
@@ -218,7 +213,7 @@
                             android:layout_gravity="center"
                             android:layout_weight="1"
                             android:text="Conception"
-                            android:textAppearance="?android:attr/textAppearanceLarge"/>
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
 
                         <TextView
                             android:id="@+id/newHorseConceptionDate"
@@ -226,9 +221,38 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_weight="1"
-                            android:onClick="selectDate"/>
+                            android:onClick="selectDate" />
+                    </TableRow>
+                    <!--SIRES NAME-->
+                    <TableRow
+                        android:id="@+id/siresNameRow"
+                        android:layout_marginBottom="10dp"
+                        android:paddingBottom="5dp"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:labelFor="@+id/siresName"
+                            android:text="Sire"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                        <EditText
+                            android:id="@+id/siresName"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:ellipsize="end"
+                            android:hint="Horse's name"
+                            android:imeOptions="actionDone|flagNoExtractUi"
+                            android:inputType="textPersonName|textCapWords"
+                            android:maxLines="1" />
                     </TableRow>
                 </TableLayout>
+
             </android.support.v7.widget.CardView>
 
         </LinearLayout>

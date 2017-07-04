@@ -46,7 +46,7 @@ public class HorsePregnancyFragment extends Fragment {
 			TextView birthDate = (TextView) view.findViewById(R.id.birthDate);
 			birthDate.setText(this.horse.getCurrentBirth().getConception().plusDays(340).toString(DateTimeHelper.DATE_FORMATTER));
 
-			TextView siresName = (TextView) view.findViewById(R.id.siresName);
+			TextView siresName = (TextView) view.findViewById(R.id.horseName);
 			siresName.setText(this.horse.getCurrentBirth().getSire());
 		}
 		// Inflate the layout for this fragment

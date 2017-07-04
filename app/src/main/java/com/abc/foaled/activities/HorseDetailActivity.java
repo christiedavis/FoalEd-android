@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
 import android.os.Bundle;
@@ -34,9 +33,7 @@ import com.abc.foaled.adaptors.MilestoneAdaptor;
 import com.abc.foaled.database.DatabaseHelper;
 import com.abc.foaled.database.ORMBaseActivity;
 import com.abc.foaled.fragments.DatePickerFragment;
-import com.abc.foaled.fragments.HorseBirthNotesFragment;
 import com.abc.foaled.fragments.HorseDetailsFragment;
-import com.abc.foaled.fragments.HorseNoteFragment;
 import com.abc.foaled.helpers.ImageHelper;
 import com.abc.foaled.models.Birth;
 import com.abc.foaled.models.Horse;
@@ -99,7 +96,7 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
 		if (currPopupWindow != null && currPopupWindow.isShowing()) {
-			EditText et = (EditText) currPopupWindow.getContentView().findViewById(R.id.siresName);
+			EditText et = (EditText) currPopupWindow.getContentView().findViewById(R.id.horseName);
 			savedInstanceState.putString("sire", et.getText().toString());
 			TextView date = (TextView) currPopupWindow.getContentView().findViewById(R.id.conceptionDate);
 			savedInstanceState.putString("date", date.getText().toString());
@@ -349,7 +346,7 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 
 		View popupView = getLayoutInflater().inflate(R.layout.fragment_add_pregnancy, null);
 		if (sire != null)
-			((EditText) popupView.findViewById(R.id.siresName)).setText(sire);
+			((EditText) popupView.findViewById(R.id.horseName)).setText(sire);
 		if (!currDate.isEmpty())
 			((TextView) popupView.findViewById(R.id.conceptionDate)).setText(currDate);
 		else
@@ -548,7 +545,7 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 		String conceptionDateString = ((TextView) view.findViewById(R.id.conceptionDate)).getText().toString();
 		DateTime conceptionDate = dateFormatter.parseDateTime(conceptionDateString);
 
-		String sire = ((TextView) view.findViewById(R.id.siresName)).getText().toString();
+		String sire = ((TextView) view.findViewById(R.id.horseName)).getText().toString();
 
 		Birth birth = new Birth(horse, sire, conceptionDate, conceptionDate.plusDays(R.integer.days_to_birth));
 

@@ -173,7 +173,7 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
 
 
 	    //Get name. Throw error if no name supplied
-        EditText nameEditText = (EditText) findViewById(R.id.siresName);
+        EditText nameEditText = (EditText) findViewById(R.id.horseName);
         if (nameEditText.getText().toString().isEmpty()) {
             nameEditText.setError("Please don't leave name blank");
             return;
@@ -274,8 +274,10 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
             layout.setVisibility(View.GONE);
             findViewById(R.id.conceptionRow).setVisibility(View.GONE);
 			findViewById(R.id.maidenRow).setVisibility(View.GONE);
+	        findViewById(R.id.siresNameRow).setVisibility(View.GONE);
             ((CheckBox) findViewById(R.id.checkboxPregnant)).setChecked(false);
 			((CheckBox) findViewById(R.id.checkboxMaiden)).setChecked(false);
+	        ((EditText) findViewById(R.id.siresName)).setText("");
         }
     }
 
@@ -286,8 +288,9 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
 
 		DateTime dob = dateFormatter.parseDateTime(((TextView) findViewById(R.id.newHorseDOB)).getText().toString());
         if (checkBox.isChecked()) {
-			if (Days.daysBetween(dob, DateTime.now()).getDays() > R.integer.foal_to_horse_days) {
+			if (Days.daysBetween(dob, DateTime.now()).getDays() > getResources().getInteger(R.integer.foal_to_horse_days)) {
 				layout.setVisibility(View.VISIBLE);
+				findViewById(R.id.siresNameRow).setVisibility(View.VISIBLE);
 				scrollView.post(new Runnable() {
 					@Override
 					public void run() {
@@ -300,6 +303,8 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
 			}
         } else {
             layout.setVisibility(View.GONE);
+	        findViewById(R.id.siresNameRow).setVisibility(View.GONE);
+	        ((EditText) findViewById(R.id.siresName)).setText("");
         }
     }
 

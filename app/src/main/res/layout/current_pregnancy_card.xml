@@ -54,11 +54,11 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_weight="1"
                     android:gravity="start"
-                    android:labelFor="@+id/siresName"
+                    android:labelFor="@+id/horseName"
                     android:text="Sire"/>
 
                 <TextView
-                    android:id="@+id/siresName"
+                    android:id="@+id/horseName"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"

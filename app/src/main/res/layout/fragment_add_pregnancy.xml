@@ -55,10 +55,10 @@
                     android:gravity="start"
                     android:text="Sire's name"
                     android:textStyle="bold"
-                    android:labelFor="@+id/siresName"/>
+                    android:labelFor="@+id/horseName"/>
 
                 <EditText
-                    android:id="@+id/siresName"
+                    android:id="@+id/horseName"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
