@@ -19,6 +19,7 @@ import com.abc.foaled.adaptors.HorseNoteAdaptor;
 import com.abc.foaled.database.DatabaseHelper;
 import com.abc.foaled.models.Birth;
 import com.abc.foaled.models.Horse;
+import com.ms.square.android.expandabletextview.ExpandableTextView;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -38,9 +39,6 @@ public class HorseBirthNotesFragment extends Fragment {
 	private Horse horse;
 	private DatabaseHelper helper;
 
-	ExpandableListAdapter listAdapter;
-	ExpandableListView expListView;
-
 	public static HorseBirthNotesFragment newInstance(Horse horse, DatabaseHelper helper) {
 		HorseBirthNotesFragment fragment = new HorseBirthNotesFragment();
 		fragment.horse = horse;
@@ -55,8 +53,7 @@ public class HorseBirthNotesFragment extends Fragment {
 		// Inflate the layout for this fragment
 		LinearLayout view = (LinearLayout) inflater.inflate(R.layout.fragment_horse_birth_notes, container, false);
 
-		expListView = (ExpandableListView) view.findViewById(R.id.lvExp);
-
+		CardView addTo = (CardView) view.findViewById(R.id.cv);
 
 		List<Birth> births = new ArrayList<>();
 
@@ -66,39 +63,18 @@ public class HorseBirthNotesFragment extends Fragment {
 			e.printStackTrace();
 		}
 
-		List<String> years = new ArrayList<>();
-		Map<String, String> map = new LinkedHashMap<>();
 
-		if (!births.isEmpty()) {
-
+		if (births.isEmpty() || (births.size() == 1 && births.get(0).getMare().getHorseID() == horse.getHorseID())) {
+			((TextView) view.findViewById(R.id.prevPregnanciesTitle)).setText("No previous pregnancies");
+			addTo.setVisibility(View.GONE);
+		} else {
 			for (Birth b : births) {
-
-				if (horse != b.getMare()) {
-					years.add(b.getYearOfBirth());
-					map.put(b.getYearOfBirth(), b.getNotes());
+				if (b.getMare().getHorseID() != horse.getHorseID()) {
+					View toAdd = inflater.inflate(R.layout.expandable_textview, addTo, false);
+					((ExpandableTextView) toAdd.findViewById(R.id.expandable_text_view)).setText(b.getYearOfBirth() + "\n" + b.getNotes());
+					addTo.addView(toAdd);
 				}
 			}
-
-
-			listAdapter = new HorseNoteAdaptor(getContext(), years, map);
-			expListView.setAdapter(listAdapter);
-/*			for (final Birth b : horse.getBirths()) {
-
-				CardView cv = (CardView) inflater.inflate(R.layout.note, baseLayout, false);
-				cv.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						Intent intent = new Intent(v.getContext(), NoteActivity.class);
-						intent.putExtra("birthID", b.getId());
-						startActivity(intent);
-					}
-				});
-				((TextView) cv.findViewById(R.id.horse_note_card_view_note)).setText(b.getNotes());
-				baseLayout.addView(cv);
-
-			}*/
-		} else {
-			((TextView) view.findViewById(R.id.prevPregnanciesTitle)).setText("No previous pregnancies");
 		}
 		return view;
 	}
