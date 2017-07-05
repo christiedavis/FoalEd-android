@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
           package="com.abc.foaled">
 
     <uses-feature
@@ -15,7 +16,8 @@
         android:icon="@mipmap/ic_launcher"
         android:label="FoalEd"
         android:supportsRtl="true"
-        android:theme="@style/FoalEd">
+        android:theme="@style/FoalEd"
+        tools:replace="android:icon">
         <meta-data
             android:name="net.hockeyapp.android.appIdentifier"
             android:value="${HOCKEYAPP_APP_ID}"/>

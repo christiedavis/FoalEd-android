@@ -43,5 +43,6 @@ dependencies {
     compile 'com.android.support:support-v4:25.3.1'
     compile 'com.android.support:support-vector-drawable:25.3.1'
     compile 'com.ms-square:expandableTextView:0.1.4'
+    compile 'net.cachapa.expandablelayout:expandablelayout:2.9.1'
     testCompile 'junit:junit:4.12'
 }

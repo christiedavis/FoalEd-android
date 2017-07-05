@@ -1,31 +1,27 @@
 package com.abc.foaled.fragments;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ExpandableListAdapter;
-import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.abc.foaled.R;
 import com.abc.foaled.activities.NoteActivity;
-import com.abc.foaled.adaptors.HorseNoteAdaptor;
 import com.abc.foaled.database.DatabaseHelper;
 import com.abc.foaled.models.Birth;
 import com.abc.foaled.models.Horse;
-import com.ms.square.android.expandabletextview.ExpandableTextView;
+
+import net.cachapa.expandablelayout.ExpandableLayout;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,7 +31,7 @@ import java.util.Map;
 public class HorseBirthNotesFragment extends Fragment {
 
 	public static final String TAG = "horse-birth-notes-fragment-tag";
-
+	private static final int EDIT_BIRTH_NOTE = 1;
 	private Horse horse;
 	private DatabaseHelper helper;
 
@@ -49,11 +45,11 @@ public class HorseBirthNotesFragment extends Fragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-							 Bundle savedInstanceState) {
+	                         Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
 		LinearLayout view = (LinearLayout) inflater.inflate(R.layout.fragment_horse_birth_notes, container, false);
 
-		CardView addTo = (CardView) view.findViewById(R.id.cv);
+		LinearLayout addTo = (LinearLayout) view.findViewById(R.id.prevPregnancies); //linear layout within the cardview
 
 		List<Birth> births = new ArrayList<>();
 
@@ -64,19 +60,45 @@ public class HorseBirthNotesFragment extends Fragment {
 		}
 
 
-		if (births.isEmpty() || (births.size() == 1 && births.get(0).getMare().getHorseID() == horse.getHorseID())) {
-			((TextView) view.findViewById(R.id.prevPregnanciesTitle)).setText("No previous pregnancies");
-			addTo.setVisibility(View.GONE);
+		if (births.isEmpty()) {
+			view.setVisibility(View.GONE);
+		} else if (births.size() == 1 && births.get(0).getMare().getHorseID() == horse.getHorseID() && horse.getCurrentBirth() != null) {
+			view.setVisibility(View.GONE);
 		} else {
-			for (Birth b : births) {
-				if (b.getMare().getHorseID() != horse.getHorseID()) {
-					View toAdd = inflater.inflate(R.layout.expandable_textview, addTo, false);
-					((ExpandableTextView) toAdd.findViewById(R.id.expandable_text_view)).setText(b.getYearOfBirth() + "\n" + b.getNotes());
-					addTo.addView(toAdd);
-				}
+			for (final Birth b : births) {
+				if (horse.getCurrentBirth() != null && horse.getCurrentBirth().getId() == b.getId())
+					continue;
+
+				View toAdd = inflater.inflate(R.layout.expandable_layout, addTo, false);
+				((TextView) toAdd.findViewById(R.id.layout_header)).setText(b.getYearOfBirth());
+				((TextView) toAdd.findViewById(R.id.note)).setText(b.getNotes());
+
+				toAdd.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						((ExpandableLayout) v.findViewById(R.id.expandable_layout)).toggle();
+					}
+				});
+
+				toAdd.findViewById(R.id.editPregnancyNote).setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						Intent intent = new Intent(v.getContext(), NoteActivity.class);
+						intent.putExtra(Birth.BIRTH_ID, b.getId());
+						startActivityForResult(intent, EDIT_BIRTH_NOTE);
+					}
+				});
+				addTo.addView(toAdd);
+
 			}
 		}
 		return view;
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == EDIT_BIRTH_NOTE && resultCode == Activity.RESULT_OK)
+			getActivity().recreate();
 	}
 
 }
