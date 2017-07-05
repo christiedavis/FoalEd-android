@@ -251,8 +251,8 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
 			horseDao.update(horse);
 		}
 
-		//make the horse the mother in the birth object
-		birth.setMare(horse);
+		//make the horse the horse in the birth object
+		birth.setHorse(horse);
         getHelper().getBirthsDataDao().create(birth);
 
         finish();

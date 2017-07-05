@@ -11,6 +11,7 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 import com.abc.foaled.R;
+import com.abc.foaled.database.DatabaseHelper;
 import com.abc.foaled.models.Horse;
 
 /**
@@ -21,15 +22,17 @@ import com.abc.foaled.models.Horse;
 public class HorseDetailsFragment extends Fragment {
 
 	public static final String FRAGMENT_TAG = "horseDetailsFragment";
+	private DatabaseHelper helper;
 
 	private Horse horse;
 	public HorseDetailsFragment() {
 		// Required empty public constructor
 	}
 
-	public static HorseDetailsFragment newInstance(Horse h) {
+	public static HorseDetailsFragment newInstance(Horse h, DatabaseHelper helper) {
 		HorseDetailsFragment fragment = new HorseDetailsFragment();
 		fragment.horse = h;
+		fragment.helper = helper;
 		fragment.setRetainInstance(true);
 		return fragment;
 	}
@@ -57,6 +60,11 @@ public class HorseDetailsFragment extends Fragment {
 			//Adds the pregnancy card to the horse
 			HorsePregnancyFragment fragment = HorsePregnancyFragment.newInstance(horse);
 			transaction.replace(R.id.pregnancyCard, fragment, HorsePregnancyFragment.FRAGMENT_TAG);
+		}
+
+		if (horse.isFemale()) {
+			HorseBirthNotesFragment fragment = HorseBirthNotesFragment.newInstance(horse, helper);
+			transaction.replace(R.id.previousPregnanciesCard, fragment, HorseBirthNotesFragment.TAG);
 		}
 
 		HorseNoteFragment fragment = HorseNoteFragment.newInstance(horse);

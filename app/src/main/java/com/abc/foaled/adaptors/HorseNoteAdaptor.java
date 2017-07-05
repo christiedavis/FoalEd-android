@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.abc.foaled.R;
@@ -77,31 +76,14 @@ public class HorseNoteAdaptor extends BaseExpandableListAdapter {
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         final String headerTitle = yearHeaders.get(groupPosition);
+
         if(convertView == null) {
             LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.ex_layout_group_header_view, null);
+            convertView = inflater.inflate(R.layout.exp_list_group_header, null);
         }
 
         TextView textView = (TextView)convertView.findViewById(R.id.year_header);
         textView.setText(headerTitle);
-
-        ImageView addNoteButton = (ImageView) convertView.findViewById(R.id.add_pregnacy_note_detail_button);
-        addNoteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-	            //TODO Steven, here the intent for the Note Activity needs to be started
-	            // In the onCreate, at the moment it is expecting a 'horseID' extra and will pull up it's general notes
-	            // This will need to be changed to pass through a birthID, because then we can get that births notes & the horse we're looking at
-
-	            /*
-	            	Intent intent = new Intent(this, NoteActivity.class);
-				    intent.putExtra("horseID", horseID);
-				    startActivity(intent);
-	             */
-                Log.i("Pregnacney view", headerTitle + " button clicked");
-            }
-        });
-
 
         return convertView;
     }
@@ -110,7 +92,7 @@ public class HorseNoteAdaptor extends BaseExpandableListAdapter {
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.ex_layout_content_view, null);
+            convertView = inflater.inflate(R.layout.exp_list_item, null);
         }
         return convertView;
     }

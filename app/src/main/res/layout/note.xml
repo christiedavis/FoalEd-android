@@ -10,7 +10,7 @@
     android:clickable="true">
 
     <TextView
-        android:id="@+id/horse_note_card_view_note"
+        android:id="@+id/note"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="10sp"

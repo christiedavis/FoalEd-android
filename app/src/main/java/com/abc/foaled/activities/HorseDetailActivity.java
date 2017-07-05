@@ -142,7 +142,7 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 
 
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-		HorseDetailsFragment fragment = HorseDetailsFragment.newInstance(horse);
+		HorseDetailsFragment fragment = HorseDetailsFragment.newInstance(horse, getHelper());
 		transaction.replace(R.id.horseDetails,  fragment, HorseDetailsFragment.FRAGMENT_TAG).commit();
 
 

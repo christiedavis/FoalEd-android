@@ -8,13 +8,23 @@ import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ExpandableListAdapter;
+import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.abc.foaled.R;
 import com.abc.foaled.activities.NoteActivity;
+import com.abc.foaled.adaptors.HorseNoteAdaptor;
+import com.abc.foaled.database.DatabaseHelper;
 import com.abc.foaled.models.Birth;
 import com.abc.foaled.models.Horse;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,25 +33,18 @@ import com.abc.foaled.models.Horse;
  */
 public class HorseBirthNotesFragment extends Fragment {
 
+	public static final String TAG = "horse-birth-notes-fragment-tag";
+
 	private Horse horse;
+	private DatabaseHelper helper;
 
+	ExpandableListAdapter listAdapter;
+	ExpandableListView expListView;
 
-	public HorseBirthNotesFragment() {
-		// Required empty public constructor
-	}
-
-	/**
-	 * Use this factory method to create a new instance of
-	 * this fragment using the provided parameters.
-	 *
-	 * @param horse The horse we're getting the notes for
-	 * @return A new instance of fragment HorseBirthNotesFragment.
-	 */
-	public static HorseBirthNotesFragment newInstance(Horse horse) {
+	public static HorseBirthNotesFragment newInstance(Horse horse, DatabaseHelper helper) {
 		HorseBirthNotesFragment fragment = new HorseBirthNotesFragment();
 		fragment.horse = horse;
-		Bundle args = new Bundle();
-		fragment.setArguments(args);
+		fragment.helper = helper;
 		fragment.setRetainInstance(true);
 		return fragment;
 	}
@@ -50,13 +53,36 @@ public class HorseBirthNotesFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
-		LinearLayout baseLayout = (LinearLayout) inflater.inflate(R.layout.note_layout, container, false);
-		((TextView) baseLayout.findViewById(R.id.card_header)).setText("Previous Pregnancies");
+		LinearLayout view = (LinearLayout) inflater.inflate(R.layout.fragment_horse_birth_notes, container, false);
+
+		expListView = (ExpandableListView) view.findViewById(R.id.lvExp);
 
 
+		List<Birth> births = new ArrayList<>();
 
-		if (!horse.getBirths().isEmpty()) {
-			for (final Birth b : horse.getBirths()) {
+		try {
+			births = helper.getBirthsDataDao().queryBuilder().where().eq("mare_id", horse.getHorseID()).query();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		List<String> years = new ArrayList<>();
+		Map<String, String> map = new LinkedHashMap<>();
+
+		if (!births.isEmpty()) {
+
+			for (Birth b : births) {
+
+				if (horse != b.getMare()) {
+					years.add(b.getYearOfBirth());
+					map.put(b.getYearOfBirth(), b.getNotes());
+				}
+			}
+
+
+			listAdapter = new HorseNoteAdaptor(getContext(), years, map);
+			expListView.setAdapter(listAdapter);
+/*			for (final Birth b : horse.getBirths()) {
 
 				CardView cv = (CardView) inflater.inflate(R.layout.note, baseLayout, false);
 				cv.setOnClickListener(new View.OnClickListener() {
@@ -70,13 +96,11 @@ public class HorseBirthNotesFragment extends Fragment {
 				((TextView) cv.findViewById(R.id.horse_note_card_view_note)).setText(b.getNotes());
 				baseLayout.addView(cv);
 
-			}
+			}*/
 		} else {
-			((TextView) baseLayout.findViewById(R.id.card_header)).setText("No Previous Pregnancies");
+			((TextView) view.findViewById(R.id.prevPregnanciesTitle)).setText("No previous pregnancies");
 		}
-
-
-		return baseLayout;
+		return view;
 	}
 
 }
