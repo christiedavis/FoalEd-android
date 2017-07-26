@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <integer name="foal_to_horse_days">365</integer>
-    <integer name="days_to_birth">340</integer>
+    <!--2-3 years-->
+    <integer name="foal_to_horse_days">916</integer>
+    <!--About 11 months-->
+    <integer name="days_to_birth">330</integer>
 </resources>

@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 public class NotificationPublisher extends BroadcastReceiver {
 
@@ -28,10 +29,10 @@ public class NotificationPublisher extends BroadcastReceiver {
 		wakeLock.acquire();
 		wakeLock.release();*/
 
-		Notification notification = intent.getParcelableExtra(NOTIFICATION);
-		int id = intent.getIntExtra(NOTIFICATION_ID, 0);
-		long snoozeTime = intent.getLongExtra(SNOOZE_TIME, 0);
-		int intentID = intent.getIntExtra(INTENT_ID, 0);
+		Notification notification = intent.getParcelableExtra(NOTIFICATION);    //Gets the notification out
+		int id = intent.getIntExtra(NOTIFICATION_ID, 0);                        //Gets the ID out '12'
+		long snoozeTime = intent.getLongExtra(SNOOZE_TIME, 0);                  //Gets the snooze time of the milestone
+		int intentID = intent.getIntExtra(INTENT_ID, 0);                        //same as notification id...
 		notificationManager.notify(id, notification);
 
 
@@ -39,6 +40,7 @@ public class NotificationPublisher extends BroadcastReceiver {
 		//Pending intent
 		PendingIntent pendingIntent = PendingIntent.getBroadcast(context, intentID, intent, 0);
 
+		Log.d("INTENT", "Published intent; ID = "+intentID);
 		//sets up the next alarm in snoozeTime milliseconds
 		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 		alarmManager.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+snoozeTime, pendingIntent);

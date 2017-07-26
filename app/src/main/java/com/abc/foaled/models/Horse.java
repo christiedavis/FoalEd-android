@@ -204,15 +204,10 @@ public class Horse implements Serializable {
 	 * Should only get called if the horse is a Foal
 	 */
 	public void createMilestones(Context context) {
-//	    ArrayList<Milestone> arrayList = new ArrayList<>(milestones);
-		this.milestones.add(new Milestone(0, this, context));
-
-//		milestones.add(new Milestone(0, this, context));
-/*		milestones.add(new Milestone(1, this, context));
+		milestones.add(new Milestone(0, this, context));
+		milestones.add(new Milestone(1, this, context));
 		milestones.add(new Milestone(2, this, context));
-		milestones.add(new Milestone(3, this, context));*/
-
-//        milestones = arrayList;
+		milestones.add(new Milestone(3, this, context));
     }
 
 }

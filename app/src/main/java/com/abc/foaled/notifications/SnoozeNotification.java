@@ -76,6 +76,6 @@ public class SnoozeNotification extends BroadcastReceiver {
 		PendingIntent pendingIntent = PendingIntent.getBroadcast(context, actualID, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
 		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-		alarmManager.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+(1000*60*5), pendingIntent);
+		alarmManager.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+snoozeTime, pendingIntent);
 	}
 }

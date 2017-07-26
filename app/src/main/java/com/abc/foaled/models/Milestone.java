@@ -32,10 +32,10 @@ public class Milestone {
 
 	public enum MILESTONE{
 
-        POOP(0), //2 hours from birth
-        EAT(1), //4 hours from birth
+        POOP(0), //1 hour from birth
+        PLACENTA(1), //1 hour from birth
         STAND(2), //1 hour from birth
-        DRINK(3); //30 minutes from birth
+        DRINK(3); //2 hours from birth
 
         private final int value;
 
@@ -85,37 +85,36 @@ public class Milestone {
 
         switch (this.milestone) {
             case POOP:
-
-				startTime = birthTime.plusSeconds(10);
-	            emergencyTime = startTime.plusHours(1);
-                snoozeTime = 1000 * 15; // 15 seconds
+				startTime = birthTime.plusHours(1);     //1 hour after birth
+	            emergencyTime = birthTime.plusHours(4); //4 hours after birth
+                snoozeTime = 1000 * 60 * 30;            //30 minutes repeat
                 message = "Your horse should have pooped by now";
                 notificationMessage = "It's important your horse poos so that it can empty itself. You might need to give them a laxative.";
                 notificationTitle = "Has your foal pooed?";
                 break;
 
-            case EAT:
-                startTime = birthTime.plusSeconds(90);
-	            emergencyTime = startTime.plusHours(1);
-                snoozeTime = 1000 * 60 * 5;
-                message = "Your horse should have eaten by now";
-                notificationMessage = "It's important your horse eats";
-                notificationTitle = "Has your foal eaten?";
+            case PLACENTA:
+                startTime = birthTime.plusHours(1);     //1 hour after birth
+	            emergencyTime = birthTime.plusHours(8); //8 hours after birth
+                snoozeTime = 1000 * 60 * 60;            //repeat every hour
+                message = "Your horse should have passed it's placenta by now";
+                notificationMessage = "It's important your horse passes it's placenta";
+                notificationTitle = "PLACENTA NOTIFICATION TITLE";
                 break;
 
             case STAND:
-                startTime = birthTime.plusSeconds(30);
-	            emergencyTime = startTime.plusHours(1);
-                snoozeTime = 1000 * 60 * 5;
+                startTime = birthTime.plusHours(1);     //1 hour after birth
+	            emergencyTime = birthTime.plusHours(2); //2 hours after birth
+                snoozeTime = 1000 * 60 * 15;            //15 minute snooze time
                 message = "Your horse should have stood by now";
                 notificationMessage = "It's important your horse stands so that his legs work";
                 notificationTitle = "Has your horse stood?";
                 break;
 
             case DRINK:
-                startTime = birthTime.plusSeconds(60);
-	            emergencyTime = startTime.plusHours(1);
-                snoozeTime = 1000 * 60 * 5;
+                startTime = birthTime.plusHours(2);         //After 2 hours
+	            emergencyTime = birthTime.plusMinutes(150); //After 2.5 hours
+                snoozeTime = 1000 * 60 * 15;                //Repeat every 15 minutes
                 message = "Your horse should have drunk by now";
                 notificationMessage = "It's important your horse drinks.";
                 notificationTitle = "Has your foal drunk yet?";
@@ -158,12 +157,12 @@ public class Milestone {
 		this.completed = completed;
 	}
 
-	private void scheduleNotification(Context context, DateTime time, long snoozeTime, int notificationId) {//delay is after how much time(in millis) from current time you want to schedule the notification
+	private void scheduleNotification(Context context, DateTime time, long snoozeTime, int milestoneID) {//delay is after how much time(in millis) from current time you want to schedule the notification
 
 		//Notification and intent ID.. these should really be different /-:
 		//	combination of horseID and milestoneID (5 & 3 = 53)
 		//	results in no conflicting IDs
-		int actualID = Integer.parseInt(h.getHorseID()+""+notificationId);
+		int actualID = Integer.parseInt(h.getHorseID()+""+milestoneID);
 
 
 		//-----ON CLICK INTENT, takes you to the horse view-------
@@ -174,15 +173,17 @@ public class Milestone {
 		stackBuilder.addParentStack(HorseDetailActivity.class);
 		stackBuilder.addNextIntent(horseIntent);
 
-		PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+		PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_CANCEL_CURRENT);
 		//----------------------------------------------------------
 
 
 		//Done action on the notification
 		Intent completeIntent = new Intent(context, CompleteNotification.class);
-		PendingIntent completePendingIntent = PendingIntent.getBroadcast(context, actualID, completeIntent, 0);
+		completeIntent.putExtra(Horse.HORSE_ID, h.getHorseID());
+		completeIntent.putExtra("MILESTONE", milestoneID);
+		completeIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, actualID);
+		PendingIntent completePendingIntent = PendingIntent.getBroadcast(context, actualID, completeIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 		NotificationCompat.Action doneAction = new NotificationCompat.Action(R.drawable.ic_done_black_18dp, "Done", completePendingIntent);
-
 
 		//Snooze action on the notification
 		Intent snoozeIntent = new Intent(context, SnoozeNotification.class);
@@ -191,7 +192,7 @@ public class Milestone {
 		snoozeIntent.putExtra(NotificationPublisher.NOTIFICATION_TITLE, notificationMessage);
 		snoozeIntent.putExtra(NotificationPublisher.NOTIFICATION_RESULT_INTENT, resultPendingIntent);
 		snoozeIntent.putExtra(NotificationPublisher.SNOOZE_TIME, snoozeTime);
-		PendingIntent snoozePendingIntent = PendingIntent.getBroadcast(context, 1111, snoozeIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+		PendingIntent snoozePendingIntent = PendingIntent.getBroadcast(context, actualID, snoozeIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 		NotificationCompat.Action snoozeAction = new NotificationCompat.Action(R.drawable.ic_add_white_18dp, "snooze (5 mins)", snoozePendingIntent);
 
 
@@ -215,7 +216,7 @@ public class Milestone {
 		notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, actualID);
 		notificationIntent.putExtra(NotificationPublisher.SNOOZE_TIME, snoozeTime);
 		notificationIntent.putExtra(NotificationPublisher.INTENT_ID, actualID);
-		notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, builder.build());
+		notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, builder.build());   //parcels the notification
 
 		//Pending intent
 		PendingIntent pendingIntent = PendingIntent.getBroadcast(context, actualID, notificationIntent, 0);

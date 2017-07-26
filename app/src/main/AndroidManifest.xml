@@ -34,6 +34,7 @@
 
         <receiver android:name=".notifications.NotificationPublisher" />
         <receiver android:name=".notifications.SnoozeNotification" />
+        <receiver android:name=".notifications.CompleteNotification" />
 
         <activity
             android:name=".MainActivity"
