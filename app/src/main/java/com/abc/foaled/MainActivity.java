@@ -47,8 +47,6 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
 		implements NavigationView.OnNavigationItemSelectedListener, HorsesListFragment.OnListFragmentInteractionListener,
 		NotificationSettingsFragment.OnFragmentInteractionListener {
 
-
-
 	public static AlarmManager alarmManager;
 
 	@Override
