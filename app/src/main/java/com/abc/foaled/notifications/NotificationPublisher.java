@@ -11,10 +11,9 @@ import android.util.Log;
 
 public class NotificationPublisher extends BroadcastReceiver {
 
-	public static final String INTENT_ID = "intent-id";
 	public static final String NOTIFICATION_ID = "notification-id";
 	public static final String NOTIFICATION = "notification";
-	public static final String SNOOZE_TIME = "snooze-time";
+	public static final String REPEAT_TIME = "repeat-time";
 	public static final String NOTIFICATION_TITLE = "notification-title";
 	public static final String NOTIFICATION_MESSAGE = "notification-message";
 	public static final String NOTIFICATION_RESULT_INTENT = "result-intent";
@@ -23,27 +22,37 @@ public class NotificationPublisher extends BroadcastReceiver {
 
 		NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
 
+		//this wakes the phone.. do I want to use?
 /*		PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
 		PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "Tag");
 
 		wakeLock.acquire();
 		wakeLock.release();*/
 
+		//Pulls out the intent and ID and displays it
 		Notification notification = intent.getParcelableExtra(NOTIFICATION);    //Gets the notification out
-		int id = intent.getIntExtra(NOTIFICATION_ID, 0);                        //Gets the ID out '12'
-		long snoozeTime = intent.getLongExtra(SNOOZE_TIME, 0);                  //Gets the snooze time of the milestone
-		int intentID = intent.getIntExtra(INTENT_ID, 0);                        //same as notification id...
-		notificationManager.notify(id, notification);
+		int notificationId = intent.getIntExtra(NOTIFICATION_ID, 0);            //Gets the ID out '12'
+
+		if (notificationId == 0)
+			throw new IllegalArgumentException("Un-allowed Notification ID of 0");
 
 
+		notificationManager.notify(notificationId, notification);
 
-		//Pending intent
-		PendingIntent pendingIntent = PendingIntent.getBroadcast(context, intentID, intent, 0);
+		long repeatTime = intent.getLongExtra(REPEAT_TIME, 0);                  //Gets the snooze time of the milestone
 
-		Log.d("INTENT", "Published intent; ID = "+intentID);
-		//sets up the next alarm in snoozeTime milliseconds
-		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-		alarmManager.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+snoozeTime, pendingIntent);
+		//If there was a repeat
+		if (repeatTime != 0) {
+			//Pending intent that will repeat what has just happened. So we use the same ID
+			PendingIntent pendingIntent = PendingIntent.getBroadcast(context, notificationId, intent, 0);
+
+			Log.d("INTENT", "Published intent; ID = " + notificationId);
+
+
+			//sets this to repeat in repeat-time milliseconds
+			AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+			alarmManager.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + repeatTime, pendingIntent);
+		}
 
 	}
 }

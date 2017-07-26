@@ -20,27 +20,26 @@ import com.abc.foaled.helpers.ImageHelper;
 
 public class SnoozeNotification extends BroadcastReceiver {
 
+	public static final String DONE_ACTION = "DONE-PENDING-INTENT";
+
 	public void onReceive(Context context, Intent intent) {
 
 		NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-
-		Log.d("NOTIFICATION", "Snoozed notification");
-
 		int actualID = intent.getIntExtra(NotificationPublisher.NOTIFICATION_ID, 0);
 
-		notificationManager.cancel(actualID);
 		Log.d("NOTIFICATION", "Snoozed notification with "+actualID);
+		notificationManager.cancel(actualID);
 
+		//starts to rebuild the notification
 		String notificationTitle = intent.getStringExtra(NotificationPublisher.NOTIFICATION_TITLE);
 		String notificationMessage = intent.getStringExtra(NotificationPublisher.NOTIFICATION_MESSAGE);
-		long snoozeTime = intent.getLongExtra(NotificationPublisher.SNOOZE_TIME, 0);
+		long snoozeTime = intent.getLongExtra(NotificationPublisher.REPEAT_TIME, 0);
 		PendingIntent resultIntent = intent.getParcelableExtra(NotificationPublisher.NOTIFICATION_RESULT_INTENT);
 
 
-		//Done action
-		Intent completeIntent = new Intent(context, CompleteNotification.class);
-		PendingIntent completePendingIntent = PendingIntent.getBroadcast(context, actualID, completeIntent, 0);
+		//Done action (gets from the snooze intent)
+		PendingIntent completePendingIntent = intent.getParcelableExtra(DONE_ACTION);
 		NotificationCompat.Action doneAction = new NotificationCompat.Action(R.drawable.ic_done_black_18dp, "Complete", completePendingIntent);
 
 		//Snooze intent
@@ -48,8 +47,7 @@ public class SnoozeNotification extends BroadcastReceiver {
 		NotificationCompat.Action snoozeAction = new NotificationCompat.Action(R.drawable.ic_add_white_18dp, "snooze (5 mins)", snoozePendingIntent);
 
 
-
-		//Builds the notification
+		//Builds the notification to display to the user
 		NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
 				.setContentTitle(notificationTitle)
 				.setContentText(notificationMessage)
@@ -64,18 +62,18 @@ public class SnoozeNotification extends BroadcastReceiver {
 				.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
 
 
+		//the intent the includes the notification
 		Intent notificationIntent = new Intent(context, NotificationPublisher.class);
-
 		notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, actualID);
-		notificationIntent.putExtra(NotificationPublisher.SNOOZE_TIME, snoozeTime);
-		notificationIntent.putExtra(NotificationPublisher.INTENT_ID, actualID);
+		notificationIntent.putExtra(NotificationPublisher.REPEAT_TIME, snoozeTime);
 		notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, builder.build());
 
 
-		//Pending intent
+		//Pending intent that fires off the notification intent
 		PendingIntent pendingIntent = PendingIntent.getBroadcast(context, actualID, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
+		//schedule for 5 minutes in the future
 		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-		alarmManager.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+snoozeTime, pendingIntent);
+		alarmManager.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+(1000 * 60 * 5), pendingIntent);
 	}
 }

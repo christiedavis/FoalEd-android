@@ -29,6 +29,7 @@ import org.joda.time.Days;
 @DatabaseTable(tableName = "milestone")
 public class Milestone {
 
+	public static final String MILESTONE_ID = "milestone-id";
 
 	public enum MILESTONE{
 
@@ -57,7 +58,7 @@ public class Milestone {
 	@DatabaseField
 	private DateTime emergencyTime; //if this milestone reaches this emergency time before being completed.. seek help
     @DatabaseField
-    private long snoozeTime;
+    private long repeatDuration;
     @DatabaseField
     private String message;
     @DatabaseField
@@ -87,7 +88,7 @@ public class Milestone {
             case POOP:
 				startTime = birthTime.plusHours(1);     //1 hour after birth
 	            emergencyTime = birthTime.plusHours(4); //4 hours after birth
-                snoozeTime = 1000 * 60 * 30;            //30 minutes repeat
+                repeatDuration = 1000 * 60 * 30;            //30 minutes repeat
                 message = "Your horse should have pooped by now";
                 notificationMessage = "It's important your horse poos so that it can empty itself. You might need to give them a laxative.";
                 notificationTitle = "Has your foal pooed?";
@@ -96,7 +97,7 @@ public class Milestone {
             case PLACENTA:
                 startTime = birthTime.plusHours(1);     //1 hour after birth
 	            emergencyTime = birthTime.plusHours(8); //8 hours after birth
-                snoozeTime = 1000 * 60 * 60;            //repeat every hour
+                repeatDuration = 1000 * 60 * 60;            //repeat every hour
                 message = "Your horse should have passed it's placenta by now";
                 notificationMessage = "It's important your horse passes it's placenta";
                 notificationTitle = "PLACENTA NOTIFICATION TITLE";
@@ -105,7 +106,7 @@ public class Milestone {
             case STAND:
                 startTime = birthTime.plusHours(1);     //1 hour after birth
 	            emergencyTime = birthTime.plusHours(2); //2 hours after birth
-                snoozeTime = 1000 * 60 * 15;            //15 minute snooze time
+                repeatDuration = 1000 * 60 * 15;            //15 minute snooze time
                 message = "Your horse should have stood by now";
                 notificationMessage = "It's important your horse stands so that his legs work";
                 notificationTitle = "Has your horse stood?";
@@ -114,14 +115,14 @@ public class Milestone {
             case DRINK:
                 startTime = birthTime.plusHours(2);         //After 2 hours
 	            emergencyTime = birthTime.plusMinutes(150); //After 2.5 hours
-                snoozeTime = 1000 * 60 * 15;                //Repeat every 15 minutes
+                repeatDuration = 1000 * 60 * 15;                //Repeat every 15 minutes
                 message = "Your horse should have drunk by now";
                 notificationMessage = "It's important your horse drinks.";
                 notificationTitle = "Has your foal drunk yet?";
                 break;
         }
         if (Days.daysBetween(h.getDateOfBirth().getBirthTime(), DateTime.now()).getDays() < 50) {
-			scheduleNotification(context, startTime, snoozeTime, milestone.getValue());
+			scheduleNotification(context, startTime, repeatDuration, milestone.getValue());
 		}
     }
 
@@ -157,12 +158,12 @@ public class Milestone {
 		this.completed = completed;
 	}
 
-	private void scheduleNotification(Context context, DateTime time, long snoozeTime, int milestoneID) {//delay is after how much time(in millis) from current time you want to schedule the notification
+	private void scheduleNotification(Context context, DateTime startTime, long repeatDuration, int milestoneID) {//delay is after how much time(in millis) from current time you want to schedule the notification
 
 		//Notification and intent ID.. these should really be different /-:
 		//	combination of horseID and milestoneID (5 & 3 = 53)
 		//	results in no conflicting IDs
-		int actualID = Integer.parseInt(h.getHorseID()+""+milestoneID);
+		int notificationID = Integer.parseInt(h.getHorseID()+""+milestoneID);
 
 
 		//-----ON CLICK INTENT, takes you to the horse view-------
@@ -173,30 +174,38 @@ public class Milestone {
 		stackBuilder.addParentStack(HorseDetailActivity.class);
 		stackBuilder.addNextIntent(horseIntent);
 
-		PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_CANCEL_CURRENT);
+		PendingIntent resultPendingIntent = stackBuilder.getPendingIntent((int)System.currentTimeMillis(), PendingIntent.FLAG_CANCEL_CURRENT);
 		//----------------------------------------------------------
 
 
 		//Done action on the notification
 		Intent completeIntent = new Intent(context, CompleteNotification.class);
 		completeIntent.putExtra(Horse.HORSE_ID, h.getHorseID());
-		completeIntent.putExtra("MILESTONE", milestoneID);
-		completeIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, actualID);
-		PendingIntent completePendingIntent = PendingIntent.getBroadcast(context, actualID, completeIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+		completeIntent.putExtra(MILESTONE_ID, milestoneID);
+		completeIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, notificationID);
+
+		//Pending intent for the done intent. Has a unique ID because I enver have to find this pending intent again
+		PendingIntent completePendingIntent = PendingIntent.getBroadcast(context, (int)System.nanoTime(), completeIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 		NotificationCompat.Action doneAction = new NotificationCompat.Action(R.drawable.ic_done_black_18dp, "Done", completePendingIntent);
+
 
 		//Snooze action on the notification
 		Intent snoozeIntent = new Intent(context, SnoozeNotification.class);
-		snoozeIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, actualID);
+		snoozeIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, notificationID);
 		snoozeIntent.putExtra(NotificationPublisher.NOTIFICATION_MESSAGE, notificationTitle);
 		snoozeIntent.putExtra(NotificationPublisher.NOTIFICATION_TITLE, notificationMessage);
 		snoozeIntent.putExtra(NotificationPublisher.NOTIFICATION_RESULT_INTENT, resultPendingIntent);
-		snoozeIntent.putExtra(NotificationPublisher.SNOOZE_TIME, snoozeTime);
-		PendingIntent snoozePendingIntent = PendingIntent.getBroadcast(context, actualID, snoozeIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+		snoozeIntent.putExtra(NotificationPublisher.REPEAT_TIME, repeatDuration);
+		snoozeIntent.putExtra(SnoozeNotification.DONE_ACTION, completePendingIntent);   //Includes the done action to the snooze intent so that it can rebuild the notification easily
+
+		//Pending intent for the snooze intent. Has a unique ID because I never have to find this pending intent again
+		PendingIntent snoozePendingIntent = PendingIntent.getBroadcast(context, (int)System.nanoTime(), snoozeIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 		NotificationCompat.Action snoozeAction = new NotificationCompat.Action(R.drawable.ic_add_white_18dp, "snooze (5 mins)", snoozePendingIntent);
 
 
-		//Builds the notification
+
+
+		//Builds the notification to show to the user
 		NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
 				.setContentTitle(notificationTitle)
 				.setContentText(notificationMessage)
@@ -211,18 +220,17 @@ public class Milestone {
 				.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
 
 
-
+		//Makes a new intent that hold the notification to show, the notification ID, repeatDuration
 		Intent notificationIntent = new Intent(context, NotificationPublisher.class);
-		notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, actualID);
-		notificationIntent.putExtra(NotificationPublisher.SNOOZE_TIME, snoozeTime);
-		notificationIntent.putExtra(NotificationPublisher.INTENT_ID, actualID);
+		notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, notificationID);
+		notificationIntent.putExtra(NotificationPublisher.REPEAT_TIME, repeatDuration);
 		notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, builder.build());   //parcels the notification
 
-		//Pending intent
-		PendingIntent pendingIntent = PendingIntent.getBroadcast(context, actualID, notificationIntent, 0);
+		//Pending intent that fires the above intent (contains notification to display)
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(context, notificationID, notificationIntent, 0);
 
 
-		long futureInMillis = time.getMillis();
+		long futureInMillis = startTime.getMillis();
 
 		//sets an alarm at the exact time given.
 		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
