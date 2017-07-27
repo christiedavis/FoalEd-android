@@ -41,11 +41,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.hockeyapp.android.CrashManager;
+import net.hockeyapp.android.CrashManagerListener;
 import net.hockeyapp.android.UpdateManager;
 
 public class MainActivity extends ORMBaseActivity<DatabaseHelper>
 		implements NavigationView.OnNavigationItemSelectedListener, HorsesListFragment.OnListFragmentInteractionListener,
-		NotificationSettingsFragment.OnFragmentInteractionListener {
+		NotificationSettingsFragment.OnFragmentInteractionListener  {
 
 	public static AlarmManager alarmManager;
 
@@ -143,6 +144,12 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
 		HorsesListFragment fragment = HorsesListFragment.newInstance();
 		fragment.setListToBeDisplayed(getHelper().getHorseDataDao().queryForAll());
 		fragmentManager.replace(R.id.flContent, fragment).commit();
+
+		CrashManager.register(this, "38fab344ccb94c3ba257147f29bb1e4b", new CrashManagerListener() {
+			public boolean shouldAutoUploadCrashes() {
+				return true;
+			}
+		});
 		checkForCrashes();
 	}
 
@@ -267,60 +274,6 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
 	public void onListFragmentInteraction(Horse item) {
 
 	}
-
-/*    private void createNotification() {
-		NotificationCompat.Builder notificationBuilder =
-                new NotificationCompat.Builder(this);
-
-	    notificationBuilder
-	            .setSmallIcon(R.mipmap.ic_launcher)
-	            .setCategory(Notification.CATEGORY_EVENT)
-	            .setAutoCancel(true)
-	            .setPriority(NotificationCompat.PRIORITY_MAX)
-	            .setContentTitle("FoalEd")
-	            .setContentText("<Insert notification here>");
-
-	    NotificationScheduler notificationScheduler = new NotificationScheduler(this);
-        notificationScheduler.schedule(notificationBuilder.build(), 10000, new Intent(this, MainActivity.class));
-
-        Intent resultIntent = new Intent(this, HomePageActivity.class);
-        PendingIntent resultPendingIntent =
-                PendingIntent.getActivity(
-                        this,
-                        1,
-                        resultIntent,
-                        PendingIntent.FLAG_UPDATE_CURRENT
-                );
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(this);
-        mBuilder
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setAutoCancel(true)
-                .setContentIntent(resultPendingIntent)
-                .setPriority(NotificationCompat.PRIORITY_MAX)
-                .setContentTitle("FoalEd")
-                .setContentText("<Insert notification here>");
-
-
-        Notification notification = mBuilder.build();
-        notification.defaults |= Notification.DEFAULT_ALL;
-
-        Intent notificationIntent = new Intent(this, NotificationPublisher.class);
-        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification);
-        PendingIntent pendingIntent =
-                PendingIntent.getBroadcast(
-                        this,
-                        2,
-                        notificationIntent,
-                        PendingIntent.FLAG_UPDATE_CURRENT
-                );
-
-
-        long futureInMillis = SystemClock.elapsedRealtime() + 5000;
-        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
-
-    } */
 
 	public void favouriteAction(View view) {
 		// To be implemented later when we want to favourite on the main screen
