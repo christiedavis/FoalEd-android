@@ -86,9 +86,9 @@ public class Milestone {
 
         switch (this.milestone) {
             case POOP:
-				startTime = birthTime.plusHours(1);     //1 hour after birth
+				startTime = birthTime.plusSeconds(10);     //1 hour after birth
 	            emergencyTime = birthTime.plusHours(4); //4 hours after birth
-                repeatDuration = 1000 * 60 * 30;            //30 minutes repeat
+                repeatDuration = 1000 * 5;            //30 minutes repeat
                 message = "Your horse should have pooped by now";
                 notificationMessage = "It's important your horse poos so that it can empty itself. You might need to give them a laxative.";
                 notificationTitle = "Has your foal pooed?";

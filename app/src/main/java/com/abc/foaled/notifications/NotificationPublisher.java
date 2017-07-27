@@ -36,6 +36,8 @@ public class NotificationPublisher extends BroadcastReceiver {
 		if (notificationId == 0)
 			throw new IllegalArgumentException("Un-allowed Notification ID of 0");
 
+//		if (!intent.hasExtra("INTENT"))
+//			intent.putExtra("INTENT", intent);
 
 		notificationManager.notify(notificationId, notification);
 
@@ -46,7 +48,9 @@ public class NotificationPublisher extends BroadcastReceiver {
 			//Pending intent that will repeat what has just happened. So we use the same ID
 			PendingIntent pendingIntent = PendingIntent.getBroadcast(context, notificationId, intent, 0);
 
-			Log.d("INTENT", "Published intent; ID = " + notificationId);
+			Log.d("SNOOZE", "actualID = " + notificationId);
+			Log.d("SNOOZE", "notificationIntent = " + intent);
+			Log.d("SNOOZE", "context = " + context.getClass());
 
 
 			//sets this to repeat in repeat-time milliseconds

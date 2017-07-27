@@ -28,7 +28,7 @@ public class SnoozeNotification extends BroadcastReceiver {
 
 		int actualID = intent.getIntExtra(NotificationPublisher.NOTIFICATION_ID, 0);
 
-		Log.d("NOTIFICATION", "Snoozed notification with "+actualID);
+//		Log.d("NOTIFICATION", "Snoozed notification with "+actualID);
 		notificationManager.cancel(actualID);
 
 		//starts to rebuild the notification
@@ -71,6 +71,10 @@ public class SnoozeNotification extends BroadcastReceiver {
 
 		//Pending intent that fires off the notification intent
 		PendingIntent pendingIntent = PendingIntent.getBroadcast(context, actualID, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+		Log.d("SNOOZE", "actualID = " + actualID);
+		Log.d("SNOOZE", "notificationIntent = " + notificationIntent);
+		Log.d("SNOOZE", "context = " + context.getClass());
 
 		//schedule for 5 minutes in the future
 		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);

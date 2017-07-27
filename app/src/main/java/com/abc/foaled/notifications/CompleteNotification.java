@@ -21,22 +21,24 @@ public class CompleteNotification extends BroadcastReceiver {
 	public void onReceive(Context context, Intent intent) {
 		NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-		Log.d("NOTIFICATION", "completed notification");
-
+		//Cancels the notification
 		int notificationID = intent.getIntExtra(NotificationPublisher.NOTIFICATION_ID, 0);
 		notificationManager.cancel(notificationID);
 
-		Log.d("NOTIFICATION_ID", notificationID+"");
+		//Cancels the pending intent set to fire. Dummy intent to have the same destination as one set to fire
+		Intent toCancel = new Intent(context, NotificationPublisher.class);
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(context, notificationID, toCancel, PendingIntent.FLAG_CANCEL_CURRENT);
 
-		//Pending intent
-/*		PendingIntent pendingIntent = PendingIntent.getBroadcast(context, notificationID, intent, 0);
+		pendingIntent.cancel();
+
+//		Log.d("COMPLETE", "Trying to stop Notification with ID: " + notificationID);
 
 		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-		alarmManager.cancel(pendingIntent);*/
+		alarmManager.cancel(pendingIntent);
 
 
-		int horseID = intent.getIntExtra(Horse.HORSE_ID, 0);
-		int milestoneID = intent.getIntExtra("MILESTONE", 0);
+//		int horseID = intent.getIntExtra(Horse.HORSE_ID, 0);
+//		int milestoneID = intent.getIntExtra("MILESTONE", 0);
 
 		//If the horse's details haven't been passed through
 /*		if (horseID == 0 || milestoneID == 0)
