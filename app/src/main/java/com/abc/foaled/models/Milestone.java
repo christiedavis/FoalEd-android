@@ -86,9 +86,9 @@ public class Milestone {
 
         switch (this.milestone) {
             case POOP:
-				startTime = birthTime.plusSeconds(10);     //1 hour after birth
+				startTime = birthTime.plusHours(1);     //1 hour after birth
 	            emergencyTime = birthTime.plusHours(4); //4 hours after birth
-                repeatDuration = 1000 * 5;            //30 minutes repeat
+                repeatDuration = 1000 * 60 * 30;        //30 minutes repeat
                 message = "Your horse should have pooped by now";
                 notificationMessage = "It's important your horse poos so that it can empty itself. You might need to give them a laxative.";
                 notificationTitle = "Has your foal pooed?";
@@ -97,7 +97,7 @@ public class Milestone {
             case PLACENTA:
                 startTime = birthTime.plusHours(1);     //1 hour after birth
 	            emergencyTime = birthTime.plusHours(8); //8 hours after birth
-                repeatDuration = 1000 * 60 * 60;            //repeat every hour
+                repeatDuration = 1000 * 60 * 60;        //repeat every hour
                 message = "Your horse should have passed it's placenta by now";
                 notificationMessage = "It's important your horse passes it's placenta";
                 notificationTitle = "PLACENTA NOTIFICATION TITLE";
@@ -106,7 +106,7 @@ public class Milestone {
             case STAND:
                 startTime = birthTime.plusHours(1);     //1 hour after birth
 	            emergencyTime = birthTime.plusHours(2); //2 hours after birth
-                repeatDuration = 1000 * 60 * 15;            //15 minute snooze time
+                repeatDuration = 1000 * 60 * 15;        //15 minute repeat time
                 message = "Your horse should have stood by now";
                 notificationMessage = "It's important your horse stands so that his legs work";
                 notificationTitle = "Has your horse stood?";
@@ -115,7 +115,7 @@ public class Milestone {
             case DRINK:
                 startTime = birthTime.plusHours(2);         //After 2 hours
 	            emergencyTime = birthTime.plusMinutes(150); //After 2.5 hours
-                repeatDuration = 1000 * 60 * 15;                //Repeat every 15 minutes
+                repeatDuration = 1000 * 60 * 15;            //Repeat every 15 minutes
                 message = "Your horse should have drunk by now";
                 notificationMessage = "It's important your horse drinks.";
                 notificationTitle = "Has your foal drunk yet?";
@@ -178,18 +178,18 @@ public class Milestone {
 		//----------------------------------------------------------
 
 
-		//Done action on the notification
+		//-------------- Done action on the notification ------------
 		Intent completeIntent = new Intent(context, CompleteNotification.class);
 		completeIntent.putExtra(Horse.HORSE_ID, h.getHorseID());
 		completeIntent.putExtra(MILESTONE_ID, milestoneID);
 		completeIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, notificationID);
 
-		//Pending intent for the done intent. Has a unique ID because I enver have to find this pending intent again
+		//Pending intent for the done intent. Has a unique ID because I never have to find this pending intent again
 		PendingIntent completePendingIntent = PendingIntent.getBroadcast(context, (int)System.nanoTime(), completeIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 		NotificationCompat.Action doneAction = new NotificationCompat.Action(R.drawable.ic_done_black_18dp, "Done", completePendingIntent);
 
 
-		//Snooze action on the notification
+		//----------------- Snooze action on the notification ----------
 		Intent snoozeIntent = new Intent(context, SnoozeNotification.class);
 		snoozeIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, notificationID);
 		snoozeIntent.putExtra(NotificationPublisher.NOTIFICATION_MESSAGE, notificationTitle);
@@ -204,8 +204,7 @@ public class Milestone {
 
 
 
-
-		//Builds the notification to show to the user
+		//-------- Builds the notification to show to the user --------------------
 		NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
 				.setContentTitle(notificationTitle)
 				.setContentText(notificationMessage)
@@ -218,6 +217,7 @@ public class Milestone {
 				.setContentIntent(resultPendingIntent)
 				.setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
 				.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+
 
 
 		//Makes a new intent that hold the notification to show, the notification ID, repeatDuration
