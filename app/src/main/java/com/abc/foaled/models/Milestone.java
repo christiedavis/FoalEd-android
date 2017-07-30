@@ -175,7 +175,6 @@ public class Milestone {
 		stackBuilder.addNextIntent(horseIntent);
 
 		PendingIntent resultPendingIntent = stackBuilder.getPendingIntent((int)System.currentTimeMillis(), PendingIntent.FLAG_CANCEL_CURRENT);
-		//----------------------------------------------------------
 
 
 		//-------------- Done action on the notification ------------
