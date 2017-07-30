@@ -192,12 +192,19 @@ public class Horse implements Serializable {
             return null;
 
         if (milestoneList == null) {
-            milestoneList = new ArrayList<Milestone>();
+            milestoneList = new ArrayList<>();
             for (Milestone milestone : milestones) {
                 milestoneList.add(milestone);
             }
         }
         return milestoneList;
+    }
+
+    public void completeMilestone(int milestoneID) {
+	    for (Milestone m : milestones) {
+		    if (m.getID() == milestoneID)
+		    	m.setCompleted(true);
+	    }
     }
 
 	/**

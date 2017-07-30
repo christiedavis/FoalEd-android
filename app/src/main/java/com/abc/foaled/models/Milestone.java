@@ -31,7 +31,7 @@ public class Milestone {
 
 	public static final String MILESTONE_ID = "milestone-id";
 
-	public enum MILESTONE{
+	private enum MILESTONE{
 
         POOP(0), //1 hour from birth
         PLACENTA(1), //1 hour from birth
@@ -126,6 +126,10 @@ public class Milestone {
 		}
     }
 
+    int getID() {
+	    return milestoneID;
+    }
+
 	public String getMessage() {
 		return message;
 	}
@@ -154,11 +158,12 @@ public class Milestone {
 		return completed;
 	}
 
-	public void setCompleted(Boolean completed) {
+	void setCompleted(Boolean completed) {
 		this.completed = completed;
 	}
 
-	private void scheduleNotification(Context context, DateTime startTime, long repeatDuration, int milestoneID) {//delay is after how much time(in millis) from current time you want to schedule the notification
+	private void scheduleNotification(Context context, DateTime startTime, long repeatDuration, int milestoneID) {
+		//delay is after how much time(in millis) from current time you want to schedule the notification
 
 		//Notification and intent ID.. these should really be different /-:
 		//	combination of horseID and milestoneID (5 & 3 = 53)
@@ -175,6 +180,7 @@ public class Milestone {
 		stackBuilder.addNextIntent(horseIntent);
 
 		PendingIntent resultPendingIntent = stackBuilder.getPendingIntent((int)System.currentTimeMillis(), PendingIntent.FLAG_CANCEL_CURRENT);
+
 
 
 		//-------------- Done action on the notification ------------

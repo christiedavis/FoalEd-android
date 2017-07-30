@@ -33,6 +33,7 @@ import com.abc.foaled.helpers.ImageHelper;
 import com.abc.foaled.models.Birth;
 import com.abc.foaled.models.Horse;
 import com.abc.foaled.R;
+import com.abc.foaled.models.Milestone;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.j256.ormlite.misc.TransactionManager;
 
@@ -54,21 +55,29 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 	private String currDate = "";
 	private CoordinatorLayout layout;
 	DateTimeFormatter dateFormatter = DateTimeFormat.forPattern("dd/MM/yyyy");
-	DateTimeFormatter dateAndTimeFormatter = DateTimeFormat.forPattern("dd/MM/yyyy - HH:mm");
+	//DateTimeFormatter dateAndTimeFormatter = DateTimeFormat.forPattern("dd/MM/yyyy - HH:mm");
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-
-
 
 		if (savedInstanceState != null && savedInstanceState.containsKey(Horse.HORSE_ID))
 			horseID = savedInstanceState.getInt(Horse.HORSE_ID, 0);
 		else
 			horseID = getIntent().getIntExtra(Horse.HORSE_ID, 0);
 
+		//If no horse ID passed through to this activity, throw error
+		if (horseID == 0)
+			throw new IllegalArgumentException("No HorseID added when starting this activity");
+
+		//retrieve relevant horse
 		horse = getHelper().getHorseDataDao().queryForId(horseID);
+
+		//Checks if milestone is to be completed
+		int milestoneID = getIntent().getIntExtra(Milestone.MILESTONE_ID, 0);
+		if (milestoneID != 0)
+			horse.completeMilestone(milestoneID);
+
 
 		if (savedInstanceState != null && savedInstanceState.containsKey("sire")) {
 			sire = savedInstanceState.getString("sire");
@@ -365,9 +374,4 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 
 		finish();
 	}
-
-	public void deleteBirth(Birth b) {
-
-	}
-
 }
