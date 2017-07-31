@@ -30,7 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:paddingTop="20dp"
-        android:text="@string/About.Title"
+        android:text="Title"
         android:textColor="@color/colorPrimary"
         android:textSize="25sp"
         android:textStyle="bold" />

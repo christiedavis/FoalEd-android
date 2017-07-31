@@ -52,7 +52,7 @@
 
     <!--About Us Page-->
     <string name="About.Title">FoalEd</string>
-    <string name="About.Content">At FoalEd we’re passionate about supporting you and building your confidence in all things foalings, so we can help you to give your foals the best possible start to life.\n\nwww.foaled.co.nz\n\nFounder and Trainer Ashleigh Davis has over 15 years experience working with horses, the last 10 years primarily across the Thoroughbred sector in New Zealand.\n\nAshleigh studied at Massey University in New Zealand and holds a Bachelor of Applied Science with a major in Equine Studies, as well as a Graduate Diploma in Business with a major in Human Resource Management.</string>
+    <string name="About.Content">At FoalEd we’re passionate about supporting you and building your confidence in all things foalings, so we can help you to give your foals the best possible start to life.\n\n<a href='www.foaled.co.nz'>www.foaled.co.nz</a>\n\nFounder and Trainer Ashleigh Davis has over 15 years experience working with horses, the last 10 years primarily across the Thoroughbred sector in New Zealand.\n\nAshleigh studied at Massey University in New Zealand and holds a Bachelor of Applied Science with a major in Equine Studies, as well as a Graduate Diploma in Business with a major in Human Resource Management.</string>
     <string name="About.Dev.Content">Christie and Brendan are developers living in Wellington. We are passionate about learning and mobile development. Our git accounts are ....</string>
 
     <!--FAQ Page-->
