@@ -18,7 +18,7 @@ public class faqActivity extends AppCompatActivity {
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
-	    if (getSupportActionBar() != null)
+        if (getSupportActionBar() != null)
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         ExpandableTextView expTv1 = (ExpandableTextView) findViewById(R.id.faq_q1);
