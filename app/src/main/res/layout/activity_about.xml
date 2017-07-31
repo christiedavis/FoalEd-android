@@ -21,6 +21,13 @@ tools:context="com.abc.foaled.activities.AboutActivity">
 
 </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_about" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="56dp">
+
+        <include layout="@layout/content_about" />
+
+    </ScrollView>
 
 </android.support.design.widget.CoordinatorLayout>

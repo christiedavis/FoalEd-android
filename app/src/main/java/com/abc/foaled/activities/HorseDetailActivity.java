@@ -104,13 +104,11 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 		return true;
 	}
 
-
 	@Override
 	public void onBackPressed() {
 		super.onBackPressed();
 		NavUtils.navigateUpFromSameTask(this);
 	}
-
 
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
@@ -149,7 +147,6 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 			findViewById(R.id.give_birth).setVisibility(View.VISIBLE);
 
 		setUpHeader();
-
 
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 		HorseDetailsFragment fragment = HorseDetailsFragment.newInstance(horse, getHelper());
@@ -192,9 +189,6 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 		TextView status = (TextView) findViewById(R.id.pregnantStatus);
 		status.setText(horse.getStatusString());
 	}
-
-
-
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -240,9 +234,7 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 					layout.getForeground().setAlpha(220);
 			}
 		});
-
 	}
-
 
 	//Toggles favouring horse
 	public void favouriteAction(MenuItem item) {
@@ -254,7 +246,6 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 		int star = horse.isFavourite() ? R.mipmap.star_white : R.mipmap.star_hollow_white;
 		item.setIcon(ContextCompat.getDrawable(this, star));
 	}
-
 
 	/**
 	 * Deletes the horse we are currently looking at
@@ -308,7 +299,6 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 			}
 		});
 		dialog.show();
-
 	}
 
 	public void cancel(View v) {

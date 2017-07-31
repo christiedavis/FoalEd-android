@@ -17,16 +17,24 @@ public class AboutActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Bitmap image = ImageHelper.bitmapSmaller(getResources(), R.drawable.animal_brown_horse, 200, 200);
+        // SET UP GENERAL
+        Bitmap image = ImageHelper.bitmapSmaller(getResources(), R.drawable.pic_ash, 250, 250);
         setContentView(R.layout.activity_about);
         ImageView iV = (ImageView) findViewById(R.id.about_circle_image_view);
         iV.setImageBitmap(image);
+
+        //setup us
+        Bitmap imagext = ImageHelper.bitmapSmaller(getResources(), R.drawable.pic_christie, 250, 250);
+        ImageView iVxt = (ImageView) findViewById(R.id.devCircleImageView1);
+        iVxt.setImageBitmap(imagext);
+        Bitmap imageb = ImageHelper.bitmapSmaller(getResources(), R.drawable.pic_brendan, 250, 250);
+        ImageView iVb = (ImageView) findViewById(R.id.devCircleImageView2);
+        iVb.setImageBitmap(imageb);
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
 	    if (getSupportActionBar() != null)
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
     }
 
     @Override
