@@ -70,9 +70,7 @@ public class HorseDetailsFragment extends Fragment {
 		HorseNoteFragment fragment = HorseNoteFragment.newInstance(horse);
 		transaction.replace(R.id.generalNotesCard, fragment, HorseNoteFragment.TAG);
 
-
 		transaction.commit();
 		return view;
 	}
-
 }

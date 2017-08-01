@@ -30,6 +30,7 @@ import com.abc.foaled.activities.NotificationSettingsActivity;
 import com.abc.foaled.database.DatabaseHelper;
 import com.abc.foaled.database.DatabaseManager;
 import com.abc.foaled.database.ORMBaseActivity;
+import com.abc.foaled.fragments.EmptyHorseFragment;
 import com.abc.foaled.helpers.DateTimeHelper;
 import com.abc.foaled.models.Horse;
 import com.abc.foaled.fragments.HorsesListFragment;
@@ -46,7 +47,7 @@ import net.hockeyapp.android.UpdateManager;
 
 public class MainActivity extends ORMBaseActivity<DatabaseHelper>
 		implements NavigationView.OnNavigationItemSelectedListener, HorsesListFragment.OnListFragmentInteractionListener,
-		NotificationSettingsFragment.OnFragmentInteractionListener  {
+		NotificationSettingsFragment.OnFragmentInteractionListener, EmptyHorseFragment.OnFragmentInteractionListener  {
 
 	public static AlarmManager alarmManager;
 
@@ -172,10 +173,8 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
+		// Handle action bar item clicks here. The action bar will automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
-
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -186,15 +185,26 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
 		Class fragmentClass = NotificationSettingsFragment.class;
 		int id = item.getItemId();
 		Intent intent;
+		List<Horse> horses;
 		Boolean favourite = false;
 
 		switch (id) {
 			case R.id.nav_all_horses:  // new fragment
-				fragmentClass = HorsesListFragment.class;
+				horses = getHelper().getHorseDataDao().queryForAll();
+				if (horses.size() == 0) {
+					fragmentClass = EmptyHorseFragment.class;
+				} else {
+					fragmentClass = HorsesListFragment.class;
+				}
 				break;
 
 			case R.id.nav_fav_horses:  // new fragment
-				fragmentClass = HorsesListFragment.class;
+				horses = getFavouriteHorses();
+				if (horses.size() == 0) {
+					fragmentClass = EmptyHorseFragment.class;
+				} else {
+					fragmentClass = HorsesListFragment.class;
+				}
 				favourite = true;
 				break;
 
@@ -227,17 +237,19 @@ public class MainActivity extends ORMBaseActivity<DatabaseHelper>
 
 		FragmentTransaction fragmentManager = getSupportFragmentManager().beginTransaction();
 
-
 		if (fragmentClass == HorsesListFragment.class) {
 
-			List<Horse> horses;
 			horses = favourite ? getFavouriteHorses() : getHelper().getHorseDataDao().queryForAll();
 
 			HorsesListFragment fragment1 = (HorsesListFragment) fragment;
-			if (fragment1 != null)
+			if (fragment1 != null) {
 				fragment1.setListToBeDisplayed(horses);
-		}
+			}
 
+		} else if (fragmentClass == EmptyHorseFragment.class) {
+			EmptyHorseFragment fragment1 = (EmptyHorseFragment) fragment;
+			fragment1.setAsFavourite(favourite);
+		}
 
 		fragmentManager.replace(R.id.flContent, fragment).commit();
 

@@ -25,7 +25,6 @@ public class AddPregnancyFragment extends Fragment {
         return fragment;
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -47,7 +46,6 @@ public class AddPregnancyFragment extends Fragment {
                 dialog.show(getActivity().getFragmentManager(), "datePicker");
             }
         });
-
 
         return view;
     }

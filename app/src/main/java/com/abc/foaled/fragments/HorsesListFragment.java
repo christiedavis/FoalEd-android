@@ -65,8 +65,6 @@ public class HorsesListFragment extends Fragment {
             RecyclerView recyclerView = (RecyclerView) view;
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
             recyclerView.setAdapter(new RVAdaptor(mHorses));
-//            Log.d("LayoutManager Height - ", recyclerView.getLayoutManager().getHeight() + "");
-//            Log.d("RecyclerView Height - ", recyclerView.getHeight() + "");
         }
 //        Log.d("View Height - ", view.getHeight() + "");
         return view;

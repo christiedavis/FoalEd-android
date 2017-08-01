@@ -45,7 +45,6 @@ public class EditPregnancyFragment extends Fragment {
 		conceptionDate.setText(birth.getConception().toString(DateTimeHelper.DATE_FORMATTER));
 		siresName.setText(birth.getSire());
 
-
 		//set the button on click listeners
 		view.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -85,5 +84,4 @@ public class EditPregnancyFragment extends Fragment {
 
 		return view;
 	}
-
 }
