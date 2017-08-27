@@ -69,6 +69,8 @@ public class Horse implements Serializable {
     private Birth dateOfBirth;
     @DatabaseField (foreign = true, foreignAutoRefresh = true)
     private Birth currentBirth;
+
+	//TODO do we need a sex.. or do we always assume female? Would be good for future planning to leave it in
     @DatabaseField(canBeNull = false)
     private boolean sex;                       //SEX true - gal
     @DatabaseField(canBeNull = false)
