@@ -118,67 +118,6 @@
                             android:layout_weight="1"
                             android:onClick="selectDate" />
                     </TableRow>
-                    <!--TIME OF BIRTH-->
-                    <TableRow
-                        android:id="@+id/tobRow"
-                        android:paddingBottom="5dp">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Time of Birth"
-                            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-                        <TextView
-                            android:id="@+id/newHorseTOB"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_weight="1"
-                            android:onClick="selectTime" />
-                    </TableRow>
-                    <!--SEX-->
-                    <TableRow android:paddingBottom="5dp">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Female"
-                            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-
-                        <CheckBox
-                            android:id="@+id/checkboxSex"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_weight="1"
-                            android:checked="false"
-                            android:onClick="toggleSex" />
-                    </TableRow>
-                    <!--MAIDEN-->
-                    <TableRow
-                        android:id="@+id/maidenRow"
-                        android:paddingBottom="5dp"
-                        android:visibility="gone">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Maiden"
-                            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-                        <CheckBox
-                            android:id="@+id/checkboxMaiden"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_weight="1"
-                            android:checked="false" />
-                    </TableRow>
                     <!--PREGNANT-->
                     <TableRow
                         android:id="@+id/pregnantRow"

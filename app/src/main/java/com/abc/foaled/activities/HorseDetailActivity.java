@@ -78,7 +78,6 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 		if (milestoneID != 0)
 			horse.completeMilestone(milestoneID);
 
-
 		if (savedInstanceState != null && savedInstanceState.containsKey("sire")) {
 			sire = savedInstanceState.getString("sire");
 		}
@@ -151,7 +150,6 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 		HorseDetailsFragment fragment = HorseDetailsFragment.newInstance(horse, getHelper());
 		transaction.replace(R.id.horseDetails,  fragment, HorseDetailsFragment.FRAGMENT_TAG).commit();
-
 
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);

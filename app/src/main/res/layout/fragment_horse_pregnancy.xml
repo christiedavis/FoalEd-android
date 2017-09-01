@@ -11,7 +11,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Pregnancy"
+        android:text="@string/pregnancy"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
 
     <android.support.v7.widget.CardView
@@ -30,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@+id/conceptionDate"
                 android:layout_alignParentStart="true"
-                android:text="Conception Date"/>
+                android:text="@string/conception_date"/>
 
             <TextView
                 android:id="@+id/conceptionDate"
@@ -45,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@+id/birthDate"
                 android:layout_alignParentStart="true"
-                android:text="Expected Birth Date"/>
+                android:text="@string/expected_birth_date"/>
 
             <TextView
                 android:id="@+id/birthDate"
@@ -62,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@+id/horseName"
                 android:layout_alignParentStart="true"
-                android:text="Sire"/>
+                android:text="@string/sire"/>
 
             <TextView
                 android:id="@+id/horseName"
@@ -80,7 +80,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/horseName"
                 android:paddingBottom="8dp"
-                android:text="Notes"/>
+                android:text="@string/notes"/>
 
             <TextView
                 android:id="@+id/notes"
@@ -102,7 +102,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/notes"
                 android:layout_centerHorizontal="true"
-                android:text="View Notes"/>
+                android:text="@string/view_notes"/>
 
             <Button
                 android:id="@+id/editPregnancy"
@@ -111,8 +111,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/viewNotes"
                 android:layout_centerHorizontal="true"
-                android:text="Edit Pregnancy"/>
-
+                android:text="@string/edit_pregnancy"/>
 
             <Button
                 android:id="@+id/giveBirth"
@@ -121,9 +120,12 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/editPregnancy"
                 android:layout_centerHorizontal="true"
-                android:text="Give Birth"/>
+                android:text="@string/give_birth"
+                android:onClick="giveBirth"
+                />
 
         </RelativeLayout>
+
     </android.support.v7.widget.CardView>
 
 </LinearLayout>
