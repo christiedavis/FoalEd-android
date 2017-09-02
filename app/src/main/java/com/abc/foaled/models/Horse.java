@@ -43,17 +43,11 @@ public class Horse implements Serializable {
                 case DORMANT :
                     return "Dormant";
 
-                case MAIDEN:
-                    return "Maiden";
-
                 case PREGNANT:
                     return "Pregnant";
 
                 case FOAL:
                     return "Foal";
-
-                case RETIRED:
-                    return "Retired"; //is this needed?
 
                 default:
                     return "Dormant";
@@ -63,20 +57,40 @@ public class Horse implements Serializable {
 
     @DatabaseField(generatedId = true)
     private int horseID;                             //ID
+
     @DatabaseField(canBeNull = false)
     private String name;                        //NAME
+
+    @DatabaseField(canBeNull = true)
+    private String breed;
+
+    @DatabaseField(canBeNull = true)
+    private String dan;
+
+    @DatabaseField(canBeNull = true)
+    private String sire;
+
+    @DatabaseField(canBeNull = true)
+    private String colour;
+
     @DatabaseField (foreign = true, canBeNull = false, foreignAutoRefresh = true, foreignAutoCreate = true)
     private Birth dateOfBirth;
+
     @DatabaseField (foreign = true, foreignAutoRefresh = true)
     private Birth currentBirth;
+
     @DatabaseField(canBeNull = false)
-    private boolean sex;                       //SEX true - gal
+    private boolean sex;                       //SEX true - girl
+
     @DatabaseField(canBeNull = false)
     private String notes;
+
     @DatabaseField(unknownEnumName = "DORMANT", canBeNull = false)
     private HORSE_STATUS status;
+
     @DatabaseField(canBeNull = false)
     private boolean favourite = false;
+
     @DatabaseField(canBeNull = false)
     private String imagePath;
 
@@ -186,6 +200,13 @@ public class Horse implements Serializable {
         return status.getString();
     }
 
+    public void setExtraDetails(String breed, String dan, String sire, String colour){
+
+        this.breed = breed;
+        this.dan = dan;
+        this.sire = sire;
+        this.colour = colour;
+    }
 
     public List<Milestone> getMilestones() {
         if (milestones.size() == 0)
