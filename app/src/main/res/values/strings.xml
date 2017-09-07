@@ -81,5 +81,15 @@
     <string name="feedback">Feedback</string>
     <string name="copyright_2017_foaled">Copyright 2017 FoalEd</string>
     <string name="my_favourite_horses">My Favourite Horses</string>
+    <string name="edit_pregnancy">Edit Pregnancy</string>
+    <string name="conception_date">Conception Date</string>
+    <string name="sire_s_name">Sire\'s name</string>
+    <string name="save">Save</string>
+    <string name="give_birth">Give Birth</string>
+    <string name="view_notes">View Notes</string>
+    <string name="notes">Notes</string>
+    <string name="sire">Sire</string>
+    <string name="expected_birth_date">Expected Birth Date</string>
+    <string name="pregnancy">Pregnancy</string>
 
 </resources>

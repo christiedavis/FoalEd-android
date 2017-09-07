@@ -75,6 +75,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginEnd="25dp"
                     android:layout_marginStart="25dp">
+
                     <!--HORSE NAME-->
                     <TableRow android:paddingBottom="5dp">
 
@@ -100,129 +101,105 @@
                             android:inputType="textPersonName|textCapWords"
                             android:maxLines="1" />
                     </TableRow>
-                    <!--DATE OF BIRTH-->
+
+                    <!--Breed-->
                     <TableRow android:paddingBottom="5dp">
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Date of Birth"
+                            android:text="Breed"
                             android:textAppearance="?android:attr/textAppearanceLarge" />
 
-                        <TextView
-                            android:id="@+id/newHorseDOB"
+                        <EditText
+                            android:id="@+id/horseBreed"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
+                            android:layout_gravity="center_vertical"
                             android:layout_weight="1"
-                            android:onClick="selectDate" />
+                            android:ellipsize="end"
+                            android:hint="Breed of Horse"
+                            android:imeOptions="actionDone|flagNoExtractUi"
+                            android:inputType="textPersonName|textCapWords"
+                            android:maxLines="1" />
                     </TableRow>
-                    <!--TIME OF BIRTH-->
-                    <TableRow
-                        android:id="@+id/tobRow"
-                        android:paddingBottom="5dp">
 
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Time of Birth"
-                            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-                        <TextView
-                            android:id="@+id/newHorseTOB"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_weight="1"
-                            android:onClick="selectTime" />
-                    </TableRow>
-                    <!--SEX-->
+                    <!--Dan-->
                     <TableRow android:paddingBottom="5dp">
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Female"
+                            android:text="Dan"
                             android:textAppearance="?android:attr/textAppearanceLarge" />
 
-
-                        <CheckBox
-                            android:id="@+id/checkboxSex"
+                        <EditText
+                            android:id="@+id/newHorseDan"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
+                            android:layout_gravity="center_vertical"
                             android:layout_weight="1"
-                            android:checked="false"
-                            android:onClick="toggleSex" />
+                            android:ellipsize="end"
+                            android:hint="Dan of Horse"
+                            android:imeOptions="actionDone|flagNoExtractUi"
+                            android:inputType="textPersonName|textCapWords"
+                            android:maxLines="1" />
                     </TableRow>
-                    <!--MAIDEN-->
-                    <TableRow
-                        android:id="@+id/maidenRow"
-                        android:paddingBottom="5dp"
-                        android:visibility="gone">
+
+                    <!--AGE-->
+                    <TableRow android:paddingBottom="5dp">
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Maiden"
+                            android:text="Age"
                             android:textAppearance="?android:attr/textAppearanceLarge" />
 
-                        <CheckBox
-                            android:id="@+id/checkboxMaiden"
+                        <EditText
+                            android:id="@+id/newHorseAge"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
+                            android:hint="Age"
+                            android:inputType="number"
                             android:layout_weight="1"
-                            android:checked="false" />
+                            />
+                        <!--<TextView-->
+                        <!--Commented this out because i cant create a number picker :( -->
+                            <!--android:id="@+id/newHorseAge"-->
+                            <!--android:layout_width="0dp"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_gravity="center"-->
+                            <!--android:layout_weight="1"-->
+                            <!--android:onClick="selectAge" />-->
                     </TableRow>
-                    <!--PREGNANT-->
-                    <TableRow
-                        android:id="@+id/pregnantRow"
-                        android:paddingBottom="5dp"
-                        android:visibility="gone">
+
+                    <!--Colour-->
+                    <TableRow android:paddingBottom="5dp">
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Pregnant"
+                            android:text="Colour"
                             android:textAppearance="?android:attr/textAppearanceLarge" />
 
-                        <CheckBox
-                            android:id="@+id/checkboxPregnant"
+                        <EditText
+                            android:id="@+id/newHorseColour"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
+                            android:layout_gravity="center_vertical"
                             android:layout_weight="1"
-                            android:checked="false"
-                            android:onClick="togglePregnant" />
+                            android:ellipsize="end"
+                            android:hint="Colour of Horse"
+                            android:imeOptions="actionDone|flagNoExtractUi"
+                            android:inputType="textPersonName|textCapWords"
+                            android:maxLines="1" />
                     </TableRow>
-                    <!--CONCEPTION DATE-->
-                    <TableRow
-                        android:id="@+id/conceptionRow"
-                        android:paddingBottom="5dp"
-                        android:visibility="gone">
 
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_weight="1"
-                            android:text="Conception"
-                            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-                        <TextView
-                            android:id="@+id/newHorseConceptionDate"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_weight="1"
-                            android:onClick="selectDate" />
-                    </TableRow>
                     <!--SIRES NAME-->
                     <TableRow
                         android:id="@+id/siresNameRow"
@@ -250,6 +227,51 @@
                             android:imeOptions="actionDone|flagNoExtractUi"
                             android:inputType="textPersonName|textCapWords"
                             android:maxLines="1" />
+                    </TableRow>
+
+                    <!--PREGNANT-->
+                    <TableRow
+                        android:id="@+id/pregnantRow"
+                        android:paddingBottom="5dp"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Pregnant"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                        <CheckBox
+                            android:id="@+id/checkboxPregnant"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:checked="false"
+                            android:onClick="togglePregnant" />
+                    </TableRow>
+
+                    <!--Babyrow-->
+                    <TableRow
+                        android:id="@+id/conceptionRow"
+                        android:paddingBottom="5dp"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Pregnant"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                        <EditText
+                            android:id="@+id/newHorseConceptionDate"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:onClick="selectDate" />
                     </TableRow>
                 </TableLayout>
 

@@ -23,6 +23,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.NumberPicker;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -31,6 +32,7 @@ import android.widget.Toast;
 import com.abc.foaled.database.DatabaseHelper;
 import com.abc.foaled.database.ORMBaseActivity;
 import com.abc.foaled.fragments.DatePickerFragment;
+import com.abc.foaled.fragments.NumberPickerFragment;
 import com.abc.foaled.fragments.TimePickerFragment;
 import com.abc.foaled.helpers.DateTimeHelper;
 import com.abc.foaled.helpers.ImageHelper;
@@ -44,6 +46,7 @@ import org.joda.time.Days;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import java.awt.font.NumericShaper;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -51,6 +54,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -59,8 +63,7 @@ import static com.abc.foaled.helpers.PermissionsHelper.hasPermissions;
 import static com.abc.foaled.helpers.PermissionsHelper.getPermissions;
 
 public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> implements
-		TimePickerDialog.OnTimeSetListener,
-		DatePickerDialog.OnDateSetListener {
+		DatePickerDialog.OnDateSetListener, NumberPicker.OnValueChangeListener {
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_IMAGE_SELECT = 2;
@@ -72,6 +75,7 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
 	DateTimeFormatter dateFormatter = DateTimeFormat.forPattern("dd/MM/yyyy");
 	DateTimeFormatter timeFormatter = DateTimeFormat.forPattern("HH:mm");
 	DateTimeFormatter dateAndTimeFormatter = DateTimeFormat.forPattern("dd/MM/yyyy - HH:mm");
+    DateTimeFormatter gmtFormatter = DateTimeFormat.forPattern("EEE MMM dd HH:mm:ss 'GMT'Z yyyy");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,23 +84,10 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-	    if (getSupportActionBar() != null)
-	        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-
-
-//        String date = new SimpleDateFormat("dd/MM/yyyy", Locale.UK).format(Calendar.getInstance().getTime());
-		String date = DateTime.now().toString(dateFormatter);
-		String time = DateTime.now().toString(timeFormatter);
-
-        TextView dob = (TextView) findViewById(R.id.newHorseDOB);
-		TextView tob = (TextView) findViewById(R.id.newHorseTOB);
-        TextView concep = (TextView) findViewById(R.id.newHorseConceptionDate);
-        dob.setText(date);
-		tob.setText(time);
-        concep.setText(date);
+	    if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
     }
-
 
     /**
      * This is called when an activity is called with an intent to return with a result.
@@ -170,8 +161,6 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
      */
     public void insert(View view) {
 
-
-
 	    //Get name. Throw error if no name supplied
         EditText nameEditText = (EditText) findViewById(R.id.horseName);
         if (nameEditText.getText().toString().isEmpty()) {
@@ -182,58 +171,61 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
 	    String name = nameEditText.getText().toString();
 
 		//DOB------------------------------------------
-	    String dobString = ((TextView) findViewById(R.id.newHorseDOB)).getText().toString();
-		String tobString = ((TextView) findViewById(R.id.newHorseTOB)).getText().toString();
+		// done by taking age and setting dob to today at the appropriate year
+	    String ageString = ((EditText) findViewById(R.id.newHorseAge)).getText().toString();
 
-	    DateTime dob = dateFormatter.parseDateTime(dobString);
+		Calendar today = Calendar.getInstance();
+		Integer yob = today.get(Calendar.YEAR) - new Integer(ageString);
 
-		//If horse is less than 2 days old
-		if (findViewById(R.id.tobRow).getVisibility() == View.VISIBLE) {
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.YEAR, yob );
+		cal.set(Calendar.MONTH, today.get(Calendar.MONTH));
+		cal.set(Calendar.DATE, today.get(Calendar.DAY_OF_MONTH));
+		cal.set(Calendar.HOUR_OF_DAY, today.get(Calendar.HOUR_OF_DAY));
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+		Date ageDate = cal.getTime();
 
-			dob = dateAndTimeFormatter.parseDateTime(dobString + " - " + tobString);
-			DateTime curr = DateTime.now();
-			//If date is in future
-			if (dob.isAfter(curr)) {
-				Toast.makeText(this, "Date of birth cannot be set in the future", Toast.LENGTH_LONG).show();
-				return;
-			}
-		}
+        DateTime ageDateTime = DateTime.parse(ageDate.toString(), gmtFormatter);
 
+		//BREED--------------------------------
+		EditText breedET = (EditText) findViewById(R.id.horseBreed);
+		String breed = breedET.getText().toString();
 
+		// DAN -------------
+		EditText danET = (EditText) findViewById(R.id.newHorseDan);
+		String dan = danET.getText().toString();
+
+		// Colour -------------
+		EditText colourEt = (EditText) findViewById(R.id.newHorseColour);
+		String colour = colourEt.getText().toString();
+
+		// SIRES NAME -------------------
+		EditText sireET = (EditText) findViewById(R.id.siresName);
+		String sire = sireET.getText().toString();
+
+		Date date = new Date();
 	    //create empty birth instance for horse
-	    Birth birth = new Birth(null, null, null, dob);
+	    Birth birth = new Birth(null, sire, null, ageDateTime);
 
-
-	    Boolean female = false;
-//		Boolean maiden = false;
-	    Boolean pregnant = false;
-
-	    CheckBox femaleCB = (CheckBox) findViewById(R.id.checkboxSex);
+	    Boolean female = true;
 	    CheckBox pregnantCB = (CheckBox) findViewById(R.id.checkboxPregnant);
+		Boolean pregnant = pregnantCB.isChecked();
 
-	    if (femaleCB.isChecked()) {
-		    female = true;
-
-//			maiden = ((CheckBox) findViewById(R.id.checkboxMaiden)).isChecked();
-		    pregnant = pregnantCB.isChecked();
-	    }
-
-	    //status of horse
+	    //---------status of horse------
 		Horse.HORSE_STATUS status = Horse.HORSE_STATUS.DORMANT;
-
-
-
 		//assumes a horse can't get pregnant at less than a year old
-		if (DateTimeHelper.getAgeInYears(dob) < 1)
+		if (DateTimeHelper.getAgeInYears(ageDateTime) < 1)
 			status = Horse.HORSE_STATUS.FOAL;
 		else if (pregnant)
 			status = Horse.HORSE_STATUS.PREGNANT;
 
-
 		//TODO make a 'pick status' dialog that lets the user choose the status of the horse
 	    Horse horse = new Horse(name, birth, female, null, status, imagePath);
+	   horse.setExtraDetails(breed, dan, sire, colour);
 
-	    //Needs to be done in this order
+	      //Needs to be done in this order
 	    RuntimeExceptionDao<Horse, Integer> horseDao = getHelper().getHorseDataDao();
 	    horseDao.assignEmptyForeignCollection(horse, "milestones");
 	    horseDao.assignEmptyForeignCollection(horse, "births");
@@ -241,15 +233,16 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
 	    horseDao.create(horse);
 
 		//Make a new birth object if the horse is pregnant
-		if (horse.getStatus() == Horse.HORSE_STATUS.PREGNANT) {
-			String concep = ((TextView) findViewById(R.id.newHorseConceptionDate)).getText().toString();
-			DateTime conceptionDate = dateFormatter.parseDateTime(concep);
-			String sire = ((TextView) findViewById(R.id.siresName)).getText().toString();
-			Birth b = new Birth(horse, sire, conceptionDate, conceptionDate.plusDays(getResources().getInteger(R.integer.days_to_birth)));
-			getHelper().getBirthsDataDao().create(b);
-			horse.setCurrentBirth(b);
-			horseDao.update(horse);
-		}
+        //todo
+//		if (horse.getStatus() == Horse.HORSE_STATUS.PREGNANT) {
+//			String concep = ((TextView) findViewById(R.id.newHorseConceptionDate)).getText().toString();
+//			DateTime conceptionDate = dateFormatter.parseDateTime(concep);
+//			String foalSire = ((TextView) findViewById(R.id.siresName)).getText().toString();
+//			Birth b = new Birth(horse, foalSire, conceptionDate, conceptionDate.plusDays(getResources().getInteger(R.integer.days_to_birth)));
+//			getHelper().getBirthsDataDao().create(b);
+//			horse.setCurrentBirth(b);
+//			horseDao.update(horse);
+//		}
 
 		//make the horse the horse in the birth object
 		birth.setHorse(horse);
@@ -258,38 +251,17 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
         finish();
     }
 
-    public void toggleSex(final View view) {
-        CheckBox checkBox = (CheckBox) view;
-        final ScrollView scrollView = (ScrollView) findViewById(R.id.content_add_new_horse);
-        LinearLayout layout = (LinearLayout) findViewById(R.id.pregnantRow);
-        if (checkBox.isChecked()) {
-            layout.setVisibility(View.VISIBLE);
-			findViewById(R.id.maidenRow).setVisibility(View.VISIBLE);
-	        scrollView.post(new Runnable() {
-		        @Override
-		        public void run() {
-			        scrollView.fullScroll(View.FOCUS_DOWN);
-		        }
-	        });
-        } else {
-            layout.setVisibility(View.GONE);
-            findViewById(R.id.conceptionRow).setVisibility(View.GONE);
-			findViewById(R.id.maidenRow).setVisibility(View.GONE);
-	        findViewById(R.id.siresNameRow).setVisibility(View.GONE);
-            ((CheckBox) findViewById(R.id.checkboxPregnant)).setChecked(false);
-			((CheckBox) findViewById(R.id.checkboxMaiden)).setChecked(false);
-	        ((EditText) findViewById(R.id.siresName)).setText("");
-        }
-    }
-
     public void togglePregnant(final View view) {
         CheckBox checkBox = (CheckBox) view;
 	    final ScrollView scrollView = (ScrollView) findViewById(R.id.content_add_new_horse);
         LinearLayout layout = (LinearLayout) findViewById(R.id.conceptionRow);
 
-		DateTime dob = dateFormatter.parseDateTime(((TextView) findViewById(R.id.newHorseDOB)).getText().toString());
-        if (checkBox.isChecked()) {
-			if (Days.daysBetween(dob, DateTime.now()).getDays() > getResources().getInteger(R.integer.foal_to_horse_days)) {
+		DateTime dob = dateFormatter.parseDateTime(((TextView) findViewById(R.id.age)).getText().toString());
+
+		Integer age = new Integer(((TextView) findViewById(R.id.age)).getText().toString());
+
+		if (checkBox.isChecked()) {
+			if (age > 2) {
 				layout.setVisibility(View.VISIBLE);
 				findViewById(R.id.siresNameRow).setVisibility(View.VISIBLE);
 				scrollView.post(new Runnable() {
@@ -309,6 +281,16 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
         }
     }
 
+    public void selectAge(View view) {
+
+        String date = ((TextView) view).getText().toString();
+
+        NumberPicker picker = new NumberPicker(this);
+        DialogFragment dialogFragment = NumberPickerFragment.newInstance(date, this);
+        String tag = "SELECT AGE";
+        dialogFragment.show(getFragmentManager(), tag);
+    }
+
     public void selectDate(View view) {
 
 		String date = ((TextView) view).getText().toString();
@@ -317,47 +299,25 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
 
 		DialogFragment dialog = DatePickerFragment.newInstance(date, this, conception);
 		//used to distinguish between selection dob and conception dates
-		String tag = view.getId() == R.id.newHorseDOB ? "dobPicker" : "conceptionDatePicker";
+		String tag = view.getId() == R.id.age ? "dobPicker" : "conceptionDatePicker";
         dialog.show(getFragmentManager(), tag);
     }
 
     @Override
+    public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+        TextView ageEt = (TextView) findViewById(R.id.newHorseAge);
+        ageEt.setText(newVal);
+    }
+
+    @Override
 	public void onDateSet(DatePicker view, int year, int month, int day) {
-		int textViewID;
-		if (getFragmentManager().findFragmentByTag("dobPicker") != null) {
-			textViewID = R.id.newHorseDOB;
-		} else
-			textViewID = R.id.newHorseConceptionDate;
+		int textViewID = R.id.newHorseConceptionDate;
 
 		TextView dateField = (TextView) findViewById(textViewID);
 		String parsedDob = day + "/" + (month + 1) + "/" + year;
 		dateField.setText(parsedDob);
 		DateTime birth = dateFormatter.parseDateTime(parsedDob);
 
-		if (textViewID == R.id.newHorseDOB) {
-			final LinearLayout tobRow = (LinearLayout) findViewById(R.id.tobRow);
-			if (Days.daysBetween(birth, DateTime.now()).getDays() > 2)
-				tobRow.setVisibility(View.GONE);
-			else {
-				tobRow.setVisibility(View.VISIBLE);
-			}
-		}
-	}
-
-
-    public void selectTime(View view) {
-		String time = ((TextView) view).getText().toString();
-
-		DialogFragment dialog = TimePickerFragment.newInstance(time, this);
-		dialog.show(getFragmentManager(), "timePicker");
-	}
-
-	@Override
-	public void onTimeSet(TimePicker view, int hour, int minute) {
-		String _minute = (minute < 10) ? "0" + minute : "" + minute;
-		String _hour = (hour < 10) ? "0" + hour : "" + hour;
-		TextView tob = (TextView) findViewById(R.id.newHorseTOB);
-		tob.setText(_hour + ":" + _minute);
 	}
 
     public void selectPhoto(View view) {
@@ -375,7 +335,6 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
 
 	@Override
 	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-
 
 		boolean canContinue = true;
 		if (permissions.length > 0 && grantResults.length > 0) { //If the permissions request was not interrupted
@@ -480,5 +439,4 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
         ImageView iV = (ImageView) findViewById(R.id.add_horse_image);
         iV.setImageBitmap(ImageHelper.bitmapSmaller(getResources(), R.drawable.default_horse, iV.getWidth(), iV.getHeight()));
     }
-
 }
