@@ -26,23 +26,15 @@ import com.abc.foaled.R;
 
 public class NoteActivity extends ORMBaseActivity<DatabaseHelper> {
 
-/*
-	public static final int HORSE_NOTE = 1;
-	public static final int BIRTH_NOTE = 2;
-*/
+	private EditText noteContent;
 
-	TextView noteTitle;
-	EditText noteContent;
+	private String title;
+	private String note;
+	private Horse horse;
+	private Birth birth;
 
-	String title;
-	String note;
-	int horseID;
-	int birthID;
-	Horse horse;
-	Birth birth;
-
-	boolean editing = false;
-	boolean dialogResult = true;
+	private boolean editing = false;
+	private boolean dialogResult = true;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -58,20 +50,20 @@ public class NoteActivity extends ORMBaseActivity<DatabaseHelper> {
 			actionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_black_18dp);
 		}
 
-		horseID = getIntent().getIntExtra(Horse.HORSE_ID, 0);
+		int horseID = getIntent().getIntExtra(Horse.HORSE_ID, 0);
 		if (horseID != 0) {
 			horse = getHelper().getHorseDataDao().queryForId(horseID);
 			title = horse.getName() + "'s notes";
 			note = horse.getNotes();
 		}
-		birthID = getIntent().getIntExtra(Birth.BIRTH_ID, 0);
+		int birthID = getIntent().getIntExtra(Birth.BIRTH_ID, 0);
 		if (birthID != 0) {
 			birth = getHelper().getBirthsDataDao().queryForId(birthID);
 			title = birth.getMare().getName() + "'s birth notes";
 			note = birth.getNotes();
 		}
 
-		noteTitle = (TextView) findViewById(R.id.note_activity_title);
+		TextView noteTitle = (TextView) findViewById(R.id.note_activity_title);
 		noteContent = (EditText) findViewById(R.id.note_activity_content);
 		noteTitle.setText(title);
 		noteContent.setText(note);

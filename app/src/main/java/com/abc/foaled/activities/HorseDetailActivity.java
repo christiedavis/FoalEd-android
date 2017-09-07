@@ -38,24 +38,22 @@ import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.j256.ormlite.misc.TransactionManager;
 
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import java.sql.SQLException;
 import java.util.concurrent.Callable;
 
+import static com.abc.foaled.helpers.DateTimeHelper.DATE_FORMATTER;
+
 public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 	implements DatePickerDialog.OnDateSetListener {
 
-	Horse horse;
-	int horseID;
+	private Horse horse;
+	private int horseID;
 
 	private PopupWindow currPopupWindow;
 	private String sire;
 	private String currDate = "";
 	private CoordinatorLayout layout;
-	DateTimeFormatter dateFormatter = DateTimeFormat.forPattern("dd/MM/yyyy");
-	//DateTimeFormatter dateAndTimeFormatter = DateTimeFormat.forPattern("dd/MM/yyyy - HH:mm");
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +86,8 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 		setup();
 	}
 
+
+
 	/**
 	 * Inflates the custom menu items in to the menu on the toolbar
 	 *
@@ -112,9 +112,9 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
 		if (currPopupWindow != null && currPopupWindow.isShowing()) {
-			EditText et = (EditText) currPopupWindow.getContentView().findViewById(R.id.horseName);
+			EditText et = currPopupWindow.getContentView().findViewById(R.id.horseName);
 			savedInstanceState.putString("sire", et.getText().toString());
-			TextView date = (TextView) currPopupWindow.getContentView().findViewById(R.id.conceptionDate);
+			TextView date = currPopupWindow.getContentView().findViewById(R.id.conceptionDate);
 			savedInstanceState.putString("date", date.getText().toString());
 		}
 
@@ -131,7 +131,7 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 	}
 
 
-	public void setup() {
+	private void setup() {
 
 		setContentView(R.layout.activity_horse_detail);
 
@@ -199,6 +199,7 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 		return super.onOptionsItemSelected(item);
 	}
 
+	@SuppressWarnings("UnusedParameters")
 	public void addNewPregnancy(View v) {
 
 		FloatingActionsMenu fab = (FloatingActionsMenu) findViewById(R.id.multiple_actions);
@@ -210,7 +211,7 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 		if (!currDate.isEmpty())
 			((TextView) popupView.findViewById(R.id.conceptionDate)).setText(currDate);
 		else
-			((TextView) popupView.findViewById(R.id.conceptionDate)).setText(DateTime.now().toString(dateFormatter));
+			((TextView) popupView.findViewById(R.id.conceptionDate)).setText(DateTime.now().toString(DATE_FORMATTER));
 
 		currPopupWindow = new PopupWindow(popupView,
 				ViewGroup.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, true);
@@ -250,6 +251,7 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 	 *
 	 * @param v The view that led us here
 	 */
+	@SuppressWarnings("UnusedParameters")
 	public void deleteHorse(View v) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		final AlertDialog dialog;
@@ -299,6 +301,7 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 		dialog.show();
 	}
 
+	@SuppressWarnings("UnusedParameters")
 	public void cancel(View v) {
 		currPopupWindow.dismiss();
 		currPopupWindow = null;
@@ -309,7 +312,7 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 		view = view.getRootView();
 
 		String conceptionDateString = ((TextView) view.findViewById(R.id.conceptionDate)).getText().toString();
-		DateTime conceptionDate = dateFormatter.parseDateTime(conceptionDateString);
+		DateTime conceptionDate = DATE_FORMATTER.parseDateTime(conceptionDateString);
 
 		String sire = ((TextView) view.findViewById(R.id.horseName)).getText().toString();
 
@@ -335,11 +338,12 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 	public void onDateSet(DatePicker view, int year, int month, int day) {
 		int textViewID = R.id.conceptionDate;
 
-		TextView dateField = (TextView) currPopupWindow.getContentView().findViewById(textViewID);
+		TextView dateField = currPopupWindow.getContentView().findViewById(textViewID);
 		String parsedDob = day + "/" + (month + 1) + "/" + year;
 		dateField.setText(parsedDob);
 	}
 
+	@SuppressWarnings("UnusedParameters")
 	public void giveBirth(View view) {
 		Birth b = horse.getCurrentBirth();
 		b.setBirthTime(DateTime.now());

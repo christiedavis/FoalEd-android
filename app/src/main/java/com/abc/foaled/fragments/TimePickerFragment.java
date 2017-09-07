@@ -8,17 +8,14 @@ import android.app.TimePickerDialog;
 import android.os.Bundle;
 
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
+
+import static com.abc.foaled.helpers.DateTimeHelper.TIME_FORMATTER;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class TimePickerFragment extends DialogFragment {
-
-
-	DateTimeFormatter timeFormatter = DateTimeFormat.forPattern("HH:mm");
 
 	private String passedInTime;
 	private TimePickerDialog.OnTimeSetListener listener;
@@ -49,7 +46,7 @@ public class TimePickerFragment extends DialogFragment {
 
 		if (!parsedTime.equals(passedInTime)) {
 
-			DateTime parsedDate = timeFormatter.parseDateTime(passedInTime);
+			DateTime parsedDate = TIME_FORMATTER.parseDateTime(passedInTime);
 			minute = parsedDate.getMinuteOfHour();
 			hour = parsedDate.getHourOfDay();
 

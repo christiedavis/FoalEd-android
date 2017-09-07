@@ -36,12 +36,13 @@
     </LinearLayout>
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/content_add_new_horse"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/add_horse_buttons"
-        android:isScrollContainer="true">
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/content_add_new_horse"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:isScrollContainer="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true">
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -125,6 +126,7 @@
                             android:maxLines="1" />
                     </TableRow>
 
+                    <!--TODO Christie, wtf is a DAN????-->
                     <!--Dan-->
                     <TableRow android:paddingBottom="5dp">
 
@@ -252,7 +254,7 @@
                             android:onClick="togglePregnant" />
                     </TableRow>
 
-                    <!--Babyrow-->
+                    <!--Conception date, if pregnant-->
                     <TableRow
                         android:id="@+id/conceptionRow"
                         android:paddingBottom="5dp"
