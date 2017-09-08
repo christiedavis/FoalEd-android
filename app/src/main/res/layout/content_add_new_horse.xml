@@ -4,6 +4,13 @@
     android:layout_height="match_parent"
     android:layout_marginTop="?attr/actionBarSize">
 
+    <View
+        android:id="@+id/horizontalBar"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#FF000000"
+        android:layout_above="@+id/add_horse_buttons"/>
+
     <LinearLayout
         android:id="@+id/add_horse_buttons"
         android:layout_width="match_parent"
@@ -18,7 +25,7 @@
             android:layout_weight="1"
             android:onClick="insert"
             android:text="SAVE"
-            android:textAlignment="center" />
+            android:textAlignment="center"/>
 
         <View
             android:layout_width="1dp"
@@ -40,7 +47,7 @@
         android:id="@+id/content_add_new_horse"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/add_horse_buttons"
+        android:layout_above="@+id/horizontalBar"
         android:isScrollContainer="true">
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
