@@ -45,6 +45,9 @@ public class NumberPickerFragment extends DialogFragment {
         View v = inflater.inflate(R.layout.fragment_number_picker, null);
         builder.setView(v);
 
+
+        NumberPicker
+
         picker = (NumberPicker) v.findViewById(R.id.numberPicker);
         picker.setMaxValue(0);
         picker.setMinValue(40);

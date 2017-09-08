@@ -1,24 +1,22 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="wrap_content"
     android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
-
-    >
+    android:gravity="center_horizontal">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:textAlignment="center"
         android:text="Select Horse age"
-        />
+        android:textAlignment="center"/>
 
-    <NumberPicker xmlns:android="http://schemas.android.com/apk/res/android"
+    <NumberPicker
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/numberPicker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:tag="Select horse age"
-        android:id="@+id/numberPicker"
-       />
+        android:tag="Select horse age"/>
 
 </LinearLayout>
