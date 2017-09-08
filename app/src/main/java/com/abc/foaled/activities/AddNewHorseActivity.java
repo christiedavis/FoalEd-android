@@ -292,7 +292,7 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
 	 */
 	private void photoDialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		final String[] items = getResources().getStringArray(imagePath.isEmpty() ? R.array.no_photo : R.array.new_photo);
+		final String[] items = getResources().getStringArray(imagePath == null || imagePath.isEmpty() ? R.array.no_photo : R.array.new_photo);
 		builder.setTitle("Change photo")
 				.setItems(items, new DialogInterface.OnClickListener() {
 					@Override

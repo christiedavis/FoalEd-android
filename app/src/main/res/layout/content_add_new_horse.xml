@@ -50,14 +50,31 @@
             android:orientation="vertical"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <ImageView
-                android:id="@+id/add_horse_image"
-                android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:contentDescription="Horse Photo"
-                android:onClick="selectPhoto"
-                android:scaleType="centerCrop"
-                android:src="@drawable/default_horse" />
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="selectPhoto">
+
+                <ImageView
+                    android:id="@+id/add_horse_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:contentDescription="Horse Photo"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/default_horse" />
+
+                <!--TODO make this not be right on the bottom-->
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_add_a_photo_white_24dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"/>
+
+            </RelativeLayout>
 
             <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/add_horse_card"
