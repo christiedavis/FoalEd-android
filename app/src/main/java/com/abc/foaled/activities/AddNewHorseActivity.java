@@ -176,17 +176,19 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
 
 		//DOB------------------------------------------
 	    String dobString = ((TextView) findViewById(R.id.newHorseAge)).getText().toString();
-	    DateTime dob = DATE_FORMATTER.parseDateTime(dobString);
+	    int age = Integer.valueOf(dobString);
+//	    DateTime dob = DATE_FORMATTER.parseDateTime(dobString);
 
+
+//	    TODO I do not like this age part. It does not fit well within the Birth model. I prefer making them choose DOB.
 	    //create empty birth instance for horse we are adding
-	    Birth birth = new Birth(null, null, null, dob);
+	    Birth birth = new Birth(null, null, null, DateTime.now().minusYears(age));
 
 	    //status of horse
 		Horse.HORSE_STATUS status = Horse.HORSE_STATUS.DORMANT;
 
 		//assumes a horse can't get pregnant at less than a year old
-		if (DateTimeHelper.getAgeInYears(dob) < 1)
-			status = Horse.HORSE_STATUS.FOAL;
+		if (age < 1) status = Horse.HORSE_STATUS.FOAL;
 
 
 		//TODO shall we make a 'pick status' dialog that lets the user choose the status of the horse??????
@@ -229,16 +231,6 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
 
 	    AlertDialog alertDialog = d.create();
 	    alertDialog.show();
-
-/*
-		String age = ((TextView) view).getText().toString();
-
-		DateTime conception = view.getId() == R.id.newHorseConceptionDate ? DateTime.now().minusYears(1) : null;
-
-		DialogFragment dialog = DatePickerFragment.newInstance(age, this, conception);
-		//used to distinguish between selection dob and conception dates
-		String tag = view.getId() == R.id.newHorseDOB ? "dobPicker" : "conceptionDatePicker";
-        dialog.show(getFragmentManager(), tag);*/
     }
 
 

@@ -174,9 +174,9 @@
                             android:maxLines="1" />
                     </TableRow>
 
-                    <!--DAME-->
+                    <!--DAM-->
                     <TableRow
-                        android:id="@+id/damesNameRow"
+                        android:id="@+id/damNameRow"
                         android:layout_marginBottom="10dp"
                         android:paddingBottom="5dp">
 
@@ -186,17 +186,17 @@
                             android:layout_gravity="center"
                             android:layout_weight="1"
                             android:labelFor="@+id/siresName"
-                            android:text="Dame"
+                            android:text="Dam"
                             android:textAppearance="?android:attr/textAppearanceLarge" />
 
                         <EditText
-                            android:id="@+id/damesName"
+                            android:id="@+id/damsName"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_weight="1"
                             android:ellipsize="end"
-                            android:hint="Dame's name"
+                            android:hint="Dam's name"
                             android:imeOptions="actionDone|flagNoExtractUi"
                             android:inputType="textPersonName|textCapWords"
                             android:maxLines="1" />

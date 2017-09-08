@@ -65,7 +65,7 @@ public class Horse implements Serializable {
     private String breed;
 
     @DatabaseField(canBeNull = true)
-    private String dan;
+    private String dam;
 
     @DatabaseField(canBeNull = true)
     private String sire;
@@ -203,7 +203,7 @@ public class Horse implements Serializable {
     public void setExtraDetails(String breed, String dan, String sire, String colour){
 
         this.breed = breed;
-        this.dan = dan;
+        this.dam = dan;
         this.sire = sire;
         this.colour = colour;
     }
