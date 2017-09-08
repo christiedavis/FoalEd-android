@@ -38,7 +38,7 @@ public class Birth {
     public Birth(Horse mother, String father, DateTime conception, DateTime dob){
 	    horse = null;
         mare = mother;
-        sire = father.isEmpty() ? null : father; //If an empty string was passed as father, make null
+        sire = father; //If an empty string was passed as father, make null
 	    notes = "";
         this.conception = conception;
         birthTime = dob;

@@ -169,7 +169,7 @@
                             android:layout_weight="1"
                             android:ellipsize="end"
                             android:hint="Sire's name"
-                            android:imeOptions="actionDone|flagNoExtractUi"
+                            android:imeOptions="actionNext|flagNoExtractUi"
                             android:inputType="textPersonName|textCapWords"
                             android:maxLines="1" />
                     </TableRow>
@@ -197,7 +197,7 @@
                             android:layout_weight="1"
                             android:ellipsize="end"
                             android:hint="Dam's name"
-                            android:imeOptions="actionDone|flagNoExtractUi"
+                            android:imeOptions="actionNext|flagNoExtractUi"
                             android:inputType="textPersonName|textCapWords"
                             android:maxLines="1" />
                     </TableRow>
@@ -225,7 +225,7 @@
                             android:layout_weight="1"
                             android:ellipsize="end"
                             android:hint="Breed"
-                            android:imeOptions="actionDone|flagNoExtractUi"
+                            android:imeOptions="actionNext|flagNoExtractUi"
                             android:inputType="textPersonName|textCapWords"
                             android:maxLines="1" />
                     </TableRow>
