@@ -114,6 +114,19 @@ public class Horse implements Serializable {
 	    this.imagePath = imagePath != null ? imagePath : "";
     }
 
+    public Horse(String name, Birth dob, String sire, String dam, String breed, String colour, HORSE_STATUS status, String imagePath) {
+	    this.name = name;
+	    this.dateOfBirth = dob;
+	    this.sire = sire;
+	    this.dam = dam;
+	    this.breed = breed;
+	    this.colour = colour;
+	    this.sex = true;
+	    this.notes = "";
+	    this.status = status != null ? status : HORSE_STATUS.DORMANT;
+	    this.imagePath = imagePath != null ? imagePath : "";
+    }
+
 
     public int getHorseID() {
         return horseID;

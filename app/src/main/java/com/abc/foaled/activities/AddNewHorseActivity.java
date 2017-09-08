@@ -78,7 +78,7 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
 	        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		//gets current date
-		String date = DateTime.now().toString(DATE_FORMATTER);
+//		String date = DateTime.now().toString(DATE_FORMATTER);
 
 //        TextView dob = findViewById(R.id.newHorseAge);
 //        TextView concep = findViewById(R.id.newHorseConceptionDate);
@@ -184,15 +184,25 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
 	    //create empty birth instance for horse we are adding
 	    Birth birth = new Birth(null, null, null, DateTime.now().minusYears(age));
 
-	    //status of horse
+	    //STATUS----------------------------------------------
 		Horse.HORSE_STATUS status = Horse.HORSE_STATUS.DORMANT;
-
 		//assumes a horse can't get pregnant at less than a year old
 		if (age < 1) status = Horse.HORSE_STATUS.FOAL;
 
+		//BREED-----------------------------------------------
+	    String breed = ((TextView) findViewById(R.id.breed)).getText().toString();
 
-		//TODO shall we make a 'pick status' dialog that lets the user choose the status of the horse??????
-	    Horse horse = new Horse(name, birth, true, null, status, imagePath);
+	    //COLOUR----------------------------------------------
+	    String colour = ((TextView) findViewById(R.id.colour)).getText().toString();
+
+	    //SIRE------------------------------------------------
+	    String sire = ((TextView) findViewById(R.id.siresName)).getText().toString();
+
+	    //DAM-------------------------------------------------
+	    String dam = ((TextView) findViewById(R.id.damsName)).getText().toString();
+
+	    //TODO Make a 'choose status' dialog for the user to interact with
+	    Horse horse = new Horse(name, birth, sire, dam, breed, colour, status, imagePath);
 
 	    //Needs to be done in this order
 	    RuntimeExceptionDao<Horse, Integer> horseDao = getHelper().getHorseDataDao();
@@ -204,9 +214,6 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
 		//attach the new horse to the empty birth instance we made
 		birth.setHorse(horse);
         getHelper().getBirthsDataDao().create(birth);
-
-	    //TODO make a string constant
-	    Snackbar.make(getWindow().getDecorView(), "Successfully added horse", Snackbar.LENGTH_LONG);
 
         finish();
     }
