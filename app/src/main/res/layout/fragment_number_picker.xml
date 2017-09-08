@@ -17,6 +17,7 @@
         android:id="@+id/numberPicker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:tag="Select horse age"/>
+        android:tag="Select horse age"
+        android:descendantFocusability="blocksDescendants"/>
 
 </LinearLayout>

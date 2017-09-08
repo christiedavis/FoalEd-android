@@ -218,12 +218,29 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
         finish();
     }
 
-    public void selectAge(View view) {
+    private int possibleAge;
+
+    public void selectAge(final View view) {
+
+	    final TextView textView = findViewById(R.id.newHorseAge);
 
 	    final AlertDialog.Builder d = new AlertDialog.Builder(AddNewHorseActivity.this);
 	    LayoutInflater inflater = getLayoutInflater();
 	    View dialogView = inflater.inflate(R.layout.fragment_number_picker, null);
 	    d.setView(dialogView);
+	    d.setPositiveButton("SET", new DialogInterface.OnClickListener() {
+		    @Override
+		    public void onClick(DialogInterface dialogInterface, int i) {
+			    textView.setText(possibleAge);
+			    dialogInterface.dismiss();
+		    }
+	    });
+	    d.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+		    @Override
+		    public void onClick(DialogInterface dialogInterface, int i) {
+			    dialogInterface.dismiss();
+		    }
+	    });
 
 	    final NumberPicker picker = dialogView.findViewById(R.id.numberPicker);
 	    picker.setMinValue(0);
@@ -233,6 +250,7 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> {
 		    @Override
 		    public void onValueChange(NumberPicker numberPicker, int i, int i1) {
 //			    Toast.makeText(numberPicker.getContext(), "SELECTED", Toast.LENGTH_LONG).show();
+			    possibleAge = i1;
 		    }
 	    });
 
