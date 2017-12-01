@@ -362,4 +362,67 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 
 		finish();
 	}
+
+	public void editPregnancy(View view) {
+
+		View popupView = getLayoutInflater().inflate(R.layout.fragment_edit_pregnancy, null);
+        if (horse.getCurrentBirth().getSire() != null) {
+            ((EditText) popupView.findViewById(R.id.siresName)).setText(horse.getCurrentBirth().getSire());
+        }
+        ((TextView) popupView.findViewById(R.id.conceptionDate)).setText(horse.getCurrentBirth().getConception().toString(dateFormatter));
+
+			currPopupWindow = new PopupWindow(popupView,
+					ViewGroup.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, true);
+
+			currPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+				@Override
+				public void onDismiss() {
+					CoordinatorLayout layout = (CoordinatorLayout) findViewById(R.id.horse_detail_screen);
+					if (Build.VERSION.SDK_INT > 22)
+						layout.getForeground().setAlpha(0);
+				}
+			});
+			currPopupWindow.setAnimationStyle(R.style.Animation);
+			layout.post(new Runnable() {
+				@Override
+				public void run() {
+					currPopupWindow.showAtLocation(layout, Gravity.CENTER, 0, 0);
+					if (Build.VERSION.SDK_INT > 22)
+						layout.getForeground().setAlpha(220);
+				}
+			});
+	}
+
+    public void savePregnancyEdit(View view) {
+
+        view = view.getRootView();
+
+        String conceptionDateString = ((TextView) view.findViewById(R.id.conceptionDate)).getText().toString();
+        DateTime conceptionDate = dateFormatter.parseDateTime(conceptionDateString);
+
+        String sire = ((TextView) view.findViewById(R.id.siresName)).getText().toString();
+
+        Birth birth = horse.getCurrentBirth();
+        birth.setConception(conceptionDate);
+        birth.setSire(sire);
+
+        getHelper().getBirthsDataDao().update(birth);
+
+        cancel(view);
+        recreate();
+    }
+
+    public void deletePregnancy(View view) {
+        view = view.getRootView();
+
+        Birth birth = horse.getCurrentBirth();
+        getHelper().getBirthsDataDao().delete(birth);
+
+        horse.setCurrentBirth(null);
+        horse.setStatus(Horse.HORSE_STATUS.DORMANT);
+        getHelper().getHorseDataDao().update(horse);
+
+        cancel(view);
+        recreate();
+    }
 }

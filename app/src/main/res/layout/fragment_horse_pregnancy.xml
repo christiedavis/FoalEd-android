@@ -7,7 +7,6 @@
               android:orientation="vertical"
               tools:context="com.abc.foaled.fragments.HorsePregnancyFragment">
 
-
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -80,7 +79,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/horseName"
                 android:paddingBottom="8dp"
-                android:text="@string/notes"/>
+                android:text="@string/notes_about_this_pregnancy"/>
 
             <TextView
                 android:id="@+id/notes"
@@ -111,7 +110,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/viewNotes"
                 android:layout_centerHorizontal="true"
-                android:text="@string/edit_pregnancy"/>
+                android:text="@string/edit_pregnancy"
+                android:onClick="editPregnancy"/>
 
             <Button
                 android:id="@+id/giveBirth"

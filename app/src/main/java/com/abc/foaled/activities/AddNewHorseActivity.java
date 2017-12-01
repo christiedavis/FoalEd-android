@@ -193,9 +193,9 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
 		EditText breedET = (EditText) findViewById(R.id.horseBreed);
 		String breed = breedET.getText().toString();
 
-		// DAN -------------
-		EditText danET = (EditText) findViewById(R.id.newHorseDan);
-		String dan = danET.getText().toString();
+		// DAm -------------
+		EditText damET = (EditText) findViewById(R.id.newHorseDam);
+		String dam = damET.getText().toString();
 
 		// Colour -------------
 		EditText colourEt = (EditText) findViewById(R.id.newHorseColour);
@@ -223,7 +223,7 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
 
 		//TODO make a 'pick status' dialog that lets the user choose the status of the horse
 	    Horse horse = new Horse(name, birth, female, null, status, imagePath);
-	   horse.setExtraDetails(breed, dan, sire, colour);
+	   horse.setExtraDetails(breed, dam, sire, colour);
 
 	      //Needs to be done in this order
 	    RuntimeExceptionDao<Horse, Integer> horseDao = getHelper().getHorseDataDao();

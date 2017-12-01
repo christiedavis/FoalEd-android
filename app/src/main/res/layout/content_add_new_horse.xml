@@ -132,17 +132,17 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Dan"
+                            android:text="Dam"
                             android:textAppearance="?android:attr/textAppearanceLarge" />
 
                         <EditText
-                            android:id="@+id/newHorseDan"
+                            android:id="@+id/newHorseDam"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_weight="1"
                             android:ellipsize="end"
-                            android:hint="Dan of Horse"
+                            android:hint="Dam of Horse"
                             android:imeOptions="actionDone|flagNoExtractUi"
                             android:inputType="textPersonName|textCapWords"
                             android:maxLines="1" />

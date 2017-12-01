@@ -91,5 +91,6 @@
     <string name="sire">Sire</string>
     <string name="expected_birth_date">Expected Birth Date</string>
     <string name="pregnancy">Pregnancy</string>
+    <string name="notes_about_this_pregnancy">Notes about this pregnancy</string>
 
 </resources>
