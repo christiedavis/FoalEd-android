@@ -47,9 +47,10 @@ import net.hockeyapp.android.UpdateManager;
 
 public class MainActivity extends ORMBaseActivity<DatabaseHelper>
 		implements NavigationView.OnNavigationItemSelectedListener, HorsesListFragment.OnListFragmentInteractionListener,
-		NotificationSettingsFragment.OnFragmentInteractionListener, EmptyHorseFragment.OnFragmentInteractionListener  {
+		EmptyHorseFragment.OnFragmentInteractionListener  {
 
-	public static AlarmManager alarmManager;
+	private static AlarmManager alarmManager;
+	public static final int API_LEVEL = android.os.Build.VERSION.SDK_INT;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

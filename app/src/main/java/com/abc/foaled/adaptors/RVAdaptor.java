@@ -24,17 +24,17 @@ import java.util.List;
 
 public class RVAdaptor extends RecyclerView.Adapter<RVAdaptor.HorseViewHolder>{
 
-    private List<Horse> horses;
+    private final List<Horse> horses;
 
     public RVAdaptor(List<Horse> horses) { this.horses = horses; }
 
     static class HorseViewHolder extends RecyclerView.ViewHolder {
 
-        CardView cv;
-        TextView horseName;
-        TextView horseStatus;
-        ImageView horsePhoto;
-        ImageView favouriteIcon;
+        final CardView cv;
+        final TextView horseName;
+        final TextView horseStatus;
+        final ImageView horsePhoto;
+        final ImageView favouriteIcon;
 
         int horseID;
         private final Context c = itemView.getContext();
@@ -94,8 +94,4 @@ public class RVAdaptor extends RecyclerView.Adapter<RVAdaptor.HorseViewHolder>{
         holder.favouriteIcon.setImageResource(star);
     }
 
-    @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-    }
 }

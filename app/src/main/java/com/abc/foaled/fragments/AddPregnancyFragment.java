@@ -1,7 +1,5 @@
 package com.abc.foaled.fragments;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,13 +9,13 @@ import android.widget.TextView;
 
 import com.abc.foaled.R;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Locale;
+import org.joda.time.DateTime;
+
+import static com.abc.foaled.helpers.DateTimeHelper.DATE_FORMATTER;
 
 public class AddPregnancyFragment extends Fragment {
 
-    public static final String TAG = "add-pregnancy-fragment-tag";
+
 
     public static AddPregnancyFragment newInstance() {
 		AddPregnancyFragment fragment = new AddPregnancyFragment();
@@ -30,10 +28,10 @@ public class AddPregnancyFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add_pregnancy, container, false);
-        TextView dateText = (TextView) view.findViewById(R.id.conceptionDate);
+        TextView dateText = view.findViewById(R.id.conceptionDate);
 
 
-        String date = new SimpleDateFormat("dd/MM/yyyy", Locale.UK).format(Calendar.getInstance().getTime());
+        String date = DateTime.now().toString(DATE_FORMATTER);
         dateText.setText(date);
 
         dateText.setOnClickListener(new View.OnClickListener() {

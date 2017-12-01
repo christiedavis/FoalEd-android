@@ -22,7 +22,7 @@ import com.abc.foaled.models.Horse;
 
 public class MilestoneAdaptor extends RecyclerView.Adapter<MilestoneAdaptor.MilestoneViewHolder> {
 
-    private Horse horse;
+    private final Horse horse;
 
     public MilestoneAdaptor(Horse horse) {
         this.horse = horse;
@@ -84,9 +84,5 @@ public class MilestoneAdaptor extends RecyclerView.Adapter<MilestoneAdaptor.Mile
             holder.completedIcon.setImageResource(R.drawable.ic_favourite_unfilled);
     }
 
-    @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-    }
 }
 

@@ -8,8 +8,8 @@ import android.app.Fragment;
 import android.os.Bundle;
 
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
+
+import static com.abc.foaled.helpers.DateTimeHelper.DATE_FORMATTER;
 
 
 /**
@@ -19,8 +19,6 @@ import org.joda.time.format.DateTimeFormatter;
  */
 public class DatePickerFragment extends DialogFragment {
 	boolean time = false;
-
-	DateTimeFormatter dateFormatter = DateTimeFormat.forPattern("dd/MM/yyyy");
 
 	private String date;
 	private DatePickerDialog.OnDateSetListener listener;
@@ -75,7 +73,7 @@ public class DatePickerFragment extends DialogFragment {
 		//if the passed in date is not
 		if (!stringDate.equals(date)) {
 
-			DateTime parsedDate = dateFormatter.parseDateTime(date);
+			DateTime parsedDate = DATE_FORMATTER.parseDateTime(date);
 			year = parsedDate.getYear();
 			month = parsedDate.getMonthOfYear()-1;
 			day = parsedDate.getDayOfMonth();

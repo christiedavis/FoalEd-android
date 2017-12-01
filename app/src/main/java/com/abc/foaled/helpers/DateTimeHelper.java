@@ -16,6 +16,8 @@ import java.util.Calendar;
 public class DateTimeHelper {
 
 	public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormat.forPattern("dd/MM/yyyy");
+	public static final DateTimeFormatter TIME_FORMATTER = DateTimeFormat.forPattern("HH:mm");
+	public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormat.forPattern("dd/MM/yyyy - HH:mm");
 
 	/**
 	 * Calculates the age of a horse and returns the string representation of the age
@@ -111,6 +113,7 @@ public class DateTimeHelper {
 
 	}
 
+	//TODO get this displaying the correct time overdate
 	private static String getBirthOverdueTime(DateTime birthTime) {
 		DateTime now = DateTime.now();
 
@@ -131,13 +134,4 @@ public class DateTimeHelper {
 	public static int getAgeInDays(DateTime birth) {
 		return Days.daysBetween(birth, DateTime.now()).getDays();
 	}
-
-
-    public static int getYear(Date date) {
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-
-        return calendar.get(Calendar.YEAR);
-    }
 }

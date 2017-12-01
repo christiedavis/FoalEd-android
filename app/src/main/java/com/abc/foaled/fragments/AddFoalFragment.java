@@ -18,7 +18,6 @@ public class AddFoalFragment extends Fragment {
         // Required empty public constructor
     }
 
-    // TODO: Rename and change types and number of parameters
     public static AddFoalFragment newInstance() {
         AddFoalFragment fragment = new AddFoalFragment();
         Bundle args = new Bundle();
@@ -27,22 +26,10 @@ public class AddFoalFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_add_foal, container, false);
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onAddFoalFragmentInteraction(uri);
-        }
     }
 
     @Override

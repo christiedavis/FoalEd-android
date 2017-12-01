@@ -3,7 +3,6 @@ package com.abc.foaled.activities;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -14,6 +13,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 
 import android.app.DialogFragment;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.FileProvider;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -26,7 +26,6 @@ import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.abc.foaled.database.DatabaseHelper;
@@ -45,6 +44,7 @@ import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.DateTimeParser;
 
 import java.awt.font.NumericShaper;
 import java.io.File;
@@ -57,20 +57,21 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
+import java.util.Locale;
+import static com.abc.foaled.MainActivity.API_LEVEL;
+import static com.abc.foaled.helpers.DateTimeHelper.DATE_FORMATTER;
 import static com.abc.foaled.helpers.PermissionsHelper.hasPermissions;
 import static com.abc.foaled.helpers.PermissionsHelper.getPermissions;
 
 public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> implements
-		DatePickerDialog.OnDateSetListener, NumberPicker.OnValueChangeListener {
+		DatePickerDialog.OnDateSetListener {
 
-    static final int REQUEST_IMAGE_CAPTURE = 1;
-    static final int REQUEST_IMAGE_SELECT = 2;
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int REQUEST_IMAGE_SELECT = 2;
 	private static final int WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 4;
-    private String imagePath = "";
+    private String imagePath = null;
 	private String tempPath = "";
-    static final int API_LEVEL = android.os.Build.VERSION.SDK_INT;
 
 	DateTimeFormatter dateFormatter = DateTimeFormat.forPattern("dd/MM/yyyy");
 	DateTimeFormatter timeFormatter = DateTimeFormat.forPattern("HH:mm");
@@ -82,11 +83,18 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_horse);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-	    if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+	    if (getSupportActionBar() != null)
+	        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+		//gets current date
+		String date = DateTime.now().toString(DATE_FORMATTER);
+
+//        TextView dob = findViewById(R.id.newHorseDOB);
+        TextView concep = findViewById(R.id.newHorseConceptionDate);
+//        dob.setText(date);
+        concep.setText(date);
     }
 
     /**
@@ -105,11 +113,14 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
 			    imagePath = tempPath;
 		    } else if (requestCode == REQUEST_IMAGE_SELECT) {
 			    try {
-				    InputStream is;
-				    is = getContentResolver().openInputStream(data.getData());
+				    //Open up the image selected
+				    InputStream is = getContentResolver().openInputStream(data.getData());
 
 				    if (is != null) {
+					    //Creates a new empty file and assigns it to imagePath
 					    imagePath = ImageHelper.createImageFile(this);
+
+					    //Copies the selected image into our own directory
 					    if (imagePath != null) {
 						    OutputStream fos = new FileOutputStream(imagePath);
 
@@ -126,18 +137,21 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
 					    throw new FileNotFoundException("Unable to find this file");
 
 			    }  catch (IOException e) {
-				    Toast.makeText(this, "unable to read in this photo", Toast.LENGTH_LONG).show();
-				    Log.e("image_select", e.getMessage());
+				    Toast.makeText(this, "Unable to read in this photo", Toast.LENGTH_LONG).show();
+				    Log.e("IMAGE SELECTION", e.getMessage());
 				    e.printStackTrace();
 
 			    }
 		    }
 
-		    ImageView iV = ((ImageView) findViewById(R.id.add_horse_image));
+		    //set the image, selected or captured, in the image view
+		    ImageView iV = findViewById(R.id.add_horse_image);
 		    int height = iV.getHeight() == 0 ? 300 : iV.getHeight();
 		    int width = iV.getWidth() == 0 ? 300 : iV.getWidth();
 		    iV.setImageBitmap(ImageHelper.bitmapSmaller(imagePath, width, height));
+
 	    } else {
+		    //if we went to take a photo and then cancelled, try to delete the empty file we had created
 		    if (requestCode == REQUEST_IMAGE_CAPTURE) {
 			    File f = new File(tempPath);
 			    if (!f.delete())
@@ -162,7 +176,7 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
     public void insert(View view) {
 
 	    //Get name. Throw error if no name supplied
-        EditText nameEditText = (EditText) findViewById(R.id.horseName);
+        EditText nameEditText = findViewById(R.id.horseName);
         if (nameEditText.getText().toString().isEmpty()) {
             nameEditText.setError("Please don't leave name blank");
             return;
@@ -171,11 +185,11 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
 	    String name = nameEditText.getText().toString();
 
 		//DOB------------------------------------------
-		// done by taking age and setting dob to today at the appropriate year
-	    String ageString = ((EditText) findViewById(R.id.newHorseAge)).getText().toString();
+//	    String dobString = ((TextView) findViewById(R.id.newHorseDOB)).getText().toString();//TODO FIX THIS
+	    DateTime dob = DATE_FORMATTER.parseDateTime(DateTime.now().minusYears(3).toString());
 
 		Calendar today = Calendar.getInstance();
-		Integer yob = today.get(Calendar.YEAR) - new Integer(ageString);
+		Integer yob = today.get(Calendar.YEAR) - Integer.valueOf(3);
 
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.YEAR, yob );
@@ -202,30 +216,30 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
 		String colour = colourEt.getText().toString();
 
 		// SIRES NAME -------------------
-		EditText sireET = (EditText) findViewById(R.id.siresName);
-		String sire = sireET.getText().toString();
+		String sire = ((EditText) findViewById(R.id.siresName)).getText().toString();
 
 		Date date = new Date();
 	    //create empty birth instance for horse
 	    Birth birth = new Birth(null, sire, null, ageDateTime);
 
-	    Boolean female = true;
-	    CheckBox pregnantCB = (CheckBox) findViewById(R.id.checkboxPregnant);
-		Boolean pregnant = pregnantCB.isChecked();
+	    //PREGNANT STATUS -------------------------------------
+	    Boolean pregnant = ((CheckBox) findViewById(R.id.checkboxPregnant)).isChecked();
 
-	    //---------status of horse------
+	    //status of horse
 		Horse.HORSE_STATUS status = Horse.HORSE_STATUS.DORMANT;
+
 		//assumes a horse can't get pregnant at less than a year old
-		if (DateTimeHelper.getAgeInYears(ageDateTime) < 1)
+		if (DateTimeHelper.getAgeInYears(dob) < 1)
 			status = Horse.HORSE_STATUS.FOAL;
 		else if (pregnant)
 			status = Horse.HORSE_STATUS.PREGNANT;
 
+
 		//TODO make a 'pick status' dialog that lets the user choose the status of the horse
-	    Horse horse = new Horse(name, birth, female, null, status, imagePath);
+	    Horse horse = new Horse(name, birth, true, null, status, imagePath);
 	   horse.setExtraDetails(breed, dam, sire, colour);
 
-	      //Needs to be done in this order
+	    //Needs to be done in this order
 	    RuntimeExceptionDao<Horse, Integer> horseDao = getHelper().getHorseDataDao();
 	    horseDao.assignEmptyForeignCollection(horse, "milestones");
 	    horseDao.assignEmptyForeignCollection(horse, "births");
@@ -233,18 +247,21 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
 	    horseDao.create(horse);
 
 		//Make a new birth object if the horse is pregnant
-        //todo
-//		if (horse.getStatus() == Horse.HORSE_STATUS.PREGNANT) {
-//			String concep = ((TextView) findViewById(R.id.newHorseConceptionDate)).getText().toString();
-//			DateTime conceptionDate = dateFormatter.parseDateTime(concep);
-//			String foalSire = ((TextView) findViewById(R.id.siresName)).getText().toString();
-//			Birth b = new Birth(horse, foalSire, conceptionDate, conceptionDate.plusDays(getResources().getInteger(R.integer.days_to_birth)));
-//			getHelper().getBirthsDataDao().create(b);
-//			horse.setCurrentBirth(b);
-//			horseDao.update(horse);
-//		}
+		if (horse.getStatus() == Horse.HORSE_STATUS.PREGNANT) {
+			//get conception date
+			String concep = ((TextView) findViewById(R.id.newHorseConceptionDate)).getText().toString();
+			DateTime conceptionDate = DATE_FORMATTER.parseDateTime(concep);
 
-		//make the horse the horse in the birth object
+			//creates birth
+			Birth b = new Birth(horse, sire, conceptionDate, conceptionDate.plusDays(getResources().getInteger(R.integer.days_to_birth)));
+			getHelper().getBirthsDataDao().create(b);
+
+			//attach current pregnancy birth object to the horse we are also adding
+			horse.setCurrentBirth(b);
+			horseDao.update(horse);
+		}
+
+		//attach the new horse to the empty birth instance we made
 		birth.setHorse(horse);
         getHelper().getBirthsDataDao().create(birth);
 
@@ -253,15 +270,12 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
 
     public void togglePregnant(final View view) {
         CheckBox checkBox = (CheckBox) view;
-	    final ScrollView scrollView = (ScrollView) findViewById(R.id.content_add_new_horse);
-        LinearLayout layout = (LinearLayout) findViewById(R.id.conceptionRow);
+	    final ScrollView scrollView = findViewById(R.id.content_add_new_horse);
+        LinearLayout layout = findViewById(R.id.conceptionRow);
 
-		DateTime dob = dateFormatter.parseDateTime(((TextView) findViewById(R.id.age)).getText().toString());
-
-		Integer age = new Integer(((TextView) findViewById(R.id.age)).getText().toString());
-
-		if (checkBox.isChecked()) {
-			if (age > 2) {
+		DateTime dob = DATE_FORMATTER.parseDateTime(DateTime.now().minusYears(3).toString()); //TODO FIX THIS
+        if (checkBox.isChecked()) {
+			if (Days.daysBetween(dob, DateTime.now()).getDays() > getResources().getInteger(R.integer.foal_to_horse_days)) {
 				layout.setVisibility(View.VISIBLE);
 				findViewById(R.id.siresNameRow).setVisibility(View.VISIBLE);
 				scrollView.post(new Runnable() {
@@ -281,16 +295,6 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
         }
     }
 
-    public void selectAge(View view) {
-
-        String date = ((TextView) view).getText().toString();
-
-        NumberPicker picker = new NumberPicker(this);
-        DialogFragment dialogFragment = NumberPickerFragment.newInstance(date, this);
-        String tag = "SELECT AGE";
-        dialogFragment.show(getFragmentManager(), tag);
-    }
-
     public void selectDate(View view) {
 
 		String date = ((TextView) view).getText().toString();
@@ -299,40 +303,47 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
 
 		DialogFragment dialog = DatePickerFragment.newInstance(date, this, conception);
 		//used to distinguish between selection dob and conception dates
-		String tag = view.getId() == R.id.age ? "dobPicker" : "conceptionDatePicker";
+		String tag = "dobPicker"; //TODO FIX THIS
         dialog.show(getFragmentManager(), tag);
     }
 
     @Override
-    public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-        TextView ageEt = (TextView) findViewById(R.id.newHorseAge);
-        ageEt.setText(newVal);
-    }
-
-    @Override
 	public void onDateSet(DatePicker view, int year, int month, int day) {
-		int textViewID = R.id.newHorseConceptionDate;
+		int textViewID;
+/*		if (getFragmentManager().findFragmentByTag("dobPicker") != null) {//TODO FIX THIS
+			textViewID = R.id.newHorseDOB;
+		} else*/
+			textViewID = R.id.newHorseConceptionDate;
 
-		TextView dateField = (TextView) findViewById(textViewID);
+		TextView dateField = findViewById(textViewID);
 		String parsedDob = day + "/" + (month + 1) + "/" + year;
 		dateField.setText(parsedDob);
-		DateTime birth = dateFormatter.parseDateTime(parsedDob);
-
 	}
 
+	/**
+	 * Requesting to add a photo
+	 * @param view The view clicked that triggers this method
+	 */
     public void selectPhoto(View view) {
-
+	    //Checks to see whether we have the permissions required
 	    if (API_LEVEL >= 23) {
 		    List<String> neededPermissions = hasPermissions(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
 		    //If there are permissions to request, then request all of the ones that aren't accepted
 		    if (!neededPermissions.isEmpty()) {
 			    getPermissions(this, WRITE_EXTERNAL_STORAGE_REQUEST_CODE, neededPermissions);
-		    } else {
-			    photoDialog();
+			    return;
 		    }
 	    }
+	    //if all is above board, continue
+	    photoDialog();
     }
 
+	/**
+	 * Callback for the prompting the user of permissions
+	 * @param requestCode The request code that was passed when requesting the permissions
+	 * @param permissions The list of permissions requests
+	 * @param grantResults The list of permissions, 0 being granted, -1 being denied
+	 */
 	@Override
 	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
@@ -354,6 +365,9 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
 		}
 	}
 
+	/**
+	 * Prompts the user to select how we are getting the new photo
+	 */
 	private void photoDialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		final String[] items = getResources().getStringArray(imagePath.isEmpty() ? R.array.no_photo : R.array.new_photo);
@@ -379,11 +393,10 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
 				.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						//Mandatory onClick override. Don't need to do anything here
+
 					}
 				}).create().show();
 	}
-
 
     /**
      * Let's you choose a photo from the gallery to use as the contact photo
@@ -401,10 +414,12 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
      */
     private void takePhoto() {
 
-//        Creates an empty temporary file in public directory Pictures/Friends, and then calls camera to take a photo
+        //Creates an empty temporary file in public directory Pictures/Friends, and then calls camera to take a photo
         if (this.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
+	        //TODO make this use the ImageHelper class to create the file
+	        //Creates the file and passes the URI to the camera app
             if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
 	            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
 	            String fileName = "JPEG_" + timeStamp;
@@ -421,6 +436,7 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
 		            e.printStackTrace();
 	            }
 
+	            //Gives the image URI to the camera app so the camera app can write to a file in FoalEd's private directory
 	            if (image != null) {
 		            Uri photoURI = FileProvider.getUriForFile(this, "com.abc.foaled.fileprovider", image);
 		            tempPath = image.getAbsolutePath(); //creates a temporary file, saving path in imagePath
@@ -435,8 +451,8 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
      * Removes the user's photo and sets it back to the default one
      */
     private void removePhoto() {
-        imagePath = "";
-        ImageView iV = (ImageView) findViewById(R.id.add_horse_image);
+        imagePath = null;
+        ImageView iV = findViewById(R.id.add_horse_image);
         iV.setImageBitmap(ImageHelper.bitmapSmaller(getResources(), R.drawable.default_horse, iV.getWidth(), iV.getHeight()));
     }
 }
