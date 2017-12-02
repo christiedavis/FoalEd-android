@@ -36,13 +36,14 @@
     </LinearLayout>
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/content_add_new_horse"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:isScrollContainer="true"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentStart="true">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/content_add_new_horse"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="60dp"
+        android:isScrollContainer="true">
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -51,14 +52,29 @@
             android:orientation="vertical"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <ImageView
-                android:id="@+id/add_horse_image"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
-                android:contentDescription="Horse Photo"
-                android:onClick="selectPhoto"
-                android:scaleType="centerCrop"
-                android:src="@drawable/default_horse" />
+                android:onClick="selectPhoto">
+
+                <ImageView
+                    android:id="@+id/add_horse_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="Horse Photo"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/default_horse" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_take_photo"
+                    android:paddingBottom="20dp"
+                    android:paddingEnd="20dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"/>
+            </RelativeLayout>
+
 
             <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/add_horse_card"
@@ -126,7 +142,6 @@
                             android:maxLines="1" />
                     </TableRow>
 
-                    <!--TODO Christie, wtf is a DAN????-->
                     <!--Dan-->
                     <TableRow android:paddingBottom="5dp">
 
@@ -165,18 +180,17 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:hint="Age"
-                            android:inputType="number"
                             android:layout_weight="1"
-                            />
+                            android:hint="Age"
+                            android:inputType="number" />
                         <!--<TextView-->
                         <!--Commented this out because i cant create a number picker :( -->
-                            <!--android:id="@+id/newHorseAge"-->
-                            <!--android:layout_width="0dp"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:layout_gravity="center"-->
-                            <!--android:layout_weight="1"-->
-                            <!--android:onClick="selectAge" />-->
+                        <!--android:id="@+id/newHorseAge"-->
+                        <!--android:layout_width="0dp"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:layout_weight="1"-->
+                        <!--android:onClick="selectAge" />-->
                     </TableRow>
 
                     <!--Colour-->
