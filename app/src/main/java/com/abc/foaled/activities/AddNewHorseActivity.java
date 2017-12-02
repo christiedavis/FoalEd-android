@@ -185,11 +185,11 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
 	    String name = nameEditText.getText().toString();
 
 		//DOB------------------------------------------
-//	    String dobString = ((TextView) findViewById(R.id.newHorseDOB)).getText().toString();//TODO FIX THIS
-	    DateTime dob = DATE_FORMATTER.parseDateTime(DateTime.now().minusYears(3).toString());
+	    String ageString = ((TextView) findViewById(R.id.newHorseAge)).getText().toString();//TODO FIX THIS
+		Integer ageInt = Integer.parseInt(ageString);
 
 		Calendar today = Calendar.getInstance();
-		Integer yob = today.get(Calendar.YEAR) - Integer.valueOf(3);
+		Integer yob = today.get(Calendar.YEAR) - ((ageInt >= 0) ? ageInt : 0);
 
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.YEAR, yob );
@@ -229,7 +229,7 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
 		Horse.HORSE_STATUS status = Horse.HORSE_STATUS.DORMANT;
 
 		//assumes a horse can't get pregnant at less than a year old
-		if (DateTimeHelper.getAgeInYears(dob) < 1)
+		if (DateTimeHelper.getAgeInYears(ageDateTime) < 1)
 			status = Horse.HORSE_STATUS.FOAL;
 		else if (pregnant)
 			status = Horse.HORSE_STATUS.PREGNANT;
@@ -370,7 +370,7 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
 	 */
 	private void photoDialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		final String[] items = getResources().getStringArray(imagePath.isEmpty() ? R.array.no_photo : R.array.new_photo);
+		final String[] items = getResources().getStringArray(imagePath == null ? R.array.no_photo : R.array.new_photo);
 		builder.setTitle("Change photo")
 				.setItems(items, new DialogInterface.OnClickListener() {
 					@Override
