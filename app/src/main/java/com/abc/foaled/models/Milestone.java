@@ -33,10 +33,10 @@ public class Milestone {
 
 	private enum MILESTONE{
 
-        POOP(0), //1 hour from birth
-        PLACENTA(1), //1 hour from birth
-        STAND(2), //1 hour from birth
-        DRINK(3); //2 hours from birth
+        POOP(1), //1 hour from birth
+        PLACENTA(2), //1 hour from birth
+        STAND(3), //1 hour from birth
+        DRINK(4); //2 hours from birth
 
         private final int value;
 
