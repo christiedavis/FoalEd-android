@@ -8,6 +8,8 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import org.joda.time.DateTime;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,6 +23,22 @@ import java.util.List;
 public class Horse implements Serializable {
 
 	public static final String HORSE_ID = "HorseID";
+
+    public String getDam() {
+        return dam;
+    }
+
+    public String getColour() {
+        return colour;
+    }
+
+    public void update(String name, String breed, String dam, String colour, String imagePath) {
+        this.name = name;
+        this.breed = breed;
+        this.dam = dam;
+        this.colour = colour;
+        this.imagePath = imagePath != null ? imagePath : "";
+    }
 
     public enum HORSE_STATUS {
 
@@ -53,8 +71,8 @@ public class Horse implements Serializable {
                     return "Dormant";
             }
         }
-    }
 
+    }
     @DatabaseField(generatedId = true)
     private int horseID;                             //ID
 
@@ -96,11 +114,11 @@ public class Horse implements Serializable {
 
     @ForeignCollectionField(eager = true, columnName = "milestones")
     private Collection<Milestone> milestones;
+
     private List<Milestone> milestoneList;
-
-
 	@ForeignCollectionField(columnName = "births")
 	private ForeignCollection<Birth> pastBirths;
+
 
     public Horse() {
     }
@@ -114,10 +132,10 @@ public class Horse implements Serializable {
 	    this.imagePath = imagePath != null ? imagePath : "";
     }
 
-
     public int getHorseID() {
         return horseID;
     }
+
 
 	public String getName() {
 		return name;
@@ -134,6 +152,10 @@ public class Horse implements Serializable {
 	public void setDateOfBirth(Birth birth) {
 		dateOfBirth = birth;
 	}
+
+    public String getBreed() {
+        return breed;
+    }
 
 	public Birth getCurrentBirth() {
 		return currentBirth;

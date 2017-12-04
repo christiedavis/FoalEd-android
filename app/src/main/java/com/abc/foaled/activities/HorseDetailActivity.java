@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.FragmentTransaction;
@@ -34,6 +35,7 @@ import com.abc.foaled.models.Birth;
 import com.abc.foaled.models.Horse;
 import com.abc.foaled.R;
 import com.abc.foaled.models.Milestone;
+import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.j256.ormlite.misc.TransactionManager;
 
@@ -46,6 +48,8 @@ import static com.abc.foaled.helpers.DateTimeHelper.DATE_FORMATTER;
 
 public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 	implements DatePickerDialog.OnDateSetListener {
+
+    public static final int HORSE_EDIT_REQUEST_CODE = 31;
 
 	private Horse horse;
 	private int horseID;
@@ -428,5 +432,21 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 
         cancel(view);
         recreate();
+    }
+
+    public void editHorseDetails(View v) {
+        FloatingActionsMenu menu = (FloatingActionsMenu) v.getParent();
+        menu.collapse();
+        Intent intent = new Intent(this, EditHorseActivity.class);
+        intent.putExtra(Horse.HORSE_ID, horseID);
+        startActivityForResult(intent, HORSE_EDIT_REQUEST_CODE);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == HORSE_EDIT_REQUEST_CODE && resultCode == RESULT_OK) {
+            recreate();
+        }
     }
 }

@@ -18,7 +18,8 @@
             android:layout_weight="1"
             android:onClick="insert"
             android:text="SAVE"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            android:id="@+id/saveButton"/>
 
         <View
             android:layout_width="1dp"
@@ -216,6 +217,8 @@
                             android:maxLines="1" />
                     </TableRow>
 
+
+                    <!--These are hidden by default. Was intended to use for adding a horse that is pregnant-->
                     <!--SIRES NAME-->
                     <TableRow
                         android:id="@+id/siresNameRow"
