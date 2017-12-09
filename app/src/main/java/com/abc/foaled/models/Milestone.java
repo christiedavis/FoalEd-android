@@ -161,7 +161,7 @@ public class Milestone {
 	public Boolean isCompleted() {
 		return completed;
 	}
-
+	public void toggleCompleted() { this.completed = !this.completed; }
 	void setCompleted(Boolean completed) {
 		this.completed = completed;
 	}

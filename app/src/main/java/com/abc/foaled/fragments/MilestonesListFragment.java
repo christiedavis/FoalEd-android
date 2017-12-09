@@ -18,6 +18,7 @@ import com.abc.foaled.adaptors.MilestoneAdaptor;
 import com.abc.foaled.adaptors.RVAdaptor;
 import com.abc.foaled.models.Horse;
 import com.abc.foaled.models.Milestone;
+import com.j256.ormlite.dao.RuntimeExceptionDao;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +31,7 @@ public class MilestonesListFragment extends Fragment {
     public static final String FRAGMENT_TAG = "milestonesDetailsFragment";
 
     private ArrayList<Milestone> milestoneList;
-
+    private RuntimeExceptionDao<Milestone, Integer> milestonesDataDao;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -40,10 +41,11 @@ public class MilestonesListFragment extends Fragment {
     }
 
     @SuppressWarnings("unused")
-    public static MilestonesListFragment newInstance(ArrayList<Milestone> milestones) {
+    public static MilestonesListFragment newInstance(ArrayList<Milestone> milestones, RuntimeExceptionDao<Milestone, Integer> milestonesDataDao) {
         MilestonesListFragment fragment = new MilestonesListFragment();
         fragment.setArguments(new Bundle());
         fragment.milestoneList = milestones;
+        fragment.milestonesDataDao = milestonesDataDao;
         return fragment;
     }
 
@@ -61,7 +63,7 @@ public class MilestonesListFragment extends Fragment {
         if (view instanceof LinearLayout) {
             Context context = view.getContext();
             ListView listView = view.findViewById(R.id.milestoneList);
-            MilestoneAdaptor adapter = new MilestoneAdaptor(container.getContext(), milestoneList);
+            MilestoneAdaptor adapter = new MilestoneAdaptor(container.getContext(), milestoneList, milestonesDataDao);
             listView.setAdapter(adapter);
             justifyListViewHeightBasedOnChildren(listView);
             listView.setScrollContainer(false);
@@ -91,5 +93,4 @@ public class MilestonesListFragment extends Fragment {
         listView.setLayoutParams(par);
         listView.requestLayout();
     }
-
 }

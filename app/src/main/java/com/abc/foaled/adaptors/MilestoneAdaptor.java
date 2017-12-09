@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -17,6 +18,7 @@ import com.abc.foaled.R;
 import com.abc.foaled.activities.HorseDetailActivity;
 import com.abc.foaled.models.Horse;
 import com.abc.foaled.models.Milestone;
+import com.j256.ormlite.dao.RuntimeExceptionDao;
 
 import java.util.ArrayList;
 
@@ -27,16 +29,15 @@ import java.util.ArrayList;
 
 public class MilestoneAdaptor extends ArrayAdapter<Milestone> {
 
-
-    public MilestoneAdaptor(Context context, ArrayList<Milestone> milestoneArrayList) {
+    RuntimeExceptionDao<Milestone, Integer> milestonesDataDao;
+    public MilestoneAdaptor(Context context, ArrayList<Milestone> milestoneArrayList, RuntimeExceptionDao<Milestone, Integer> milestonesDataDao) {
         super(context, 0, milestoneArrayList);
+        this.milestonesDataDao = milestonesDataDao;
     }
-
-
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Milestone milestone = getItem(position);
+        final Milestone milestone = getItem(position);
 
         if (convertView == null)
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.milestone_list_view, null);
@@ -44,9 +45,27 @@ public class MilestoneAdaptor extends ArrayAdapter<Milestone> {
         TextView title = convertView.findViewById(R.id.milestoneTitle);
         title.setText(milestone.getNotificationTitle());
 
+        CheckBox milestoneCheckbox = convertView.findViewById(R.id.milestoneCheckbox);
+        View.OnClickListener clickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (milestone.isCompleted() == false) { // IDK if this should not be able to be unchecked
+                    milestone.toggleCompleted();
+                    ((CheckBox) view).setChecked(milestone.isCompleted());
+                    milestonesDataDao.update(milestone);
+
+                }
+
+            }
+        };
+
+        milestoneCheckbox.setOnClickListener(clickListener);
+        milestoneCheckbox.setChecked(milestone.isCompleted());
 
         return convertView;
     }
 
-}
+    public void mileStoneCheckboxTapped(View view) {
 
+    }
+}

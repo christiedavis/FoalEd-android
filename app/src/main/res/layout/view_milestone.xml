@@ -31,10 +31,7 @@ android:id="@+id/milestoneView"
             android:id="@+id/milestone_completed"
             android:layout_gravity="right"
             app:srcCompat="@drawable/star_hollowed"
-            android:layout_marginStart="10dp"
-            android:onClick="favouriteAction"/>
-
-
+            android:layout_marginStart="10dp"/>
 
     </LinearLayout>
 

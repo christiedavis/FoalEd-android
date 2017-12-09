@@ -92,7 +92,6 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 	}
 
 
-
 	/**
 	 * Inflates the custom menu items in to the menu on the toolbar
 	 *
@@ -158,13 +157,12 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 
 
 		ArrayList<Milestone> list = (ArrayList)horse.getMilestones();
-		MilestonesListFragment milestonesListFragment = MilestonesListFragment.newInstance(list);
+		MilestonesListFragment milestonesListFragment = MilestonesListFragment.newInstance(list, getHelper().getMilestonesDataDao());
 
 		if (horse.getStatus() == Horse.HORSE_STATUS.FOAL)
 			transaction.replace(R.id.milestoneListFrameLayout, milestonesListFragment, MilestonesListFragment.FRAGMENT_TAG);
 
 		transaction.commit();
-
 
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
