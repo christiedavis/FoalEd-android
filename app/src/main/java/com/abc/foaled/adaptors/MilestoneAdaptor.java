@@ -2,6 +2,7 @@ package com.abc.foaled.adaptors;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -29,21 +30,23 @@ import java.util.ArrayList;
 
 public class MilestoneAdaptor extends ArrayAdapter<Milestone> {
 
-    RuntimeExceptionDao<Milestone, Integer> milestonesDataDao;
+    private RuntimeExceptionDao<Milestone, Integer> milestonesDataDao;
+
     public MilestoneAdaptor(Context context, ArrayList<Milestone> milestoneArrayList, RuntimeExceptionDao<Milestone, Integer> milestonesDataDao) {
         super(context, 0, milestoneArrayList);
         this.milestonesDataDao = milestonesDataDao;
     }
 
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         final Milestone milestone = getItem(position);
 
         if (convertView == null)
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.milestone_list_view, null);
 
         TextView title = convertView.findViewById(R.id.milestoneTitle);
-        title.setText(milestone.getNotificationTitle());
+        title.setText(milestone != null ? milestone.getNotificationTitle() : "No milestone text");
 
         CheckBox milestoneCheckbox = convertView.findViewById(R.id.milestoneCheckbox);
         View.OnClickListener clickListener = new View.OnClickListener() {
@@ -53,9 +56,7 @@ public class MilestoneAdaptor extends ArrayAdapter<Milestone> {
                     milestone.toggleCompleted();
                     ((CheckBox) view).setChecked(milestone.isCompleted());
                     milestonesDataDao.update(milestone);
-
                 }
-
             }
         };
 
@@ -63,9 +64,5 @@ public class MilestoneAdaptor extends ArrayAdapter<Milestone> {
         milestoneCheckbox.setChecked(milestone.isCompleted());
 
         return convertView;
-    }
-
-    public void mileStoneCheckboxTapped(View view) {
-
     }
 }
