@@ -23,7 +23,6 @@
             android:textColor="@android:color/black"
             android:textStyle="bold" />
 
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -85,6 +84,7 @@
                 android:layout_height="wrap_content"
                 android:onClick="cancel"
                 android:text="Cancel" />
+
         </LinearLayout>
 
     </RelativeLayout>

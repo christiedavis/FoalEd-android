@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.FragmentTransaction;
@@ -34,6 +35,7 @@ import com.abc.foaled.models.Birth;
 import com.abc.foaled.models.Horse;
 import com.abc.foaled.R;
 import com.abc.foaled.models.Milestone;
+import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.j256.ormlite.misc.TransactionManager;
 
@@ -46,6 +48,8 @@ import static com.abc.foaled.helpers.DateTimeHelper.DATE_FORMATTER;
 
 public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 	implements DatePickerDialog.OnDateSetListener {
+
+    public static final int HORSE_EDIT_REQUEST_CODE = 31;
 
 	private Horse horse;
 	private int horseID;
@@ -366,4 +370,83 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 
 		finish();
 	}
+
+	public void editPregnancy(View view) {
+
+		View popupView = getLayoutInflater().inflate(R.layout.fragment_edit_pregnancy, null);
+        if (horse.getCurrentBirth().getSire() != null) {
+            ((EditText) popupView.findViewById(R.id.siresName)).setText(horse.getCurrentBirth().getSire());
+        }
+        ((TextView) popupView.findViewById(R.id.conceptionDate)).setText(horse.getCurrentBirth().getConception().toString(DATE_FORMATTER));
+
+			currPopupWindow = new PopupWindow(popupView,
+					ViewGroup.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, true);
+
+			currPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+				@Override
+				public void onDismiss() {
+					CoordinatorLayout layout = (CoordinatorLayout) findViewById(R.id.horse_detail_screen);
+					if (Build.VERSION.SDK_INT > 22)
+						layout.getForeground().setAlpha(0);
+				}
+			});
+			currPopupWindow.setAnimationStyle(R.style.Animation);
+			layout.post(new Runnable() {
+				@Override
+				public void run() {
+					currPopupWindow.showAtLocation(layout, Gravity.CENTER, 0, 0);
+					if (Build.VERSION.SDK_INT > 22)
+						layout.getForeground().setAlpha(220);
+				}
+			});
+	}
+
+    public void savePregnancyEdit(View view) {
+
+        view = view.getRootView();
+
+        String conceptionDateString = ((TextView) view.findViewById(R.id.conceptionDate)).getText().toString();
+        DateTime conceptionDate = DATE_FORMATTER.parseDateTime(conceptionDateString);
+
+        String sire = ((TextView) view.findViewById(R.id.siresName)).getText().toString();
+
+        Birth birth = horse.getCurrentBirth();
+        birth.setConception(conceptionDate);
+        birth.setSire(sire);
+
+        getHelper().getBirthsDataDao().update(birth);
+
+        cancel(view);
+        recreate();
+    }
+
+    public void deletePregnancy(View view) {
+        view = view.getRootView();
+
+        Birth birth = horse.getCurrentBirth();
+        getHelper().getBirthsDataDao().delete(birth);
+
+        horse.setCurrentBirth(null);
+        horse.setStatus(Horse.HORSE_STATUS.DORMANT);
+        getHelper().getHorseDataDao().update(horse);
+
+        cancel(view);
+        recreate();
+    }
+
+    public void editHorseDetails(View v) {
+        FloatingActionsMenu menu = (FloatingActionsMenu) v.getParent();
+        menu.collapse();
+        Intent intent = new Intent(this, EditHorseActivity.class);
+        intent.putExtra(Horse.HORSE_ID, horseID);
+        startActivityForResult(intent, HORSE_EDIT_REQUEST_CODE);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == HORSE_EDIT_REQUEST_CODE && resultCode == RESULT_OK) {
+            recreate();
+        }
+    }
 }

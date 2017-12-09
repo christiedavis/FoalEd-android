@@ -33,10 +33,10 @@ public class Milestone {
 
 	private enum MILESTONE{
 
-        POOP(0), //1 hour from birth
-        PLACENTA(1), //1 hour from birth
-        STAND(2), //1 hour from birth
-        DRINK(3); //2 hours from birth
+        POOP(1), //1 hour from birth
+        PLACENTA(2), //1 hour from birth
+        STAND(3), //1 hour from birth
+        DRINK(4); //2 hours from birth
 
         private final int value;
 
@@ -86,9 +86,13 @@ public class Milestone {
 
         switch (this.milestone) {
             case POOP:
+//            	Below lines are commented out for testing purposes
+
+//            	startTime = birthTime.plusSeconds(10);
 				startTime = birthTime.plusHours(1);     //1 hour after birth
 	            emergencyTime = birthTime.plusHours(4); //4 hours after birth
                 repeatDuration = 1000 * 60 * 30;        //30 minutes repeat
+//				repeatDuration = 1000 * 10;
                 message = "Your horse should have pooped by now";
                 notificationMessage = "It's important your horse poos so that it can empty itself. You might need to give them a laxative.";
                 notificationTitle = "Has your foal pooed?";

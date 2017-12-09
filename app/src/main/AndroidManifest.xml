@@ -91,6 +91,15 @@
         </activity>
 
         <activity
+            android:name=".activities.EditHorseActivity"
+            android:label="@string/edit_horse_screen_label"
+            android:launchMode="singleTop"
+            android:parentActivityName=".activities.HorseDetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden" />
+
+        <activity
             android:name=".activities.faqActivity"
             android:label="FAQ"
             android:parentActivityName=".MainActivity"
