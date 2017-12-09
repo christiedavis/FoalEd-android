@@ -27,12 +27,12 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/conceptionDate"
+                android:layout_alignBaseline="@+id/notificationCheckbox1"
                 android:layout_alignParentStart="true"
                 android:text="@string/conception_date"/>
 
             <TextView
-                android:id="@+id/conceptionDate"
+                android:id="@+id/notificationCheckbox1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
@@ -42,16 +42,16 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/birthDate"
+                android:layout_alignBaseline="@+id/notificationCheckbox2"
                 android:layout_alignParentStart="true"
                 android:text="@string/expected_birth_date"/>
 
             <TextView
-                android:id="@+id/birthDate"
+                android:id="@+id/notificationCheckbox2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_below="@+id/conceptionDate"
+                android:layout_below="@+id/notificationCheckbox1"
                 android:paddingBottom="24dp"
                 android:textStyle="bold"/>
 
@@ -59,16 +59,16 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/horseName"
+                android:layout_alignBaseline="@+id/notificationCheckbox3"
                 android:layout_alignParentStart="true"
                 android:text="@string/sire"/>
 
             <TextView
-                android:id="@+id/horseName"
+                android:id="@+id/notificationCheckbox3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_below="@+id/birthDate"
+                android:layout_below="@+id/notificationCheckbox2"
                 android:paddingBottom="24dp"
                 android:textStyle="bold"/>
 
@@ -77,12 +77,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/horseName"
+                android:layout_below="@+id/notificationCheckbox3"
                 android:paddingBottom="8dp"
                 android:text="@string/notes_about_this_pregnancy"/>
 
             <TextView
-                android:id="@+id/notes"
+                android:id="@+id/notificationCheckbox4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/notesTitle"
@@ -99,7 +99,7 @@
                 style="@style/Widget.AppCompat.Button.Borderless.Colored"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/notes"
+                android:layout_below="@id/notificationCheckbox4"
                 android:layout_centerHorizontal="true"
                 android:text="@string/view_notes"/>
 

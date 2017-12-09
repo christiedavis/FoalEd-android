@@ -39,7 +39,7 @@ public class EditPregnancyFragment extends Fragment {
 	                         Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_edit_pregnancy, container, false);
 
-		TextView conceptionDate = (TextView) view.findViewById(R.id.conceptionDate);
+		TextView conceptionDate = (TextView) view.findViewById(R.id.notificationCheckbox1);
 		TextView siresName = (TextView) view.findViewById(R.id.siresName);
 
 		conceptionDate.setText(birth.getConception().toString(DateTimeHelper.DATE_FORMATTER));
@@ -55,7 +55,7 @@ public class EditPregnancyFragment extends Fragment {
 		view.findViewById(R.id.editPregnancy).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				TextView conceptionDate = (TextView) v.getRootView().findViewById(R.id.conceptionDate);
+				TextView conceptionDate = (TextView) v.getRootView().findViewById(R.id.notificationCheckbox1);
 				TextView siresName = (TextView) v.getRootView().findViewById(R.id.siresName);
 
 				birth.setConception(DateTimeHelper.DATE_FORMATTER.parseDateTime(conceptionDate.getText().toString()));

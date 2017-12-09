@@ -42,16 +42,16 @@ public class HorsePregnancyFragment extends Fragment {
 		View view = inflater.inflate(R.layout.fragment_horse_pregnancy, container, false);
 
 		if (view instanceof LinearLayout) {
-			TextView conceptionDate = (TextView) view.findViewById(R.id.conceptionDate);
+			TextView conceptionDate = (TextView) view.findViewById(R.id.notificationCheckbox1);
 			conceptionDate.setText(this.horse.getCurrentBirth().getConception().toString(DateTimeHelper.DATE_FORMATTER));
 
-			TextView birthDate = (TextView) view.findViewById(R.id.birthDate);
+			TextView birthDate = (TextView) view.findViewById(R.id.notificationCheckbox2);
 			birthDate.setText(this.horse.getCurrentBirth().getConception().plusDays(340).toString(DateTimeHelper.DATE_FORMATTER));
 
-			TextView siresName = (TextView) view.findViewById(R.id.horseName);
+			TextView siresName = (TextView) view.findViewById(R.id.notificationCheckbox3);
 			siresName.setText(this.horse.getCurrentBirth().getSire());
 
-			TextView notes = (TextView) view.findViewById(R.id.notes);
+			TextView notes = (TextView) view.findViewById(R.id.notificationCheckbox4);
 			boolean noNotes = horse.getCurrentBirth().getNotes().isEmpty();
 			String note = noNotes ? "No notes yet" : horse.getCurrentBirth().getNotes();
 			notes.setText(note);

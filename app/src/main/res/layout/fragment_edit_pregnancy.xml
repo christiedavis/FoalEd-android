@@ -26,15 +26,15 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/conceptionDate"
+            android:layout_alignBaseline="@+id/notificationCheckbox1"
             android:layout_alignParentStart="true"
             android:layout_marginBottom="16dp"
-            android:labelFor="@+id/conceptionDate"
+            android:labelFor="@+id/notificationCheckbox1"
             android:text="@string/conception_date"
             android:textStyle="bold"/>
 
         <TextView
-            android:id="@+id/conceptionDate"
+            android:id="@+id/notificationCheckbox1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -55,7 +55,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_below="@id/conceptionDate"
+            android:layout_below="@id/notificationCheckbox1"
             android:ellipsize="end"
             android:hint="@string/sire_s_name"
             android:imeOptions="actionDone|flagNoExtractUi"

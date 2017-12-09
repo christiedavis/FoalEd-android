@@ -13,7 +13,6 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 
 import android.app.DialogFragment;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.FileProvider;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -23,7 +22,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.NumberPicker;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,8 +29,6 @@ import android.widget.Toast;
 import com.abc.foaled.database.DatabaseHelper;
 import com.abc.foaled.database.ORMBaseActivity;
 import com.abc.foaled.fragments.DatePickerFragment;
-import com.abc.foaled.fragments.NumberPickerFragment;
-import com.abc.foaled.fragments.TimePickerFragment;
 import com.abc.foaled.helpers.DateTimeHelper;
 import com.abc.foaled.helpers.ImageHelper;
 import com.abc.foaled.models.Birth;
@@ -44,9 +40,7 @@ import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.DateTimeParser;
 
-import java.awt.font.NumericShaper;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -176,7 +170,7 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
     public void insert(View view) {
 
 	    //Get name. Throw error if no name supplied
-        EditText nameEditText = findViewById(R.id.horseName);
+        EditText nameEditText = findViewById(R.id.notificationCheckbox3);
         if (nameEditText.getText().toString().isEmpty()) {
             nameEditText.setError("Please don't leave name blank");
             return;

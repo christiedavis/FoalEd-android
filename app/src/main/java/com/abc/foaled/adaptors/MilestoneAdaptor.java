@@ -8,80 +8,44 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.abc.foaled.R;
 import com.abc.foaled.activities.HorseDetailActivity;
 import com.abc.foaled.models.Horse;
+import com.abc.foaled.models.Milestone;
+
+import java.util.ArrayList;
 
 /**
  * Created by christie on 20/05/17.
  *
  */
 
-public class MilestoneAdaptor extends RecyclerView.Adapter<MilestoneAdaptor.MilestoneViewHolder> {
+public class MilestoneAdaptor extends ArrayAdapter<Milestone> {
 
-    private final Horse horse;
 
-    public MilestoneAdaptor(Horse horse) {
-        this.horse = horse;
+    public MilestoneAdaptor(Context context, ArrayList<Milestone> milestoneArrayList) {
+        super(context, 0, milestoneArrayList);
     }
 
-    public static class MilestoneViewHolder extends RecyclerView.ViewHolder {
 
-        CardView mv;
-        TextView milestoneTitle;
-        ImageView completedIcon;
-
-        private final Context c = itemView.getContext();
-
-        MilestoneViewHolder(View itemView) {
-            super(itemView);
-            mv = (CardView) itemView.findViewById(R.id.milestoneView);
-            mv.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    final Intent intent;
-
-                    intent = new Intent(c, HorseDetailActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    c.startActivity(intent);
-                }
-            });
-            milestoneTitle = (TextView) itemView.findViewById(R.id.milestone_title);
-            completedIcon = (ImageView) itemView.findViewById(R.id.milestone_completed);
-        }
-    }
 
     @Override
-    public MilestoneViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.view_milestone, viewGroup, false);
+    public View getView(int position, View convertView, ViewGroup parent) {
+        Milestone milestone = getItem(position);
 
-        return new MilestoneViewHolder(v);
-    }
+        if (convertView == null)
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.milestone_list_view, null);
 
-    @Override
-    public int getItemCount() {
-/*
-        if (horse.getMilestones() == null ) {
-            horse.createMilestones();
-        }
-*/
+        TextView title = convertView.findViewById(R.id.milestoneTitle);
+        title.setText(milestone.getNotificationTitle());
 
-            Log.d("Size = " +  Integer.toString(horse.getMilestones().size()), "");
-            return horse.getMilestones().size();
-    }
 
-    @Override
-    public void onBindViewHolder(MilestoneViewHolder holder, int i) {
-        holder.milestoneTitle.setText(horse.getMilestones().get(i).getMessage());
-        holder.completedIcon.setImageResource(R.drawable.ic_favourite_unfilled);
-
-        if (horse.getMilestones().get(i).isCompleted())
-            holder.completedIcon.setImageResource(R.drawable.ic_favourite_filled);
-        else
-            holder.completedIcon.setImageResource(R.drawable.ic_favourite_unfilled);
+        return convertView;
     }
 
 }

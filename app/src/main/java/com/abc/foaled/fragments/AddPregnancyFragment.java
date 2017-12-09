@@ -28,7 +28,7 @@ public class AddPregnancyFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add_pregnancy, container, false);
-        TextView dateText = view.findViewById(R.id.conceptionDate);
+        TextView dateText = view.findViewById(R.id.notificationCheckbox1);
 
 
         String date = DateTime.now().toString(DATE_FORMATTER);

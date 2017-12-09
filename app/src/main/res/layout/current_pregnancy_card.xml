@@ -37,7 +37,7 @@
                     android:text="Conception Date"/>
 
                 <TextView
-                    android:id="@+id/conceptionDate"
+                    android:id="@+id/notificationCheckbox1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -54,11 +54,11 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_weight="1"
                     android:gravity="start"
-                    android:labelFor="@+id/horseName"
+                    android:labelFor="@+id/notificationCheckbox3"
                     android:text="Sire"/>
 
                 <TextView
-                    android:id="@+id/horseName"
+                    android:id="@+id/notificationCheckbox3"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"

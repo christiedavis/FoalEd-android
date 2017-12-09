@@ -2,8 +2,6 @@ package com.abc.foaled.activities;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
-import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -15,27 +13,19 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.CheckBox;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.abc.foaled.R;
 import com.abc.foaled.database.DatabaseHelper;
 import com.abc.foaled.database.ORMBaseActivity;
-import com.abc.foaled.fragments.DatePickerFragment;
-import com.abc.foaled.helpers.DateTimeHelper;
 import com.abc.foaled.helpers.ImageHelper;
 import com.abc.foaled.models.Birth;
 import com.abc.foaled.models.Horse;
-import com.j256.ormlite.dao.RuntimeExceptionDao;
 
 import org.joda.time.DateTime;
-import org.joda.time.Days;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -46,13 +36,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import static com.abc.foaled.MainActivity.API_LEVEL;
-import static com.abc.foaled.helpers.DateTimeHelper.DATE_FORMATTER;
 import static com.abc.foaled.helpers.PermissionsHelper.getPermissions;
 import static com.abc.foaled.helpers.PermissionsHelper.hasPermissions;
 
@@ -107,7 +95,7 @@ public class EditHorseActivity extends ORMBaseActivity<DatabaseHelper> {
 			horsePhoto.setImageBitmap(ImageHelper.bitmapSmaller(horse.getImagePath(), 300, 300));
 
 //		Populates other data
-		((EditText) findViewById(R.id.horseName)).setText(horse.getName());
+		((EditText) findViewById(R.id.notificationCheckbox3)).setText(horse.getName());
 		((EditText) findViewById(R.id.horseBreed)).setText(horse.getBreed());
 		((EditText) findViewById(R.id.newHorseDam)).setText(horse.getDam());
 		((EditText) findViewById(R.id.newHorseAge)).setText(DateTime.now().getYear() - horse.getDateOfBirth().getBirthTime().getYear()+"");
@@ -194,7 +182,7 @@ public class EditHorseActivity extends ORMBaseActivity<DatabaseHelper> {
 		//  delete old photo if this is a new one. Can be determined by this.imagePath being different from horse.getImagePath
 
 //		NAME ----------------
-		EditText nameEditText = findViewById(R.id.horseName);
+		EditText nameEditText = findViewById(R.id.notificationCheckbox3);
 		String name = nameEditText.getText().toString();
 		if (name.isEmpty()) {
 			nameEditText.setError("Required");

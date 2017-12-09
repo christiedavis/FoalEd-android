@@ -30,18 +30,19 @@ import com.abc.foaled.database.DatabaseHelper;
 import com.abc.foaled.database.ORMBaseActivity;
 import com.abc.foaled.fragments.DatePickerFragment;
 import com.abc.foaled.fragments.HorseDetailsFragment;
+import com.abc.foaled.fragments.MilestonesListFragment;
 import com.abc.foaled.helpers.ImageHelper;
 import com.abc.foaled.models.Birth;
 import com.abc.foaled.models.Horse;
 import com.abc.foaled.R;
 import com.abc.foaled.models.Milestone;
-import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.j256.ormlite.misc.TransactionManager;
 
 import org.joda.time.DateTime;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.concurrent.Callable;
 
 import static com.abc.foaled.helpers.DateTimeHelper.DATE_FORMATTER;
@@ -116,13 +117,13 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
 		if (currPopupWindow != null && currPopupWindow.isShowing()) {
-			EditText et = currPopupWindow.getContentView().findViewById(R.id.horseName);
+			EditText et = currPopupWindow.getContentView().findViewById(R.id.notificationCheckbox3);
 			savedInstanceState.putString("sire", et.getText().toString());
-			TextView date = currPopupWindow.getContentView().findViewById(R.id.conceptionDate);
+			TextView date = currPopupWindow.getContentView().findViewById(R.id.notificationCheckbox1);
 			savedInstanceState.putString("date", date.getText().toString());
 		}
-
 		savedInstanceState.putInt(Horse.HORSE_ID, horseID);
+		super.onSaveInstanceState(savedInstanceState);
 	}
 
 	@Override
@@ -153,7 +154,17 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 		HorseDetailsFragment fragment = HorseDetailsFragment.newInstance(horse, getHelper());
-		transaction.replace(R.id.horseDetails,  fragment, HorseDetailsFragment.FRAGMENT_TAG).commit();
+		transaction.replace(R.id.horseDetails,  fragment, HorseDetailsFragment.FRAGMENT_TAG);
+
+
+		ArrayList<Milestone> list = (ArrayList)horse.getMilestones();
+		MilestonesListFragment milestonesListFragment = MilestonesListFragment.newInstance(list);
+
+		if (horse.getStatus() == Horse.HORSE_STATUS.FOAL)
+			transaction.replace(R.id.milestoneListFrameLayout, milestonesListFragment, MilestonesListFragment.FRAGMENT_TAG);
+
+		transaction.commit();
+
 
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
@@ -211,11 +222,11 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 
 		View popupView = getLayoutInflater().inflate(R.layout.fragment_add_pregnancy, null);
 		if (sire != null)
-			((EditText) popupView.findViewById(R.id.horseName)).setText(sire);
+			((EditText) popupView.findViewById(R.id.notificationCheckbox3)).setText(sire);
 		if (!currDate.isEmpty())
-			((TextView) popupView.findViewById(R.id.conceptionDate)).setText(currDate);
+			((TextView) popupView.findViewById(R.id.notificationCheckbox1)).setText(currDate);
 		else
-			((TextView) popupView.findViewById(R.id.conceptionDate)).setText(DateTime.now().toString(DATE_FORMATTER));
+			((TextView) popupView.findViewById(R.id.notificationCheckbox1)).setText(DateTime.now().toString(DATE_FORMATTER));
 
 		currPopupWindow = new PopupWindow(popupView,
 				ViewGroup.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, true);
@@ -315,10 +326,10 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 
 		view = view.getRootView();
 
-		String conceptionDateString = ((TextView) view.findViewById(R.id.conceptionDate)).getText().toString();
+		String conceptionDateString = ((TextView) view.findViewById(R.id.notificationCheckbox1)).getText().toString();
 		DateTime conceptionDate = DATE_FORMATTER.parseDateTime(conceptionDateString);
 
-		String sire = ((TextView) view.findViewById(R.id.horseName)).getText().toString();
+		String sire = ((TextView) view.findViewById(R.id.notificationCheckbox3)).getText().toString();
 
 		Birth birth = new Birth(horse, sire, conceptionDate, conceptionDate.plusDays(getResources().getInteger(R.integer.days_to_birth)));
 		getHelper().getBirthsDataDao().create(birth);
@@ -340,7 +351,7 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 
 	@Override
 	public void onDateSet(DatePicker view, int year, int month, int day) {
-		int textViewID = R.id.conceptionDate;
+		int textViewID = R.id.notificationCheckbox1;
 
 		TextView dateField = currPopupWindow.getContentView().findViewById(textViewID);
 		String parsedDob = day + "/" + (month + 1) + "/" + year;
@@ -377,7 +388,7 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
         if (horse.getCurrentBirth().getSire() != null) {
             ((EditText) popupView.findViewById(R.id.siresName)).setText(horse.getCurrentBirth().getSire());
         }
-        ((TextView) popupView.findViewById(R.id.conceptionDate)).setText(horse.getCurrentBirth().getConception().toString(DATE_FORMATTER));
+        ((TextView) popupView.findViewById(R.id.notificationCheckbox1)).setText(horse.getCurrentBirth().getConception().toString(DATE_FORMATTER));
 
 			currPopupWindow = new PopupWindow(popupView,
 					ViewGroup.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, true);
@@ -405,7 +416,7 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 
         view = view.getRootView();
 
-        String conceptionDateString = ((TextView) view.findViewById(R.id.conceptionDate)).getText().toString();
+        String conceptionDateString = ((TextView) view.findViewById(R.id.notificationCheckbox1)).getText().toString();
         DateTime conceptionDate = DATE_FORMATTER.parseDateTime(conceptionDateString);
 
         String sire = ((TextView) view.findViewById(R.id.siresName)).getText().toString();
