@@ -48,9 +48,9 @@ import java.util.concurrent.Callable;
 import static com.abc.foaled.helpers.DateTimeHelper.DATE_FORMATTER;
 
 public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
-	implements DatePickerDialog.OnDateSetListener {
+		implements DatePickerDialog.OnDateSetListener {
 
-    public static final int HORSE_EDIT_REQUEST_CODE = 31;
+	private static final int HORSE_EDIT_REQUEST_CODE = 31;
 
 	private Horse horse;
 	private int horseID;
@@ -64,6 +64,8 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		//Builds the horse from the passed through horseID, or if re-building on screen rotate
+		//  then it gets the info from the bundle
 		if (savedInstanceState != null && savedInstanceState.containsKey(Horse.HORSE_ID))
 			horseID = savedInstanceState.getInt(Horse.HORSE_ID, 0);
 		else
@@ -76,21 +78,21 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 		//retrieve relevant horse
 		horse = getHelper().getHorseDataDao().queryForId(horseID);
 
-		//Checks if milestone is to be completed
+		//Checks if milestone is to be completed, and updates the right milestone if it is
 		int milestoneID = getIntent().getIntExtra(Milestone.MILESTONE_ID, 0);
 		if (milestoneID != 0)
-			horse.completeMilestone(milestoneID);
+			getHelper().getMilestonesDataDao().update(horse.completeMilestone(milestoneID));
 
-		if (savedInstanceState != null && savedInstanceState.containsKey("sire")) {
+		//Gets the sire from bundle. Used to deal with rotation
+		//TODO investigate just getting the data from the Horse object instead
+		if (savedInstanceState != null && savedInstanceState.containsKey("sire"))
 			sire = savedInstanceState.getString("sire");
-		}
 
 		if (savedInstanceState != null && savedInstanceState.containsKey("date"))
 			currDate = savedInstanceState.getString("date");
 
 		setup();
 	}
-
 
 	/**
 	 * Inflates the custom menu items in to the menu on the toolbar
@@ -125,6 +127,9 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 		super.onSaveInstanceState(savedInstanceState);
 	}
 
+	/**
+	 * If activity is stopped for any reason, close the pop-up window
+	 */
 	@Override
 	public void onStop() {
 		if (currPopupWindow != null) {
@@ -134,12 +139,16 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 		super.onStop();
 	}
 
-
+	/**
+	 * Populates all the data into the views on this screen
+	 */
 	private void setup() {
 
 		setContentView(R.layout.activity_horse_detail);
 
-		layout = (CoordinatorLayout) findViewById(R.id.horse_detail_screen);
+		layout = findViewById(R.id.horse_detail_screen);
+		//Makes the screen clear, in case we are re-building screen after the pop-up window was still showing
+		//TODO perhaps move the below alpha check to the onStop method instead?
 		if (Build.VERSION.SDK_INT > 22)
 			layout.getForeground().setAlpha(0);
 
@@ -151,34 +160,37 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 
 		setUpHeader();
 
+		//Builds a fragment to go on the screen that will have all the correct data
 		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 		HorseDetailsFragment fragment = HorseDetailsFragment.newInstance(horse, getHelper());
-		transaction.replace(R.id.horseDetails,  fragment, HorseDetailsFragment.FRAGMENT_TAG);
+		transaction.replace(R.id.horseDetails, fragment, HorseDetailsFragment.FRAGMENT_TAG);
+
+		//
 
 
-		ArrayList<Milestone> list = (ArrayList)horse.getMilestones();
-		MilestonesListFragment milestonesListFragment = MilestonesListFragment.newInstance(list, getHelper().getMilestonesDataDao());
+		if (horse.getStatus() == Horse.HORSE_STATUS.FOAL) {
+			ArrayList<Milestone> list = new ArrayList<>(horse.getMilestones());
+			MilestonesListFragment milestonesListFragment = MilestonesListFragment.newInstance(list, getHelper().getMilestonesDataDao());
 
-		if (horse.getStatus() == Horse.HORSE_STATUS.FOAL)
 			transaction.replace(R.id.milestoneListFrameLayout, milestonesListFragment, MilestonesListFragment.FRAGMENT_TAG);
+		}
 
 		transaction.commit();
 
-		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+		Toolbar toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 		if (getSupportActionBar() != null) {
 			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 			getSupportActionBar().setTitle(horse.getName());
 		}
-
 	}
 
 	/**
-	 * sets up the image view and top three buttons
+	 * Sets up the image view and top three tags
 	 */
 	private void setUpHeader() {
 		//---------SET UP PHOTO------------
-		ImageView horsePhoto = (ImageView) findViewById(R.id.horse_photo);
+		ImageView horsePhoto = findViewById(R.id.horse_photo);
 		if (horse.getImagePath().isEmpty()) {
 			int photo = horse.getStatus() == Horse.HORSE_STATUS.FOAL ? R.drawable.default_foal : R.drawable.default_horse;
 			horsePhoto.setImageResource(photo);
@@ -186,18 +198,18 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 			horsePhoto.setImageBitmap(ImageHelper.bitmapSmaller(horse.getImagePath(), 300, 300));
 
 		if (horse.getStatus() == Horse.HORSE_STATUS.PREGNANT) {
-			TextView pregnancyStatus = (TextView) findViewById(R.id.horse_status);
+			TextView pregnancyStatus = findViewById(R.id.horse_status);
 			pregnancyStatus.setText(getString(R.string.pregnancy_left_time, horse.getCurrentBirth().getBirthDurationAsString()));
 		}
 
 		//age
-		TextView age = (TextView) findViewById(R.id.age);
+		TextView age = findViewById(R.id.age);
 		age.setText(getString(R.string.horse_age, horse.getAge()));
 		//gender
-		TextView gender = (TextView) findViewById(R.id.sex);
+		TextView gender = findViewById(R.id.sex);
 		gender.setText(horse.isFemale() ? "Female" : "Male");
 		//status
-		TextView status = (TextView) findViewById(R.id.pregnantStatus);
+		TextView status = findViewById(R.id.pregnantStatus);
 		status.setText(horse.getStatusString());
 	}
 
@@ -212,27 +224,32 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 		return super.onOptionsItemSelected(item);
 	}
 
-	@SuppressWarnings("UnusedParameters")
-	public void addNewPregnancy(View v) {
+	/**
+	 * Used to enter details to add a pregnancy to the current horse
+	 *
+	 * @param v The view that was clicked to get here
+	 */
+	public void showAddNewPregnancyPopupWindow(View v) {
 
-		FloatingActionsMenu fab = (FloatingActionsMenu) findViewById(R.id.multiple_actions);
+		FloatingActionsMenu fab = findViewById(R.id.multiple_actions);
 		fab.collapse();
 
-		View popupView = getLayoutInflater().inflate(R.layout.fragment_add_pregnancy, null);
+		//Creates a pop-up view and populates it
+		View popupView = getLayoutInflater().inflate(R.layout.fragment_add_pregnancy, (ViewGroup) v.getRootView());
 		if (sire != null)
 			((EditText) popupView.findViewById(R.id.notificationCheckbox3)).setText(sire);
+
 		if (!currDate.isEmpty())
 			((TextView) popupView.findViewById(R.id.notificationCheckbox1)).setText(currDate);
 		else
 			((TextView) popupView.findViewById(R.id.notificationCheckbox1)).setText(DateTime.now().toString(DATE_FORMATTER));
 
-		currPopupWindow = new PopupWindow(popupView,
-				ViewGroup.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, true);
+		currPopupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, true);
 
 		currPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
 			@Override
 			public void onDismiss() {
-				CoordinatorLayout layout = (CoordinatorLayout) findViewById(R.id.horse_detail_screen);
+				CoordinatorLayout layout = findViewById(R.id.horse_detail_screen);
 				if (Build.VERSION.SDK_INT > 22)
 					layout.getForeground().setAlpha(0);
 			}
@@ -248,7 +265,65 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 		});
 	}
 
-	//Toggles favouring horse
+	/**
+	 * Makes the current horse pregnant
+	 *
+	 * @param view The view that triggered this method call
+	 */
+	public void makePregnant(View view) {
+
+		view = view.getRootView();
+
+		//gets conception date
+		String conceptionDateString = ((TextView) view.findViewById(R.id.notificationCheckbox1)).getText().toString();
+		DateTime conceptionDate = DATE_FORMATTER.parseDateTime(conceptionDateString);
+
+		//gets sire
+		String sire = ((TextView) view.findViewById(R.id.notificationCheckbox3)).getText().toString();
+
+		//makes birth
+		Birth birth = new Birth(horse, sire, conceptionDate, conceptionDate.plusDays(getResources().getInteger(R.integer.days_to_birth)));
+		getHelper().getBirthsDataDao().create(birth);
+
+		//updates horse
+		horse.setCurrentBirth(birth);
+		getHelper().getHorseDataDao().update(horse);
+
+		//rebuilds page
+		cancel();
+		recreate();
+	}
+
+	/**
+	 * Edits the current horse
+	 *
+	 * @param view View that called this method
+	 */
+	public void savePregnancyEdit(View view) {
+
+		view = view.getRootView();
+
+		//gets conception date
+		String conceptionDateString = ((TextView) view.findViewById(R.id.notificationCheckbox1)).getText().toString();
+		DateTime conceptionDate = DATE_FORMATTER.parseDateTime(conceptionDateString);
+
+		//gets sires
+		String sire = ((TextView) view.findViewById(R.id.siresName)).getText().toString();
+
+		//gets current birth object and updates
+		Birth birth = horse.getCurrentBirth();
+		birth.setConception(conceptionDate);
+		birth.setSire(sire);
+
+		getHelper().getBirthsDataDao().update(birth);
+
+		cancel();
+		recreate();
+	}
+
+	/**
+	 * Toggles favouring horse
+	 */
 	public void favouriteAction(MenuItem item) {
 		//Updates horse
 		horse.toggleFavourite();
@@ -262,10 +337,11 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 	/**
 	 * Deletes the horse we are currently looking at
 	 *
-	 * @param v The view that led us here
+	 * @param v The view called this method
 	 */
 	@SuppressWarnings("UnusedParameters")
 	public void deleteHorse(View v) {
+		//TODO fix this to include deleting pregnant horse as well
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		final AlertDialog dialog;
 		final Context context = this;
@@ -281,6 +357,8 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 									new Callable<Void>() {
 										public Void call() throws Exception {
 											Birth b = horse.getCurrentBirth();
+
+
 											if (getHelper().getHorseDataDao().delete(horse) != 1)
 												throw new SQLException("0 or greater than 1 horse were to be deleted");
 
@@ -314,31 +392,21 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 		dialog.show();
 	}
 
-	@SuppressWarnings("UnusedParameters")
-	public void cancel(View v) {
-		currPopupWindow.dismiss();
-		currPopupWindow = null;
+	/**
+	 * dismiss current popup window
+	 */
+	public void cancel() {
+		if (currPopupWindow != null) {
+			currPopupWindow.dismiss();
+			currPopupWindow = null;
+		}
 	}
 
-	public void makePregnant(View view) {
-
-		view = view.getRootView();
-
-		String conceptionDateString = ((TextView) view.findViewById(R.id.notificationCheckbox1)).getText().toString();
-		DateTime conceptionDate = DATE_FORMATTER.parseDateTime(conceptionDateString);
-
-		String sire = ((TextView) view.findViewById(R.id.notificationCheckbox3)).getText().toString();
-
-		Birth birth = new Birth(horse, sire, conceptionDate, conceptionDate.plusDays(getResources().getInteger(R.integer.days_to_birth)));
-		getHelper().getBirthsDataDao().create(birth);
-
-		horse.setCurrentBirth(birth);
-		getHelper().getHorseDataDao().update(horse);
-
-		cancel(view);
-		recreate();
-	}
-
+	/**
+	 * Opens a dialog to select the dat required
+	 *
+	 * @param view View that called this method
+	 */
 	public void selectDate(View view) {
 		String date = ((TextView) view).getText().toString();
 
@@ -347,6 +415,14 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 		dialog.show(getFragmentManager(), "conceptionDatePicker");
 	}
 
+	/**
+	 * On the result of choosing a date, update the text box to show it
+	 *
+	 * @param view  DatePicker that was just being interacted with
+	 * @param year  Year selected
+	 * @param month Month select
+	 * @param day   Day selected
+	 */
 	@Override
 	public void onDateSet(DatePicker view, int year, int month, int day) {
 		int textViewID = R.id.notificationCheckbox1;
@@ -356,13 +432,20 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 		dateField.setText(parsedDob);
 	}
 
+	/**
+	 * Finish a pregnancy and create a new horse
+	 *
+	 * @param view View that called this method
+	 */
 	@SuppressWarnings("UnusedParameters")
 	public void giveBirth(View view) {
 		Birth b = horse.getCurrentBirth();
 		b.setBirthTime(DateTime.now());
 
+		//Creates the new foal and gives it milestones. Also updates the birth object to be attached to the new foal
 		//name = horse's foal //birth = current horses birth object //true for female //null for notes //foal status //no image
-		Horse foal = new Horse(horse.getName()+"'s foal", horse.getCurrentBirth(), true, null, Horse.HORSE_STATUS.FOAL, null);
+		Horse foal = new Horse(horse.getName() + "'s foal", horse.getCurrentBirth(), true, null, Horse.HORSE_STATUS.FOAL, null);
+		//TODO make a static field instead of hard-coding "milestones"
 		getHelper().getHorseDataDao().assignEmptyForeignCollection(foal, "milestones");
 		getHelper().getHorseDataDao().create(foal);
 		foal.createMilestones(this);
@@ -374,88 +457,91 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 		horse.setStatus(Horse.HORSE_STATUS.DORMANT);
 		getHelper().getHorseDataDao().update(horse);
 
-		FloatingActionsMenu fab = (FloatingActionsMenu) findViewById(R.id.multiple_actions);
+		FloatingActionsMenu fab = findViewById(R.id.multiple_actions);
 		fab.collapse();
 
 		finish();
 	}
 
+	/**
+	 * Edit a current pregnancy for a horse
+	 *
+	 * @param view View that called this method
+	 */
 	public void editPregnancy(View view) {
 
-		View popupView = getLayoutInflater().inflate(R.layout.fragment_edit_pregnancy, null);
-        if (horse.getCurrentBirth().getSire() != null) {
-            ((EditText) popupView.findViewById(R.id.siresName)).setText(horse.getCurrentBirth().getSire());
-        }
-        ((TextView) popupView.findViewById(R.id.notificationCheckbox1)).setText(horse.getCurrentBirth().getConception().toString(DATE_FORMATTER));
+		//Creates and populates a pop-up window
+		View popupView = getLayoutInflater().inflate(R.layout.fragment_edit_pregnancy, (ViewGroup) view.getRootView());
+		if (horse.getCurrentBirth().getSire() != null)
+			((EditText) popupView.findViewById(R.id.siresName)).setText(horse.getCurrentBirth().getSire());
 
-			currPopupWindow = new PopupWindow(popupView,
-					ViewGroup.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, true);
+		((TextView) popupView.findViewById(R.id.notificationCheckbox1)).setText(horse.getCurrentBirth().getConception().toString(DATE_FORMATTER));
 
-			currPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-				@Override
-				public void onDismiss() {
-					CoordinatorLayout layout = (CoordinatorLayout) findViewById(R.id.horse_detail_screen);
-					if (Build.VERSION.SDK_INT > 22)
-						layout.getForeground().setAlpha(0);
-				}
-			});
-			currPopupWindow.setAnimationStyle(R.style.Animation);
-			layout.post(new Runnable() {
-				@Override
-				public void run() {
-					currPopupWindow.showAtLocation(layout, Gravity.CENTER, 0, 0);
-					if (Build.VERSION.SDK_INT > 22)
-						layout.getForeground().setAlpha(220);
-				}
-			});
+		currPopupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, true);
+
+		currPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+			@Override
+			public void onDismiss() {
+				CoordinatorLayout layout = findViewById(R.id.horse_detail_screen);
+				if (Build.VERSION.SDK_INT > 22)
+					layout.getForeground().setAlpha(0);
+			}
+		});
+		currPopupWindow.setAnimationStyle(R.style.Animation);
+		layout.post(new Runnable() {
+			@Override
+			public void run() {
+				currPopupWindow.showAtLocation(layout, Gravity.CENTER, 0, 0);
+				if (Build.VERSION.SDK_INT > 22)
+					layout.getForeground().setAlpha(220);
+			}
+		});
 	}
 
-    public void savePregnancyEdit(View view) {
+	/**
+	 * Deletes the current pregnancy for the horse
+	 *
+	 * @param view View that called this method
+	 */
+	public void deletePregnancy(View view) {
 
-        view = view.getRootView();
+		Birth birth = horse.getCurrentBirth();
+		getHelper().getBirthsDataDao().delete(birth);
 
-        String conceptionDateString = ((TextView) view.findViewById(R.id.notificationCheckbox1)).getText().toString();
-        DateTime conceptionDate = DATE_FORMATTER.parseDateTime(conceptionDateString);
+		horse.setCurrentBirth(null);
+		horse.setStatus(Horse.HORSE_STATUS.DORMANT);
+		getHelper().getHorseDataDao().update(horse);
 
-        String sire = ((TextView) view.findViewById(R.id.siresName)).getText().toString();
+		cancel();
+		recreate();
+	}
 
-        Birth birth = horse.getCurrentBirth();
-        birth.setConception(conceptionDate);
-        birth.setSire(sire);
+	/**
+	 * Starts a new activity where you can edit the current horse's details
+	 *
+	 * @param view View that called this method
+	 */
+	public void editHorseDetails(View view) {
+		FloatingActionsMenu menu = (FloatingActionsMenu) view.getParent();
+		menu.collapse();
 
-        getHelper().getBirthsDataDao().update(birth);
+		Intent intent = new Intent(this, EditHorseActivity.class);
+		intent.putExtra(Horse.HORSE_ID, horseID);
+		startActivityForResult(intent, HORSE_EDIT_REQUEST_CODE);
+	}
 
-        cancel(view);
-        recreate();
-    }
+	/**
+	 * Used to recreate the page when a successful edit of the horse occurred
+	 *
+	 * @param requestCode Custom code sent back from the closing activity
+	 * @param resultCode  Code indicating the type of closure of the activity (cancelled, ok etc.)
+	 * @param data        Data sent back from the closing activity
+	 */
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
 
-    public void deletePregnancy(View view) {
-        view = view.getRootView();
-
-        Birth birth = horse.getCurrentBirth();
-        getHelper().getBirthsDataDao().delete(birth);
-
-        horse.setCurrentBirth(null);
-        horse.setStatus(Horse.HORSE_STATUS.DORMANT);
-        getHelper().getHorseDataDao().update(horse);
-
-        cancel(view);
-        recreate();
-    }
-
-    public void editHorseDetails(View v) {
-        FloatingActionsMenu menu = (FloatingActionsMenu) v.getParent();
-        menu.collapse();
-        Intent intent = new Intent(this, EditHorseActivity.class);
-        intent.putExtra(Horse.HORSE_ID, horseID);
-        startActivityForResult(intent, HORSE_EDIT_REQUEST_CODE);
-    }
-
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == HORSE_EDIT_REQUEST_CODE && resultCode == RESULT_OK) {
-            recreate();
-        }
-    }
+		if (requestCode == HORSE_EDIT_REQUEST_CODE && resultCode == RESULT_OK) {
+			recreate();
+		}
+	}
 }
