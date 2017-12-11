@@ -22,6 +22,7 @@ import com.abc.foaled.R;
 /**
  * Created by Brendan on 24/02/2017.
  *
+ * Used to edit notes for a horse or birth
  */
 
 public class NoteActivity extends ORMBaseActivity<DatabaseHelper> {
@@ -34,7 +35,6 @@ public class NoteActivity extends ORMBaseActivity<DatabaseHelper> {
 	private Birth birth;
 
 	private boolean editing = false;
-	private boolean dialogResult = true;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +42,7 @@ public class NoteActivity extends ORMBaseActivity<DatabaseHelper> {
 		setContentView(R.layout.activity_note);
 
 
-		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+		Toolbar toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 		ActionBar actionBar = getSupportActionBar();
 		if (actionBar != null) {
@@ -63,8 +63,8 @@ public class NoteActivity extends ORMBaseActivity<DatabaseHelper> {
 			note = birth.getNotes();
 		}
 
-		TextView noteTitle = (TextView) findViewById(R.id.note_activity_title);
-		noteContent = (EditText) findViewById(R.id.note_activity_content);
+		TextView noteTitle = findViewById(R.id.note_activity_title);
+		noteContent = findViewById(R.id.note_activity_content);
 		noteTitle.setText(title);
 		noteContent.setText(note);
 		noteContent.setFocusableInTouchMode(editing);
@@ -88,7 +88,7 @@ public class NoteActivity extends ORMBaseActivity<DatabaseHelper> {
 	}
 
 	/**
-	 * @param item The item thatw as clicked in the menu
+	 * @param item The item that was clicked in the menu
 	 * @return Return false to allow normal menu processing to proceed, true to consume it here.
 	 */
 	@Override
@@ -96,7 +96,7 @@ public class NoteActivity extends ORMBaseActivity<DatabaseHelper> {
 		switch (item.getItemId()) {
 			// Respond to the action bar's Up/Home button
 			case android.R.id.home:
-				this.finish();
+				confirmLeave();
 				return true;
 			case R.id.action_note:
 				if (editing)
@@ -107,15 +107,6 @@ public class NoteActivity extends ORMBaseActivity<DatabaseHelper> {
 		return super.onOptionsItemSelected(item);
 	}
 
-	/**
-	 * @return Returns true if the note has changed
-	 */
-	private boolean hasChanged() {
-		if (horse != null)
-			return !noteContent.getText().toString().equals(horse.getNotes());
-
-		return birth != null && !noteContent.getText().toString().equals(birth.getNotes());
-	}
 
 	/**
 	 * Saves the new note
@@ -155,20 +146,25 @@ public class NoteActivity extends ORMBaseActivity<DatabaseHelper> {
 		if (editing) {
 			noteContent.setSelection(noteContent.getText().length());
 			noteContent.requestFocus();
-			imm.showSoftInput(noteContent, InputMethodManager.SHOW_IMPLICIT);
+			if (imm != null)
+				imm.showSoftInput(noteContent, InputMethodManager.SHOW_IMPLICIT);
 		} else {
 			noteContent.setSelection(0);
 			noteContent.clearFocus();
-			imm.hideSoftInputFromWindow(noteContent.getWindowToken(), 0);
+			if (imm != null)
+				imm.hideSoftInputFromWindow(noteContent.getWindowToken(), 0);
 		}
 	}
 
-	//TODO get this confirmation dialog working?
-	private boolean confirmLeave() {
-		dialogResult = true;
+	/**
+	 * Creates a confirmation dialog box to make sure we don't leave unexpectedly
+	 */
+	private void confirmLeave() {
 		if (hasChanged()) {
 			InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-			imm.hideSoftInputFromWindow(noteContent.getWindowToken(), 0);
+			if (imm != null)
+				imm.hideSoftInputFromWindow(noteContent.getWindowToken(), 0);
+
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setTitle("Keep changes?")
 					.setPositiveButton("KEEP", new DialogInterface.OnClickListener() {
@@ -180,16 +176,24 @@ public class NoteActivity extends ORMBaseActivity<DatabaseHelper> {
 					.setNegativeButton("DISCARD", new DialogInterface.OnClickListener() {
 
 						public void onClick(DialogInterface dialog, int id) {
-
+							finish();
 						}
 					})
 					.setOnDismissListener(new DialogInterface.OnDismissListener() {
 						@Override
 						public void onDismiss(DialogInterface dialog) {
-							dialogResult = false;
 						}
 					}).show();
 		}
-		return dialogResult;
+	}
+
+	/**
+	 * @return Returns true if the note has changed
+	 */
+	private boolean hasChanged() {
+		if (horse != null)
+			return !noteContent.getText().toString().equals(horse.getNotes());
+
+		return birth != null && !noteContent.getText().toString().equals(birth.getNotes());
 	}
 }

@@ -110,5 +110,6 @@
     <string name="add_horse_sire_label">Sire</string>
     <string name="add_horse_sire_hint">Sire\'s name</string>
     <string name="expand_text_section">Expand text section</string>
+    <string name="edit_notes_hint">Note</string>
 
 </resources>
