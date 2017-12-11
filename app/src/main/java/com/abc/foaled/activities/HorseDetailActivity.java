@@ -1,5 +1,6 @@
 package com.abc.foaled.activities;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -43,7 +45,7 @@ import java.util.concurrent.Callable;
 
 import static com.abc.foaled.helpers.DateTimeHelper.DATE_FORMATTER;
 
-public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper> {
+public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper> implements DatePickerDialog.OnDateSetListener {
 
 	private static final int HORSE_EDIT_REQUEST_CODE = 31;
 
@@ -509,5 +511,22 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper> {
 		if (requestCode == HORSE_EDIT_REQUEST_CODE && resultCode == RESULT_OK) {
 			recreate();
 		}
+	}
+
+	/**
+	 * On the result of choosing a date, update the text box to show it
+	 *
+	 * @param view  DatePicker that was just being interacted with
+	 * @param year  Year selected
+	 * @param month Month select
+	 * @param day   Day selected
+	 */
+	@Override
+	public void onDateSet(DatePicker view, int year, int month, int day) {
+		int textViewID = R.id.notificationCheckbox1;
+
+		TextView dateField = currPopupWindow.getContentView().findViewById(textViewID);
+		String parsedDob = day + "/" + (month + 1) + "/" + year;
+		dateField.setText(parsedDob);
 	}
 }
