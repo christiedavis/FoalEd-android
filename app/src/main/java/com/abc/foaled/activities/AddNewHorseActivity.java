@@ -179,23 +179,11 @@ public class AddNewHorseActivity extends ORMBaseActivity<DatabaseHelper> impleme
 	    String name = nameEditText.getText().toString();
 
 		//DOB------------------------------------------
-	    String ageString = ((TextView) findViewById(R.id.newHorseAge)).getText().toString();//TODO FIX THIS
-		Integer ageInt = Integer.parseInt(ageString);
+	    String ageString = ((TextView) findViewById(R.id.newHorseAge)).getText().toString();
+		Integer ageInt = ageString.isEmpty() ? 0 : Integer.parseInt(ageString);
 
-		Calendar today = Calendar.getInstance();
-		Integer yob = today.get(Calendar.YEAR) - ((ageInt >= 0) ? ageInt : 0);
+        DateTime ageDateTime = DateTime.now().minusYears(ageInt);
 
-		Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.YEAR, yob );
-		cal.set(Calendar.MONTH, today.get(Calendar.MONTH));
-		cal.set(Calendar.DATE, today.get(Calendar.DAY_OF_MONTH));
-		cal.set(Calendar.HOUR_OF_DAY, today.get(Calendar.HOUR_OF_DAY));
-		cal.set(Calendar.MINUTE, 0);
-		cal.set(Calendar.SECOND, 0);
-		cal.set(Calendar.MILLISECOND, 0);
-		Date ageDate = cal.getTime();
-
-        DateTime ageDateTime = DateTime.parse(ageDate.toString(), gmtFormatter);
 
 		//BREED--------------------------------
 		EditText breedET = (EditText) findViewById(R.id.horseBreed);
