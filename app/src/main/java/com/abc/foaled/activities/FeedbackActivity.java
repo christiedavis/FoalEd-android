@@ -14,42 +14,42 @@ import net.hockeyapp.android.FeedbackManager;
 
 public class FeedbackActivity extends AppCompatActivity {
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_feedback);
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_feedback);
 
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(myToolbar);
-	    if (getSupportActionBar() != null)
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		Toolbar myToolbar = findViewById(R.id.toolbar);
+		setSupportActionBar(myToolbar);
+		if (getSupportActionBar() != null)
+			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        FeedbackManager.register(this);
-        final View feedbackView = findViewById(R.id.feedback_view);
+		FeedbackManager.register(this);
+		final View feedbackView = findViewById(R.id.feedback_view);
 
-        Button feedbackButton = (Button) findViewById(R.id.feedback_button);
-        feedbackButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FeedbackManager.showFeedbackActivity(feedbackView.getContext());
-            }
-        });
-    }
+		Button feedbackButton = findViewById(R.id.feedback_button);
+		feedbackButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				FeedbackManager.showFeedbackActivity(feedbackView.getContext());
+			}
+		});
+	}
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        FeedbackManager.unregister();
-    }
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		FeedbackManager.unregister();
+	}
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            // Respond to the action bar's Up/Home button
-            case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			// Respond to the action bar's Up/Home button
+			case android.R.id.home:
+				NavUtils.navigateUpFromSameTask(this);
+				return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
 }
