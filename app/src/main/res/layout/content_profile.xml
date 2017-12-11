@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/content_profile"
@@ -14,12 +15,12 @@
     tools:showIn="@layout/activity_profile">
 
     <TextView
-        android:text="THIS IS THE PROFILE PAGE"
+        android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:layout_marginStart="105dp"
         android:layout_marginTop="75dp"
-        android:id="@+id/textView2" />
+        android:text="@string/profile_placeholder_text"/>
 </RelativeLayout>

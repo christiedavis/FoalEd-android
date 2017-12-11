@@ -112,5 +112,6 @@
     <string name="expand_text_section">Expand text section</string>
     <string name="edit_notes_hint">Note</string>
     <string name="notification_page_placeholder_text">This is where any notification settings will live.</string>
+    <string name="profile_placeholder_text">THIS IS THE PROFILE PAGE</string>
 
 </resources>
