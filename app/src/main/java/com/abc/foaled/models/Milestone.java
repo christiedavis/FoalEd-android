@@ -69,7 +69,7 @@ public class Milestone {
     private Boolean completed = false;
 
     @DatabaseField(foreign = true)
-    private Horse h;
+    private Horse horse;
 
 	//Required empty constructor
     public Milestone() {
@@ -77,7 +77,7 @@ public class Milestone {
     }
 
     Milestone(int value, Horse horse, Context context) {
-        this.h = horse;
+        this.horse = horse;
         //constructor stuff here
         this.milestone = MILESTONE.values() [value];
         milestoneID = milestone.getValue();
@@ -125,7 +125,8 @@ public class Milestone {
                 notificationTitle = "Has your foal drunk yet?";
                 break;
         }
-        if (Days.daysBetween(h.getDateOfBirth().getBirthTime(), DateTime.now()).getDays() < 50) {
+        //If the horse is over 50 days old, don't schedule notifications
+        if (Days.daysBetween(birthTime, DateTime.now()).getDays() < 50) {
 			scheduleNotification(context, startTime, repeatDuration, milestone.getValue());
 		}
     }
@@ -172,12 +173,12 @@ public class Milestone {
 		//Notification and intent ID.. these should really be different /-:
 		//	combination of horseID and milestoneID (5 & 3 = 53)
 		//	results in no conflicting IDs
-		int notificationID = Integer.parseInt(h.getHorseID()+""+milestoneID);
+		int notificationID = Integer.parseInt(horse.getHorseID()+""+milestoneID);
 
 
 		//-----ON CLICK INTENT, takes you to the horse view-------
 		Intent horseIntent = new Intent(context, HorseDetailActivity.class);
-		horseIntent.putExtra(Horse.HORSE_ID, h.getHorseID());
+		horseIntent.putExtra(Horse.HORSE_ID, horse.getHorseID());
 
 		TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
 		stackBuilder.addParentStack(HorseDetailActivity.class);
@@ -189,7 +190,7 @@ public class Milestone {
 
 		//-------------- Done action on the notification ------------
 		Intent completeIntent = new Intent(context, CompleteNotification.class);
-		completeIntent.putExtra(Horse.HORSE_ID, h.getHorseID());
+		completeIntent.putExtra(Horse.HORSE_ID, horse.getHorseID());
 		completeIntent.putExtra(MILESTONE_ID, milestoneID);
 		completeIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, notificationID);
 

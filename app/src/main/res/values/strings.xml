@@ -93,5 +93,17 @@
     <string name="pregnancy">Pregnancy</string>
     <string name="notes_about_this_pregnancy">Notes about this pregnancy</string>
     <string name="edit_horse_screen_label">Edit Horse</string>
+    <string name="horse_photo">Horse Photo</string>
+    <string name="take_image_icon">Take image icon</string>
+    <string name="horse_name_label">Name</string>
+    <string name="add_horse_name_hint">Name of Horse</string>
+    <string name="add_horse_breed_label">Breed</string>
+    <string name="add_horse_breed_hint">Breed of Horse</string>
+    <string name="add_horse_dam_label">Dam</string>
+    <string name="add_horse_dam_hint">Dam of Horse</string>
+    <string name="add_horse_age_label">Age</string>
+    <string name="add_horse_age_hint">Age</string>
+    <string name="add_horse_colour_label">Colour</string>
+    <string name="add_horse_colour_hint">Colour of Horse</string>
 
 </resources>

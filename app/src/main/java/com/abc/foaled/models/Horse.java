@@ -243,11 +243,14 @@ public class Horse implements Serializable {
         return milestoneList;
     }
 
-    public void completeMilestone(int milestoneID) {
+    public Milestone completeMilestone(int milestoneID) {
 	    for (Milestone m : milestones) {
-		    if (m.getID() == milestoneID)
-		    	m.setCompleted(true);
+		    if (m.getID() == milestoneID) {
+			    m.setCompleted(true);
+			    return m;
+		    }
 	    }
+	    return null;
     }
 
 	/**

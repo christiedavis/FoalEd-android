@@ -81,10 +81,10 @@ public class ImageHelper {
         return BitmapFactory.decodeResource(resources, resID, options);
     }
 
-    public static String createImageFile(Activity a) {
+    public static String createImageFile(Activity activity) {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
 
-        String imagePath = a.getFilesDir().getAbsolutePath() + "/JPEG_" + timeStamp + ".jpg";
+        String imagePath = activity.getFilesDir().getAbsolutePath() + "/images/JPEG_" + timeStamp + ".jpg";
         try {
             if (!new File(imagePath).createNewFile())
             	throw new IOException("Unable to create new image file");

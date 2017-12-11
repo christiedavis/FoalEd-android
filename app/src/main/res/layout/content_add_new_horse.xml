@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="insert"
-            android:text="SAVE"
+            android:text="@string/save"
             android:textAlignment="center"
             android:id="@+id/saveButton"/>
 
@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="cancel"
-            android:text="CANCEL"
+            android:text="@string/cancel"
             android:textAlignment="center" />
     </LinearLayout>
 
@@ -62,16 +62,18 @@
                     android:id="@+id/add_horse_image"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:contentDescription="Horse Photo"
+                    android:contentDescription="@string/horse_photo"
                     android:scaleType="centerCrop"
                     android:src="@drawable/default_horse" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:contentDescription="@string/take_image_icon"
                     android:src="@drawable/ic_take_photo"
                     android:paddingBottom="20dp"
                     android:paddingEnd="20dp"
+                    android:paddingStart="20dp"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentEnd="true"/>
             </RelativeLayout>
@@ -104,7 +106,7 @@
                             android:layout_weight="1"
                             android:gravity="start"
                             android:labelFor="@+id/notificationCheckbox3"
-                            android:text="Name"
+                            android:text="@string/horse_name_label"
                             android:textAppearance="?android:attr/textAppearanceLarge" />
 
                         <EditText
@@ -114,7 +116,7 @@
                             android:layout_gravity="center_vertical"
                             android:layout_weight="1"
                             android:ellipsize="end"
-                            android:hint="Name of Horse"
+                            android:hint="@string/add_horse_name_hint"
                             android:imeOptions="actionDone|flagNoExtractUi"
                             android:inputType="textPersonName|textCapWords"
                             android:maxLines="1" />
@@ -127,7 +129,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Breed"
+                            android:text="@string/add_horse_breed_label"
                             android:textAppearance="?android:attr/textAppearanceLarge" />
 
                         <EditText
@@ -137,20 +139,20 @@
                             android:layout_gravity="center_vertical"
                             android:layout_weight="1"
                             android:ellipsize="end"
-                            android:hint="Breed of Horse"
+                            android:hint="@string/add_horse_breed_hint"
                             android:imeOptions="actionDone|flagNoExtractUi"
                             android:inputType="textPersonName|textCapWords"
                             android:maxLines="1" />
                     </TableRow>
 
-                    <!--Dan-->
+                    <!--Dam-->
                     <TableRow android:paddingBottom="5dp">
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Dam"
+                            android:text="@string/add_horse_dam_label"
                             android:textAppearance="?android:attr/textAppearanceLarge" />
 
                         <EditText
@@ -160,7 +162,7 @@
                             android:layout_gravity="center_vertical"
                             android:layout_weight="1"
                             android:ellipsize="end"
-                            android:hint="Dam of Horse"
+                            android:hint="@string/add_horse_dam_hint"
                             android:imeOptions="actionDone|flagNoExtractUi"
                             android:inputType="textPersonName|textCapWords"
                             android:maxLines="1" />
@@ -173,7 +175,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Age"
+                            android:text="@string/add_horse_age_label"
                             android:textAppearance="?android:attr/textAppearanceLarge" />
 
                         <EditText
@@ -182,16 +184,9 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_weight="1"
-                            android:hint="Age"
+                            android:hint="@string/add_horse_age_hint"
                             android:inputType="number" />
-                        <!--<TextView-->
-                        <!--Commented this out because i cant create a number picker :( -->
-                        <!--android:id="@+id/newHorseAge"-->
-                        <!--android:layout_width="0dp"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_gravity="center"-->
-                        <!--android:layout_weight="1"-->
-                        <!--android:onClick="selectAge" />-->
+
                     </TableRow>
 
                     <!--Colour-->
@@ -201,7 +196,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Colour"
+                            android:text="@string/add_horse_colour_label"
                             android:textAppearance="?android:attr/textAppearanceLarge" />
 
                         <EditText
@@ -211,87 +206,12 @@
                             android:layout_gravity="center_vertical"
                             android:layout_weight="1"
                             android:ellipsize="end"
-                            android:hint="Colour of Horse"
+                            android:hint="@string/add_horse_colour_hint"
                             android:imeOptions="actionDone|flagNoExtractUi"
                             android:inputType="textPersonName|textCapWords"
                             android:maxLines="1" />
                     </TableRow>
 
-
-                    <!--These are hidden by default. Was intended to use for adding a horse that is pregnant-->
-                    <!--SIRES NAME-->
-                    <TableRow
-                        android:id="@+id/siresNameRow"
-                        android:layout_marginBottom="10dp"
-                        android:paddingBottom="5dp"
-                        android:visibility="gone">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_weight="1"
-                            android:labelFor="@+id/siresName"
-                            android:text="Sire"
-                            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-                        <EditText
-                            android:id="@+id/siresName"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_weight="1"
-                            android:ellipsize="end"
-                            android:hint="Sire's name"
-                            android:imeOptions="actionDone|flagNoExtractUi"
-                            android:inputType="textPersonName|textCapWords"
-                            android:maxLines="1" />
-                    </TableRow>
-
-                    <!--PREGNANT-->
-                    <TableRow
-                        android:id="@+id/pregnantRow"
-                        android:paddingBottom="5dp"
-                        android:visibility="gone">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Pregnant"
-                            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-                        <CheckBox
-                            android:id="@+id/checkboxPregnant"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_weight="1"
-                            android:checked="false"
-                            android:onClick="togglePregnant" />
-                    </TableRow>
-
-                    <!--Conception date, if pregnant-->
-                    <TableRow
-                        android:id="@+id/conceptionRow"
-                        android:paddingBottom="5dp"
-                        android:visibility="gone">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Pregnant"
-                            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-                        <EditText
-                            android:id="@+id/newHorseConceptionDate"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_weight="1"
-                            android:onClick="selectDate" />
-                    </TableRow>
                 </TableLayout>
 
             </android.support.v7.widget.CardView>

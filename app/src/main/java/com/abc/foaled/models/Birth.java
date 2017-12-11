@@ -35,13 +35,13 @@ public class Birth {
     public Birth() {
     }
 
-    public Birth(Horse mother, String father, DateTime conception, DateTime dob){
+    public Birth(Horse mother, String father, DateTime conceptionDate, DateTime dateOfBirth){
 	    horse = null;
         mare = mother;
         sire = father; //If an empty string was passed as father, make null
 	    notes = "";
-        this.conception = conception;
-        birthTime = dob;
+        this.conception = conceptionDate;
+        birthTime = dateOfBirth;
     }
 
 	public int getId() {

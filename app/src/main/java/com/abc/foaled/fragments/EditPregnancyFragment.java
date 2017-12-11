@@ -49,7 +49,7 @@ public class EditPregnancyFragment extends Fragment {
 		view.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				((HorseDetailActivity) getActivity()).cancel(v);
+				((HorseDetailActivity) getActivity()).cancel();
 			}
 		});
 		view.findViewById(R.id.editPregnancy).setOnClickListener(new View.OnClickListener() {
