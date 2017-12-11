@@ -109,5 +109,6 @@
     <string name="edit_horse_age_placeholder">%1$d</string>
     <string name="add_horse_sire_label">Sire</string>
     <string name="add_horse_sire_hint">Sire\'s name</string>
+    <string name="expand_text_section">Expand text section</string>
 
 </resources>

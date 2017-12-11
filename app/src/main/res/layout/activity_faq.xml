@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:fitsSystemWindows="true"
-    tools:context="com.abc.foaled.activities.faqActivity">
+                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                 xmlns:tools="http://schemas.android.com/tools"
+                                                 android:layout_width="match_parent"
+                                                 android:layout_height="match_parent"
+                                                 android:fitsSystemWindows="true"
+                                                 tools:context="com.abc.foaled.activities.faqActivity">
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,7 +27,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     android:background="?attr/colorPrimary"
-                    app:popupTheme="@style/AppTheme.PopupOverlay" />
+                    app:popupTheme="@style/AppTheme.PopupOverlay"/>
 
             </android.support.design.widget.AppBarLayout>
 
@@ -39,167 +39,181 @@
                 android:paddingRight="20sp"
                 android:paddingTop="15sp"
                 android:text="@string/FAQ.header"
-                android:textColor="@android:color/black" />
+                android:textColor="@android:color/black"/>
 
             <!-- expandable xml -->
             <com.ms.square.android.expandabletextview.ExpandableTextView
-                 android:id="@+id/faq_q1"
                 xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:expandableTextView="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/faq_q1"
 
-                android:paddingLeft="15sp"
-                android:paddingRight="15sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                expandableTextView:maxCollapsedLines="2"
-                expandableTextView:animDuration="200"
                 android:layout_marginTop="5sp"
+                android:paddingLeft="15sp"
+                android:paddingRight="15sp"
+                expandableTextView:animDuration="200"
+                expandableTextView:maxCollapsedLines="2"
                 >
+
                 <TextView
                     android:id="@id/expandable_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:textSize="16sp"
-                    android:textColor="#666666" />
+                    android:textColor="#666666"
+                    android:textSize="16sp"/>
 
                 <ImageButton
                     android:id="@id/expand_collapse"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="16dp"
-                    android:layout_gravity="right|bottom"
-                    android:background="@android:color/transparent"/>
+                    android:layout_gravity="end|bottom"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="@string/expand_text_section"
+                    android:padding="16dp"/>
 
             </com.ms.square.android.expandabletextview.ExpandableTextView>
 
             <!-- expandable xml -->
             <com.ms.square.android.expandabletextview.ExpandableTextView
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:expandableTextView="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/faq_q2"
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:expandableTextView="http://schemas.android.com/apk/res-auto"
 
-                android:paddingLeft="15sp"
-                android:paddingRight="15sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                expandableTextView:maxCollapsedLines="2"
-                expandableTextView:animDuration="200"
                 android:layout_marginTop="5sp"
+                android:paddingLeft="15sp"
+                android:paddingRight="15sp"
+                expandableTextView:animDuration="200"
+                expandableTextView:maxCollapsedLines="2"
                 >
+
                 <TextView
                     android:id="@id/expandable_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:textSize="16sp"
-                    android:textColor="#666666" />
+                    android:textColor="#666666"
+                    android:textSize="16sp"/>
+
                 <ImageButton
                     android:id="@id/expand_collapse"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="16dp"
-                    android:layout_gravity="right|bottom"
-                    android:background="@android:color/transparent"/>
+                    android:layout_gravity="end|bottom"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="@string/expand_text_section"
+                    android:padding="16dp"/>
 
             </com.ms.square.android.expandabletextview.ExpandableTextView>
 
             <!-- expandable xml -->
             <com.ms.square.android.expandabletextview.ExpandableTextView
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:expandableTextView="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/faq_q3"
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:expandableTextView="http://schemas.android.com/apk/res-auto"
 
-                android:paddingLeft="15sp"
-                android:paddingRight="15sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                expandableTextView:maxCollapsedLines="2"
-                expandableTextView:animDuration="200"
                 android:layout_marginTop="5sp"
+                android:paddingLeft="15sp"
+                android:paddingRight="15sp"
+                expandableTextView:animDuration="200"
+                expandableTextView:maxCollapsedLines="2"
                 >
+
                 <TextView
                     android:id="@id/expandable_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:textSize="16sp"
-                    android:textColor="#666666" />
+                    android:textColor="#666666"
+                    android:textSize="16sp"/>
+
                 <ImageButton
                     android:id="@id/expand_collapse"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="16dp"
-                    android:layout_gravity="right|bottom"
-                    android:background="@android:color/transparent"/>
+                    android:layout_gravity="end|bottom"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="@string/expand_text_section"
+                    android:padding="16dp"/>
 
             </com.ms.square.android.expandabletextview.ExpandableTextView>
 
 
             <!-- expandable xml -->
             <com.ms.square.android.expandabletextview.ExpandableTextView
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:expandableTextView="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/faq_q4"
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:expandableTextView="http://schemas.android.com/apk/res-auto"
 
-                android:paddingLeft="15sp"
-                android:paddingRight="15sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                expandableTextView:maxCollapsedLines="2"
-                expandableTextView:animDuration="200"
                 android:layout_marginTop="5sp"
+                android:paddingLeft="15sp"
+                android:paddingRight="15sp"
+                expandableTextView:animDuration="200"
+                expandableTextView:maxCollapsedLines="2"
                 >
+
                 <TextView
                     android:id="@id/expandable_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:textSize="16sp"
-                    android:textColor="#666666" />
+                    android:textColor="#666666"
+                    android:textSize="16sp"/>
+
                 <ImageButton
                     android:id="@id/expand_collapse"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="16dp"
-                    android:layout_gravity="right|bottom"
-                    android:background="@android:color/transparent"/>
+                    android:layout_gravity="end|bottom"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="@string/expand_text_section"
+                    android:padding="16dp"/>
 
             </com.ms.square.android.expandabletextview.ExpandableTextView>
 
             <!-- expandable xml -->
             <com.ms.square.android.expandabletextview.ExpandableTextView
-                android:id="@+id/faq_q5"
                 xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:expandableTextView="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/faq_q5"
 
-                android:paddingLeft="15sp"
-                android:paddingRight="15sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                expandableTextView:maxCollapsedLines="2"
-                expandableTextView:animDuration="200"
                 android:layout_marginTop="5sp"
+                android:paddingLeft="15sp"
+                android:paddingRight="15sp"
+                expandableTextView:animDuration="200"
+                expandableTextView:maxCollapsedLines="2"
                 >
+
                 <TextView
                     android:id="@id/expandable_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:textSize="16sp"
-                    android:textColor="#666666" />
+                    android:textColor="#666666"
+                    android:textSize="16sp"/>
+
                 <ImageButton
                     android:id="@id/expand_collapse"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="16dp"
-                    android:layout_gravity="right|bottom"
-                    android:background="@android:color/transparent"/>
+                    android:layout_gravity="end|bottom"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="@string/expand_text_section"
+                    android:padding="16dp"/>
 
             </com.ms.square.android.expandabletextview.ExpandableTextView>
 
