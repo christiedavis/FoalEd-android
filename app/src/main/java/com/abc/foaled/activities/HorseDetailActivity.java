@@ -1,7 +1,5 @@
 package com.abc.foaled.activities;
 
-import android.app.DatePickerDialog;
-import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,7 +16,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -28,7 +25,6 @@ import android.widget.Toast;
 
 import com.abc.foaled.database.DatabaseHelper;
 import com.abc.foaled.database.ORMBaseActivity;
-import com.abc.foaled.fragments.DatePickerFragment;
 import com.abc.foaled.fragments.HorseDetailsFragment;
 import com.abc.foaled.fragments.MilestonesListFragment;
 import com.abc.foaled.helpers.ImageHelper;
@@ -47,8 +43,7 @@ import java.util.concurrent.Callable;
 
 import static com.abc.foaled.helpers.DateTimeHelper.DATE_FORMATTER;
 
-public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
-		implements DatePickerDialog.OnDateSetListener {
+public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper> {
 
 	private static final int HORSE_EDIT_REQUEST_CODE = 31;
 
@@ -402,35 +397,6 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper>
 		}
 	}
 
-	/**
-	 * Opens a dialog to select the dat required
-	 *
-	 * @param view View that called this method
-	 */
-	public void selectDate(View view) {
-		String date = ((TextView) view).getText().toString();
-
-		DateTime conceptionMin = DateTime.now().minusYears(1);
-		DialogFragment dialog = DatePickerFragment.newInstance(date, this, conceptionMin);
-		dialog.show(getFragmentManager(), "conceptionDatePicker");
-	}
-
-	/**
-	 * On the result of choosing a date, update the text box to show it
-	 *
-	 * @param view  DatePicker that was just being interacted with
-	 * @param year  Year selected
-	 * @param month Month select
-	 * @param day   Day selected
-	 */
-	@Override
-	public void onDateSet(DatePicker view, int year, int month, int day) {
-		int textViewID = R.id.notificationCheckbox1;
-
-		TextView dateField = currPopupWindow.getContentView().findViewById(textViewID);
-		String parsedDob = day + "/" + (month + 1) + "/" + year;
-		dateField.setText(parsedDob);
-	}
 
 	/**
 	 * Finish a pregnancy and create a new horse

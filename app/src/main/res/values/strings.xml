@@ -106,4 +106,8 @@
     <string name="add_horse_colour_label">Colour</string>
     <string name="add_horse_colour_hint">Colour of Horse</string>
 
+    <string name="edit_horse_age_placeholder">%1$d</string>
+    <string name="add_horse_sire_label">Sire</string>
+    <string name="add_horse_sire_hint">Sire\'s name</string>
+
 </resources>

@@ -212,6 +212,36 @@
                             android:maxLines="1" />
                     </TableRow>
 
+
+                    <!--These are hidden by default. Was intended to use for adding a horse that is pregnant-->
+                    <!--SIRES NAME-->
+                    <TableRow
+                        android:id="@+id/siresNameRow"
+                        android:layout_marginBottom="10dp"
+                        android:paddingBottom="5dp"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:labelFor="@+id/siresName"
+                            android:text="@string/add_horse_sire_label"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                        <EditText
+                            android:id="@+id/siresName"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:ellipsize="end"
+                            android:hint="@string/add_horse_sire_hint"
+                            android:imeOptions="actionDone|flagNoExtractUi"
+                            android:inputType="textPersonName|textCapWords"
+                            android:maxLines="1" />
+                    </TableRow>
                 </TableLayout>
 
             </android.support.v7.widget.CardView>

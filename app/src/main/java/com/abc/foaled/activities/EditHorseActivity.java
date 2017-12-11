@@ -12,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.FileProvider;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -26,8 +27,6 @@ import com.abc.foaled.models.Birth;
 import com.abc.foaled.models.Horse;
 
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -54,11 +53,6 @@ public class EditHorseActivity extends ORMBaseActivity<DatabaseHelper> {
     private String imagePath = null;
 	private String tempPath = "";
 
-	DateTimeFormatter dateFormatter = DateTimeFormat.forPattern("dd/MM/yyyy");
-	DateTimeFormatter timeFormatter = DateTimeFormat.forPattern("HH:mm");
-	DateTimeFormatter dateAndTimeFormatter = DateTimeFormat.forPattern("dd/MM/yyyy - HH:mm");
-    DateTimeFormatter gmtFormatter = DateTimeFormat.forPattern("EEE MMM dd HH:mm:ss 'GMT'Z yyyy");
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +71,17 @@ public class EditHorseActivity extends ORMBaseActivity<DatabaseHelper> {
 	    if (getSupportActionBar() != null)
 	        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			// Respond to the action bar's Up/Home button
+			case android.R.id.home:
+				cancel(null);
+				return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
 
 	private void populateHorseDetails(int horseID) {
 		if (horseID == 0)
@@ -98,10 +103,9 @@ public class EditHorseActivity extends ORMBaseActivity<DatabaseHelper> {
 		((EditText) findViewById(R.id.notificationCheckbox3)).setText(horse.getName());
 		((EditText) findViewById(R.id.horseBreed)).setText(horse.getBreed());
 		((EditText) findViewById(R.id.newHorseDam)).setText(horse.getDam());
-		((EditText) findViewById(R.id.newHorseAge)).setText(DateTime.now().getYear() - horse.getDateOfBirth().getBirthTime().getYear()+"");
+		((EditText) findViewById(R.id.newHorseAge)).setText(getString(R.string.edit_horse_age_placeholder,DateTime.now().getYear() - horse.getDateOfBirth().getBirthTime().getYear()));
 		((EditText) findViewById(R.id.newHorseColour)).setText(horse.getColour());
 	}
-
 
 	/**
      * This is called when an activity is called with an intent to return with a result.
@@ -120,7 +124,7 @@ public class EditHorseActivity extends ORMBaseActivity<DatabaseHelper> {
 		    } else if (requestCode == REQUEST_IMAGE_SELECT) {
 			    try {
 				    //Open up the image selected
-				    InputStream is = getContentResolver().openInputStream(data.getData());
+				    InputStream is = data.getData() != null ? getContentResolver().openInputStream(data.getData()) : null;
 
 				    if (is != null) {
 					    //Creates a new empty file and assigns it to imagePath
@@ -176,10 +180,11 @@ public class EditHorseActivity extends ORMBaseActivity<DatabaseHelper> {
 	    finish();
     }
 
+	/**
+	 * Save the current horse with the data on the screen. Doesn't necessarily actually have to be updated at all.
+	 */
 	private void saveHorseEdit() {
 
-		//TODO
-		//  delete old photo if this is a new one. Can be determined by this.imagePath being different from horse.getImagePath
 
 //		NAME ----------------
 		EditText nameEditText = findViewById(R.id.notificationCheckbox3);
@@ -212,7 +217,6 @@ public class EditHorseActivity extends ORMBaseActivity<DatabaseHelper> {
 		setResult(RESULT_OK);
 		finish();
 	}
-
 
 	/**
 	 * Requesting to add a photo
@@ -293,7 +297,7 @@ public class EditHorseActivity extends ORMBaseActivity<DatabaseHelper> {
 	}
 
     /**
-     * Let's you choose a photo from the gallery to use as the contact photo
+     * Let's you choose a photo from the gallery to use as the image
      */
     private void choosePhoto() {
         Intent intent = new Intent(
@@ -312,7 +316,6 @@ public class EditHorseActivity extends ORMBaseActivity<DatabaseHelper> {
         if (this.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-	        //TODO make this use the ImageHelper class to create the file
 	        //Creates the file and passes the URI to the camera app
             if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
 	            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
