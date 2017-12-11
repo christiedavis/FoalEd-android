@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:fab="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/horse_detail_screen"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:foreground="@drawable/dim_effect"
     android:fitsSystemWindows="true"
+    android:foreground="@drawable/dim_effect"
     android:orientation="vertical"
     tools:context="com.abc.foaled.activities.HorseDetailActivity">
 

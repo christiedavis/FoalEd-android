@@ -11,7 +11,7 @@
     fab:fab_addButtonColorPressed="@color/colorAccentLight"
     fab:fab_addButtonPlusIconColor="#FFFFFF"
     fab:fab_labelStyle="@style/menu_labels_style"
->
+    >
 
     <!--TODO: add white edit icon-->
     <com.getbase.floatingactionbutton.FloatingActionButton
@@ -27,22 +27,22 @@
 
     <com.getbase.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_pregnancy"
-        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="showAddNewPregnancyPopupWindow"
         android:src="@drawable/ic_menu_pregnancy"
+        android:visibility="gone"
         fab:fab_colorNormal="@color/colorAccent"
         fab:fab_colorPressed="@color/colorAccentLight"
         fab:fab_title="Add pregnancy"/>
 
     <com.getbase.floatingactionbutton.FloatingActionButton
         android:id="@+id/give_birth"
-        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="giveBirth"
         android:src="@drawable/ic_menu_pregnancy"
+        android:visibility="gone"
         fab:fab_colorNormal="@color/colorAccent"
         fab:fab_colorPressed="@color/colorAccentLight"
         fab:fab_title="Give birth"/>
