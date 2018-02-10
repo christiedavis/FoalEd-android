@@ -77,7 +77,6 @@ public class DatePickerFragment extends DialogFragment {
 			year = parsedDate.getYear();
 			month = parsedDate.getMonthOfYear()-1;
 			day = parsedDate.getDayOfMonth();
-
 		}
 
 		//sets the datepicker dialog to have a max of today, and min of 50 years ago

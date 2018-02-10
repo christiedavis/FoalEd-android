@@ -2,6 +2,7 @@ package com.abc.foaled.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +40,7 @@ public class AddPregnancyFragment extends Fragment {
             public void onClick(View v) {
                 DatePickerFragment dialog = new DatePickerFragment();
 
+                Log.d("datepicker", "got here");
                 dialog.displayTimeDialog(false);
                 dialog.setRetainInstance(true);
                 dialog.show(getActivity().getFragmentManager(), "datePicker");

@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,8 +29,10 @@ import android.widget.Toast;
 
 import com.abc.foaled.database.DatabaseHelper;
 import com.abc.foaled.database.ORMBaseActivity;
+import com.abc.foaled.fragments.DatePickerFragment;
 import com.abc.foaled.fragments.HorseDetailsFragment;
 import com.abc.foaled.fragments.MilestonesListFragment;
+import com.abc.foaled.helpers.DateTimeHelper;
 import com.abc.foaled.helpers.ImageHelper;
 import com.abc.foaled.models.Birth;
 import com.abc.foaled.models.Horse;
@@ -235,11 +238,25 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper> impleme
 		//Creates a pop-up view and populates it
 		LayoutInflater layoutInflater = (LayoutInflater)getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);
 		View popupView = layoutInflater.inflate(R.layout.fragment_add_pregnancy, null);
+
+        TextView dateText = popupView.findViewById(R.id.notificationCheckbox1);
+
+        dateText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatePickerFragment dialog = DatePickerFragment.newInstance(DateTime.now().toString(DATE_FORMATTER), HorseDetailActivity.this);
+
+                dialog.displayTimeDialog(false);
+                dialog.setRetainInstance(true);
+                dialog.show(getFragmentManager(), "datePicker");
+            }
+        });
+
 		if (sire != null)
 			((EditText) popupView.findViewById(R.id.notificationCheckbox3)).setText(sire);
 
 		if (!currDate.isEmpty())
-			((TextView) popupView.findViewById(R.id.notificationCheckbox1)).setText(currDate);
+			dateText.setText(currDate);
 		else
 			((TextView) popupView.findViewById(R.id.notificationCheckbox1)).setText(DateTime.now().toString(DATE_FORMATTER));
 
