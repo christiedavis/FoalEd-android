@@ -13,6 +13,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -232,7 +233,8 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper> impleme
 		fab.collapse();
 
 		//Creates a pop-up view and populates it
-		View popupView = getLayoutInflater().inflate(R.layout.fragment_add_pregnancy, (ViewGroup) v.getRootView());
+		LayoutInflater layoutInflater = (LayoutInflater)getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+		View popupView = layoutInflater.inflate(R.layout.fragment_add_pregnancy, null);
 		if (sire != null)
 			((EditText) popupView.findViewById(R.id.notificationCheckbox3)).setText(sire);
 
@@ -252,14 +254,9 @@ public class HorseDetailActivity extends ORMBaseActivity<DatabaseHelper> impleme
 			}
 		});
 		currPopupWindow.setAnimationStyle(R.style.Animation);
-		layout.post(new Runnable() {
-			@Override
-			public void run() {
-				currPopupWindow.showAtLocation(layout, Gravity.CENTER, 0, 0);
-				if (Build.VERSION.SDK_INT > 22)
-					layout.getForeground().setAlpha(220);
-			}
-		});
+		currPopupWindow.showAtLocation(layout, Gravity.CENTER, 0, 0);
+		if (Build.VERSION.SDK_INT > 22)
+			layout.getForeground().setAlpha(220);
 	}
 
 	/**
