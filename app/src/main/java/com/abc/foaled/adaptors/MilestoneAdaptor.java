@@ -1,5 +1,8 @@
 package com.abc.foaled.adaptors;
 
+import android.app.AlarmManager;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -19,9 +22,13 @@ import com.abc.foaled.R;
 import com.abc.foaled.activities.HorseDetailActivity;
 import com.abc.foaled.models.Horse;
 import com.abc.foaled.models.Milestone;
+import com.abc.foaled.notifications.CompleteNotification;
+import com.abc.foaled.notifications.NotificationPublisher;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 
 import java.util.ArrayList;
+
+import static com.abc.foaled.models.Milestone.MILESTONE_ID;
 
 /**
  * Created by christie on 20/05/17.
@@ -31,9 +38,11 @@ import java.util.ArrayList;
 public class MilestoneAdaptor extends ArrayAdapter<Milestone> {
 
     private RuntimeExceptionDao<Milestone, Integer> milestonesDataDao;
+    private Context context;
 
     public MilestoneAdaptor(Context context, ArrayList<Milestone> milestoneArrayList, RuntimeExceptionDao<Milestone, Integer> milestonesDataDao) {
         super(context, 0, milestoneArrayList);
+        this.context = context;
         this.milestonesDataDao = milestonesDataDao;
     }
 
@@ -56,6 +65,27 @@ public class MilestoneAdaptor extends ArrayAdapter<Milestone> {
                     milestone.toggleCompleted();
                     ((CheckBox) view).setChecked(milestone.isCompleted());
                     milestonesDataDao.update(milestone);
+
+                    int notificationID = milestone.getNotificationID();
+
+                    Intent intent = new Intent(context, NotificationPublisher.class);
+
+                    Log.d("CANCEL_NOTIFICATION", "pending notification id = " +  notificationID);
+
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(context, notificationID, intent, 0);
+                    pendingIntent.cancel();
+                    AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                    alarmManager.cancel(pendingIntent);
+
+                    NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+                    notificationManager.cancel(notificationID);
+
+//                    Intent completeIntent = new Intent(context, CompleteNotification.class);
+//                    completeIntent.putExtra(Horse.HORSE_ID, milestone.getHorseID());
+//                    completeIntent.putExtra(MILESTONE_ID, milestone.getID());
+//                    completeIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, notificationID);
+//                    PendingIntent.getBroadcast(context, (int)System.nanoTime(), completeIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+
                 }
             }
         };

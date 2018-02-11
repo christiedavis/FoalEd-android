@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.util.Log;
 
 import com.abc.foaled.R;
 import com.abc.foaled.activities.HorseDetailActivity;
@@ -70,6 +71,10 @@ public class Milestone {
 
     @DatabaseField(foreign = true)
     private Horse horse;
+    @DatabaseField
+	private int horseID;
+
+
 
 	//Required empty constructor
     public Milestone() {
@@ -78,6 +83,7 @@ public class Milestone {
 
     Milestone(int value, Horse horse, Context context) {
         this.horse = horse;
+        this.horseID = horse.getHorseID();
         //constructor stuff here
         this.milestone = MILESTONE.values() [value];
         milestoneID = milestone.getValue();
@@ -88,11 +94,11 @@ public class Milestone {
             case POOP:
 //            	Below lines are commented out for testing purposes
 
-//            	startTime = birthTime.plusSeconds(10);
-				startTime = birthTime.plusHours(1);     //1 hour after birth
+            	startTime = birthTime.plusSeconds(10);
+//				startTime = birthTime.plusHours(1);     //1 hour after birth
 	            emergencyTime = birthTime.plusHours(4); //4 hours after birth
-                repeatDuration = 1000 * 60 * 30;        //30 minutes repeat
-//				repeatDuration = 1000 * 10;
+//                repeatDuration = 1000 * 60 * 30;        //30 minutes repeat
+				repeatDuration = 1000 * 10;
                 message = "Your horse should have pooped by now";
                 notificationMessage = "It's important your horse poos so that it can empty itself. You might need to give them a laxative.";
                 notificationTitle = "Has your foal pooed?";
@@ -131,9 +137,18 @@ public class Milestone {
 		}
     }
 
-    int getID() {
+    public int getNotificationID() {
+		return Integer.parseInt(horse.getHorseID()+""+milestone.getValue());
+	}
+
+    public int getID() {
 	    return milestoneID;
     }
+
+
+    public int getHorseID() {
+    	return horseID;
+	}
 
 	public String getMessage() {
 		return message;
@@ -173,7 +188,7 @@ public class Milestone {
 		//Notification and intent ID.. these should really be different /-:
 		//	combination of horseID and milestoneID (5 & 3 = 53)
 		//	results in no conflicting IDs
-		int notificationID = Integer.parseInt(horse.getHorseID()+""+milestoneID);
+		int notificationID = getNotificationID();
 
 
 		//-----ON CLICK INTENT, takes you to the horse view-------
@@ -238,6 +253,8 @@ public class Milestone {
 
 		//Pending intent that fires the above intent (contains notification to display)
 		PendingIntent pendingIntent = PendingIntent.getBroadcast(context, notificationID, notificationIntent, 0);
+
+		Log.d("CANCEL_NOTIFICATION", "making pending notification id = " +  notificationID);
 
 
 		long futureInMillis = startTime.getMillis();

@@ -48,10 +48,8 @@ public class NotificationPublisher extends BroadcastReceiver {
 			//Pending intent that will repeat what has just happened. So we use the same ID
 			PendingIntent pendingIntent = PendingIntent.getBroadcast(context, notificationId, intent, 0);
 
-			Log.d("SNOOZE", "actualID = " + notificationId);
-			Log.d("SNOOZE", "notificationIntent = " + intent);
-			Log.d("SNOOZE", "context = " + context.getClass());
 
+			Log.d("NOTIFICATION", "notificationID = " + notificationId);
 
 			//sets this to repeat in repeat-time milliseconds
 			AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
