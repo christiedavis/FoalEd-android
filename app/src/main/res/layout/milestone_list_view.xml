@@ -1,15 +1,14 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    >
-        <!--android:gravity="center_vertical"-->
+    android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/milestoneTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="milestone info" />
+            android:text="milestone info"
+            android:ellipsize="end"/>
 
         <View
             android:layout_width="0dp"
@@ -19,7 +18,6 @@
         <CheckBox
             android:id="@+id/milestoneCheckbox"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="mileStoneCheckboxTapped"/>
+            android:layout_height="wrap_content" />
 
 </LinearLayout>

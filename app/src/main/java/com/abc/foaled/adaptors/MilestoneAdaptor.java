@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -54,23 +56,24 @@ public class MilestoneAdaptor extends ArrayAdapter<Milestone> {
         if (convertView == null)
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.milestone_list_view, null);
 
+        //set title
         TextView title = convertView.findViewById(R.id.milestoneTitle);
         title.setText(milestone != null ? milestone.getNotificationTitle() : "No milestone text");
 
+
+        //set on click on checkbox
         CheckBox milestoneCheckbox = convertView.findViewById(R.id.milestoneCheckbox);
-        View.OnClickListener clickListener = new View.OnClickListener() {
+        milestoneCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View view) {
-                if (milestone.isCompleted() == false) { // IDK if this should not be able to be unchecked
-                    milestone.toggleCompleted();
-                    ((CheckBox) view).setChecked(milestone.isCompleted());
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    milestone.setCompleted(true);
+                    compoundButton.setChecked(milestone.isCompleted());
+                    compoundButton.setEnabled(false);
                     milestonesDataDao.update(milestone);
 
+                    //Disables the upcoming notifications and removes current one if it is there
                     int notificationID = milestone.getNotificationID();
-
                     Intent intent = new Intent(context, NotificationPublisher.class);
-
-                    Log.d("CANCEL_NOTIFICATION", "pending notification id = " +  notificationID);
 
                     PendingIntent pendingIntent = PendingIntent.getBroadcast(context, notificationID, intent, 0);
                     pendingIntent.cancel();
@@ -79,19 +82,18 @@ public class MilestoneAdaptor extends ArrayAdapter<Milestone> {
 
                     NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
                     notificationManager.cancel(notificationID);
-
-//                    Intent completeIntent = new Intent(context, CompleteNotification.class);
-//                    completeIntent.putExtra(Horse.HORSE_ID, milestone.getHorseID());
-//                    completeIntent.putExtra(MILESTONE_ID, milestone.getID());
-//                    completeIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, notificationID);
-//                    PendingIntent.getBroadcast(context, (int)System.nanoTime(), completeIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-
-                }
             }
-        };
+        });
 
-        milestoneCheckbox.setOnClickListener(clickListener);
         milestoneCheckbox.setChecked(milestone.isCompleted());
+
+        //If milestone has already been complete
+        if (milestone.isCompleted()) {
+            milestoneCheckbox.setEnabled(!milestone.isCompleted());
+            title.setPaintFlags(title.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
+        }
+
 
         return convertView;
     }
